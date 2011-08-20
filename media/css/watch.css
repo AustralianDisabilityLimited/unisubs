@@ -334,7 +334,7 @@ div.pages {
 
 div.pages span.page_count {
 	display: inline-block;
-	padding: 13px 0 0 0;
+	padding: 13px 0;
 }
 
 div.pages a.pag_first {

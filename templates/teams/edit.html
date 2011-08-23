@@ -74,7 +74,7 @@
                   {{ form.logo.errors }}
               </p>
               <p class="avatar-container">
-                  <img class="thumbnail_medium team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
+                  <img class="team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
               </p>
               <p style="float: left; clear: both; margin-bottom: 30px;">
                   <input type="file" id="id_logo" name="logo" size="6"/>
@@ -136,17 +136,11 @@
                   </p>
           </div>
       </div>
-      <p>
-          <button class="green_button small"><span>{% trans 'Save' %}</span></button>
-      </p>
+      <div class="ft">
+          <button class="blue_button small"><span>{% trans 'Save Changes' %}</span></button>
+      </div>
       </form>
-      <div class="clearfix"></div>
       {% else %}
          {% trans 'You are not a manager of this team.' %}
-         <br/>
-         <br/>
-         <br/>
-         <br/> 
       {% endif %}            
-  <div class="clearfix"></div>
 {% endblock %}

@@ -92,6 +92,11 @@ body#watch h1 a {
     border-bottom: 1px solid #E2E6E7;
 }
 
+.pod .big_list li {
+    padding: 20px;
+    border-bottom: 1px solid #E2E6E7;
+}
+
 .pod .ft {
     float: left;
     width: 100%;
@@ -608,7 +613,7 @@ body#watch_results #main_col {
 }
 
 body#watch_results .pages {
-    width: 764px;
-    margin: 0 0 0 175px;
+    width: 769px;
+    margin: 0 0 0 170px;
     border-left: 1px #cad1d4 solid;
 }

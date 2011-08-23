@@ -359,7 +359,6 @@ background: -moz-linear-gradient(top,  #fff,  #d6e8eb); /* for firefox 3.6+ */
 
 }
 
-
 .search_button:hover span{
 background: 0;
 
@@ -371,39 +370,29 @@ background: 0;
 color: #6666;
 }
 
-
-
 .inline_search{
 float: right;
 }
 
-
-
-
-
 .inline_search input{
-float: left;
-clear: none;
-width: 220px;
--moz-border-radius: 3px;
--webkit-border-radius: 3px;
-border-radius:3px;
-border: 1px solid #a7c3c9;
-border-bottom: 1px solid #a7c3c9;
-border-top: 1px solid #8fadb3;
-
-
--moz-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
--webkit-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
-box-shadow:  0 1px 0px #fff, inset 0 2px 1px #ddd;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #eee,  #fff); /* for firefox 3.6+ */
-
-font-size: 12px;
-padding: 8px 12px 9px;
-margin: 0 10px 0 0;
+  float: left;
+  clear: none;
+  width: 220px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius:3px;
+  border: 1px solid #a7c3c9;
+  border-bottom: 1px solid #a7c3c9;
+  border-top: 1px solid #8fadb3;
+  -moz-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
+  -webkit-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
+  box-shadow:  0 1px 0px #fff, inset 0 2px 1px #ddd;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #eee,  #fff); /* for firefox 3.6+ */
+  font-size: 12px;
+  padding: 8px 12px 9px;
+  margin: 0 10px 0 0;
 }
 
 

@@ -325,7 +325,8 @@ font-size: 16px;
   }
 
 .action_buttons{ border-top: 1px solid #fff;}
-.pod .action_buttons {
+
+.pod .actions {
   position: relative;
   top: -1px;
   float: left;
@@ -338,7 +339,10 @@ font-size: 16px;
 
 .action_buttons .blue_button,
 .action_buttons .green_button,
-.action_buttons .sort_button{
+.action_buttons .sort_button,
+.actions .blue_button,
+.actions .green_button,
+.actions .sort_button {
   margin: 10px; 
   float: right;
   }

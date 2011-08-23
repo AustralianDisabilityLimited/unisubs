@@ -30,7 +30,7 @@
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
   </div>
-  <div class="action_buttons">
+  <div class="actions">
     <form class="moderation-dashboard" action="{% url moderation:get-pending-videos team_id=team.pk %}" method="GET">
         <fieldset>
           {{form.to_langs.label_tag}}

@@ -79,28 +79,28 @@ form .alpha {
   margin-left: 5px;
 }
 
-.settings_main .action_buttons form.moderation-dashboard {
+.settings_main .actions form.moderation-dashboard {
   margin: 0;
   padding: 10px;
 }
 
-.action_buttons form.moderation-dashboard fieldset {
+.actions form.moderation-dashboard fieldset {
   float: left;
   width: 125px;
   margin-right: 10px;
 }
 
-.action_buttons form.moderation-dashboard fieldset label {
+.actions form.moderation-dashboard fieldset label {
   display: block;
   font-weight: bold;
 }
 
-.action_buttons form.moderation-dashboard fieldset select,
-.action_buttons form.moderation-dashboard fieldset input {
+.actions form.moderation-dashboard fieldset select,
+.actions form.moderation-dashboard fieldset input {
   width: 125px;
 }
 
-.action_buttons form.moderation-dashboard fieldset input {
+.actions form.moderation-dashboard fieldset input {
   border: 1px solid #00446F;
   padding: 1px;
 }

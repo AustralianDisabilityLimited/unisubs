@@ -195,14 +195,15 @@
               &nbsp;
           </div>
       </div>
-
-      <button style="margin: 10px;" class="green_button small" type="submit" value="Save">
-          <span>{% trans 'Save Edits to Profile' %}</span>
-      </button>
-          
-      <a class="small" style="margin: 10px;" href="{% url auth:delete_user %}">
-          <span>{% trans 'Permanently Delete Your Profile' %}</span>
-      </a>  
+      <div class="ft">
+        <button class="blue_button small" type="submit" value="Save">
+            <span>{% trans 'Save Changes' %}</span>
+        </button>
+            
+        <a href="{% url auth:delete_user %}">
+            <span>{% trans 'Permanently Delete Your Profile' %}</span>
+        </a>
+      </div>
   </form>
 
 <script type="text/javascript">

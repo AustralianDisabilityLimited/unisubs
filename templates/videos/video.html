@@ -152,33 +152,33 @@
         {% team_add_video_select %}
         {% render_belongs_to_team_list video %}
     </div>
-    <div class="wrap grid_9 omega">
-        <h4 class="inline">{% trans 'Video Info' %}</h4>
-        <ul class="inline_tabs">
-            <li>
-                <a href="#comments-tab">
-                <span class="inline_text">{% trans 'Comments' %}</span>
-                <span class="badgy_out">
-                    <span class="badgy">{% get_comment_count video %}</span>
-                </span>
-                </a>
-            </li>
-            <li class="bull">&bull;</li>
-            <li class="active">
-                <a href="#activity-tab">
-                <span class="inline_text">{% trans 'Activity Stream' %}</span>
-                </a>
-            </li>
-            <li class="bull">&bull;</li>
-            <li>
-                <a href="#urls-tab">
-                <span class="inline_text">{% trans 'Video URLs' %}</span>
-                <span class="badgy_out">
-                    <span class="badgy">{% video_url_count video %}</span>
-                </span>
-                </a>
-            </li>
-        </ul>
+    <div class="wrap grid_9 omega pod video_details">
+        <div class="hd">
+            <h2>{% trans 'Video Info' %}</h2>
+            <ul class="inline_tabs">
+                <li>
+                    <a href="#comments-tab">
+                    <span class="inline_text">{% trans 'Comments' %}</span>
+                    <span class="badgy_out">
+                        <span class="badgy">{% get_comment_count video %}</span>
+                    </span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="#activity-tab">
+                    <span class="inline_text">{% trans 'Activity Stream' %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#urls-tab">
+                    <span class="inline_text">{% trans 'Video URLs' %}</span>
+                    <span class="badgy_out">
+                        <span class="badgy">{% video_url_count video %}</span>
+                    </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div id="comments-tab" style="display: none">
             <div class="grid_9 alpha omega">
                 {% render_comment_form video %}

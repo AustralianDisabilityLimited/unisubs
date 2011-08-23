@@ -1,6 +1,6 @@
 {% extends "profiles/base.html" %}
 
-{% load thumbnail i18n messages_tags %}
+{% load i18n messages_tags recent_activity %}
 
 {% block title %}{{ user_info }} | Universal Subtitles{% endblock %}
 
@@ -26,33 +26,55 @@
 
 {% block main_content %}
     {% if user_info.is_active %}
-    <div class="left_column">
-        <h2>
-            {{ user_info }}
-            {% if can_edit %}<a href="{% url profiles:edit %}">(Edit profile)</a>{% endif %}
-        </h2>
-        <img class="thumbnail_medium" src="{{ user_info.avatar }}">
-        <p>{% trans 'Member since' %}: {{ user_info.date_joined|date:"DATETIME_FORMAT" }}</p>
-        <p>{% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
-        <p>{% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
+        <div class="grid_9 alpha">
+            <div class="pod">
+                <div class="hd">
+                    <h2>
+                        {{ user_info|title }}'s Activity
+                    </h2>
+                    {% if can_edit %}
+                        <a href="{% url profiles:edit %}" class="heading_button">Edit profile</a>
+                    {% endif %}
+                </div>
+                {% if user_info.action_set.exists %}
+                    {% recent_activity user_info %}
+                {% endif %}
+            </div>
+        </div>
         
-        {% if user.is_authenticated and not user == user_info %}
-            {% send_message_form user_info %}
-        {% endif %}
-    </div>
-    
-    <div class="right_column">
-        <br />
-        <h3>{% trans 'About' %}</h3>
-        <p class="user_bio">
-            {{ user_info.biography|urlize|default:_('<i>User has not submitted a bio.</i>')|linebreaksbr }}
-        </p>
-    </div>
-    
-    {{ block.super }}
+        <div class="grid_3 omega meta">
+            <img src="{{ user_info.avatar }}">
+            <h4>{% trans 'Member since' %}</h4>
+            <p>
+                {{ user_info.date_joined|date:"DATETIME_FORMAT" }}
+            </p>
+            {% if user_info.preferred_language %}
+                <h4>{% trans 'Preferred Language' %}</h4>
+                <p>
+                    {{ user_info.language }}
+                </p>
+            {% endif %}
+            {% if user_info.homepage %}
+                <h4>{% trans 'Homepage' %}</h4>
+                <p>
+                    <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a>
+                </p>
+            {% endif %}
+            <h4>{% trans "About" %}</h4>
+            <p class="user_bio">
+                {{ user_info.biography|urlize|default:_('<i>User has not submitted a bio.</i>')|linebreaksbr }}
+            </p>
+            {% if user.is_authenticated and not user == user_info %}
+                {% send_message_form user_info %}
+            {% endif %}
+        </div>
+        
+        {{ block.super }}
     {% else %}
-    <div class="left_column">
-        <h2>{% trans 'User deleted his profile' %}</h2?
-    </div>        
+        <div class="grid_9">
+            <div class="pod">
+                <p>{% trans 'User deleted his profile' %}</p>
+            </div>
+        </div>         
     {% endif %}
 {% endblock %}

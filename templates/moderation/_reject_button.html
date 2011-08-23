@@ -1,7 +1,7 @@
 {% if url %}
   {% load i18n  %}
   {% if  style  == "labelless" %}
-    <a href="{{url}}" class="red_button small reject-version moderation-set-button"><span>X</span></a>
+    <a href="{{url}}" class="red_button small reject-version moderation-set-button"><span>Reject</span></a>
   {% else %}
     <a href="{{url}}" {%if confirms %}data-confirmdialog="unisubs.subtitle.ConfirmRejectiondDialog"{% endif %}  class="red_button small reject-version moderation-set-button"><span>{{label}}</span></a>
   {% endif %}

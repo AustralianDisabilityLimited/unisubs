@@ -55,9 +55,9 @@
 .red_button.small{
   font-size: 11px;
   padding: 5px 15px;
-  -moz-border-radius: 30px;
-  -webkit-border-radius: 30px;
-  border-radius:30px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
   }
 
 
@@ -82,7 +82,6 @@
 	-moz-border-radius: 5px !important;
 }
 
-
 .green_button:hover{
   color: #485a0c !important;
 
@@ -96,9 +95,6 @@
   background: -webkit-gradient(linear, left top, left bottom, from(#b7e3b0), to(#9ace9b)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #b7e3b0,  #9ace9b); /* for firefox 3.6+ */
   }
-
-
-
 
 .blue_button {
   color: #1f4e5e !important;
@@ -115,7 +111,6 @@
   background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
   }
 
-
 .blue_button:hover {
   color: #1f4e5e !important;
   text-shadow: 0 1px 0px #FFF;
@@ -126,10 +121,6 @@
   border-top: 1px solid #c6d9de;
   border-bottom: 1px solid #88afb6;
 }
-
-
-
-
 
 .red_button{
   color: #412625 !important;
@@ -149,9 +140,6 @@
   background: -webkit-gradient(linear, left top, left bottom, from(#dd443f), to(#c51917)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #dd443f,  #c51917); /* for firefox 3.6+ */
   }
-
-
-
 
 /*---- Blue Button ----*/
 
@@ -178,7 +166,6 @@
   background: -moz-linear-gradient(top,  #ecf9fc,  #d6e8eb); /* for firefox 3.6+ */
   }
 
-
 .silver_button:hover{
   border: 1px solid #a7c3c9;
   border-top: 1px solid #c6d9de;
@@ -192,19 +179,6 @@
   background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #fff,  #d6e8eb); /* for firefox 3.6+ */
   }
-  
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*///////   ~  Fixes for various HTML elements  ~   ///////*/
 
@@ -385,7 +359,6 @@ background: -moz-linear-gradient(top,  #fff,  #d6e8eb); /* for firefox 3.6+ */
 
 }
 
-
 .search_button:hover span{
 background: 0;
 
@@ -397,39 +370,29 @@ background: 0;
 color: #6666;
 }
 
-
-
 .inline_search{
 float: right;
 }
 
-
-
-
-
 .inline_search input{
-float: left;
-clear: none;
-width: 220px;
--moz-border-radius: 3px;
--webkit-border-radius: 3px;
-border-radius:3px;
-border: 1px solid #a7c3c9;
-border-bottom: 1px solid #a7c3c9;
-border-top: 1px solid #8fadb3;
-
-
--moz-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
--webkit-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
-box-shadow:  0 1px 0px #fff, inset 0 2px 1px #ddd;
-
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff'); /* for IE */
-background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff)); /* for webkit browsers */
-background: -moz-linear-gradient(top,  #eee,  #fff); /* for firefox 3.6+ */
-
-font-size: 12px;
-padding: 8px 12px 9px;
-margin: 0 10px 0 0;
+  float: left;
+  clear: none;
+  width: 220px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius:3px;
+  border: 1px solid #a7c3c9;
+  border-bottom: 1px solid #a7c3c9;
+  border-top: 1px solid #8fadb3;
+  -moz-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
+  -webkit-box-shadow: 0 1px 0px #fff, inset 0 2px 1px #ddd;
+  box-shadow:  0 1px 0px #fff, inset 0 2px 1px #ddd;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#ffffff'); /* for IE */
+  background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#fff)); /* for webkit browsers */
+  background: -moz-linear-gradient(top,  #eee,  #fff); /* for firefox 3.6+ */
+  font-size: 12px;
+  padding: 8px 12px 9px;
+  margin: 0 10px 0 0;
 }
 
 
@@ -470,6 +433,10 @@ border-radius: 3px;
 box-shadow:inset 0 1px 0px #fff;
 }
 
+.pod .sort_button {
+  margin: 2px 0;
+  padding:0;
+}
 
 .sort_button.margin-top{
 margin-top: 21px;
@@ -971,8 +938,6 @@ margin-left: 4px;
 margin-bottom: 10px;
 }
 
-
-
-
-
-
+.team-video-buttons-container a {
+  margin-right: 5px !important;
+}

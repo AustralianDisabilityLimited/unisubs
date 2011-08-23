@@ -20,7 +20,7 @@ class ModerationListSearchForm(forms.Form):
     ] + ALL_LANGUAGES
     
     
-    q = forms.CharField(label=_(u'Video title?'), required=False)
+    q = forms.CharField(label=_(u'Video title'), required=False)
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
                              label=_(u'Sort By'))
     to_langs = forms.ChoiceField(choices=LANG_CHOICES, required=False, label=_(u'Subtitled Into'),

@@ -54,26 +54,13 @@
 
 {% block main_content %}
 
-{% if user.is_superuser and user.is_active %}
-    <a href="{% url teams:create %}" class="green_button big start_team">
-        <span>{% trans 'Start a Team' %}</span>
-    </a>
-{% endif %}
-
 <h2>{% trans 'Team Directory' %}</h2>
 
 <div class="grid_8 alpha">
-    <p class="intro">
-        {% blocktrans %}
-        Teams are a great way to work together on subtitling videos. 
-        Membership and participation policies vary from team to team. 
-        Don't know where to start? Check the sidebar!
-        {% endblocktrans %}
-    </p>
-    <div class="boxx">
-        <div class="padding_small">
+    <div class="pod">
+        <div class="padding_small clearfix">
             <div class="sort_button">
-                <div class='arrow'>
+                <div class="arrow">
                 </div>
                 <span class="sort_label">{% trans 'Sort by' %} <strong>{{ order_name }}</strong></span>
                 <ul>
@@ -96,12 +83,10 @@
             <div class="inline_search">
                 <form action=".">
                     <input type="text" name="q" value="{{ query|default:'' }}"/>
-                    <button class="green_button big">
+                    <button class="green_button big" style="margin:0;">
                         <span>{% trans 'Search' %}</span>
                     </button>
                 </form>
-            </div>
-            <div class="clearfix">
             </div>
         </div>
     </div>
@@ -154,6 +139,15 @@
     {% if is_paginated %}{% paginator %}{% endif %}
 </div>
 <div class="grid_4 omega">
+    <h3>{% trans 'About Teams' %}</h3>
+    <p class="notice">
+        {% blocktrans %}
+        Teams are a great way to work together on subtitling videos. 
+        Membership and participation policies vary from team to team.
+        {% endblocktrans %}
+    </p>
+    <p class="notice">Want to create your own captioning and translation team? Contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>
+    <br />
     <h3>{% trans 'Highlighted Teams' %}</h3>
     <ul class="small_list">
         {% for team in highlighted_qs %}
@@ -188,5 +182,10 @@
         </li>
         {% endfor %}
     </ul>
+    {% if user.is_superuser and user.is_active %}
+    <a href="{% url teams:create %}" class="green_button big start_team">
+        <span>{% trans 'Start a Team' %}</span>
+    </a>
+{% endif %}
 </div>
 {% endblock %}

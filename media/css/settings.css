@@ -1,6 +1,5 @@
 .settings_nav { 
   float: left;
-  width: 184px;
   padding-top: 10px;
   text-indent: 10px; }
 
@@ -11,14 +10,16 @@
   
 .settings_nav li { 
   line-height: 30px;
-  padding: 0; }
+  padding: 0; 
+  margin-right: -10px;
+  }
 
 .settings_nav li a { 
   color: #1c2b2e;
   text-decoration: none; }
 
 .settings_nav li.active { 
-  background-color: #aac6cd;
+  background-color: #eaeaea;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px; }
 
@@ -46,48 +47,93 @@
 
 .teams li a { 
   color: #4c6a70; }
-  
-.settings_main { 
-  background-color: #eaf4f6;
-  float: right;
-  width: 750px;
-  border: 3px solid #aac6cd;
-  border-radius: 6px; }
 
-.settings_main .left_column {
-  width: 350px; }
+.meta h4 {
+  margin-top: 1em;
+}
 
-.settings_main .right_column {
-  width: 330px; }
-
-.settings_main .right_column select {
-  width: 140px; }
-
-.settings_main h2{
-  background-color: #d9e9ec;
-  clear: both;
-  padding: 0px 0px 0px 30px;
-  height: 50px;
-  line-height: 50px;
-  -moz-border-radius-topright: 5px;  
-  -moz-border-radius-topleft: 5px;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  border-bottom: 1px solid #d1dee0;
-  border-top: 1px solid #e9f2f4; }
-  
-  
-.settings_main .inline_tabs { 
-  background-color: #d9e9ec;
-  display: block !important;
-  line-height: 40px;
-  padding-left: 30px;
-  border-top: 1px solid #e9f2f4;
-  border-bottom: 1px solid #d1dee0; }
+.settings_main .hd .heading_button:hover {
+  background-color: #f4f8f9;
+  border-color: #d6dadb;
+}
 
 .settings_main .pagination {
     margin-right: 20px;
 }
 
-#teams .settings_main h2 { 
-  margin-bottom: 0; }
+.settings_main form {
+  float: left;
+  width: 100%;
+  margin-top: 2em;  
+}
+
+.settings_main form h3 {
+  margin-top: 1em;
+}
+
+form .grid_5, form .grid_3 {
+  margin-left: 15px;
+}
+
+form .alpha {
+  margin-left: 5px;
+}
+
+.settings_main .actions form.moderation-dashboard {
+  margin: 0;
+  padding: 10px;
+}
+
+.actions form.moderation-dashboard fieldset {
+  float: left;
+  width: 125px;
+  margin-right: 10px;
+}
+
+.actions form.moderation-dashboard fieldset label {
+  display: block;
+  font-weight: bold;
+}
+
+.actions form.moderation-dashboard fieldset select,
+.actions form.moderation-dashboard fieldset input {
+  width: 125px;
+}
+
+.actions form.moderation-dashboard fieldset input {
+  border: 1px solid #00446F;
+  padding: 1px;
+}
+
+#filter_submit {
+  margin-top: 16px;
+}
+
+.moderation-list-container, .moderation-list-container .video-container {
+  clear: both;
+}
+
+.moderation-list-container .video-container .item {
+  padding: 10px;
+  float: left;
+  width: 100%;
+  clear: both;
+}
+
+.dev-button-container {
+  text-indent: 0;
+}
+
+.dev-button-container a {
+  line-height: 15px;
+  text-align: center;
+}
+
+table.video-moderation-item th:first-child, table.video-moderation-item td:first-child {
+  text-align: center;
+  width: 10px;
+}
+
+.approve-button-container a {
+  margin-right: 10px;
+}

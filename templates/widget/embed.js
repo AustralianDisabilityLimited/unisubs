@@ -103,7 +103,6 @@
     if (typeof(unisubsCrossDomainLoaded) == 'undefined' && !window.unisubsLoading) {
         window.unisubsLoading = true;
         for (var i = 0; i < scriptsToLoad.length; i++) {
-            console.log('adding script ' + scriptsToLoad[i]);
             var curScript = $c('script');
             curScript.type = 'text/javascript';
             curScript.src = scriptsToLoad[i];

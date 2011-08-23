@@ -9,10 +9,13 @@
 {% endblock %}
 
 {% block settings_content %}
-    <h2>{{ team.name }}</h2>
-    {% with "videos" as active %}
-        {% include 'teams/_edit_top_navigation.html' %}
-    {% endwith %}
+    <div class="hd">
+        <h2>{{ team.name }}</h2>
+        <a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
+        {% with "videos" as active %}
+            {% include 'teams/_edit_top_navigation.html' %}
+        {% endwith %}
+    </div>
     <div>
         <a style="margin: 5px 0 5px 20px" href="{% url teams:add_video team.slug %}" class="green_button small">{% trans 'Add video' %}</a>
     </div>

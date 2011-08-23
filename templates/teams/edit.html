@@ -34,11 +34,13 @@
 {% endblock %}
 
 {% block settings_content %}
-  <h2>{{ team.name }}</h2>
-  {% with "settings" as active %}
-      {% include 'teams/_edit_top_navigation.html' %}
-  {% endwith %}
-  <div class="padding">
+  <div class="hd">
+    <h2>{{ team.name }}</h2>
+    <a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
+    {% with "settings" as active %}
+        {% include 'teams/_edit_top_navigation.html' %}
+    {% endwith %}
+  </div>
       {% if form %}
       <form method='post' action="." class="edit-team" enctype="multipart/form-data">
       <div class="grid_9">
@@ -103,7 +105,7 @@
                    {% trans "This will replace Description. " %}
                </p>                                                        
           </div>
-          <div class="grid_4 omega">
+          <div class="grid_3 omega">
               <h3>{% trans 'Team Member Settings' %}</h3>
                   <p>
                       <label>
@@ -146,6 +148,5 @@
          <br/>
          <br/> 
       {% endif %}            
-  </div>
   <div class="clearfix"></div>
 {% endblock %}

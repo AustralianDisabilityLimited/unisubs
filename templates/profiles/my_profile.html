@@ -18,28 +18,19 @@
 <div class="grid_8 alpha">
     <h2>{% trans 'My videos' %}</h2>
 
-    <ul class="video_tabs">
-        <li class="active">
-            <span class="tab-item">
-                {% trans 'My Videos' %}<span class="badgy_out"><span class="badgy">{{ hits }}</span></span>
-            </span>
-        </li>
-    </ul>
-    <div id="videos-tab">
-        <div class="boxx">
-            <div class="padding_small">
+    <div class="pod">
+            <div class="padding_small clearfix">
                 <div class="inline_search">
                     <form method="post" >
                         {% csrf_token %}
                         <input type="text"name="q" value="{{ query|default:'' }}">
-                        <button class="green_button big">
+                        <button class="green_button big" style="margin:0;">
                             {% trans 'Search' %}
                         </button>
                     </form>
                 </div><!-- // inline_search -->
-                <div class="clearfix"></div>
             </div><!-- // padding_small -->
-        </div><!-- // boxx -->
+    </div>
         <div class="grid_8 clearfix">
             <br/>
             <br/>
@@ -52,7 +43,6 @@
             {% endfor %}
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
-    </div><!-- // video-tab -->
 </div><!-- // grid_8 alpha -->
 
 <div class="grid_4 omega">

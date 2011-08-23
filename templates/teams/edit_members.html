@@ -86,11 +86,13 @@
 {% endblock %}
 
 {% block settings_content %}
-  <h2>{{ team.name }}</h2>
-  {% with "members" as active %}
-      {% include 'teams/_edit_top_navigation.html' %}
-  {% endwith %}
-  
+    <div class="hd">
+        <h2>{{ team.name }}</h2>
+        <a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
+          {% with "members" as active %}
+              {% include 'teams/_edit_top_navigation.html' %}
+          {% endwith %}
+    </div>
     <div class="action_buttons">
         {% if team|can_invite_to_team:user %}
             <a href="#" data-modal="invite-user" class="blue_button small">{% trans 'Invite User' %}</a>

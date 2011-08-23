@@ -24,35 +24,23 @@
     <script src="{% url messages:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}
 
-{% block main_content %}
-    {% if user_info.is_active %}
-    <div class="left_column">
-        <h2>
-            {{ user_info }}
-            {% if can_edit %}<a href="{% url profiles:edit %}">(Edit profile)</a>{% endif %}
-        </h2>
-        <img class="thumbnail_medium" src="{{ user_info.avatar }}">
-        <p>{% trans 'Member since' %}: {{ user_info.date_joined|date:"DATETIME_FORMAT" }}</p>
-        <p>{% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}</p>
-        <p>{% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a></p>
-        
+{% block profile_info %}
+    <div class="grid_3 omega">
+        <img src="{{ user_info.avatar }}">
+        <p>
+            {% trans 'Member since' %}: {{ user_info.date_joined|date:"DATETIME_FORMAT" }}
+        </p>
+        <p>
+            {% trans 'Preferred Language' %}: {% if user_info.preferred_language %}{{ user_info.language }}{% endif %}
+        </p>
+        <p>
+            {% trans 'Homepage' %}: <a href="{{ user_info.homepage }}">{{ user_info.homepage }}</a>
+        </p>
+        <p class="user_bio">
+            {{ user_info.biography|urlize|default:_('<i>User has not submitted a bio.</i>')|linebreaksbr }}
+        </p>
         {% if user.is_authenticated and not user == user_info %}
             {% send_message_form user_info %}
         {% endif %}
     </div>
-    
-    <div class="right_column">
-        <br />
-        <h3>{% trans 'About' %}</h3>
-        <p class="user_bio">
-            {{ user_info.biography|urlize|default:_('<i>User has not submitted a bio.</i>')|linebreaksbr }}
-        </p>
-    </div>
-    
-    {{ block.super }}
-    {% else %}
-    <div class="left_column">
-        <h2>{% trans 'User deleted his profile' %}</h2?
-    </div>        
-    {% endif %}
 {% endblock %}

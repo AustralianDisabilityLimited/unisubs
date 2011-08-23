@@ -80,9 +80,15 @@
 
 {% block settings_content %}
 
-<h2 class="msg_header">
-  {% trans 'Sent Messages' %} /  <a href="{% url messages:index %}">{% trans 'My Messages' %}</a>
-</h2>
+<div class="hd">
+  <h2 class="msg_header">
+    {% trans 'Messages' %}
+  </h2>
+  <ul class="inline_tabs">
+    <li><a href="{% url messages:index %}">{% trans "Inbox" %}</a></li>
+    <li class="active"><a href="{% url messages:sent %}">{% trans "Sent" %}</a></li>
+  </ul>
+</div>
 
 {% if message_list %}
     {% if is_paginated %}{% paginator %}{% endif %}

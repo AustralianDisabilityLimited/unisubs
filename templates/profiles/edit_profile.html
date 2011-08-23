@@ -42,14 +42,17 @@
 {% endblock %}
 
 {% block settings_content %}
+  <div class="hd">
+    <h2>
+      {% trans 'Edit Your Profile' %}
+    </h2>
+    <a href="{% url profiles:profile user.username %}" class="heading_button">{% trans 'View Profile' %}</a>
+  </div>
   <form class="edit_profile" action="." method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="edit_profile_shell">
-          <h2>
-              {% trans 'Edit Your Profile' %}
-          </h2>
+      <div class="grid_9 clearfix">
 
-          <div class="left_column">
+          <div class="grid_5 alpha">
               <h3>{% trans 'Personal Info' %}</h3>
               {{ form.non_field_errors }}
               <p>
@@ -132,7 +135,7 @@
               </p>                          
           </div>
 
-          <div class="right_column">
+          <div class="grid_3 omega">
               <h3>{% trans 'Language Info' %}</h3>
               <p>
                   {{ form.preferred_language.errors }}

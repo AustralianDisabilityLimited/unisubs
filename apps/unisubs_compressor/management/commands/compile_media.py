@@ -102,6 +102,7 @@ KEEP_BACKWARDS_MIROSUBS = (
     ("js/unisubs-extension.js", "js/mirosubs-extension.js"),
     ("js/unisubs-statwidget.js", "js/mirosubs-statwidget.js"),
     ("js/unisubs-api.js", "js/mirosubs-api.js"),
+    ("js/unisubs.js", "js/mirosubs.js"),
 )
 
 def call_command(command):

@@ -48,17 +48,8 @@
 .teams li a { 
   color: #4c6a70; }
 
-.settings_main .left_column {
-  width: 350px; }
-
-.settings_main .right_column {
-  width: 330px; }
-
-.settings_main .right_column select {
-  width: 140px; }
-
-.settings_main h2{
-  clear: both;
+.meta h4 {
+  margin-top: 1em;
 }
 
 .settings_main .hd .heading_button:hover {
@@ -76,10 +67,73 @@
   margin-top: 2em;  
 }
 
+.settings_main form h3 {
+  margin-top: 1em;
+}
+
 form .grid_5, form .grid_3 {
   margin-left: 15px;
 }
 
 form .alpha {
   margin-left: 5px;
+}
+
+.settings_main .action_buttons form.moderation-dashboard {
+  margin: 0;
+  padding: 10px;
+}
+
+.action_buttons form.moderation-dashboard fieldset {
+  float: left;
+  width: 125px;
+  margin-right: 10px;
+}
+
+.action_buttons form.moderation-dashboard fieldset label {
+  display: block;
+  font-weight: bold;
+}
+
+.action_buttons form.moderation-dashboard fieldset select,
+.action_buttons form.moderation-dashboard fieldset input {
+  width: 125px;
+}
+
+.action_buttons form.moderation-dashboard fieldset input {
+  border: 1px solid #00446F;
+  padding: 1px;
+}
+
+#filter_submit {
+  margin-top: 16px;
+}
+
+.moderation-list-container, .moderation-list-container .video-container {
+  clear: both;
+}
+
+.moderation-list-container .video-container .item {
+  padding: 10px;
+  float: left;
+  width: 100%;
+  clear: both;
+}
+
+.dev-button-container {
+  text-indent: 0;
+}
+
+.dev-button-container a {
+  line-height: 15px;
+  text-align: center;
+}
+
+table.video-moderation-item th:first-child, table.video-moderation-item td:first-child {
+  text-align: center;
+  width: 10px;
+}
+
+.approve-button-container a {
+  margin-right: 10px;
 }

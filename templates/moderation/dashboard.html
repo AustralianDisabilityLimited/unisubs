@@ -30,41 +30,40 @@
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}
   </div>
+  <div class="action_buttons">
     <form class="moderation-dashboard" action="{% url moderation:get-pending-videos team_id=team.pk %}" method="GET">
-      <label>Batch Actions</label>
-      <div class="dev-button-container">
-        <input type="checkbox" class="select-all-languages" name="select-all-languages"/>
-        <a class="batch-approve-selected-button mirosubs-green-button small"> Approve  </a>
-        <a class="batch-reject-selected-button mirosubs-green-button small dev-button-sequence"> Unapprove </a>
-      </div>
-      
-      <br>
-      {{form.to_langs.label}}
-      {{form.to_langs}}
-
-      <br>
-      {{form.from_langs.label}}
-      {{form.from_langs}}
-
-      <br>
-      {{form.sort.label}}
-      {{form.sort}}
-
-      <br>
-        {{form.q.label}} 
-       {{form.q}} 
-    <input type="SUBMIT" name="Go!"/>
+        <fieldset>
+          {{form.to_langs.label_tag}}
+          {{form.to_langs}}
+        </fieldset>
+        <fieldset>
+          {{form.from_langs.label_tag}}
+          {{form.from_langs}}
+        </fieldset>
+        <fieldset>
+          {{form.sort.label_tag}}
+          {{form.sort}}
+        </fieldset>
+        <fieldset>
+          {{form.q.label_tag}}
+          {{form.q}}
+        </fieldset>
+          <input id="filter_submit" type="submit" name="submit" value="Apply"/>
     </form>
-
-    <div class="moderation-list-container">
-      <div style="text-align: center; padding: 75px">
-        <img align="absmiddle" width="256" height1="30" src="{{ MEDIA_URL }}/images/ajax-loader.gif"/>
-      </div>
+  </div>
+  <div class="moderation-list-container">
+    <div style="text-align: center; padding: 75px">
+      <img align="absmiddle" src="{{ MEDIA_URL }}/images/ajax-loader.gif"/>
     </div>
-    <div class="clearfix"></div>
+  </div>
+  <div class="ft">
+      <div class="dev-button-container">
+        <a class="batch-approve-selected-button green_button small">{% trans "Approve Selected" %}</a>
+        <a class="batch-reject-selected-button red_button small dev-button-sequence">{% trans "Reject Selected" %}</a>
+      </div>
+  </div>
 <script type="text/javascript">
     {% include 'moderation/moderation-buttons.js' %}
     {% include 'moderation/dashboard.js' %}
-</script> 
-
+</script>
 {% endblock %}

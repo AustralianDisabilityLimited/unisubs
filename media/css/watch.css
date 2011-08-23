@@ -29,7 +29,7 @@ body#watch h1 a {
      position: relative;
     float: left;
     width: 100%;
-    border-bottom: 1px #e2e5e6 solid;
+    border-bottom: 1px #D4D8D9 solid;
     -webkit-box-shadow: inset 0 -1px 0 #FFF;
     background: -webkit-gradient(linear, 0% 100%, 0% 40%, from(#ecf0f1), to(#FFF)); /* for webkit browsers */
   background: -moz-linear-gradient(0% 75% 270deg, #FFF, #ecf0f1); /* for firefox 3.6+ */
@@ -85,6 +85,26 @@ body#watch h1 a {
     color: #747b81;
     font-size: 14px;
     font-family: Helvetica, Arial, sans-serif;
+}
+
+.pod .small_list li {
+    padding: 15px;
+    border-bottom: 1px solid #E2E6E7;
+}
+
+.pod .ft {
+    float: left;
+    width: 100%;
+    clear: both;
+    padding: 10px 0;
+    border-top: 1px solid #d4d8d9;
+    text-indent: 15px;
+    line-height: 32px;
+}
+
+.pod .ft button {
+    float: right;
+    margin-right: 15px;
 }
 
 #watch_search {

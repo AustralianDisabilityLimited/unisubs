@@ -5,11 +5,6 @@
 {% load escapejs paginator widget comments i18n subtitles_tags teams_tags media_compressor videos_tags moderation doorman%}
 
 {% block css %}
-    {% if video.thumbnail %}
-    <meta property="og:image" content="{{ video.get_thumbnail }}" />
-    {% else %}
-    <meta property="og:image" content="http://{{ current_site.domain }}{{ MEDIA_URL }}images/small_logo.png" />
-    {% endif %}
     {{ block.super }}
     {% include_bundle "video_history" %}
 {% endblock %}
@@ -110,6 +105,21 @@
         {% endblocktrans %}
     {% endif %}
 {% endblock %}
+
+{% block opengraph-head %}
+    <meta property="og:title" content="{% title_for_video video language %}"/>
+    <meta property="og:type" content="video"/>
+    <meta property="og:url" content="http://{{ current_site.domain }}{{ video.get_absolute_url }}"/>
+    {% if video.thumbnail %}
+    <meta property="og:image" content="{{ video.get_thumbnail }}" />
+    {% else %}
+    <meta property="og:image" content="{{ MEDIA_URL }}images/small_logo.png" />
+    {% endif %}
+
+    <meta property="og:site_name" content="Universal Subtitles"/>
+    <meta property="og:description"
+          content="{% title_for_video video language %}"/>
+{% endblock  %}
 
 {% block main_content %}
     <h2 class="main-title">

@@ -8,8 +8,8 @@ body#watch {
     -webkit-border-radius: 5px;
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-   background: -webkit-gradient(linear, 0% 100%, 0% 50%, from(#edf6f8), to(#fff)); /* for webkit browsers */
-   background: -moz-linear-gradient(0% 75% 270deg, #fff, #edf6f8); /* for firefox 3.6+ */
+   background: -webkit-gradient(linear, 0% 100%, 0% 50%, from(#ecf0f1), to(#fff)); /* for webkit browsers */
+   background: -moz-linear-gradient(0% 75% 270deg, #fff, #ecf0f1); /* for firefox 3.6+ */
     margin: 0 0 10px 0;
 }
 

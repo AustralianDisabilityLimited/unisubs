@@ -1,33 +1,5 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="profile"{% endblock %}
 
-{% load thumbnail recent_activity %}
-
-{% if user_info.is_active %}
-    <div class="grid_9 alpha">
-        <div class="pod">
-            <div class="hd">
-                <h2>
-                    {{ user_info|title }}'s Activity
-                </h2>
-                {% if can_edit %}
-                    <a href="{% url profiles:edit %}" class="heading_button">Edit profile</a>
-                {% endif %}
-            </div>
-            {% if user_info.action_set.exists %}
-                {% recent_activity user_info %}
-            {% endif %}
-        </div>
-    </div>
-    
-    {% profile_info %}
-    
-{% else %}
-    <div class="grid_9">
-        <div class="pod">
-            <h2>{% trans 'User deleted his profile' %}</h2>
-        </div>
-    </div>        
-{% endif %}
-
+{% block main_content %}
 {% endblock %}

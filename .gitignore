@@ -27,7 +27,6 @@ media/js/js-base-dependencies.js
 media/js/js-moderation-dashboard.js
 media/js/js-onsite-dialog.js
 media/js/js-testing-base.js
-media/js/unisubs.js
 media/static-cache/
 media/teams/*
 media/videos/*

@@ -47,9 +47,11 @@
           {% csrf_token %}
           <div class="grid_5 alpha">
               <h3>{% trans 'Details About Your Team' %}</h3>
+                  {% if form.non_field_errors %}
                   <p>
                       {{ form.non_field_errors }}
                   </p>
+                  {% endif %}
                   <p>
                       {{ form.name.errors }}
                       {{ form.name.label_tag }}
@@ -107,33 +109,33 @@
           </div>
           <div class="grid_3 omega">
               <h3>{% trans 'Team Member Settings' %}</h3>
-                  <p>
-                      <label>
-                          {% trans 'Who can join this team?' %}
-                      </label>
-                      {{ form.membership_policy.errors }}
-                      {{ form.membership_policy }}  
-                  </p>
-                  <p>
-                      <label>
-                          {% trans 'Is moderated?' %}
-                      </label>
-                      {{ form.is_moderated.errors }}
-                      {{ form.is_moderated }}  
-                  </p>                  
-                  <p>
-                      <label>
-                          {% trans 'Who can add videos to this team?' %}
-                      </label>
-                      {{ form.video_policy.errors }}
-                      {{ form.video_policy }}  
-                  </p>
-                  <h3>{% trans 'Team Privacy Settings' %}</h3>
-                  <p class="checkbox">
-                      {{ form.is_visible.errors }}
-                      {{ form.is_visible }}
-                      {{ form.is_visible.label_tag }}
-                  </p>
+                <p>
+                    <label>
+                        {% trans 'Who can join this team?' %}
+                    </label>
+                    {{ form.membership_policy.errors }}
+                    {{ form.membership_policy }}  
+                </p>
+                <p>
+                    <label>
+                        {% trans 'Is moderated?' %}
+                    </label>
+                    {{ form.is_moderated.errors }}
+                    {{ form.is_moderated }}  
+                </p>                  
+                <p>
+                    <label>
+                        {% trans 'Who can add videos to this team?' %}
+                    </label>
+                    {{ form.video_policy.errors }}
+                    {{ form.video_policy }}  
+                </p>
+                <h3>{% trans 'Team Privacy Settings' %}</h3>
+                <p class="checkbox">
+                    {{ form.is_visible.errors }}
+                    {{ form.is_visible }}
+                    {{ form.is_visible.label_tag }}
+                </p>
           </div>
       </div>
       <div class="ft">

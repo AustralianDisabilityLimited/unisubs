@@ -16,39 +16,39 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.GoogleTranslator');
-goog.provide('mirosubs.translate.GoogleTranslator.Transaction');
+goog.provide('unisubs.translate.GoogleTranslator');
+goog.provide('unisubs.translate.GoogleTranslator.Transaction');
 
-mirosubs.translate.GoogleTranslator.TRANSACTION_ID = 0;
+unisubs.translate.GoogleTranslator.TRANSACTION_ID = 0;
 
 /**
  * @constructor
  */
-mirosubs.translate.GoogleTranslator.Transaction = function(){
-    this.id = ++mirosubs.translate.GoogleTranslator.TRANSACTION_ID;
+unisubs.translate.GoogleTranslator.Transaction = function(){
+    this.id = ++unisubs.translate.GoogleTranslator.TRANSACTION_ID;
     this.actions = [];
     this.withError = false;
 };
 
-mirosubs.translate.GoogleTranslator.Transaction.prototype.add = function(toTranslate, fromLang, toLang, widgets, callback){
+unisubs.translate.GoogleTranslator.Transaction.prototype.add = function(toTranslate, fromLang, toLang, widgets, callback){
     if (toTranslate.length > 0){
         this.actions.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
     }
 };
 
-mirosubs.translate.GoogleTranslator.Transaction.prototype.onError = function(response){
+unisubs.translate.GoogleTranslator.Transaction.prototype.onError = function(response){
     if ( ! this.withError){
         this.withError = true;
         alert('Cannot complete automated translation. Error: "'+response['responseDetails']+'".');
     }
 };
 
-mirosubs.translate.GoogleTranslator.Transaction.prototype.getCallback_ = function(widgets, callback){
+unisubs.translate.GoogleTranslator.Transaction.prototype.getCallback_ = function(widgets, callback){
     /**
      * shortcut
      * @type {string}
      */
-    var d = mirosubs.translate.GoogleTranslator.delimiter;
+    var d = unisubs.translate.GoogleTranslator.delimiter;
     var transaction = this;
     
     if (widgets.length && widgets[0].showLoadingIndicator) {
@@ -79,9 +79,9 @@ mirosubs.translate.GoogleTranslator.Transaction.prototype.getCallback_ = functio
     }    
 };
 
-mirosubs.translate.GoogleTranslator.Transaction.prototype.start = function(){
+unisubs.translate.GoogleTranslator.Transaction.prototype.start = function(){
     for (var i=0, len=this.actions.length; i<len; i++){
-        mirosubs.translate.GoogleTranslator.translate.apply(null, this.actions[i]);
+        unisubs.translate.GoogleTranslator.translate.apply(null, this.actions[i]);
     }
 };
 
@@ -89,32 +89,32 @@ mirosubs.translate.GoogleTranslator.Transaction.prototype.start = function(){
  * Uri for jsonp handler
  * @type {goog.Uri}
  */
-mirosubs.translate.GoogleTranslator.baseUri_ = new goog.Uri("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0");
+unisubs.translate.GoogleTranslator.baseUri_ = new goog.Uri("http://ajax.googleapis.com/ajax/services/language/translate?v=1.0");
 
 /**
  * Jsonp handler for Gogle Translator API
  * @type {goog.net.Jsonp}
  */
-mirosubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(mirosubs.translate.GoogleTranslator.baseUri_);
+unisubs.translate.GoogleTranslator.jsonp = new goog.net.Jsonp(unisubs.translate.GoogleTranslator.baseUri_);
 
 /**
  * Maximum length of text to translate
  * @type {number}
  */
-mirosubs.translate.GoogleTranslator.queryMaxLen = 1000;
+unisubs.translate.GoogleTranslator.queryMaxLen = 1000;
 
 /**
  * Delimiter for stings to translate
  * @type {string}
  */
-mirosubs.translate.GoogleTranslator.delimiter = '<dlmt>';
+unisubs.translate.GoogleTranslator.delimiter = '<dlmt>';
 
 /**
  * Remove delimiter from string
  * @param {string} string that should be claned
  * @return {string}
  */
-mirosubs.translate.GoogleTranslator.cleanString = function(str) {
+unisubs.translate.GoogleTranslator.cleanString = function(str) {
     return str.replace('<dlmt>', '');
 };
 
@@ -125,9 +125,9 @@ mirosubs.translate.GoogleTranslator.cleanString = function(str) {
  * @param {string} toLang Language code for language of result
  * @param {function({Object})} callback Callback
  */
-mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
+unisubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang, callback) {
     fromLang = fromLang || '';
-    mirosubs.translate.GoogleTranslator.jsonp.send({
+    unisubs.translate.GoogleTranslator.jsonp.send({
         'q': text,
         'langpair': fromLang+'|'+toLang
     }, callback, function() {
@@ -138,17 +138,17 @@ mirosubs.translate.GoogleTranslator.translate = function(text, fromLang, toLang,
 
 /**
  * Transalte subtitles from widgets with GoogleTranslator.translate
- * @param {Array.<mirosubs.translate.TranslationWidget>} needTranslating
+ * @param {Array.<unisubs.translate.TranslationWidget>} needTranslating
  * @param {?string} fromLang Language code of text to translate, left empty for auto-detection
  * @param {string} toLang Language code for language of result
- * @param {function(Array.<string>, Array.<mirosubs.translate.TranslationWidget>, ?string)} callback
+ * @param {function(Array.<string>, Array.<unisubs.translate.TranslationWidget>, ?string)} callback
  */
-mirosubs.translate.GoogleTranslator.translateWidgets = 
+unisubs.translate.GoogleTranslator.translateWidgets = 
 function(needTranslating, fromLang, toLang, callback) {
-    var ml = mirosubs.translate.GoogleTranslator.queryMaxLen;
-    var d = mirosubs.translate.GoogleTranslator.delimiter;
-    var cleanStr = mirosubs.translate.GoogleTranslator.cleanString;
-    var translate = mirosubs.translate.GoogleTranslator.translate;
+    var ml = unisubs.translate.GoogleTranslator.queryMaxLen;
+    var d = unisubs.translate.GoogleTranslator.delimiter;
+    var cleanStr = unisubs.translate.GoogleTranslator.cleanString;
+    var translate = unisubs.translate.GoogleTranslator.translate;
     
     //ml = 250; for debuging multiple requests
     
@@ -159,10 +159,10 @@ function(needTranslating, fromLang, toLang, callback) {
     var toTranslate = [];
     /**
      * Widgets with subtitles to translate in one request
-     * @type {Array.<mirosubs.translate.TranslationWidget>}
+     * @type {Array.<unisubs.translate.TranslationWidget>}
      */    
     var widgetsToTranslate = [];
-    var transaction = new mirosubs.translate.GoogleTranslator.Transaction();
+    var transaction = new unisubs.translate.GoogleTranslator.Transaction();
     
     goog.array.forEach(needTranslating, function(w) {
         /**
@@ -190,12 +190,12 @@ function(needTranslating, fromLang, toLang, callback) {
     transaction.start();
 };
 
-mirosubs.translate.GoogleTranslator.isTranslateable = function() {
-    if (!mirosubs.translate.GoogleTranslator.Languages_ ) {
+unisubs.translate.GoogleTranslator.isTranslateable = function() {
+    if (!unisubs.translate.GoogleTranslator.Languages_ ) {
         /* 
          * @private 
          */
-        mirosubs.translate.GoogleTranslator.Languages_ = new goog.structs.Set([
+        unisubs.translate.GoogleTranslator.Languages_ = new goog.structs.Set([
             'af','sq','am','ar','hy','az',
 'eu','be','bn','bh','br','bg','my','ca','chr','zh','zh-cn','zh-tw','co','hr','cs',
 'da','dv','nl','en','et','fo','tl','fi','fr','fy','gl','ka','de','el','gu',
@@ -205,5 +205,5 @@ mirosubs.translate.GoogleTranslator.isTranslateable = function() {
 'sk','sl','es','su','sw','sv','syr','tg','ta','tt','te','th','bo','to','tr','uk',
 'ur','uz','ug','vi','cy','yi','yo','']);
     }
-    return mirosubs.translate.GoogleTranslator.Languages_.containsAll(arguments);
+    return unisubs.translate.GoogleTranslator.Languages_.containsAll(arguments);
 }

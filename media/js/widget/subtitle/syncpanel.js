@@ -16,21 +16,21 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.SyncPanel');
+goog.provide('unisubs.subtitle.SyncPanel');
 
 /**
  * @constructor
- * @param {mirosubs.subtitle.EditableCaptionSet} subtitles The subtitles
+ * @param {unisubs.subtitle.EditableCaptionSet} subtitles The subtitles
  *     for the video, so far.
- * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
- * @param {mirosubs.CaptionManager} Caption manager, already containing subtitles
+ * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.CaptionManager} Caption manager, already containing subtitles
  *     with start_time set.
  */
-mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
+unisubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
                                        serverModel, captionManager) {
     goog.ui.Component.call(this);
     /**
-     * @type {mirosubs.subtitle.EditableCaptionSet}
+     * @type {unisubs.subtitle.EditableCaptionSet}
      */
     this.subtitles_ = subtitles;
 
@@ -46,41 +46,41 @@ mirosubs.subtitle.SyncPanel = function(subtitles, videoPlayer,
     this.downHeld_ = false;
     this.keyEventsSuspended_ = false;
 };
-goog.inherits(mirosubs.subtitle.SyncPanel, goog.ui.Component);
+goog.inherits(unisubs.subtitle.SyncPanel, goog.ui.Component);
 
-mirosubs.subtitle.SyncPanel.prototype.enterDocument = function() {
-    mirosubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
+unisubs.subtitle.SyncPanel.prototype.enterDocument = function() {
+    unisubs.subtitle.SyncPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
     handler.listen(this.captionManager_,
-                   mirosubs.CaptionManager.CAPTION,
+                   unisubs.CaptionManager.CAPTION,
                    this.captionReached_).
         listen(document, goog.events.EventType.KEYDOWN, this.handleKeyDown_).
         listen(document, goog.events.EventType.KEYUP, this.handleKeyUp_);
 };
-mirosubs.subtitle.SyncPanel.prototype.createDom = function() {
-    mirosubs.subtitle.SyncPanel.superClass_.createDom.call(this);
+unisubs.subtitle.SyncPanel.prototype.createDom = function() {
+    unisubs.subtitle.SyncPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild(this.contentElem_ = $d('div'));
-    this.addChild(this.subtitleList_ = new mirosubs.subtitle.SubtitleList(
+    this.addChild(this.subtitleList_ = new unisubs.subtitle.SubtitleList(
         this.videoPlayer_, this.subtitles_, true), true);
 };
-mirosubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
+unisubs.subtitle.SyncPanel.prototype.getRightPanel = function() {
     if (!this.rightPanel_) {
         this.rightPanel_ = this.createRightPanelInternal();
         this.getHandler().
             listen(
                 this.rightPanel_,
-                mirosubs.RightPanel.EventType.LEGENDKEY,
+                unisubs.RightPanel.EventType.LEGENDKEY,
                 this.handleLegendKeyPress_).
             listen(
                 this.rightPanel_,
-                mirosubs.RightPanel.EventType.RESTART,
+                unisubs.RightPanel.EventType.RESTART,
                 this.startOverClicked_);
     }
     return this.rightPanel_;
 };
-mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
-    var helpContents = new mirosubs.RightPanel.HelpContents(
+unisubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
+    var helpContents = new unisubs.RightPanel.HelpContents(
         "Syncing",
         ["Congratulations, you finished the hard part (all that typing)!",
          ["Now, to line up your subtitles to the video, tap the DOWN ARROW right ",
@@ -92,30 +92,30 @@ mirosubs.subtitle.SyncPanel.prototype.createRightPanelInternal = function() {
         3, 1);
     var extraHelp = 
         ["Press play, then tap this button or the down arrow when the next subtitle should appear."];
-    return new mirosubs.RightPanel(
+    return new unisubs.RightPanel(
         this.serverModel, helpContents, extraHelp,
         this.makeKeySpecsInternal(), true, "Done?",
         "Next Step: Reviewing");
 };
-mirosubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
+unisubs.subtitle.SyncPanel.prototype.makeKeySpecsInternal = function() {
     var KC = goog.events.KeyCodes;
     return [
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-begin', 'mirosubs-down', 'down',
+        new unisubs.RightPanel.KeySpec(
+            'unisubs-begin', 'unisubs-down', 'down',
             'Tap when next subtitle should appear', KC.DOWN, 0),
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-play', 'mirosubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
-        new mirosubs.RightPanel.KeySpec(
-            'mirosubs-skip', 'mirosubs-control', 'shift\n+\ntab',
+        new unisubs.RightPanel.KeySpec(
+            'unisubs-play', 'unisubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
+        new unisubs.RightPanel.KeySpec(
+            'unisubs-skip', 'unisubs-control', 'shift\n+\ntab',
             'Skip Back 8 Seconds', KC.TAB,
-            mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
+            unisubs.RightPanel.KeySpec.Modifier.SHIFT)
     ];
 
 };
-mirosubs.subtitle.SyncPanel.prototype.suspendKeyEvents = function(suspended) {
+unisubs.subtitle.SyncPanel.prototype.suspendKeyEvents = function(suspended) {
     this.keyEventsSuspended_ = suspended;
 };
-mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
+unisubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
     function(event)
 {
     if (event.keyCode == goog.events.KeyCodes.DOWN) {
@@ -127,7 +127,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleLegendKeyPress_ =
             this.downReleased_();
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
+unisubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
     if (this.keyEventsSuspended_)
         return;
     if (event.keyCode == goog.events.KeyCodes.DOWN && 
@@ -143,7 +143,7 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyDown_ = function(event) {
         this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, 0, true);
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
+unisubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.DOWN && this.downHeld_) {
         event.preventDefault();
         this.downReleased_();
@@ -153,10 +153,10 @@ mirosubs.subtitle.SyncPanel.prototype.handleKeyUp_ = function(event) {
              !this.currentlyEditingSubtitle_())
         this.rightPanel_.setKeyDown(goog.events.KeyCodes.TAB, 0, false);
 };
-mirosubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
+unisubs.subtitle.SyncPanel.prototype.spacePressed_ = function() {
     this.videoPlayer_.togglePause();
 }
-mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
+unisubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
     if (this.videoPlayer_.isPlaying()) {
         if (this.downHeld_)
             return;
@@ -173,7 +173,7 @@ mirosubs.subtitle.SyncPanel.prototype.downPressed_ = function() {
         this.videoStarted_ = true;
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.downReleased_ = function() {
+unisubs.subtitle.SyncPanel.prototype.downReleased_ = function() {
     this.captionManager_.disableCaptionEvents(false);
     this.downHeld_ = false;
     var playheadTime = this.videoPlayer_.getPlayheadTime();
@@ -198,7 +198,7 @@ mirosubs.subtitle.SyncPanel.prototype.downReleased_ = function() {
     this.downSub_ = null;
     this.downPlayheadTime_ = -1;
 };
-mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
+unisubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
     var answer =
         confirm("Are you sure you want to start over? All timestamps " +
                 "will be deleted.");
@@ -207,17 +207,17 @@ mirosubs.subtitle.SyncPanel.prototype.startOverClicked_ = function() {
         this.videoPlayer_.setPlayheadTime(0);
     }
 };
-mirosubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
+unisubs.subtitle.SyncPanel.prototype.currentlyEditingSubtitle_ = function() {
     return this.subtitleList_.isCurrentlyEditing();
 };
-mirosubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {
+unisubs.subtitle.SyncPanel.prototype.captionReached_ = function(event) {
     var editableCaption = event.caption;
     this.subtitleList_.clearActiveWidget();
     if (editableCaption != null)
         this.subtitleList_.setActiveWidget(editableCaption.getCaptionID());
 };
-mirosubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
-    mirosubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);
+unisubs.subtitle.SyncPanel.prototype.disposeInternal = function() {
+    unisubs.subtitle.SyncPanel.superClass_.disposeInternal.call(this);
     if (this.rightPanel_)
         this.rightPanel_.dispose();
 };

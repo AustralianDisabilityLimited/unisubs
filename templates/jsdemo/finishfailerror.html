@@ -9,14 +9,14 @@
   }
 
   function openDialog() {
-      var logger = new mirosubs.subtitle.Logger(2);
-      mirosubs.finishfaildialog.Dialog.show(
+      var logger = new unisubs.subtitle.Logger(2);
+      unisubs.finishfaildialog.Dialog.show(
           logger, 503, saveFunction);
   }
 
   function openTimeoutDialog() {
-      var logger = new mirosubs.subtitle.Logger(2);
-      window.timeoutDialog = mirosubs.finishfaildialog.Dialog.show(
+      var logger = new unisubs.subtitle.Logger(2);
+      window.timeoutDialog = unisubs.finishfaildialog.Dialog.show(
          logger, null, saveFunction);
   }
 

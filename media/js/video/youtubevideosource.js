@@ -16,79 +16,79 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.YoutubeVideoSource');
+goog.provide('unisubs.video.YoutubeVideoSource');
 
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  * @param {string} youtubeVideoID Youtube video id
  * @param {Object.<string, *>=} opt_videoConfig Params to use for 
  *     youtube query string, plus optional 'width' and 'height' 
  *     parameters.
  */
-mirosubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
+unisubs.video.YoutubeVideoSource = function(youtubeVideoID, opt_videoConfig) {
     this.youtubeVideoID_ = youtubeVideoID;
-    this.uuid_ = mirosubs.randomString();
+    this.uuid_ = unisubs.randomString();
     this.videoConfig_ = opt_videoConfig;
 };
 
-mirosubs.video.YoutubeVideoSource.extractVideoID = function(videoURL) {
+unisubs.video.YoutubeVideoSource.extractVideoID = function(videoURL) {
     var videoIDExtract = /(?:v[\/=]|embed\/)([0-9a-zA-Z\-\_]+)/i.exec(videoURL);
     return videoIDExtract ? videoIDExtract[1] : null;
 }
 
-mirosubs.video.YoutubeVideoSource.forURL = 
+unisubs.video.YoutubeVideoSource.forURL = 
     function(videoURL, opt_videoConfig) 
 {
-    var videoID = mirosubs.video.YoutubeVideoSource.extractVideoID(videoURL);
+    var videoID = unisubs.video.YoutubeVideoSource.extractVideoID(videoURL);
     if (videoID)
-        return new mirosubs.video.YoutubeVideoSource(
+        return new unisubs.video.YoutubeVideoSource(
             videoID, opt_videoConfig);
     else
         return null;
 };
 
-mirosubs.video.YoutubeVideoSource.isYoutube = function(videoURL) {
+unisubs.video.YoutubeVideoSource.isYoutube = function(videoURL) {
     return /^\s*https?:\/\/([^\.]+\.)?youtube/i.test(videoURL);
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
+unisubs.video.YoutubeVideoSource.prototype.createPlayer = function() {
     return this.createPlayerInternal(false);
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
+unisubs.video.YoutubeVideoSource.prototype.createControlledPlayer = 
     function() 
 {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayerInternal(true));
+    return new unisubs.video.ControlledVideoPlayer(this.createPlayerInternal(true));
 };
 
 /**
  * @protected
  */
-mirosubs.video.YoutubeVideoSource.prototype.createPlayerInternal = function(forDialog) {
-    return new mirosubs.video.YoutubeVideoPlayer(
-        new mirosubs.video.YoutubeVideoSource(
+unisubs.video.YoutubeVideoSource.prototype.createPlayerInternal = function(forDialog) {
+    return new unisubs.video.YoutubeVideoPlayer(
+        new unisubs.video.YoutubeVideoSource(
             this.youtubeVideoID_, this.videoConfig_), 
         forDialog);
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
+unisubs.video.YoutubeVideoSource.prototype.getYoutubeVideoID = function() {
     return this.youtubeVideoID_;
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.getUUID = function() {
+unisubs.video.YoutubeVideoSource.prototype.getUUID = function() {
     return this.uuid_;
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.getVideoConfig = function() {
+unisubs.video.YoutubeVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.setVideoConfig = function(config) {
+unisubs.video.YoutubeVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.sizeFromConfig = function() {
+unisubs.video.YoutubeVideoSource.prototype.sizeFromConfig = function() {
     if (this.videoConfig_ && this.videoConfig_['width'] && 
         this.videoConfig_['height']) {
         return new goog.math.Size(
@@ -99,6 +99,6 @@ mirosubs.video.YoutubeVideoSource.prototype.sizeFromConfig = function() {
     }
 };
 
-mirosubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
+unisubs.video.YoutubeVideoSource.prototype.getVideoURL = function() {
     return "http://www.youtube.com/watch?v=" + this.youtubeVideoID_;
 };

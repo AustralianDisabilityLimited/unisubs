@@ -21,10 +21,10 @@
   margin-bottom: 50px;
 }
 
-.mirosubs-videoDiv video,
-.mirosubs-videoDiv video *,
-.mirosubs-videoDiv object,
-.mirosubs-videoDiv embed{
+.unisubs-videoDiv video,
+.unisubs-videoDiv video *,
+.unisubs-videoDiv object,
+.unisubs-videoDiv embed{
   display: block;
   width: 470px ;
 }
@@ -266,13 +266,13 @@ margin: 0px !important;
 /////////////////////////////////////////////*/
 
 
-.mirosubs-share h2{
+.unisubs-share h2{
   border-bottom: 0 !important;;
   padding: 0 !important;
   line-height: 1em;
   }
 
-.mirosubs-share h3{
+.unisubs-share h3{
   border-bottom: 0 !important;;
   padding: 0 !important;
   }

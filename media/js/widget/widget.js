@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.Widget');
+goog.provide('unisubs.widget.Widget');
 
 /**
  * @constructor
  * @param {Object} widgetConfig parameter documentation is currenty in embed.js.
  */
-mirosubs.widget.Widget = function(widgetConfig) {
+unisubs.widget.Widget = function(widgetConfig) {
     goog.ui.Component.call(this);
 
     /**
@@ -49,13 +49,13 @@ mirosubs.widget.Widget = function(widgetConfig) {
         !!widgetConfig['translate_immediately'];
     var baseState = widgetConfig['base_state'];
     if (baseState)
-        this.baseState_ = new mirosubs.widget.BaseState(baseState);
+        this.baseState_ = new unisubs.widget.BaseState(baseState);
 
-    mirosubs.widget.Widget.widgetsCreated_.push(this);
+    unisubs.widget.Widget.widgetsCreated_.push(this);
 };
-goog.inherits(mirosubs.widget.Widget, goog.ui.Component);
+goog.inherits(unisubs.widget.Widget, goog.ui.Component);
 
-mirosubs.widget.Widget.prototype.createDom = function() {
+unisubs.widget.Widget.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createElement('span'));
     this.addWidget_(this.getElement());
 };
@@ -63,7 +63,7 @@ mirosubs.widget.Widget.prototype.createDom = function() {
 /*
  * @Type {Array} All widget instances created on this page.
  */
-mirosubs.widget.Widget.widgetsCreated_ = [];
+unisubs.widget.Widget.widgetsCreated_ = [];
 
 
 /* Gets all widgets created on this page.
@@ -71,8 +71,8 @@ mirosubs.widget.Widget.widgetsCreated_ = [];
  * The array is cloned, so end user code can loop, filter and otherwise 
  * modify the array without compromising our global registry.
  */
-mirosubs.widget.Widget.getAllWidgets = function(){
-    return mirosubs.widget.Widget.widgetsCreated_.slice(0);
+unisubs.widget.Widget.getAllWidgets = function(){
+    return unisubs.widget.Widget.widgetsCreated_.slice(0);
 };
 
 /* Get the last widget on this page with the given video URL.
@@ -81,77 +81,77 @@ mirosubs.widget.Widget.getAllWidgets = function(){
  * If a page contains X widgets with the same video url, 
  * only the last one will be fetched from this call (even if their
  * other configs differ). To get all widgets on the page, use 
- * the mirosubs.widgets.Widget.getAllWidgetsByURL method.
- * @return {mirosubs.widgets.Widget} The widget (or undefined if not found).
+ * the unisubs.widgets.Widget.getAllWidgetsByURL method.
+ * @return {unisubs.widgets.Widget} The widget (or undefined if not found).
  */
-mirosubs.widget.Widget.getWidgetByURL = function(url){
-    return mirosubs.widget.Widget.getAllWidgetsByURL(url)[0];
+unisubs.widget.Widget.getWidgetByURL = function(url){
+    return unisubs.widget.Widget.getAllWidgetsByURL(url)[0];
 };
 
 /* Get the last widget on this page with the given video URL.
  * @param {String} url The video url to find widgets for.
  * @return {Array} An array with zero or more widgets with the given URL. 
  */
-mirosubs.widget.Widget.getAllWidgetsByURL = function(url){
+unisubs.widget.Widget.getAllWidgetsByURL = function(url){
     if (!url){
         return [];
     }
-    var filtered =  goog.array.filter(mirosubs.widget.Widget.widgetsCreated_, function(x){
+    var filtered =  goog.array.filter(unisubs.widget.Widget.widgetsCreated_, function(x){
         return x.videoURL_ == url;
     });
     return filtered;
 };
 
 /**
- * @param {HTMLDivElement} el Just a blank div with class mirosubs-widget.
+ * @param {HTMLDivElement} el Just a blank div with class unisubs-widget.
  */
-mirosubs.widget.Widget.prototype.decorateInternal = function(el) {
-    mirosubs.widget.Widget.superClass_.decorateInternal.call(this, el);
+unisubs.widget.Widget.prototype.decorateInternal = function(el) {
+    unisubs.widget.Widget.superClass_.decorateInternal.call(this, el);
     this.addWidget_(el);
 };
 
-mirosubs.widget.Widget.prototype.createVideoPlayer_ = function(videoSource) {
+unisubs.widget.Widget.prototype.createVideoPlayer_ = function(videoSource) {
     this.videoPlayer_ = videoSource.createPlayer();
     this.addChildAt(this.videoPlayer_, 0, true);
     this.setVideoDimensions_();
 };
 
-mirosubs.widget.Widget.prototype.findVideoSource_ = function() {
+unisubs.widget.Widget.prototype.findVideoSource_ = function() {
     if (this.alternateVideoURLs_ && this.alternateVideoURLs_.length > 0) {
         var mainVideoSpec = this.videoURL_;
         if (this.videoConfig_)
             mainVideoSpec = { 'url': this.videoURL_, 
                               'config': this.videoConfig_ };
-        return mirosubs.video.VideoSource.bestVideoSource(
+        return unisubs.video.VideoSource.bestVideoSource(
             goog.array.concat(mainVideoSpec, this.alternateVideoURLs_));
     }
     else
-        return mirosubs.video.VideoSource.videoSourceForURL(
+        return unisubs.video.VideoSource.videoSourceForURL(
             this.videoURL_, this.videoConfig_);
 };
 
-mirosubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ = 
+unisubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ = 
     function() 
 {
-    if (this.videoSource_ instanceof mirosubs.video.BlipTVPlaceholder)
+    if (this.videoSource_ instanceof unisubs.video.BlipTVPlaceholder)
         return false;
     if (this.forceFormat_ || goog.isDefAndNotNull(this.alternateVideoURLs_))
         return true;
     else {
-        return !(this.videoSource_ instanceof mirosubs.video.Html5VideoSource)
-                || mirosubs.video.supportsVideo();
+        return !(this.videoSource_ instanceof unisubs.video.Html5VideoSource)
+                || unisubs.video.supportsVideo();
     }
 };
 
-mirosubs.widget.Widget.prototype.addVideoLoadingPlaceholder_ = 
+unisubs.widget.Widget.prototype.addVideoLoadingPlaceholder_ = 
     function(el) 
 {
     this.videoPlaceholder_ = this.getDomHelper().createDom(
-        'div', 'mirosubs-videoLoading', 'Loading...');
+        'div', 'unisubs-videoLoading', 'Loading...');
     goog.dom.appendChild(el, this.videoPlaceholder_);
 };
 
-mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
+unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     try {
         this.videoSource_ = this.findVideoSource_();
     }
@@ -164,30 +164,30 @@ mirosubs.widget.Widget.prototype.addWidget_ = function(el) {
         this.createVideoPlayer_(this.videoSource_);
     else
         this.addVideoLoadingPlaceholder_(el);
-    this.videoTab_ = new mirosubs.widget.VideoTab();
+    this.videoTab_ = new unisubs.widget.VideoTab();
     var videoTabContainer = new goog.ui.Component();
     this.addChild(videoTabContainer, true);
     videoTabContainer.addChild(this.videoTab_, true);
     videoTabContainer.getElement().className = 
-        'mirosubs-videoTab-container';
+        'unisubs-videoTab-container';
     this.videoTab_.showLoading();
     var args = {
         'video_url': this.videoURL_,
-        'is_remote': mirosubs.isFromDifferentDomain()
+        'is_remote': unisubs.isFromDifferentDomain()
     };
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.initializeState_, this),
         goog.bind(this.showWidgetError_, this));
 };
 
-mirosubs.widget.Widget.prototype.showWidgetError_ = function() {
+unisubs.widget.Widget.prototype.showWidgetError_ = function() {
     // call to show_widget timed out.
     if (!this.isVideoSourceImmediatelyUsable_()) {
         // waiting for video source from server.
-        if (this.videoSource_ instanceof mirosubs.video.BlipTVPlaceholder) {
+        if (this.videoSource_ instanceof unisubs.video.BlipTVPlaceholder) {
             // out of luck.
             
         }
@@ -198,7 +198,7 @@ mirosubs.widget.Widget.prototype.showWidgetError_ = function() {
     this.videoTab_.showError();
 };
 
-mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
+unisubs.widget.Widget.prototype.initializeState_ = function(result) {
     if (!result) {
         // this happens, for example, for private youtube videos.
         this.videoTab_.showError();
@@ -206,7 +206,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
     }
     if (!this.isVideoSourceImmediatelyUsable_()) {
         goog.dom.removeNode(this.videoPlaceholder_);
-        var videoSource = mirosubs.video.VideoSource.bestVideoSource(
+        var videoSource = unisubs.video.VideoSource.bestVideoSource(
             result['video_urls']);
         if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
             this.videoConfig_)
@@ -215,7 +215,7 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
         this.createVideoPlayer_(this.videoSource_);
     }
 
-    this.controller_ = new mirosubs.widget.WidgetController(
+    this.controller_ = new unisubs.widget.WidgetController(
         this.videoURL_, this.videoPlayer_, this.videoTab_);
     this.controller_.initializeState(result);
 
@@ -230,12 +230,12 @@ mirosubs.widget.Widget.prototype.initializeState_ = function(result) {
                       subController_));
 };
 
-mirosubs.widget.Widget.prototype.enterDocument = function() {
-    mirosubs.widget.Widget.superClass_.enterDocument.call(this);
+unisubs.widget.Widget.prototype.enterDocument = function() {
+    unisubs.widget.Widget.superClass_.enterDocument.call(this);
     this.setVideoDimensions_();
 };
 
-mirosubs.widget.Widget.prototype.setVideoDimensions_ = function() {
+unisubs.widget.Widget.prototype.setVideoDimensions_ = function() {
     if (!this.isInDocument() || !this.videoPlayer_)
         return;
     if (this.videoPlayer_.areDimensionsKnown())
@@ -243,12 +243,12 @@ mirosubs.widget.Widget.prototype.setVideoDimensions_ = function() {
     else
         this.getHandler().listen(
             this.videoPlayer_,
-            mirosubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
+            unisubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
             this.videoDimensionsKnown_);
 };
 
-mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
-    mirosubs.style.setWidth(
+unisubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
+    unisubs.style.setWidth(
         this.getElement(),
         Math.round(this.videoPlayer_.getVideoSize().width));
 };
@@ -257,8 +257,8 @@ mirosubs.widget.Widget.prototype.videoDimensionsKnown_ = function() {
  * Select a menu item. Either called by selecting 
  * a menu item or programmatically by js on the page.
  */
-mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
-    var s = mirosubs.widget.DropDown.Selection;
+unisubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_languageCode) {
+    var s = unisubs.widget.DropDown.Selection;
     var subController = this.controller_.getSubtitleController();
     var playController = this.controller_.getPlayController();
 
@@ -276,44 +276,60 @@ mirosubs.widget.Widget.prototype.selectMenuItem = function(selection, opt_langua
         
 };
 
-mirosubs.widget.Widget.prototype.playAt = function(time) {
+unisubs.widget.Widget.prototype.playAt = function(time) {
     this.videoPlayer_.setPlayheadTime(time);
     this.videoPlayer_.play();
 };
 
-mirosubs.widget.Widget.prototype.play = function() {
+unisubs.widget.Widget.prototype.play = function() {
     this.videoPlayer_.play();
 };
 
-mirosubs.widget.Widget.prototype.pause = function() {
+unisubs.widget.Widget.prototype.pause = function() {
     this.videoPlayer_.pause();
 };
 
-mirosubs.widget.Widget.prototype.openMenu = function (){
+unisubs.widget.Widget.prototype.openMenu = function (){
     this.controller_.openMenu();
 }
 
-mirosubs.widget.Widget.exportJSSameDomain_ = function(){
+unisubs.widget.Widget.exportJSSameDomain_ = function(){
 
     goog.exportSymbol(
-        "mirosubs.widget.SameDomainEmbed.embed", 
-        mirosubs.widget.SameDomainEmbed.embed);
+        "unisubs.widget.SameDomainEmbed.embed", 
+        unisubs.widget.SameDomainEmbed.embed);
     
     goog.exportSymbol(
-        "mirosubs.video.supportsVideo", mirosubs.video.supportsVideo);
+        "unisubs.video.supportsVideo", unisubs.video.supportsVideo);
     goog.exportSymbol(
-        "mirosubs.video.supportsH264", mirosubs.video.supportsH264);
+        "unisubs.video.supportsH264", unisubs.video.supportsH264);
     goog.exportSymbol(
-        "mirosubs.video.supportsOgg", mirosubs.video.supportsOgg);
+        "unisubs.video.supportsOgg", unisubs.video.supportsOgg);
     goog.exportSymbol(
-        "mirosubs.video.supportsWebM", mirosubs.video.supportsWebM);
+        "unisubs.video.supportsWebM", unisubs.video.supportsWebM);
+        
+    // these are here to guarantee backwareds compatibility,
+    // should be removed once we are sure partners do not need this
+    
+    goog.exportSymbol(
+        "mirosubs.widget.SameDomainEmbed.embed", 
+        unisubs.widget.SameDomainEmbed.embed);
+
+    goog.exportSymbol(
+        "mirosubs.video.supportsVideo", unisubs.video.supportsVideo);
+    goog.exportSymbol(
+        "mirosubs.video.supportsH264", unisubs.video.supportsH264);
+    goog.exportSymbol(
+        "mirosubs.video.supportsOgg", unisubs.video.supportsOgg);
+    goog.exportSymbol(
+        "mirosubs.video.supportsWebM", unisubs.video.supportsWebM);
 };
 
-mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
-        if (!mirosubs.widget.CrossDomainEmbed){
-            mirosubs.widget.CrossDomainEmbed = {};
+unisubs.widget.Widget.exportJSCrossDomain_ = function(){
+        if (!unisubs.widget.CrossDomainEmbed){
+            unisubs.widget.CrossDomainEmbed = {};
         } 
-        mirosubs.widget.CrossDomainEmbed.Type = {
+        unisubs.widget.CrossDomainEmbed.Type = {
             EMBED_SCRIPT : 1,
             WIDGETIZER : 2,
             BOOKMARKLET : 3,
@@ -321,64 +337,79 @@ mirosubs.widget.Widget.exportJSCrossDomain_ = function(){
         };
 
         goog.exportSymbol(
-            'mirosubs.widget.CrossDomainEmbed.embed',
-            mirosubs.widget.CrossDomainEmbed.embed);
+            'unisubs.widget.CrossDomainEmbed.embed',
+            unisubs.widget.CrossDomainEmbed.embed);
+            
+        // these are here to guarantee backwareds compatibility,
+        // should be removed once we are sure partners do not need this
+        goog.exportSymbol(
+            'unisubs.widget.CrossDomainEmbed.embed',
+            unisubs.widget.CrossDomainEmbed.embed);
+            
 };
 
-mirosubs.widget.Widget.exportFireKeySequence = function() {
+unisubs.widget.Widget.exportFireKeySequence = function() {
+    goog.exportSymbol(
+        'unisubs.widget.fireKeySequence',
+        goog.testing.events.fireNonAsciiKeySequence);
+
+    // these are here to guarantee backwareds compatibility,
+    // should be removed once we are sure partners do not need this
+
     goog.exportSymbol(
         'mirosubs.widget.fireKeySequence',
         goog.testing.events.fireNonAsciiKeySequence);
+    
 };
 
 /*
  * @param {bool} isCrossDomain Is is a cross domain embed?
  */
-mirosubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
+unisubs.widget.Widget.exportJSSymbols = function(isCrossDomain){
     // these should be exported in all cases:
     goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
+        unisubs.widget.Widget.prototype,
         "play",
-        mirosubs.widget.Widget.prototype.play );
+        unisubs.widget.Widget.prototype.play );
     goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
+        unisubs.widget.Widget.prototype,
         "pause",
-        mirosubs.widget.Widget.prototype.pause );
+        unisubs.widget.Widget.prototype.pause );
     goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
+        unisubs.widget.Widget.prototype,
         "playAt",
-        mirosubs.widget.Widget.prototype.playAt );
+        unisubs.widget.Widget.prototype.playAt );
     goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
+        unisubs.widget.Widget.prototype,
         "openMenu",
-        mirosubs.widget.Widget.prototype.openMenu );
+        unisubs.widget.Widget.prototype.openMenu );
 
     goog.exportProperty(
-        mirosubs.widget.Widget.prototype,
+        unisubs.widget.Widget.prototype,
         "selectMenuItem",
-        mirosubs.widget.Widget.prototype.selectMenuItem);
+        unisubs.widget.Widget.prototype.selectMenuItem);
 
-    mirosubs.widget.Widget.exportFireKeySequence();
-
-    goog.exportSymbol(
-        "mirosubs.widget.Widget.getWidgetByURL",
-        mirosubs.widget.Widget.getWidgetByURL);
-    goog.exportSymbol(
-        "mirosubs.widget.Widget.getAllWidgets",
-        mirosubs.widget.Widget.getAllWidgets);
+    unisubs.widget.Widget.exportFireKeySequence();
 
     goog.exportSymbol(
-        "mirosubs.widget.DropDown.Selection",
-        mirosubs.widget.DropDown.Selection);
-    var s = mirosubs.widget.DropDown.Selection;
+        "unisubs.widget.Widget.getWidgetByURL",
+        unisubs.widget.Widget.getWidgetByURL);
+    goog.exportSymbol(
+        "unisubs.widget.Widget.getAllWidgets",
+        unisubs.widget.Widget.getAllWidgets);
+
+    goog.exportSymbol(
+        "unisubs.widget.DropDown.Selection",
+        unisubs.widget.DropDown.Selection);
+    var s = unisubs.widget.DropDown.Selection;
     s['IMPROVE_SUBTITLES'] = s.IMPROVE_SUBTITLES;
     s['LANGUAGE_SELECTED'] = s.LANGUAGE_SELECTED;
     s['ADD_LANGUAGE'] = s.ADD_LANGUAGE;
     s['SUBTITLES_OFF'] = s.SUBTITLES_OFF;
     
     if (isCrossDomain) {
-        mirosubs.widget.Widget.exportJSCrossDomain_();
+        unisubs.widget.Widget.exportJSCrossDomain_();
     } else {
-        mirosubs.widget.Widget.exportJSSameDomain_();
+        unisubs.widget.Widget.exportJSSameDomain_();
     }
 };

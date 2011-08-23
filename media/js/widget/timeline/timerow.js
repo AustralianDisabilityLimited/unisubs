@@ -16,34 +16,34 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.timeline.TimeRow');
+goog.provide('unisubs.timeline.TimeRow');
 /**
 * @constructor
 * @extends goog.ui.Component
 */
-mirosubs.timeline.TimeRow = function(timelineInner, spacing) {
+unisubs.timeline.TimeRow = function(timelineInner, spacing) {
     goog.ui.Component.call(this);
     this.timelineInner_ = timelineInner;
     this.spacing_ = spacing;
-    this.secondsPerUL_ = spacing * mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS;
-    this.pixelsPerUL_ = mirosubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
-        mirosubs.timeline.TimeRowUL.PX_PER_TICK;
+    this.secondsPerUL_ = spacing * unisubs.timeline.TimeRowUL.NUM_MAJOR_TICKS;
+    this.pixelsPerUL_ = unisubs.timeline.TimeRowUL.NUM_MAJOR_TICKS *
+        unisubs.timeline.TimeRowUL.PX_PER_TICK;
     this.uls_ = [];
 
-    var imagesPath = mirosubs.mediaURL + 'images/';
+    var imagesPath = unisubs.mediaURL + 'images/';
     this.openHandStyle_ = goog.style.cursor.getDraggableCursorStyle(
         imagesPath);
     this.closedHandStyle_ = goog.style.cursor.getDraggingCursorStyle(
         imagesPath);
 };
-goog.inherits(mirosubs.timeline.TimeRow, goog.ui.Component);
-mirosubs.timeline.TimeRow.prototype.createDom = function() {
-    mirosubs.timeline.TimeRow.superClass_.createDom.call(this);
+goog.inherits(unisubs.timeline.TimeRow, goog.ui.Component);
+unisubs.timeline.TimeRow.prototype.createDom = function() {
+    unisubs.timeline.TimeRow.superClass_.createDom.call(this);
     var el = this.getElement();
-    el.className = 'mirosubs-timerow';
+    el.className = 'unisubs-timerow';
     this.ensureVisible(0);
 
-    mirosubs.style.setProperty(el, 'cursor', this.openHandStyle_);
+    unisubs.style.setProperty(el, 'cursor', this.openHandStyle_);
 
     // Dragger has a default action that cannot be overridden.  Kind of pointless
     // to subclass just to override that, so instead the variable is being
@@ -51,8 +51,8 @@ mirosubs.timeline.TimeRow.prototype.createDom = function() {
     this.dragger_ = new goog.fx.Dragger(el);
     this.dragger_.defaultAction = function(x,y) {};
 };
-mirosubs.timeline.TimeRow.prototype.enterDocument = function() {
-    mirosubs.timeline.Timeline.superClass_.enterDocument.call(this);
+unisubs.timeline.TimeRow.prototype.enterDocument = function() {
+    unisubs.timeline.Timeline.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(
             this.dragger_,
@@ -71,20 +71,20 @@ mirosubs.timeline.TimeRow.prototype.enterDocument = function() {
             goog.fx.Dragger.EventType.END,
             goog.bind(this.timelineInner_.endDrag, this.timelineInner_));
 };
-mirosubs.timeline.TimeRow.prototype.ensureVisible = function(time) {
+unisubs.timeline.TimeRow.prototype.ensureVisible = function(time) {
     // always reaching 20 seconds into the future.
     var $d =
         goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     while (this.uls_.length * this.secondsPerUL_ < time + 20) {
-        var row = new mirosubs.timeline.TimeRowUL(
+        var row = new unisubs.timeline.TimeRowUL(
             this.spacing_,
             this.uls_.length * this.secondsPerUL_);
         this.addChild(row, true);
         this.uls_.push(row);
     }
 };
-mirosubs.timeline.TimeRow.prototype.changeCursor = function(closed) {
-    mirosubs.style.setProperty(
+unisubs.timeline.TimeRow.prototype.changeCursor = function(closed) {
+    unisubs.style.setProperty(
         this.getElement(),
         closed ? this.closedHandStyle_ : this.openHandStyle_);
 }

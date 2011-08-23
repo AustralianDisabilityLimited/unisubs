@@ -1,0 +1,29 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@pybrew.com
+
+    ServerName unisubs.pybrew.com
+    ServerAlias unisubs.pybrew.com unisubsalpha.pybrew.com
+
+    LogLevel warn
+    ErrorLog /home/unisubs/log/apache.error.log
+    CustomLog /home/unisubs/log/apache.custom.log combined
+
+    WSGIDaemonProcess unisubs user=unisubs group=www-data threads=2
+    WSGIProcessGroup unisubs
+
+    WSGIScriptAlias / /home/unisubs/unisubs/deploy/unisubs.wsgi
+
+    Alias /site_media /home/unisubs/unisubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /home/unisubs/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

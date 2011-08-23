@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 
-  {% include_bundle "mirosubs-api" %}
+  {% include_bundle "unisubs-api" %}
   <script type="text/javascript">
     window.MEDIA_URL = '{{MEDIA_URL}}';
     {% if DEBUG %}
@@ -16,7 +16,7 @@
 
 <body>
   <script language="JavaScript" type="text/javascript">
-    mirosubs.api.openUnisubsDialogWithSettings(false, {{widget_params|safe}}, {{general_settings|safe}});
+    unisubs.api.openUnisubsDialogWithSettings(false, {{widget_params|safe}}, {{general_settings|safe}});
   </script>
 </body>
 </html>

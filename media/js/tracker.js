@@ -16,29 +16,29 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Tracker');
+goog.provide('unisubs.Tracker');
 
 /**
  * @constructor
  */
-mirosubs.Tracker = function() {
+unisubs.Tracker = function() {
     this.accountSet_ = false;
     if (goog.DEBUG) {
-        this.logger_ = goog.debug.Logger.getLogger('mirosubs.Tracker');
+        this.logger_ = goog.debug.Logger.getLogger('unisubs.Tracker');
     }
 };
 
-goog.addSingletonGetter(mirosubs.Tracker);
+goog.addSingletonGetter(unisubs.Tracker);
 
-mirosubs.Tracker.prototype.ACCOUNT_ = 'UA-163840-22';
-mirosubs.Tracker.prototype.PREFIX_ = 'usubs';
+unisubs.Tracker.prototype.ACCOUNT_ = 'UA-163840-22';
+unisubs.Tracker.prototype.PREFIX_ = 'usubs';
 
-mirosubs.Tracker.prototype.gaq_ = function() {
+unisubs.Tracker.prototype.gaq_ = function() {
     return window['_gaq'];
 };
 
-mirosubs.Tracker.prototype.trackEvent = function(category, action, opt_label, opt_value) {
-    if (mirosubs.REPORT_ANALYTICS) {
+unisubs.Tracker.prototype.trackEvent = function(category, action, opt_label, opt_value) {
+    if (unisubs.REPORT_ANALYTICS) {
         if (goog.DEBUG) {
             this.logger_.info('tracking event: ' + category + 
                               ' for action ' + action + 
@@ -50,19 +50,19 @@ mirosubs.Tracker.prototype.trackEvent = function(category, action, opt_label, op
     }
 };
 
-mirosubs.Tracker.prototype.trackPageview = function(pageview, opt_props) {
-    if (mirosubs.REPORT_ANALYTICS) {
+unisubs.Tracker.prototype.trackPageview = function(pageview, opt_props) {
+    if (unisubs.REPORT_ANALYTICS) {
         if (goog.DEBUG) {
             this.logger_.info(pageview);
         }
         var props = opt_props || {};
-        props['onsite'] = mirosubs.isFromDifferentDomain() ? 'no' : 'yes';
+        props['onsite'] = unisubs.isFromDifferentDomain() ? 'no' : 'yes';
         this.setAccount_();
         this.gaq_().push([this.PREFIX_ + '._trackPageview', '/widget/' + pageview]);
     }
 };
 
-mirosubs.Tracker.prototype.setAccount_ = function() {
+unisubs.Tracker.prototype.setAccount_ = function() {
     if (!this.accountSet_) {
         window['_gaq'] = this.gaq_() || [];
         this.loadGA_();
@@ -71,9 +71,9 @@ mirosubs.Tracker.prototype.setAccount_ = function() {
     }
 };
 
-mirosubs.Tracker.prototype.loadGA_ = function() {
-    if (mirosubs.REPORT_ANALYTICS) {
+unisubs.Tracker.prototype.loadGA_ = function() {
+    if (unisubs.REPORT_ANALYTICS) {
         var url = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        mirosubs.addScript(url, true);
+        unisubs.addScript(url, true);
     }
 };

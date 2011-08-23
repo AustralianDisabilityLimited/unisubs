@@ -37,7 +37,7 @@ def _make_version_debug_string():
 
     We have this as an external function because we need this on compilation and testing deployment
     """
-    return '/*mirosubs.static_version="%s"*/' % LAST_COMMIT_GUID
+    return '/*unisubs.static_version="%s"*/' % LAST_COMMIT_GUID
     
 
 
@@ -51,6 +51,7 @@ JS_LIB = os.path.join(settings.PROJECT_ROOT, "media")
 CLOSURE_LIB = os.path.join(JS_LIB, "js", "closure-library")
 FLOWPLAYER_JS = os.path.join(settings.PROJECT_ROOT, "media/flowplayer/flowplayer-3.2.2.min.js")
 COMPILER_PATH = os.path.join(settings.PROJECT_ROOT,  "closure", "compiler.jar")
+
 
 DIRS_TO_COMPILE = []
 SKIP_COPING_ON = DIRS_TO_COMPILE + [
@@ -66,27 +67,42 @@ NO_UNIQUE_URL = (
 #        "no-cache": True 
 #    }, 
     {
-        "name": "js/mirosubs-widgetizer.js",
+        "name": "js/unisubs-widgetizer.js",
         "no-cache": True
     }, {
-        "name": "js/mirosubs-widgetizer-debug.js",
+        "name": "js/unisubs-widgetizer-debug.js",
         "no-cache": True,
     }, {
-        "name": "js/mirosubs-widgetizer-sumo.js",
+        "name": "js/unisubs-widgetizer-sumo.js",
         "no-cache": True,
     }, {
-        "name": "js/mirosubs-api.js",
+        "name": "js/unisubs-api.js",
         "no-cache": True
     }, {
-        "name": "js/mirosubs-extension.js",
+        "name": "js/unisubs-extension.js",
         "no-cache": False,
     }, {
-        "name": "js/mirosubs-statwidget.js",
+        "name": "js/unisubs-statwidget.js",
         "no-cache": False,
     }, {
         "name": "js/widgetizer/widgetizerprimer.js",
         "no-cache": False
     }
+)
+
+#: as we've kept those URIs as public, we need to duplicate those files
+#: keeping the old mirosubs-js
+    
+KEEP_BACKWARDS_MIROSUBS = (
+    ("js/unisubs-offsite-compiled.js", "js/mirosubs-offsite-compiled.js"),
+    ("js/unisubs-onsite-compiled.js", "js/mirosubs-onsite-compiled.js"),
+    ("js/unisubs-widgetizer.js", "js/mirosubs-widgetizer.js"),
+    ("js/unisubs-widgetizer-sumo.js", "js/mirosubs-widgetizer-sumo.js"),
+    ("js/unisubs-widgetizer-debug.js", "js/mirosubs-widgetizer-debug.js"),
+    ("js/unisubs-extension.js", "js/mirosubs-extension.js"),
+    ("js/unisubs-statwidget.js", "js/mirosubs-statwidget.js"),
+    ("js/unisubs-api.js", "js/mirosubs-api.js"),
+    ("js/unisubs.js", "js/mirosubs.js"),
 )
 
 def call_command(command):
@@ -131,7 +147,7 @@ class Command(BaseCommand):
     
     def _append_version_for_debug(self, descriptor, file_type):
         """
-        We append the /*mirosubs.static_version="{{commit guid}"*/ to the end of the
+        We append the /*unisubs.static_version="{{commit guid}"*/ to the end of the
         file so we can debug, be sure we have the correct version of media.
 
         Arguments:
@@ -183,7 +199,7 @@ class Command(BaseCommand):
         logging.info("Starting {0}".format(output_file_name))
 
         deps = [" --js %s " % os.path.join(JS_LIB, file) for file in files]
-        calcdeps_js = os.path.join(JS_LIB, 'js', 'mirosubs-calcdeps.js')
+        calcdeps_js = os.path.join(JS_LIB, 'js', 'unisubs-calcdeps.js')
         compiled_js = os.path.join(self.temp_dir, "js" , output_file_name)
         if not os.path.exists(os.path.dirname(compiled_js)):
             os.makedirs(os.path.dirname(compiled_js))
@@ -206,7 +222,7 @@ class Command(BaseCommand):
         output,_ = call_command(cmd_str)
 
         # This is to reduce the number of warnings in the code.
-        # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
+        # The unisubs-calcdeps.js file is a concatenation of a bunch of Google Closure
         # JavaScript files, each of which has a @fileoverview tag to describe it.
         # When put all in one file, the compiler complains, so remove them all.
         output_lines = filter(lambda s: s.find("@fileoverview") == -1,
@@ -260,11 +276,11 @@ class Command(BaseCommand):
             logging.info("Successfully compiled {0}".format(output_file_name))
 
     def _compile_js_bootloader(self, bundle_name, bootloader_settings):
-        print("_compile_js_bootloader called with MEDIA_URL {0}".format(
-                settings.MEDIA_URL))
+        logging.info("_compile_js_bootloader called with cache_base_url {0}".format(
+                get_cache_base_url()))
         context = { 'gatekeeper' : bootloader_settings['gatekeeper'],
-                    'script_src': "{0}js/{1}-inner.js".format(
-                settings.MEDIA_URL, bundle_name) }
+                    'script_src': "{0}/js/{1}-inner.js".format(
+                get_cache_base_url(), bundle_name) }
         rendered = render_to_string("widget/bootloader.js", context)
         file_name = os.path.join(
             self.temp_dir, "js", "{0}.js".format(bundle_name))
@@ -282,7 +298,7 @@ class Command(BaseCommand):
         getattr(self, "compile_%s_bundle" % bundle_type)(bundle_name, bundle_type, files)
 
     def _create_temp_dir(self):
-        commit_hash = settings.LAST_COMMIT_GUID.split("/")[1]
+        commit_hash = LAST_COMMIT_GUID
         temp = os.path.join("/tmp", "static-%s-%s" % (commit_hash, time.time()))
         os.makedirs(temp)
         return temp
@@ -305,7 +321,7 @@ class Command(BaseCommand):
         context = widget.add_offsite_js_files(
             {'current_site': Site.objects.get_current(),
              'MEDIA_URL': get_cache_base_url() +"/",
-             "js_file": get_cache_base_url() +"/js/mirosubs-offsite-compiled.js" })
+             "js_file": get_cache_base_url() +"/js/unisubs-offsite-compiled.js" })
         rendered = render_to_string(
             'widget/{0}'.format(file_name), context)
         with open(os.path.join(output_dir, file_name), 'w') as f:
@@ -317,11 +333,10 @@ class Command(BaseCommand):
         are used to provide build-specific info (like media url and site url)
         to compiled js.
         """
-        print(("_compile_conf_and_embed_js with cache_base_url {0} and "
-               "MEDIA_URL {1}").format(
-                get_cache_base_url(), settings.MEDIA_URL))
+        logging.info(("_compile_conf_and_embed_js with cache_base_url {0}").format(
+                get_cache_base_url()))
 
-        file_name = os.path.join(self.temp_dir, 'js/config.js')
+        file_name = os.path.join(JS_LIB, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
                    'MEDIA_URL': get_cache_base_url()+ "/"}
@@ -329,14 +344,14 @@ class Command(BaseCommand):
             'widget/config.js', context)
         with open(file_name, 'w') as f:
             f.write(rendered)
-
+        logging.info("Compiled config to %s" % (file_name))
         self._output_embed_to_dir(settings.MEDIA_ROOT)
         self._output_embed_to_dir(
             settings.MEDIA_ROOT, settings.EMBED_JS_VERSION)
         for version in settings.PREVIOUS_EMBED_JS_VERSIONS:
             self._output_embed_to_dir(settings.MEDIA_ROOT, version)
 
-        file_name = os.path.join(self.temp_dir, 'js/statwidget/statwidgetconfig.js')
+        file_name = os.path.join(JS_LIB, 'js/statwidget/statwidgetconfig.js')
         rendered = render_to_string(
             'widget/statwidgetconfig.js', context)
         with open(file_name, 'w') as f:
@@ -356,6 +371,8 @@ class Command(BaseCommand):
         in which case it will still need the previous build there
         """
         base = os.path.dirname(get_cache_dir())
+        if not os.path.exists(os.path.join(os.getcwd(), "media/static-cache")):
+            return 
         targets = [os.path.join(base, x) for x 
                    in sorted_ls("media/static-cache/")
                    if x.startswith(".") is False][:-num_to_keep]
@@ -379,6 +396,24 @@ class Command(BaseCommand):
                 os.remove(to_path)
             shutil.copy(from_path, to_path)
 
+    def _copy_backwards_compability(self, from_dir):
+        """
+        In the old days, the project was called mirosubs, we therefore announced
+        public urls such as js/mirosubs-api.js . Since we've changed all of it to
+        be called unisubs, we broke those names.
+
+        We are duplicating those files (since s3 won't allow us to do redirects)
+        for a grace period until we get our partners to swtich to the new files.
+
+        For example, we should copy
+        js/unisubs-api.js -> js/mirosubs-api.js 
+        """
+        for src,target in KEEP_BACKWARDS_MIROSUBS:
+            shutil.copy(
+                os.path.join(from_dir, src),
+                os.path.join(from_dir, target),
+                )
+            
     def handle(self, *args, **options):
         """
         There are three directories involved here:
@@ -390,8 +425,8 @@ class Command(BaseCommand):
             media ends up
         """
         self.temp_dir = self._create_temp_dir()
-        print(("Starting static media compilation with "
-               "temp_dir {0} and cache_dir {1}").format(
+        logging.info(("Starting static media compilation with "
+                      "temp_dir {0} and cache_dir {1}").format(
                 self.temp_dir, get_cache_dir()));
         self.verbosity = int(options.get('verbosity'))
         self.test_str_version = bool(options.get('test_str_version'))
@@ -402,6 +437,7 @@ class Command(BaseCommand):
         self._copy_media_root_to_temp_dir() 
         self._compile_conf_and_embed_js()
         self._compile_media_bundles(restrict_bundles, args)
+        self._copy_backwards_compability(self.temp_dir)
             
         if not self.keeps_previous:
             self._remove_cache_dirs_before(1)

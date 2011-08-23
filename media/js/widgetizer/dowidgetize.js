@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-mirosubs.Widgetizer.getInstance().widgetize();
-mirosubs.widget.WidgetDecorator.exportJSSymbols();
+unisubs.Widgetizer.getInstance().widgetize();
+unisubs.widget.WidgetDecorator.exportJSSymbols();
 
 window['UnisubsWidgetizerLoaded'] = true;

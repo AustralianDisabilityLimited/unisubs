@@ -21,45 +21,45 @@
  *
  */
 
-goog.provide('mirosubs.video.VideoSource');
+goog.provide('unisubs.video.VideoSource');
 
 /**
  *
  * @interface
  */
-mirosubs.video.VideoSource = function() {};
+unisubs.video.VideoSource = function() {};
 
 /**
  * Creates a player for the page, not the widget.
- * @return {mirosubs.video.AbstractVideoPlayer} 
+ * @return {unisubs.video.AbstractVideoPlayer} 
  */
-mirosubs.video.VideoSource.prototype.createPlayer = function() {};
+unisubs.video.VideoSource.prototype.createPlayer = function() {};
 /**
  * Creates a player for the widget.
- * @return {mirosubs.video.ControlledVideoPlayer}
+ * @return {unisubs.video.ControlledVideoPlayer}
  */
-mirosubs.video.VideoSource.prototype.createControlledPlayer = function() {};
+unisubs.video.VideoSource.prototype.createControlledPlayer = function() {};
 
 /**
  * @return {string}
  */
-mirosubs.video.VideoSource.prototype.getVideoURL = function() {};
+unisubs.video.VideoSource.prototype.getVideoURL = function() {};
 
 /**
  *
  * @param {Array} videoSpecs This is an array in which each element is either 
  *   a string (for a url) or an object with properties "url" and "config".
- * @return {?mirosubs.video.VideoSource} video source, or null if none found.
+ * @return {?unisubs.video.VideoSource} video source, or null if none found.
  */
-mirosubs.video.VideoSource.bestVideoSource = function(videoSpecs) {
+unisubs.video.VideoSource.bestVideoSource = function(videoSpecs) {
     var videoSources = goog.array.map(videoSpecs, function(spec) {
-        return mirosubs.video.VideoSource.videoSourceForSpec_(spec);
+        return unisubs.video.VideoSource.videoSourceForSpec_(spec);
     });
-    var vt = mirosubs.video.Html5VideoType;
+    var vt = unisubs.video.Html5VideoType;
     var preferenceOrdering = [vt.OGG, vt.WEBM, vt.H264];
     for (var i = 0; i < preferenceOrdering.length; i++) {
-        if (mirosubs.video.supportsVideoType(preferenceOrdering[i])) {
-            var videoSource = mirosubs.video.VideoSource.html5VideoSource_(
+        if (unisubs.video.supportsVideoType(preferenceOrdering[i])) {
+            var videoSource = unisubs.video.VideoSource.html5VideoSource_(
                 videoSources, preferenceOrdering[i]);
             if (videoSource != null)
                 return videoSource;
@@ -68,31 +68,31 @@ mirosubs.video.VideoSource.bestVideoSource = function(videoSpecs) {
     // browser does not support any available html5 formats. Return a flash format.
     var videoSource = goog.array.find(
         videoSources,
-        function(v) { return !(v instanceof mirosubs.video.Html5VideoSource); });
+        function(v) { return !(v instanceof unisubs.video.Html5VideoSource); });
     if (videoSource != null)
         return videoSource;
     // if we got this far, first return mp4 for player fallback. then return anything.
-    var videoSource = mirosubs.video.VideoSource.html5VideoSource_(
+    var videoSource = unisubs.video.VideoSource.html5VideoSource_(
         videoSources, vt.H264);
     if (videoSource != null)
         return videoSource;
     return videoSources.length > 0 ? videoSources[0] : null;
 };
 
-mirosubs.video.VideoSource.videoSourceForSpec_ = function(videoSpec) {
+unisubs.video.VideoSource.videoSourceForSpec_ = function(videoSpec) {
     if (goog.isString(videoSpec))
-        return mirosubs.video.VideoSource.videoSourceForURL(
+        return unisubs.video.VideoSource.videoSourceForURL(
             videoSpec);
     else
-        return mirosubs.video.VideoSource.videoSourceForURL(
+        return unisubs.video.VideoSource.videoSourceForURL(
             videoSpec['url'], videoSpec['config']);
 };
 
-mirosubs.video.VideoSource.html5VideoSource_ = function(videoSources, videoType) {
+unisubs.video.VideoSource.html5VideoSource_ = function(videoSources, videoType) {
     return goog.array.find(
         videoSources, 
         function(v) { 
-            return (v instanceof mirosubs.video.Html5VideoSource) && 
+            return (v instanceof unisubs.video.Html5VideoSource) && 
                 v.getVideoType() == videoType; 
         });
 };
@@ -102,16 +102,16 @@ mirosubs.video.VideoSource.html5VideoSource_ = function(videoSources, videoType)
  * for more info.
  *
  */
-mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
+unisubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
     var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
-    if (mirosubs.video.YoutubeVideoSource.isYoutube(videoURL)) {
+    if (unisubs.video.YoutubeVideoSource.isYoutube(videoURL)) {
         var videoSource = null;
-        if (mirosubs.supportsIFrameMessages()) {
-            videoSource = mirosubs.video.YTIFrameVideoSource.forURL(
+        if (unisubs.supportsIFrameMessages()) {
+            videoSource = unisubs.video.YTIFrameVideoSource.forURL(
                 videoURL, opt_videoConfig);
         }
         else {
-            videoSource = mirosubs.video.YoutubeVideoSource.forURL(
+            videoSource = unisubs.video.YoutubeVideoSource.forURL(
                 videoURL, opt_videoConfig);
         }
         if (videoSource != null)
@@ -120,28 +120,28 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
     else if (/^\s*https?:\/\/([^\.]+\.)?vimeo/.test(videoURL)) {
         var videoIDExtract = /vimeo.com\/([0-9]+)/i.exec(videoURL);
         if (videoIDExtract)
-            return new mirosubs.video.VimeoVideoSource(
+            return new unisubs.video.VimeoVideoSource(
                 videoIDExtract[1], videoURL, opt_videoConfig);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?dailymotion/.test(videoURL)) {
         var videoIDExtract = /dailymotion.com\/video\/([0-9a-z]+)/i.exec(videoURL);
         if (videoIDExtract)
-            return new mirosubs.video.DailymotionVideoSource(
+            return new unisubs.video.DailymotionVideoSource(
                 videoIDExtract[1], videoURL);
     }
     else if (/^\s*https?:\/\/([^\.]+\.)?blip\.tv/.test(videoURL) &&
              !blipFileGetRegex.test(videoURL)) {
-        return new mirosubs.video.BlipTVPlaceholder(videoURL);
+        return new unisubs.video.BlipTVPlaceholder(videoURL);
     }
     else if (/\.flv$|\.mov$/i.test(videoURL)) {
-        return new mirosubs.video.FlvVideoSource(videoURL, opt_videoConfig);
+        return new unisubs.video.FlvVideoSource(videoURL, opt_videoConfig);
     }
-    else if (mirosubs.video.BrightcoveVideoSource.isBrightcove(videoURL)) {
-        return mirosubs.video.BrightcoveVideoSource.forURL(videoURL);
+    else if (unisubs.video.BrightcoveVideoSource.isBrightcove(videoURL)) {
+        return unisubs.video.BrightcoveVideoSource.forURL(videoURL);
     }
     else {
         var videoSource = 
-            mirosubs.video.Html5VideoSource.forURL(videoURL, opt_videoConfig);
+            unisubs.video.Html5VideoSource.forURL(videoURL, opt_videoConfig);
         if (videoSource != null)
             return videoSource;
     }
@@ -150,8 +150,8 @@ mirosubs.video.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
 };
 
 /**
- * @deprecated Use mirosubs.video.YoutubeVideoSource.isYoutube
+ * @deprecated Use unisubs.video.YoutubeVideoSource.isYoutube
  */
-mirosubs.video.VideoSource.isYoutube = function(videoURL) {
-    return mirosubs.video.YoutubeVideoSource.isYoutube(videoURL);
+unisubs.video.VideoSource.isYoutube = function(videoURL) {
+    return unisubs.video.YoutubeVideoSource.isYoutube(videoURL);
 };

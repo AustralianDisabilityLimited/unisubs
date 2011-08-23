@@ -21,7 +21,7 @@
     <!--[if IE]><link href="{{ MEDIA_URL }}index/css/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
     <!--[if IE 6]><script src="{{ MEDIA_URL }}index/js/ie6PngFix.js"></script><![endif]--> 
     <link href="{{ MEDIA_URL }}index/style.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ MEDIA_URL }}css/unisubs-widget.css" media="all" type="text/css" rel="stylesheet" /> 
     <link href="{{ MEDIA_URL }}css/imported/top_user_panel.css" media="all" type="text/css" rel="stylesheet" /> 
     <link href="{{ MEDIA_URL }}css/imported/buttons.css" media="all" type="text/css" rel="stylesheet" /> 
     <link href="{{ MEDIA_URL }}css/imported/forms.css" media="all" type="text/css" rel="stylesheet" /> 
@@ -31,7 +31,7 @@
     <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>  
     <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>  
     <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>    
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" %}
     <script type="text/javascript">
         jQuery(function($){
             $.mod();
@@ -170,7 +170,7 @@
         
         <div class="section_secondary_top_right">
           <h4>{% trans "For every video on a page or site" %}</h4>
-            <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+            <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
             <span class="indication">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
             
         </div><!-- End: section_secondary_top_right -->
@@ -289,7 +289,7 @@
 
       <li>
           {% trans 'The code is free and open source' %}
-           (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
+           (<a href="http://github.com/8planes/unisubs/">{% trans 'get the source code' %}</a>)
       </li>
 
       <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>

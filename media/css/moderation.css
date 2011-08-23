@@ -1,4 +1,4 @@
-.mirosubs-modal-simp {b
+.unisubs-modal-simp {b
   width: 842px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
@@ -15,7 +15,7 @@
   z-index: 2147483631 !important;
   }
 
-.mirosubs-modal-widget-content {
+.unisubs-modal-widget-content {
   border: 1px solid #000 !important;
   border-top: none !important;
   border-right: none !important;
@@ -25,6 +25,6 @@
   overflow: hidden !important;
   }
 
-.mirosubs-modal-lang-buttons button{
+.unisubs-modal-lang-buttons button{
    
 }

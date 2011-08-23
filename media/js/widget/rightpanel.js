@@ -16,22 +16,22 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.RightPanel');
+goog.provide('unisubs.RightPanel');
 
 /**
  * @constructor
  * @extends goog.ui.Component
  *
- * @param {mirosubs.ServerModel} serverModel
- * @param {mirosubs.RightPanel.HelpContents} helpContents
+ * @param {unisubs.ServerModel} serverModel
+ * @param {unisubs.RightPanel.HelpContents} helpContents
  * @param {Array.<string>} extraHelp paragraphs to display in extra bubble.
  *     0-length array will not display bubble.
- * @param {Array.<mirosubs.RightPanel.KeySpec>} legendKeySpecs
+ * @param {Array.<unisubs.RightPanel.KeySpec>} legendKeySpecs
  * @param {boolean} showRestart
  * @param {string} doneStrongText
  * @param {string} doneText
  */
-mirosubs.RightPanel = function(serverModel,
+unisubs.RightPanel = function(serverModel,
                                helpContents,
                                extraHelp,
                                legendKeySpecs,
@@ -55,16 +55,16 @@ mirosubs.RightPanel = function(serverModel,
      */
     this.mouseDownKeyCode_ = null;
 };
-goog.inherits(mirosubs.RightPanel, goog.ui.Component);
-mirosubs.RightPanel.EventType = {
+goog.inherits(unisubs.RightPanel, goog.ui.Component);
+unisubs.RightPanel.EventType = {
     LEGENDKEY : 'legend',
     RESTART : 'restart',
     DONE : 'done',
     BACK : 'back',
     GOTOSTEP : 'gotostep'
 };
-mirosubs.RightPanel.prototype.createDom = function() {
-    mirosubs.RightPanel.superClass_.createDom.call(this);
+unisubs.RightPanel.prototype.createDom = function() {
+    unisubs.RightPanel.superClass_.createDom.call(this);
 
     // TODO: you might really want to do this in enterDocument instead
     // of createDom, given that we're adding event listeners.
@@ -82,15 +82,15 @@ mirosubs.RightPanel.prototype.createDom = function() {
 
     this.appendStepsContents_($d, el);
 };
-mirosubs.RightPanel.prototype.showLoading = function(show) {
-    mirosubs.style.showElement(this.loadingGif_, show);
+unisubs.RightPanel.prototype.showLoading = function(show) {
+    unisubs.style.showElement(this.loadingGif_, show);
 };
-mirosubs.RightPanel.prototype.showBackLink = function(linkText) {
-    mirosubs.style.showElement(this.backAnchor_, true);
+unisubs.RightPanel.prototype.showBackLink = function(linkText) {
+    unisubs.style.showElement(this.backAnchor_, true);
     goog.dom.setTextContent(this.backAnchor_, linkText);
 };
-mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
-    var helpHeadingDiv = $d('div', 'mirosubs-help-heading');
+unisubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
+    var helpHeadingDiv = $d('div', 'unisubs-help-heading');
     el.appendChild(helpHeadingDiv);
     helpHeadingDiv.appendChild($d('h2', null, this.helpContents_.header));
     if (this.helpContents_.numSteps) {
@@ -99,13 +99,13 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
         for (var i = 0; i < this.helpContents_.numSteps; i++) {
             var linkAttributes = { 'href' : '#' };
             if (i == this.helpContents_.activeStep)
-                linkAttributes['className'] = 'mirosubs-activestep';
+                linkAttributes['className'] = 'unisubs-activestep';
             var link = $d('a', linkAttributes, i + 1 + '');
             this.getHandler().listen(
                 link, 'click', goog.partial(function(step, e) {
                     e.preventDefault();
                     that.dispatchEvent(
-                        new mirosubs.RightPanel.GoToStepEvent(step));
+                        new unisubs.RightPanel.GoToStepEvent(step));
                 }, i));
             stepsUL.appendChild($d('li', null, link));
         }
@@ -121,29 +121,29 @@ mirosubs.RightPanel.prototype.appendHelpContentsInternal = function($d, el) {
             el.appendChild($d('p', null, p));
         });
 };
-mirosubs.RightPanel.prototype.appendExtraHelp_ = function($d, el) {
+unisubs.RightPanel.prototype.appendExtraHelp_ = function($d, el) {
     if (this.extraHelp_ && this.extraHelp_.length > 0) {
         this.appendExtraHelpInternal($d, el);
     }
 };
-mirosubs.RightPanel.prototype.appendExtraHelpInternal = function($d, el) {
-    var extraDiv = $d('div', 'mirosubs-extra');
+unisubs.RightPanel.prototype.appendExtraHelpInternal = function($d, el) {
+    var extraDiv = $d('div', 'unisubs-extra');
     for (var i = 0; i < this.extraHelp_.length; i++)
         extraDiv.appendChild($d('p', null, this.extraHelp_[i]));
-    extraDiv.appendChild($d('span', 'mirosubs-spanarrow'));
+    extraDiv.appendChild($d('span', 'unisubs-spanarrow'));
     el.appendChild(extraDiv);
 };
-mirosubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
-    var legendDiv = $d('div', 'mirosubs-legend');
+unisubs.RightPanel.prototype.appendLegendContents_ = function($d, el) {
+    var legendDiv = $d('div', 'unisubs-legend');
     el.appendChild(legendDiv);
     this.appendLegendContentsInternal($d, legendDiv);
     this.appendLegendClearInternal($d, legendDiv);
 };
-mirosubs.RightPanel.prototype.findSpec_ = function(keyCode, modifiers) {
+unisubs.RightPanel.prototype.findSpec_ = function(keyCode, modifiers) {
     return goog.array.find(this.legendKeySpecs_,
                            function(s) { return s.keyCode == keyCode && s.modifiers == modifiers; });
 };
-mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, modifiers, active) {
+unisubs.RightPanel.prototype.setKeyDown = function(keyCode, modifiers, active) {
     this.enableButtonClassInternal(keyCode, modifiers, '-down', active);
 };
 
@@ -151,14 +151,14 @@ mirosubs.RightPanel.prototype.setKeyDown = function(keyCode, modifiers, active) 
  * @protected
  * @param {string=} opt_text text for the button, or null to revert to original text.
  */
-mirosubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, modifiers, opt_text) {
+unisubs.RightPanel.prototype.setButtonTextInternal = function(keyCode, modifiers, opt_text) {
     var spec = this.findSpec_(keyCode, modifiers);
     if (spec)
         goog.dom.setTextContent(
             spec.textSpan, opt_text ? opt_text : spec.legendText);
 };
 
-mirosubs.RightPanel.prototype.enableButtonClassInternal =
+unisubs.RightPanel.prototype.enableButtonClassInternal =
     function (keyCode, modifiers, classSuffix, enable)
 {
     var spec = this.findSpec_(keyCode, modifiers);
@@ -167,7 +167,7 @@ mirosubs.RightPanel.prototype.enableButtonClassInternal =
             spec.div, spec.divClass + classSuffix, enable);
 };
 
-mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
+unisubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legendDiv) {
     var et = goog.events.EventType;
     for (var i = 0; i < this.legendKeySpecs_.length; i++) {
         var spec = this.legendKeySpecs_[i];
@@ -194,35 +194,35 @@ mirosubs.RightPanel.prototype.appendLegendContentsInternal = function($d, legend
         this.getHandler().listen(key, et.MOUSEOUT, mouseupFn);
     }
 };
-mirosubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
-    legendDiv.appendChild($d('div', 'mirosubs-clear'));
+unisubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv) {
+    legendDiv.appendChild($d('div', 'unisubs-clear'));
 };
-mirosubs.RightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
+unisubs.RightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
     // dear subclasses, override me if you want. love, rightpanel.
 };
-mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
+unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
     this.loadingGif_ = $d('img',
-                          {'src': mirosubs.imageAssetURL('spinner.gif') });
+                          {'src': unisubs.imageAssetURL('spinner.gif') });
     this.showLoading(false);
-    this.doneAnchor_ = $d('a', {'className':'mirosubs-done', 'href':'#'},
+    this.doneAnchor_ = $d('a', {'className':'unisubs-done', 'href':'#'},
                           $d('span', null,
                              this.loadingGif_,
                              $d('strong', null, this.doneStrongText_),
                              goog.dom.createTextNode(" "),
                              goog.dom.createTextNode(this.doneText_)));
-    var stepsDiv = $d('div', 'mirosubs-steps', this.loginDiv_);
+    var stepsDiv = $d('div', 'unisubs-steps', this.loginDiv_);
 
     this.backAnchor_ =
-        $d('a', {'className':'mirosubs-backTo mirosubs-greybutton', 'href':'#'},
+        $d('a', {'className':'unisubs-backTo unisubs-greybutton', 'href':'#'},
            'Return to Typing');
     this.getHandler().listen(this.backAnchor_, 'click', this.backClickedInternal);
-    mirosubs.style.showElement(this.backAnchor_, false);
+    unisubs.style.showElement(this.backAnchor_, false);
     stepsDiv.appendChild(this.backAnchor_);
 
     if (this.showRestart_) {
         var restartAnchor =
-            $d('a', {'className': 'mirosubs-restart','href':'#'},
+            $d('a', {'className': 'unisubs-restart','href':'#'},
                'Restart this Step');
         this.getHandler().listen(
             restartAnchor, 'click', this.restartClicked_);
@@ -230,7 +230,7 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     }
 
     this.downloadLink_ = this.getDomHelper().createDom(
-        'a', {'href':'#', 'className':'mirosubs-download-subs'}, 
+        'a', {'href':'#', 'className':'unisubs-download-subs'}, 
         'Download subtitles');
     goog.style.showElement(this.downloadLink_, false);
     goog.dom.append(stepsDiv, this.downloadLink_);
@@ -243,44 +243,44 @@ mirosubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
-mirosubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, modifiers, event) {
+unisubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, modifiers, event) {
     this.dispatchEvent(
-        new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
+        new unisubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
 };
-mirosubs.RightPanel.prototype.legendKeyMousedown_ = function(keyCode, modifiers, event) {
+unisubs.RightPanel.prototype.legendKeyMousedown_ = function(keyCode, modifiers, event) {
     this.dispatchEvent(
-        new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
+        new unisubs.RightPanel.LegendKeyEvent(keyCode, modifiers, event.type));
     this.mouseDownKeyCode_ = keyCode;
 };
-mirosubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, modifiers, event) {
+unisubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, modifiers, event) {
     if (this.mouseDownKeyCode_ != null) {
         this.mouseDownKeyCode_ = null;
         this.dispatchEvent(
-            new mirosubs.RightPanel.LegendKeyEvent(keyCode, modifiers, 'mouseup'));
+            new unisubs.RightPanel.LegendKeyEvent(keyCode, modifiers, 'mouseup'));
     }
 };
-mirosubs.RightPanel.prototype.backClickedInternal = function(event) {
-    this.dispatchEvent(mirosubs.RightPanel.EventType.BACK);
+unisubs.RightPanel.prototype.backClickedInternal = function(event) {
+    this.dispatchEvent(unisubs.RightPanel.EventType.BACK);
     event.preventDefault();
 };
-mirosubs.RightPanel.prototype.restartClicked_ = function(event) {
-    this.dispatchEvent(mirosubs.RightPanel.EventType.RESTART);
+unisubs.RightPanel.prototype.restartClicked_ = function(event) {
+    this.dispatchEvent(unisubs.RightPanel.EventType.RESTART);
     event.preventDefault();
 };
-mirosubs.RightPanel.prototype.doneClicked_ = function(event) {
-    this.dispatchEvent(mirosubs.RightPanel.EventType.DONE);
+unisubs.RightPanel.prototype.doneClicked_ = function(event) {
+    this.dispatchEvent(unisubs.RightPanel.EventType.DONE);
     event.preventDefault();
 };
-mirosubs.RightPanel.prototype.getDoneAnchor = function() {
+unisubs.RightPanel.prototype.getDoneAnchor = function() {
     return this.doneAnchor_;
 };
-mirosubs.RightPanel.prototype.updateLoginState = function() {
+unisubs.RightPanel.prototype.updateLoginState = function() {
     goog.dom.removeChildren(this.loginDiv_);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     if (this.serverModel_ && this.serverModel_.currentUsername() == null) {
         var loginLink = $d('a', {'href':'#'}, "LOGIN");
         this.loginDiv_.appendChild(
-            $d('div', 'mirosubs-needLogin',
+            $d('div', 'unisubs-needLogin',
                goog.dom.createTextNode(
                    'To save your subtitling work, you need to '),
                loginLink));
@@ -288,17 +288,17 @@ mirosubs.RightPanel.prototype.updateLoginState = function() {
     }
 };
 
-mirosubs.RightPanel.prototype.showDownloadLink = function(jsonSubsFn) {
+unisubs.RightPanel.prototype.showDownloadLink = function(jsonSubsFn) {
     goog.style.showElement(this.downloadLink_, true);
     this.jsonSubsFn_ = jsonSubsFn;
 };
 
-mirosubs.RightPanel.prototype.downloadClicked_ = function(e) {
+unisubs.RightPanel.prototype.downloadClicked_ = function(e) {
     e.preventDefault();
-    mirosubs.finishfaildialog.CopyDialog.showForSubs(this.jsonSubsFn_());
+    unisubs.finishfaildialog.CopyDialog.showForSubs(this.jsonSubsFn_());
 };
 
-mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
+unisubs.RightPanel.prototype.loginClicked_ = function(event) {
     this.serverModel_.logIn();
     event.preventDefault();
 };
@@ -312,7 +312,7 @@ mirosubs.RightPanel.prototype.loginClicked_ = function(event) {
  * @param {number=} opt_numSteps
  * @param {number} opt_activeStep;
  */
-mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, opt_activeStep) {
+unisubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, opt_activeStep) {
     this.header = header;
     this.paragraphs = paragraphs;
     this.numSteps = opt_numSteps;
@@ -323,7 +323,7 @@ mirosubs.RightPanel.HelpContents = function(header, paragraphs, opt_numSteps, op
 /**
 * @constructor
 */
-mirosubs.RightPanel.KeySpec = function(divClass, spanClass,
+unisubs.RightPanel.KeySpec = function(divClass, spanClass,
                                        keyText, legendText,
                                        keyCode, modifiers) {
     this.divClass = divClass;
@@ -334,7 +334,7 @@ mirosubs.RightPanel.KeySpec = function(divClass, spanClass,
     this.modifiers = modifiers;
 };
 
-mirosubs.RightPanel.KeySpec.Modifier = {
+unisubs.RightPanel.KeySpec.Modifier = {
     SHIFT : 1,
     ALT: 2,
     CTRL: 4
@@ -343,8 +343,8 @@ mirosubs.RightPanel.KeySpec.Modifier = {
 /**
 * @constructor
 */
-mirosubs.RightPanel.LegendKeyEvent = function(keyCode, modifiers, eventType) {
-    this.type = mirosubs.RightPanel.EventType.LEGENDKEY;
+unisubs.RightPanel.LegendKeyEvent = function(keyCode, modifiers, eventType) {
+    this.type = unisubs.RightPanel.EventType.LEGENDKEY;
     this.keyCode = keyCode;
     this.modifiers = modifiers;
     this.keyEventType = eventType;
@@ -352,7 +352,7 @@ mirosubs.RightPanel.LegendKeyEvent = function(keyCode, modifiers, eventType) {
 /**
 * @constructor
 */
-mirosubs.RightPanel.GoToStepEvent = function(stepNo) {
-    this.type = mirosubs.RightPanel.EventType.GOTOSTEP;
+unisubs.RightPanel.GoToStepEvent = function(stepNo) {
+    this.type = unisubs.RightPanel.EventType.GOTOSTEP;
     this.stepNo = stepNo;
 };

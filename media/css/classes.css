@@ -5,7 +5,7 @@ video {
 }
 
 
-.mirosubs-standalone_spinner{
+.unisubs-standalone_spinner{
 height: 110px;
 width: 110px;
 border: 1px solid;
@@ -147,13 +147,13 @@ font-size: 16px;
   }
   
 
-.mirosubs-twitter-share{
+.unisubs-twitter-share{
   background: url("../images/share_icons.png") 0 -37px no-repeat !important;
   text-decoration: underline;
   }
 
 
-.mirosubs-facebook{
+.unisubs-facebook{
   background: url("../images/share_icons.png") 0 0px no-repeat !important;
   text-decoration: underline;
   }

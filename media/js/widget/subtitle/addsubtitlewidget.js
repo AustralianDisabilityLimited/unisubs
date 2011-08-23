@@ -16,42 +16,42 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.AddSubtitleWidget');
+goog.provide('unisubs.subtitle.AddSubtitleWidget');
 /**
 * @constructor
 * @extends goog.ui.Component
 */
-mirosubs.subtitle.AddSubtitleWidget = function() {
+unisubs.subtitle.AddSubtitleWidget = function() {
     goog.ui.Component.call(this);
 
 };
-goog.inherits(mirosubs.subtitle.AddSubtitleWidget, goog.ui.Component);
+goog.inherits(unisubs.subtitle.AddSubtitleWidget, goog.ui.Component);
 
-mirosubs.subtitle.AddSubtitleWidget.ADD = 'addsub';
+unisubs.subtitle.AddSubtitleWidget.ADD = 'addsub';
 
-mirosubs.subtitle.AddSubtitleWidget.prototype.createDom = function() {
+unisubs.subtitle.AddSubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.addSubLink_ =
         $d('a',
            {'href':'#',
-            'className':'mirosubs-append-sub-link'},
+            'className':'unisubs-append-sub-link'},
            'Add subtitle');
     this.setElementInternal($d('li', null, this.addSubLink_));
-    this.getElement().className = 'mirosubs-append-sub-button';
+    this.getElement().className = 'unisubs-append-sub-button';
 };
 
-mirosubs.subtitle.AddSubtitleWidget.prototype.enterDocument = function() {
-    mirosubs.subtitle.AddSubtitleWidget.superClass_.enterDocument.call(this);
+unisubs.subtitle.AddSubtitleWidget.prototype.enterDocument = function() {
+    unisubs.subtitle.AddSubtitleWidget.superClass_.enterDocument.call(this);
     this.getHandler().listen(
         this.addSubLink_, goog.events.EventType.CLICK, this.addClicked_);
 };
 
-mirosubs.subtitle.AddSubtitleWidget.prototype.addClicked_ = function(e) {
-    this.dispatchEvent(mirosubs.subtitle.AddSubtitleWidget.ADD);
+unisubs.subtitle.AddSubtitleWidget.prototype.addClicked_ = function(e) {
+    this.dispatchEvent(unisubs.subtitle.AddSubtitleWidget.ADD);
     e.preventDefault();
     e.stopPropagation();
 };
 
-mirosubs.subtitle.AddSubtitleWidget.prototype.showLink = function(display) {
-    mirosubs.style.showElement(this.addSubLink_, display);
+unisubs.subtitle.AddSubtitleWidget.prototype.showLink = function(display) {
+    unisubs.style.showElement(this.addSubLink_, display);
 };

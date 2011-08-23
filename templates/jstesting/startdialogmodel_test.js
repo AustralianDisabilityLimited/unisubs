@@ -15,23 +15,23 @@ function makeBaseJSON() {
 }
 
 function setUp() {
-    mirosubs.languages = {{languages|safe}};
-    mirosubs.metadataLanguages = [];
+    unisubs.languages = {{languages|safe}};
+    unisubs.metadataLanguages = [];
 }
 
 function testOriginalLanguageDisplay() {
-    var model = new mirosubs.startdialog.Model(makeBaseJSON());
+    var model = new unisubs.startdialog.Model(makeBaseJSON());
     assertFalse(model.originalLanguageShown());
 
     var json = makeBaseJSON();
     json['original_language'] = '';
     json['video_languages'] = [];
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     assertTrue(model.originalLanguageShown());
 }
 
 function testToLanguages0() {
-    var model = new mirosubs.startdialog.Model(makeBaseJSON());
+    var model = new unisubs.startdialog.Model(makeBaseJSON());
     var languages = model.toLanguages();
 
     assertEquals('fr', languages[0].LANGUAGE);
@@ -47,7 +47,7 @@ function testToLanguagesWithUnspoken() {
         'language': 'it', 'dependent': false, 'is_complete': true, 
         'subtitle_count': 8
     });
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     var italians = goog.array.filter(
         languages, 
@@ -57,7 +57,7 @@ function testToLanguagesWithUnspoken() {
 }
 
 function testToLanguages1() {
-    var model = new mirosubs.startdialog.Model(makeBaseJSON());
+    var model = new unisubs.startdialog.Model(makeBaseJSON());
     var languages = model.toLanguages();
     assertTrue(languages.length > 2)
     assertEquals(1, goog.array.filter(
@@ -79,7 +79,7 @@ function testToLanguages2() {
     var json = makeBaseJSON();
     json['original_language'] = '';
     json['video_languages'] = [];
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertTrue(languages[0].LANGUAGE == 'en' || languages[0].LANGUAGE == 'fr');
     assertTrue(languages[0].LANGUAGE != languages[1].LANGUAGE && 
@@ -90,7 +90,7 @@ function testToLanguages2() {
 function testToLanguagesWithUnsubtitledLanguage() {
     var json = makeBaseJSON();
     json['my_languages'].push('de');
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertEquals('de', languages[0].LANGUAGE);
     assertEquals('fr', languages[1].LANGUAGE);
@@ -103,7 +103,7 @@ function testToLanguagesWithDependent0() {
     json['video_languages'].push({
         'pk': 3, 'language': 'it', 'dependent': true, 'percent_done': 50, 'standard_pk': 2, 'subtitle_count': 9
     });
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertEquals('it', languages[0].LANGUAGE);
     assertEquals('fr', languages[1].LANGUAGE);
@@ -114,7 +114,7 @@ function testFromLangugesWithBlank() {
     var fr = json['video_languages'][1];
     fr['language'] = '';
     fr['subtitle_count'] = 0;
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var fromLanguages = model.fromLanguages();
 
     var containsOriginal = function(tolang) {
@@ -127,14 +127,14 @@ function testFromLangugesWithBlank() {
     fr = json['video_languages'][1];
     fr['language'] = '';
     fr['subtitle_count'] = 8;
-    model = new mirosubs.startdialog.Model(json);
+    model = new unisubs.startdialog.Model(json);
     fromLanguages = model.fromLanguages();
 
     assertTrue(goog.array.some(fromLanguages, containsOriginal));
 }
 
 function testFromLanguages0() {
-    var model = new mirosubs.startdialog.Model(makeBaseJSON());
+    var model = new unisubs.startdialog.Model(makeBaseJSON());
     var toLanguages = model.toLanguages();
     var fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
@@ -151,7 +151,7 @@ function testFromLanguagesWithZeroPercent() {
     json['video_languages'].push(
         {'pk': 3, 'dependent': true, 'percent_done': 90, 
          'language': 'ru', 'standard_pk': 1, 'subtitle_count': 4 });
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var fromLanguages = model.fromLanguages();
     assertEquals(2, fromLanguages.length);
 
@@ -160,7 +160,7 @@ function testFromLanguagesWithZeroPercent() {
     json['video_languages'].push(
         {'pk': 3, 'dependent': true, 'percent_done': 0, 
          'language': 'ru', 'standard_pk': 1, 'subtitle_count': 0 });
-    model = new mirosubs.startdialog.Model(json);
+    model = new unisubs.startdialog.Model(json);
     fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
 }
@@ -170,7 +170,7 @@ function testFromLanguageWithZeroCount() {
     json['video_languages'].push(
         {'pk': 3, 'dependent': false, 'is_complete': false, 
          'language': 'ru', 'subtitle_count': 4 });
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var fromLanguages = model.fromLanguages();
     assertEquals(2, fromLanguages.length);
 
@@ -179,7 +179,7 @@ function testFromLanguageWithZeroCount() {
     json['video_languages'].push(
         {'pk': 3, 'dependent': false, 'is_complete': false, 
          'language': 'ru', 'subtitle_count': 0 });
-    model = new mirosubs.startdialog.Model(json);
+    model = new unisubs.startdialog.Model(json);
     fromLanguages = model.fromLanguages();
     assertEquals(1, fromLanguages.length);
 }
@@ -197,12 +197,12 @@ function testGeneral0() {
             'subtitle_count': 0
         }]
     }
-    var model = new mirosubs.startdialog.Model(json, null);
+    var model = new unisubs.startdialog.Model(json, null);
     assertTrue(model.originalLanguageShown());
     assertEquals(0, model.fromLanguages().length);
     var toLanguages = model.toLanguages();
     assertEquals("en", toLanguages[0].LANGUAGE);
-    assertEquals(mirosubs.languages.length, toLanguages.length);
+    assertEquals(unisubs.languages.length, toLanguages.length);
     for (var i = 0; i < toLanguages.length; i++)
         assertTrue(!toLanguages[i].VIDEO_LANGUAGE);
 }
@@ -216,7 +216,7 @@ function testLanguageSummaryNullError() {
         'my_languages': ['ru', 'be'],
         'original_language': 'en'
     }
-    var model = new mirosubs.startdialog.Model(json, null);
+    var model = new unisubs.startdialog.Model(json, null);
     // the tests passes if the following call does not throw an exception.
     var langs = model.fromLanguages();
 }
@@ -229,7 +229,7 @@ function testSetOriginalLanguage() {
         'my_languages': ['ru', 'en'],
         'original_language': ''
     }
-    var model = new mirosubs.startdialog.Model(json, null);
+    var model = new unisubs.startdialog.Model(json, null);
     model.selectOriginalLanguage('ru');
     model.selectLanguage('en');
     assertTrue(model.fromLanguages().length > 0);
@@ -247,9 +247,9 @@ function testSetInitialLanguage() {
         'original_language': ''
     };
 
-    var model = new mirosubs.startdialog.Model(json, {LANGUAGE:"pt"});
+    var model = new unisubs.startdialog.Model(json, {LANGUAGE:"pt"});
     assertEquals(model.getSelectedLanguage().LANGUAGE, 'pt' );
-    var model = new mirosubs.startdialog.Model(json );
+    var model = new unisubs.startdialog.Model(json );
     assertEquals(model.getSelectedLanguage().LANGUAGE, 'en');
 }
 
@@ -261,7 +261,7 @@ function testOrderForUserLanguages() {
         {'pk': 5, 'language': 'es', 'dependent': true, 'percent_done': 80, 'standard_pk': 1, 'subtitle_count': 9},
         {'pk': 5, 'language': 'pt', 'dependent': true, 'percent_done': 100, 'standard_pk': 1, 'subtitle_count': 9},
         {'pk': 4, 'language': 'ca', 'dependent': true, 'percent_done': 80, 'standard_pk': 3, 'subtitle_count': 9}]);
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     // make sure that  > % comes first and on % tie we respect the 
     // regular alphabetical sorting
@@ -274,7 +274,7 @@ function testOrderForUserLanguages() {
 function testUserLangsAllEmptyOrder(){
     var json = makeBaseJSON();
     json['my_languages'] = ['it',  'es', 'ca'];
-    var model = new mirosubs.startdialog.Model(json);
+    var model = new unisubs.startdialog.Model(json);
     var languages = model.toLanguages();
     assertEquals('Catalan', languages[0].LANGUAGE_NAME);
     assertEquals('Italian', languages[1].LANGUAGE_NAME);

@@ -16,21 +16,21 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.YoutubeIFrame');
+goog.provide('unisubs.widgetizer.YoutubeIFrame');
 
 /**
  * @constructor
  *
  */
-mirosubs.widgetizer.YoutubeIFrame = function() {
-    mirosubs.widgetizer.VideoPlayerMaker.call(this);
+unisubs.widgetizer.YoutubeIFrame = function() {
+    unisubs.widgetizer.VideoPlayerMaker.call(this);
     this.logger_ = goog.debug.Logger.getLogger(
-        'mirosubs.widgetizer.YoutubeIFrame');
+        'unisubs.widgetizer.YoutubeIFrame');
 };
-goog.inherits(mirosubs.widgetizer.YoutubeIFrame,
-              mirosubs.widgetizer.VideoPlayerMaker);
+goog.inherits(unisubs.widgetizer.YoutubeIFrame,
+              unisubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.YoutubeIFrame.prototype.makeVideoPlayers = function() {
+unisubs.widgetizer.YoutubeIFrame.prototype.makeVideoPlayers = function() {
     var iframes = this.unwidgetizedIFrames_();
     if (goog.DEBUG) {
         this.logger_.info("Found " + iframes.length + " unwidgetized iframes");
@@ -55,7 +55,7 @@ mirosubs.widgetizer.YoutubeIFrame.prototype.makeVideoPlayers = function() {
     return videoPlayers;
 };
 
-mirosubs.widgetizer.YoutubeIFrame.prototype.isDecoratable_ = function(iframe) {
+unisubs.widgetizer.YoutubeIFrame.prototype.isDecoratable_ = function(iframe) {
     var uri = new goog.Uri(iframe['src'], true);
     return uri.getParameterValue('enablejsapi') == '1' &&
         goog.array.contains(['transparent', 'opaque'], 
@@ -63,7 +63,7 @@ mirosubs.widgetizer.YoutubeIFrame.prototype.isDecoratable_ = function(iframe) {
         !!uri.getParameterValue('origin');
 };
 
-mirosubs.widgetizer.YoutubeIFrame.prototype.makeVideoSource_ = function(iframe, includeConfig) {
+unisubs.widgetizer.YoutubeIFrame.prototype.makeVideoSource_ = function(iframe, includeConfig) {
     var url = iframe['src'];
     var config = null;
     if (includeConfig) {
@@ -75,10 +75,10 @@ mirosubs.widgetizer.YoutubeIFrame.prototype.makeVideoSource_ = function(iframe, 
         config['width'] = iframe['width'];
         config['height'] = iframe['height'];
     }
-    return mirosubs.video.YTIFrameVideoSource.forURL(url, config);
+    return unisubs.video.YTIFrameVideoSource.forURL(url, config);
 };
 
-mirosubs.widgetizer.YoutubeIFrame.prototype.replaceIFrameElement_ = function(player, element) {
+unisubs.widgetizer.YoutubeIFrame.prototype.replaceIFrameElement_ = function(player, element) {
     // FIXME: some duplication with Youtube#replaceVideoElement_
     var nextNode = goog.dom.getNextElementSibling(element);
     var parent = element.parentNode;
@@ -89,12 +89,12 @@ mirosubs.widgetizer.YoutubeIFrame.prototype.replaceIFrameElement_ = function(pla
         player.render(parent);
 };
 
-mirosubs.widgetizer.YoutubeIFrame.prototype.unwidgetizedIFrames_ = function() {
+unisubs.widgetizer.YoutubeIFrame.prototype.unwidgetizedIFrames_ = function() {
     var iframes = goog.dom.getElementsByTagNameAndClass('iframe');
     var youtubeIFrames = goog.array.filter(
         iframes,
         function(iframe) { 
-            return mirosubs.video.YoutubeVideoSource.isYoutube(iframe['src']); 
+            return unisubs.video.YoutubeVideoSource.isYoutube(iframe['src']); 
         });
     return this.filterUnwidgetized(youtubeIFrames);
 };

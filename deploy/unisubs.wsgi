@@ -12,9 +12,9 @@ prev_sys_path = list(sys.path)
 site.addsitedir(rel('env/lib/python2.6/site-packages'))
 
 sys.path.append(PROJECT_ROOT)
-sys.path.append(rel('mirosubs'))
-sys.path.append(rel('mirosubs', 'libs'))
-sys.path.append(rel('mirosubs', 'apps'))
+sys.path.append(rel('unisubs'))
+sys.path.append(rel('unisubs', 'libs'))
+sys.path.append(rel('unisubs', 'apps'))
 
 sys.stdout = sys.stderr
 
@@ -24,12 +24,12 @@ for item in new_sys_path:
 sys.path[:0] = new_sys_path
 
 import django.core.handlers.wsgi
-os.environ['DJANGO_SETTINGS_MODULE'] = 'mirosubs.unisubs_settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'unisubs.unisubs_settings'
 os.environ["CELERY_LOADER"] = "django"
 application = django.core.handlers.wsgi.WSGIHandler()
 
 handler = django.core.handlers.wsgi.WSGIHandler()
-disabled_file_path = rel('mirosubs', 'disabled')
+disabled_file_path = rel('unisubs', 'disabled')
 
 def application(environ, start_response):
     if os.path.exists(disabled_file_path):
@@ -40,7 +40,7 @@ def application(environ, start_response):
 
         for lang in langs:
             lang = lang.split(';')[0].split('-')[0].lower()
-            off_tpl_path = rel('mirosubs', 'templates', 'off_template', '%s.html' % lang)
+            off_tpl_path = rel('unisubs', 'templates', 'off_template', '%s.html' % lang)
             if os.path.exists(off_tpl_path):
                 break
 

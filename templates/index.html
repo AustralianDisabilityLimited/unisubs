@@ -8,7 +8,7 @@
 {% endblock %}<!-- // css -->
 
 {% block scripts %}
-{% include_bundle "mirosubs-onsite-compiled" %}
+{% include_bundle "unisubs-onsite-compiled" %}
 {% endblock %}<!-- // scripts -->
 
 {% block main_content %}
@@ -51,9 +51,9 @@
     
     <div id="home-right">
        {% block widget_container %}
-            <div id="widget_div" class="mirosubs-widget"></div> 
+            <div id="widget_div" class="unisubs-widget"></div> 
             <script type="text/javascript"> 
-              var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+              var widget_widget_div = unisubs.widget.SameDomainEmbed.embed(
                   document.getElementById('widget_div'), 
                   { 
                       base_state: {},

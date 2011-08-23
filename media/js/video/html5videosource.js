@@ -16,28 +16,28 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.Html5VideoSource');
+goog.provide('unisubs.video.Html5VideoSource');
 
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  * @param {string} videoURL
- * @param {mirosubs.video.Html5VideoType} videoType
+ * @param {unisubs.video.Html5VideoType} videoType
  * @param {Object.<string, string>=} opt_videoConfig Attributes to use for 
  *     video element, plus optional 'click_to_play' parameter
  */
-mirosubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig) {
+unisubs.video.Html5VideoSource = function(videoURL, videoType, opt_videoConfig) {
     this.videoURL_ = videoURL;
     this.videoType_ = videoType;
     this.videoConfig_ = opt_videoConfig;
     this.alternateSources_ = [];
 };
 
-mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
+unisubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
     var queryStringIndex = videoURL.indexOf('?');
     if (queryStringIndex > -1)
         videoURL = videoURL.substring(0, queryStringIndex);
-    var vt = mirosubs.video.Html5VideoType;
+    var vt = unisubs.video.Html5VideoType;
     var videoType = null;
     if (/\.ogv$|\.ogg$/i.test(videoURL))
         videoType = vt.OGG;
@@ -46,68 +46,68 @@ mirosubs.video.Html5VideoSource.forURL = function(videoURL, opt_videoConfig) {
     else if (/\.webm$/i.test(videoURL))
         videoType = vt.WEBM;
     if (videoType != null)
-        return new mirosubs.video.Html5VideoSource(
+        return new unisubs.video.Html5VideoSource(
             videoURL, videoType, opt_videoConfig);
     else
         return null;
 };
 
-mirosubs.video.Html5VideoSource.prototype.isBestVideoSource = function() {
-    if (this.videoType_ == mirosubs.video.Html5VideoType.H264 && 
-        (mirosubs.video.supportsOgg() || mirosubs.video.supportsWebM()))
+unisubs.video.Html5VideoSource.prototype.isBestVideoSource = function() {
+    if (this.videoType_ == unisubs.video.Html5VideoType.H264 && 
+        (unisubs.video.supportsOgg() || unisubs.video.supportsWebM()))
         return false;
-    return mirosubs.video.supportsVideoType(this.videoType_);
+    return unisubs.video.supportsVideoType(this.videoType_);
 };
 
-mirosubs.video.Html5VideoSource.prototype.createPlayer = function() {
+unisubs.video.Html5VideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.Html5VideoSource.prototype.createControlledPlayer = 
+unisubs.video.Html5VideoSource.prototype.createControlledPlayer = 
     function() 
 {
-    return new mirosubs.video.ControlledVideoPlayer(
+    return new unisubs.video.ControlledVideoPlayer(
         this.createPlayer_(true));
 };
 
-mirosubs.video.Html5VideoSource.prototype.createPlayer_ = 
+unisubs.video.Html5VideoSource.prototype.createPlayer_ = 
     function(forSubDialog) 
 {
-    if (this.videoType_ == mirosubs.video.Html5VideoType.H264 && 
-        !mirosubs.video.supportsH264())
-        return new mirosubs.video.FlvVideoPlayer(this, forSubDialog);
+    if (this.videoType_ == unisubs.video.Html5VideoType.H264 && 
+        !unisubs.video.supportsH264())
+        return new unisubs.video.FlvVideoPlayer(this, forSubDialog);
     else {
-        var newSource = new mirosubs.video.Html5VideoSource(
+        var newSource = new unisubs.video.Html5VideoSource(
             this.videoURL_, this.videoType_, this.videoConfig_);
         newSource.setAlternateSources(this.alternateSources_);
-        return new mirosubs.video.Html5VideoPlayer(
+        return new unisubs.video.Html5VideoPlayer(
             newSource, forSubDialog);
     }
 };
 
-mirosubs.video.Html5VideoSource.prototype.getFlvURL = function() {
-    if (this.videoType_ != mirosubs.video.Html5VideoType.H264)
+unisubs.video.Html5VideoSource.prototype.getFlvURL = function() {
+    if (this.videoType_ != unisubs.video.Html5VideoType.H264)
         throw new Error();
     return this.videoURL_;
 };
 
-mirosubs.video.Html5VideoSource.prototype.getVideoURL = function() {
+unisubs.video.Html5VideoSource.prototype.getVideoURL = function() {
     return this.videoURL_;
 };
 
-mirosubs.video.Html5VideoSource.prototype.getVideoType = function() {
+unisubs.video.Html5VideoSource.prototype.getVideoType = function() {
     return this.videoType_;
 };
 
-mirosubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
+unisubs.video.Html5VideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-mirosubs.video.Html5VideoSource.prototype.setVideoConfig = function(config) {
+unisubs.video.Html5VideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };
 
-mirosubs.video.Html5VideoSource.prototype.getAlternateURLs = function() {
+unisubs.video.Html5VideoSource.prototype.getAlternateURLs = function() {
     if (this.alternateSources_)
         return goog.array.map(
             this.alternateSources_, 
@@ -116,6 +116,6 @@ mirosubs.video.Html5VideoSource.prototype.getAlternateURLs = function() {
         return [];
 };
 
-mirosubs.video.Html5VideoSource.prototype.setAlternateSources = function(sources) {
+unisubs.video.Html5VideoSource.prototype.setAlternateSources = function(sources) {
     this.alternateSources_ = sources;
 };

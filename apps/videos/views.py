@@ -143,7 +143,7 @@ def volunteer_category(request, category):
 
 def bug(request):
     from widget.rpc import add_general_settings
-    context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
+    context = widget.add_config_based_js_files({}, settings.JS_API, 'unisubs-api.js')
     context['all_videos'] = Video.objects.count()
     try:
         context['video_url_obj'] = VideoUrl.objects.filter(type=VIDEO_TYPE_YOUTUBE)[:1].get()

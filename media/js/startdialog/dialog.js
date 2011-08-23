@@ -16,12 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.Dialog');
+goog.provide('unisubs.startdialog.Dialog');
 
 /**
  * @constructor
  * @param {string} videoID
- * @param {?mirosubs.widget.SubtitleState} initialLanguageState The state 
+ * @param {?unisubs.widget.SubtitleState} initialLanguageState The state 
  * for the initial lang to be displayed.
  * @param {function(?string, string, ?number, ?number, function())} 
  * callback When OK button is 
@@ -33,8 +33,8 @@ goog.provide('mirosubs.startdialog.Dialog');
  * SubtitleLanguage to translate from. This will be null iff the user intends to make 
  *     forked/original. arg4: function to close the dialog.
  */
-mirosubs.startdialog.Dialog = function(videoID, initialLanguageState, callback) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+unisubs.startdialog.Dialog = function(videoID, initialLanguageState, callback) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
@@ -43,12 +43,12 @@ mirosubs.startdialog.Dialog = function(videoID, initialLanguageState, callback) 
     this.initialLanguageState_ = initialLanguageState;
     this.callback_ = callback;
 };
-goog.inherits(mirosubs.startdialog.Dialog, goog.ui.Dialog);
+goog.inherits(unisubs.startdialog.Dialog, goog.ui.Dialog);
 
-mirosubs.startdialog.Dialog.FORK_VALUE = 'forkk';
+unisubs.startdialog.Dialog.FORK_VALUE = 'forkk';
 
-mirosubs.startdialog.Dialog.prototype.createDom = function() {
-    mirosubs.startdialog.Dialog.superClass_.createDom.call(this);
+unisubs.startdialog.Dialog.prototype.createDom = function() {
+    unisubs.startdialog.Dialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, 
                        this.getDomHelper());
     var el = this.getElement();
@@ -58,15 +58,15 @@ mirosubs.startdialog.Dialog.prototype.createDom = function() {
     el.appendChild(this.contentDiv_);
 };
 
-mirosubs.startdialog.Dialog.prototype.enterDocument = function() {
-    mirosubs.startdialog.Dialog.superClass_.enterDocument.call(this);
+unisubs.startdialog.Dialog.prototype.enterDocument = function() {
+    unisubs.startdialog.Dialog.superClass_.enterDocument.call(this);
     this.connectEvents_();
 };
 
-mirosubs.startdialog.Dialog.prototype.setVisible = function(visible) {
-    mirosubs.startdialog.Dialog.superClass_.setVisible.call(this, visible);
+unisubs.startdialog.Dialog.prototype.setVisible = function(visible) {
+    unisubs.startdialog.Dialog.superClass_.setVisible.call(this, visible);
     if (visible)
-        mirosubs.Rpc.call(
+        unisubs.Rpc.call(
             'fetch_start_dialog_contents',
             { 'video_id': this.videoID_ },
             goog.bind(this.responseReceived_, this));
@@ -74,7 +74,7 @@ mirosubs.startdialog.Dialog.prototype.setVisible = function(visible) {
 
 
 
-mirosubs.startdialog.Dialog.prototype.makeDropdown_ = 
+unisubs.startdialog.Dialog.prototype.makeDropdown_ = 
     function($d, contents) 
 {
 var options = [];
@@ -84,9 +84,9 @@ var options = [];
     return $d('select', null, options);
 };
 
-mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
+unisubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
-    this.model_ = new mirosubs.startdialog.Model(jsonResult, this.initialLanguageState_);
+    this.model_ = new unisubs.startdialog.Model(jsonResult, this.initialLanguageState_);
     goog.dom.removeChildren(this.contentDiv_);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -100,11 +100,11 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
-            'className': "mirosubs-green-button mirosubs-big"}, 
+            'className': "unisubs-green-button unisubs-big"}, 
            'Continue');
     goog.dom.append(this.contentDiv_, this.okButton_);
     var clearDiv = $d('div');
-    mirosubs.style.setProperty(clearDiv, 'clear', 'both');
+    unisubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.contentDiv_.appendChild(clearDiv);
     this.reposition();
@@ -112,7 +112,7 @@ mirosubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
     this.maybeShowWarning_();
 };
 
-mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
+unisubs.startdialog.Dialog.prototype.setFromContents_ = function() {
     var fromLanguages = this.model_.fromLanguages();
     goog.style.showElement(
         this.fromLanguageSection_, fromLanguages.length > 0);
@@ -123,7 +123,7 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
                 return [l.PK + '', l.toString()];
             });
         fromLanguageContents.push(
-            [mirosubs.startdialog.Dialog.FORK_VALUE,
+            [unisubs.startdialog.Dialog.FORK_VALUE,
              "Direct from video (more work)"]);
         var $d = goog.bind(this.getDomHelper().createDom,
                            this.getDomHelper());
@@ -141,7 +141,7 @@ mirosubs.startdialog.Dialog.prototype.setFromContents_ = function() {
     }
 };
 
-mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
+unisubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
     var toLanguageContents = goog.array.map(
         this.model_.toLanguages(),
         function(l) {
@@ -155,7 +155,7 @@ mirosubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
            this.toLanguageDropdown_));
 };
 
-mirosubs.startdialog.Dialog.prototype.addFromLanguageSection_ = function($d) {
+unisubs.startdialog.Dialog.prototype.addFromLanguageSection_ = function($d) {
     this.fromContainer_ = $d('span');
     this.fromLanguageSection_ =
         $d('div', null,
@@ -165,10 +165,10 @@ mirosubs.startdialog.Dialog.prototype.addFromLanguageSection_ = function($d) {
     this.contentDiv_.appendChild(this.fromLanguageSection_);
 };
 
-mirosubs.startdialog.Dialog.prototype.addOriginalLanguageSection_ = function($d) {
+unisubs.startdialog.Dialog.prototype.addOriginalLanguageSection_ = function($d) {
     if (this.model_.originalLanguageShown()) {
         this.originalLangDropdown_ = this.makeDropdown_(
-            $d, mirosubs.languages);
+            $d, unisubs.languages);
         this.originalLangDropdown_.value = 'en';
         this.model_.selectOriginalLanguage('en');
         this.contentDiv_.appendChild(
@@ -179,11 +179,11 @@ mirosubs.startdialog.Dialog.prototype.addOriginalLanguageSection_ = function($d)
     else
         this.contentDiv_.appendChild(
             $d('p', null, "This video is in " + 
-               mirosubs.languageNameForCode(
+               unisubs.languageNameForCode(
                    this.model_.getOriginalLanguage())));
 };
 
-mirosubs.startdialog.Dialog.prototype.connectEvents_ = function() {
+unisubs.startdialog.Dialog.prototype.connectEvents_ = function() {
     if (!this.isInDocument() || !this.fetchCompleted_)
         return;
     this.getHandler().
@@ -202,43 +202,43 @@ mirosubs.startdialog.Dialog.prototype.connectEvents_ = function() {
             this.originalLangChanged_);
 };
 
-mirosubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
+unisubs.startdialog.Dialog.prototype.originalLangChanged_ = function(e) {
     this.model_.selectOriginalLanguage(this.originalLangDropdown_.value);
     this.setFromContents_();
 };
 
 
-mirosubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
+unisubs.startdialog.Dialog.prototype.toLanguageChanged_ = function(e) {
     this.model_.selectLanguage(this.toLanguageDropdown_.value);
     this.setFromContents_();
     this.maybeShowWarning_();
 };
 
-mirosubs.startdialog.Dialog.prototype.fromLanguageChanged_ = function(e) {
+unisubs.startdialog.Dialog.prototype.fromLanguageChanged_ = function(e) {
     this.maybeShowWarning_();
 };
 
-mirosubs.startdialog.Dialog.prototype.maybeShowWarning_ = function() {
+unisubs.startdialog.Dialog.prototype.maybeShowWarning_ = function() {
     var warning = null;
     if (this.fromLanguageDropdown_ && 
         this.fromLanguageDropdown_.value != 
-        mirosubs.startdialog.Dialog.FORK_VALUE)
+        unisubs.startdialog.Dialog.FORK_VALUE)
         warning = this.warningMessage_();
     this.showWarning_(warning);
 };
 
-mirosubs.startdialog.Dialog.prototype.showWarning_ = function(warning) {
+unisubs.startdialog.Dialog.prototype.showWarning_ = function(warning) {
     goog.dom.setTextContent(this.warningElem_, warning || '');
     goog.style.showElement(this.warningElem_, !!warning);
 };
 
-mirosubs.startdialog.Dialog.prototype.warningMessage_ = function() {
+unisubs.startdialog.Dialog.prototype.warningMessage_ = function() {
     /**
-     * @type {mirosubs.startdialog.ToLanguage}
+     * @type {unisubs.startdialog.ToLanguage}
      */
     var toLanguage = this.model_.getSelectedLanguage();
     /**
-     * @type {mirosubs.startdialog.VideoLanguageLanguage}
+     * @type {unisubs.startdialog.VideoLanguageLanguage}
      */
     var fromLanguage = this.model_.findFromForPK(
         parseInt(this.fromLanguageDropdown_.value));
@@ -267,7 +267,7 @@ mirosubs.startdialog.Dialog.prototype.warningMessage_ = function() {
     return null;
 };
 
-mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
+unisubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     if (this.okHasBeenClicked_)
         return;
@@ -275,7 +275,7 @@ mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
     var fromLanguageID = null;
     if (this.fromLanguageDropdown_ && 
         this.fromLanguageDropdown_.value != 
-            mirosubs.startdialog.Dialog.FORK_VALUE)
+            unisubs.startdialog.Dialog.FORK_VALUE)
         fromLanguageID = parseInt(this.fromLanguageDropdown_.value);
     var toLanguage = this.model_.toLanguageForKey(
         this.toLanguageDropdown_.value);
@@ -288,5 +288,5 @@ mirosubs.startdialog.Dialog.prototype.okClicked_ = function(e) {
         fromLanguageID,
         function() { that.setVisible(false); });
     goog.dom.setTextContent(this.okButton_, "Loading...");
-    goog.dom.classes.add(this.okButton_, "mirosubs-button-disabled");
+    goog.dom.classes.add(this.okButton_, "unisubs-button-disabled");
 };

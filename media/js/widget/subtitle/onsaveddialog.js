@@ -16,25 +16,25 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.OnSavedDialog');
+goog.provide('unisubs.subtitle.OnSavedDialog');
 
 /**
  * @constructor
  * @private
  */
-mirosubs.subtitle.OnSavedDialog = function( msg, callback) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-completed', true);
+unisubs.subtitle.OnSavedDialog = function( msg, callback) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-completed', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.callback_ = callback;
     this.msg_ = msg;
 
 };
-goog.inherits(mirosubs.subtitle.OnSavedDialog, goog.ui.Dialog);
+goog.inherits(unisubs.subtitle.OnSavedDialog, goog.ui.Dialog);
 
 
-mirosubs.subtitle.OnSavedDialog.prototype.createDom = function() {
-    mirosubs.subtitle.OnSavedDialog.superClass_.createDom.call(this);
+unisubs.subtitle.OnSavedDialog.prototype.createDom = function() {
+    unisubs.subtitle.OnSavedDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild($d('h3', null, "Subtitles saved"));
     this.getElement().appendChild(
@@ -46,22 +46,22 @@ mirosubs.subtitle.OnSavedDialog.prototype.createDom = function() {
     this.okButton_ = 
         $d('a', 
            {'href':'#', 
-            'className': "mirosubs-green-button mirosubs-big"}, 
+            'className': "unisubs-green-button unisubs-big"}, 
            'OK');
     this.getElement().appendChild(this.okButton_);
     var clearDiv = $d('div');
-    mirosubs.style.setProperty(clearDiv, 'clear', 'both');
+    unisubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.getElement().appendChild(clearDiv);
 };
 
-mirosubs.subtitle.OnSavedDialog.prototype.enterDocument = function() {
-    mirosubs.subtitle.OnSavedDialog.superClass_.enterDocument.call(this);
+unisubs.subtitle.OnSavedDialog.prototype.enterDocument = function() {
+    unisubs.subtitle.OnSavedDialog.superClass_.enterDocument.call(this);
     this.getHandler().listen(
         this.okButton_, 'click', this.okClicked_);
 };
 
-mirosubs.subtitle.OnSavedDialog.prototype.okClicked_ = function(e) {
+unisubs.subtitle.OnSavedDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
     this.callback_();
@@ -71,8 +71,8 @@ mirosubs.subtitle.OnSavedDialog.prototype.okClicked_ = function(e) {
  * @param {string} The msg to display to the end user
  * @param {function(boolean)} callback
  */
-mirosubs.subtitle.OnSavedDialog.show = function(msg, callback) {
-    var dialog = new mirosubs.subtitle.OnSavedDialog(
+unisubs.subtitle.OnSavedDialog.show = function(msg, callback) {
+    var dialog = new unisubs.subtitle.OnSavedDialog(
         msg, callback);
     dialog.setVisible(true);
 };

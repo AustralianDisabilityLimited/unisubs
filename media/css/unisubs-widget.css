@@ -281,19 +281,19 @@
 
 
 
-.mirosubs-widgetContainer {
+.unisubs-widgetContainer {
   width: 100% !important;
   height: 100% !important;
   position: relative !important;
 }
 
-.mirosubs-modal-widget, .mirosubs-modal-widget:active, .mirosubs-modal-widget:hover, a, a:hover, a:active{
+.unisubs-modal-widget, .unisubs-modal-widget:active, .unisubs-modal-widget:hover, a, a:hover, a:active{
   outline: none !important;
 }
 
 
 
-span.mirosubs-widget {
+span.unisubs-widget {
   display: block !important;
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
@@ -306,7 +306,7 @@ span.mirosubs-widget {
   }
 
 
-.mirosubs-modal-widget {
+.unisubs-modal-widget {
   width: 842px !important;
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
@@ -323,7 +323,7 @@ span.mirosubs-widget {
   z-index: 2147483631 !important;
   }
 
-.mirosubs-modal-widget-content {
+.unisubs-modal-widget-content {
   border: 1px solid #000 !important;
   border-top: none !important;
   border-right: none !important;
@@ -334,27 +334,27 @@ span.mirosubs-widget {
   }
 
 
-.mirosubs-right div a{
+.unisubs-right div a{
   color: #fff !important;
   }
 
-.mirosubs-right div ul {
+.unisubs-right div ul {
   margin: 0 0 0 30px;
 }
 
-.mirosubs-modal-widget-content h1{
+.unisubs-modal-widget-content h1{
   color: #fff !important;
   text-align: center !important;
   padding: 25px !important;
   }
 
-.mirosubs-moreHelp{
+.unisubs-moreHelp{
   width: 400px !important;
   margin: 80px auto 0 !important;
   }
 
 
-.mirosubs-showTimeline{
+.unisubs-showTimeline{
   position: absolute !important;
   left: -10px !important;
   background: #fff !important;
@@ -370,12 +370,12 @@ span.mirosubs-widget {
   }
 
 
-.mirosubs-moreHelp p a{
+.unisubs-moreHelp p a{
   color: #fff !important;
   text-align: center !important;
   }
 
-.mirosubs-moreHelp p{
+.unisubs-moreHelp p{
   color: #fff !important;
   text-align: center !important;
   }
@@ -384,7 +384,7 @@ span.mirosubs-widget {
 
 
 
-.mirosubs-BANG {
+.unisubs-BANG {
 text-shadow: 
 0px 0px 25px red,
 0px 0px 35px red,
@@ -401,7 +401,7 @@ text-shadow:
 -2px -1px 0px red !important;
 }
 
-.mirosubs-modal-login-title-close, .mirosubs-modal-widget-title-close, .mirosubs-modal-lang-title-close, .mirosubs-forkdialog-title-close {
+.unisubs-modal-login-title-close, .unisubs-modal-widget-title-close, .unisubs-modal-lang-title-close, .unisubs-forkdialog-title-close {
   background: url("../images/sprite.png") 0 -256px no-repeat !important;
   position: absolute !important;
   top: 9px !important;
@@ -415,7 +415,7 @@ text-shadow:
   z-index: 4567890 !important;
   }
 
-.mirosubs-langDrop {
+.unisubs-langDrop {
   background: #999 !important;
   padding: 15px 0 !important;
   text-align: left !important;
@@ -424,7 +424,7 @@ text-shadow:
 
   }
 
-.mirosubs-langDrop select{
+.unisubs-langDrop select{
   background: #fff !important;
   line-height: 2em !important;
   border: 1px solid !important;
@@ -433,17 +433,17 @@ text-shadow:
 
 
 
-.mirosubs-langDrop option{
+.unisubs-langDrop option{
 
 }
 
 
-.mirosubs-left {
+.unisubs-left {
 	width: 400px !important;
 	float: left !important;
 }
 
-.mirosubs-modal-widget-transcribe .mirosubs-right{
+.unisubs-modal-widget-transcribe .unisubs-right{
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
@@ -453,14 +453,14 @@ text-shadow:
   border: 0 !important;	
   }
 
-.mirosubs-modal-widget-sync .mirosubs-right,
-.mirosubs-modal-widget-review .mirosubs-right{
+.unisubs-modal-widget-sync .unisubs-right,
+.unisubs-modal-widget-review .unisubs-right{
   height: 751px !important;
   }
 
 
 
-.mirosubs-modal-widget-translate .mirosubs-right{
+.unisubs-modal-widget-translate .unisubs-right{
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
@@ -471,7 +471,7 @@ text-shadow:
   }
 
 
-.mirosubs-modal-widget-translate .mirosubs-right{
+.unisubs-modal-widget-translate .unisubs-right{
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
@@ -483,13 +483,13 @@ text-shadow:
   
 
 
-.mirosubs-modal-widget-translate .mirosubs-right .mirosubs-done{
+.unisubs-modal-widget-translate .unisubs-right .unisubs-done{
   margin-top: 75px !important;	
   }
 
 
 
-.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share{
+.unisubs-modal-widget-finished .unisubs-right .unisubs-share{
   width: 350px !important;	
   margin-left: 26px !important;
   }
@@ -498,8 +498,8 @@ text-shadow:
 
 
 
-.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share h2,
-.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share h3{
+.unisubs-modal-widget-finished .unisubs-right .unisubs-share h2,
+.unisubs-modal-widget-finished .unisubs-right .unisubs-share h3{
   color: #333 !important;
   width: 340px !important;
   margin-bottom: 10px !important;
@@ -508,7 +508,7 @@ text-shadow:
 
 
 
-.mirosubs-modal-widget-finished .mirosubs-right .mirosubs-share p{
+.unisubs-modal-widget-finished .unisubs-right .unisubs-share p{
   width: 340px !important;
   padding: 0 !important;
   margin: 0px 0 10px !important;
@@ -517,7 +517,7 @@ text-shadow:
   }
 
 
-.mirosubs-modal-widget-finished .mirosubs-right{
+.unisubs-modal-widget-finished .unisubs-right{
   width: 440px !important;
   padding: 30px 0px !important;
   float: left !important;
@@ -527,7 +527,7 @@ text-shadow:
   border: 0 !important;	
   }
 
-.mirosubs-modal-widget-edittranslation .mirosubs-right{
+.unisubs-modal-widget-edittranslation .unisubs-right{
   height: 611px !important;
   }
 
@@ -537,7 +537,7 @@ text-shadow:
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 
-.mirosubs-modal-widget-transcribe .mirosubs-right{
+.unisubs-modal-widget-transcribe .unisubs-right{
 height: 713px !important;
 }
 
@@ -545,7 +545,7 @@ height: 713px !important;
 
 
 
-.mirosubs-right{
+.unisubs-right{
   width: 440px !important;
   padding: 0px 0px !important;
   float: left !important;
@@ -557,7 +557,7 @@ height: 713px !important;
   }
 
 
-.mirosubs-help-heading{
+.unisubs-help-heading{
   padding-top: 16px !important;
   height: 32px !important;
   margin: 0 -1px 20px 0px !important;
@@ -566,7 +566,7 @@ height: 713px !important;
   }
 
 
-.mirosubs-right h2{
+.unisubs-right h2{
   color: #333 !important;
   margin: 0px 0 0 !important;
   font-size: 15px !important;
@@ -575,7 +575,7 @@ height: 713px !important;
 
 
 
-.mirosubs-right p{
+.unisubs-right p{
   font-size: 13px !important;
   line-height: 1.6em !important;
   margin: 0 21px 10px !important;
@@ -584,13 +584,13 @@ height: 713px !important;
 
 
 
-.mirosubs-help-heading ul{
+.unisubs-help-heading ul{
   padding: 0px !important;
   margin: -4px 5px 0 0 !important;
   float: right !important;
   }
 
-.mirosubs-help-heading ul span{
+.unisubs-help-heading ul span{
   float: left !important;
   margin-right: 20px !important;
   padding-top: 4px !important;
@@ -598,14 +598,14 @@ height: 713px !important;
   }
 
 
-.mirosubs-help-heading ul li{
+.unisubs-help-heading ul li{
   list-style: none !important;
   float: left !important;
   margin-right: 10px !important;
   }
   
 
-.mirosubs-help-heading ul li a{
+.unisubs-help-heading ul li a{
   text-decoration: none !important;
   color: #aaa !important;
   font-size: 11px !important;
@@ -620,7 +620,7 @@ height: 713px !important;
 
 
 
-.mirosubs-help-heading ul li a.mirosubs-activestep{
+.unisubs-help-heading ul li a.unisubs-activestep{
   text-decoration: none !important;
   color: #333 !important;
   background: #fff !important;
@@ -628,21 +628,21 @@ height: 713px !important;
   }
 
 
-.mirosubs-modal-widget-content.finished {
+.unisubs-modal-widget-content.finished {
   height: 670px !important;
   }
   
 
 
 
-.mirosubs-modal-widget-content.finished .mirosubs-right{
+.unisubs-modal-widget-content.finished .unisubs-right{
   width: 360px !important;
   padding: 0px 30px 0 0 !important;
   float: right !important;
   }
 
 
-.mirosubs-modal-widget-content.finished .mirosubs-right{
+.unisubs-modal-widget-content.finished .unisubs-right{
   width: 360px !important;
   padding: 0px 30px 0 0 !important;
   float: right !important;
@@ -651,13 +651,13 @@ height: 713px !important;
 
 
 
-.mirosubs-modal-widget-content.finished .mirosubs-videoDiv{
+.unisubs-modal-widget-content.finished .unisubs-videoDiv{
   margin: 0px !important;
 }
   
 
 
-.mirosubs-help{
+.unisubs-help{
   color: #fff !important;
   margin: 10px 0 !important;
   
@@ -668,7 +668,7 @@ height: 713px !important;
 
 
 
-.mirosubs-steps{
+.unisubs-steps{
   position:absolute !important;
   bottom: 30px !important;
   width: 420px !important;
@@ -680,14 +680,14 @@ height: 713px !important;
 
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	.mirosubs-steps{
+	.unisubs-steps{
 		bottom: 47px !important;
 	}
 }
 
 
 
-.mirosubs-restart, a.mirosubs-download-subs {
+.unisubs-restart, a.unisubs-download-subs {
   padding-left: 33px !important;
   margin: 10px 0 30px 0px !important;
   font-size: 11px !important;
@@ -704,11 +704,11 @@ height: 713px !important;
   -webkit-border-radius: 4px !important;
 }
 
-.mirosubs-restart {
+.unisubs-restart {
    background: #333 url("../images/sprite.png") 8px -146px no-repeat !important;
 }
   
-.mirosubs-extra{
+.unisubs-extra{
   border: 1px solid #4f4f4f !important;
   background: #454545 !important;
   
@@ -721,7 +721,7 @@ height: 713px !important;
   }
 
 
-.mirosubs-extra p{
+.unisubs-extra p{
   margin: 0px 0 5px !important;
   color: #fff !important;
   padding: 0 !important;
@@ -732,7 +732,7 @@ height: 713px !important;
   }
 
 
-.mirosubs-extra a{
+.unisubs-extra a{
   margin: 0px 0 5px !important;
   color: #fff !important;
   padding: 0 !important;
@@ -743,7 +743,7 @@ height: 713px !important;
   }
 
 
-.mirosubs-extra h3{
+.unisubs-extra h3{
   margin: 0px 0 5px !important;
   color: #fff !important;
   text-shadow: 0px 1px 1px #000 !important;
@@ -756,7 +756,7 @@ height: 713px !important;
 
 
 
-.mirosubs-extra ul{
+.unisubs-extra ul{
   margin: 0px 0 5px !important;
   color: #fff !important;
   padding: 0 0 0 15px !important;
@@ -769,7 +769,7 @@ height: 713px !important;
 
 
 
-.mirosubs-extra .mirosubs-spanarrow{
+.unisubs-extra .unisubs-spanarrow{
   display: block !important;
   bottom: -12px !important;
   width: 17px !important;
@@ -778,7 +778,7 @@ height: 713px !important;
   background: url("../images/pointing.png") 0 0 no-repeat !important;
   }
 
-.mirosubs-extra.mirosubs-extra-left .mirosubs-spanarrow{
+.unisubs-extra.unisubs-extra-left .unisubs-spanarrow{
   display: block !important;
   top: 14px !important;
   left: -8px !important;
@@ -790,7 +790,7 @@ height: 713px !important;
 
 
 
-.mirosubs-backTo{
+.unisubs-backTo{
   padding-left: 29px !important;
   margin: 10px 0 30px 20px !important;
   font-size: 11px !important;
@@ -807,7 +807,7 @@ height: 713px !important;
   -webkit-border-radius: 4px !important;
   }
 
-.mirosubs-backTo:hover{
+.unisubs-backTo:hover{
   background: #666 url("../images/sprite.png") 10px -206px no-repeat !important;
   border: 1px solid #777 !important;
   border-top: 1px solid #999 !important;
@@ -817,7 +817,7 @@ height: 713px !important;
 
 
 
-.mirosubs-restart:hover{
+.unisubs-restart:hover{
   background: #666 url("../images/sprite.png") 8px -145px no-repeat !important;
   border: 1px solid #777 !important;
   border-top: 1px solid #999 !important;
@@ -826,12 +826,12 @@ height: 713px !important;
   }
 
 
-.mirosubs-loggedIn{
+.unisubs-loggedIn{
   color: #fff !important;
   text-align: center !important;
   }
 
-.mirosubs-done, .mirosubs-done-save {
+.unisubs-done, .unisubs-done-save {
   color: #333 !important;
   font-size: 16px !important;
   -moz-border-radius: 5px !important;
@@ -851,7 +851,7 @@ float: left !important;
   }
 
 
-  .mirosubs-steps .mirosubs-done {
+  .unisubs-steps .unisubs-done {
   	display: block !important;
   	width: auto !important;
   	text-align: center !important;
@@ -860,13 +860,13 @@ float: left !important;
   }
 
 
-.mirosubs-done-save {
+.unisubs-done-save {
   margin: 15px 0px 0px 20px !important;
 
   }
 
 
-.mirosubs-silver-button {
+.unisubs-silver-button {
   color: #333 !important;
   font-size: 12px !important;
   -moz-border-radius: 5px !important;
@@ -885,36 +885,36 @@ float: left !important;
 
 
 
-.mirosubs-red{
+.unisubs-red{
 color: red !important;
 }
 
 
-.mirosubs-green{
+.unisubs-green{
 color: green !important;
 }
 
 
-.mirosubs-status{
+.unisubs-status{
 position: absolute !important;
 top: -60px !important;
 left: 20px !important;
 }
 
 
-.mirosubs-status a{
+.unisubs-status a{
 margin-right: 20px !important;
 }
 
 
 
-.mirosubs-done img {
+.unisubs-done img {
    border: 0 !important;
    position: absolute !important;
    left: 30px !important;
 }
 
-.mirosubs-done span {  
+.unisubs-done span {  
     padding-right: 40px !important;
    text-decoration: none !important;
    color: #333 !important;
@@ -923,42 +923,42 @@ margin-right: 20px !important;
 
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-.mirosubs-done span {
+.unisubs-done span {
    background: url("../images/sprite.png") right -234px no-repeat !important;
 }
 }
 
 
-.mirosubs-done.left span {
+.unisubs-done.left span {
    padding-left: 19px !important;
    background: url("../images/sprite.png") left -214px no-repeat !important;
 }
 
-.mirosubs-done:hover {
+.unisubs-done:hover {
    background: #fff url("../images/gradient.png") right 132px repeat-x !important;
    text-shadow: none !important;
 }
 
-.mirosubs-done:active {
+.unisubs-done:active {
    background: #fff url("../images/gradient.png") right -82px repeat-x !important;
    border-color: #000 !important;
 }
 
-.mirosubs-translateField{
+.unisubs-translateField{
   padding: 3px !important;
   width: 350px !important;
   margin-top: 3px !important;
   height: 34px !important;
   }
 
-.mirosubs-whats{
+.unisubs-whats{
   display: block !important;
   font-size: 11px !important;
   color: #999 !important;
   margin-left: 40px !important;
   }
 
-.mirosubs-needLogin{
+.unisubs-needLogin{
   color: #fff !important;
   font-size: 15px !important;
   padding-left: 35px !important;
@@ -971,50 +971,50 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-needLogin a{
+.unisubs-needLogin a{
   color: #fff !important;
   
   }
 
 
-.mirosubs-legend{
+.unisubs-legend{
 
 }
 
 
 
-.mirosubs-speedmode{
+.unisubs-speedmode{
   margin-left: 20px !important;
   clear: both !important;
 	text-shadow: 0 0 0 !important;
   }
 
 
-.mirosubs-speedmode h4{
+.unisubs-speedmode h4{
   float: left !important;
   margin: 21px 20px 0 0 !important;
   
   }
 
-.mirosubs-speedmode select{
+.unisubs-speedmode select{
   float: left !important;
   margin-top: 20px !important;
   
   }
 
-.mirosubs-speedmode select option{
+.unisubs-speedmode select option{
 
 }
 
 
 
-.mirosubs-play:hover,
-.mirosubs-skip:hover,
-.mirosubs-begin:hover{
+.unisubs-play:hover,
+.unisubs-skip:hover,
+.unisubs-begin:hover{
    cursor: pointer !important;
   }
 
-.mirosubs-play{
+.unisubs-play{
   text-shadow: 1px 1px 0px #68b553 !important;
   background: url("../images/new_buttons.png") 0px -73px no-repeat !important;
   font-size: 11px !important;
@@ -1030,13 +1030,13 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-play-beginner{
+.unisubs-play-beginner{
   padding-top: 12px !important;
   padding-bottom: 2px !important;
   }
 
 
-.mirosubs-play-beginner span.mirosubs-tab{
+.unisubs-play-beginner span.unisubs-tab{
   padding-top: 10px !important;
   
   }
@@ -1044,17 +1044,17 @@ margin-right: 20px !important;
 
 
 
-.mirosubs-play:hover{
+.unisubs-play:hover{
   background: url("../images/new_buttons.png") 0px -214px no-repeat !important;
   text-shadow: 1px 1px 0px #a7d29c !important;
   }
 
-.mirosubs-play:active, .mirosubs-play-down {
+.unisubs-play:active, .unisubs-play-down {
   background: url("../images/new_buttons.png") 0px -356px no-repeat !important;
   text-shadow: none !important;
   }
 
-.mirosubs-begin{
+.unisubs-begin{
   text-shadow: 1px 1px 0px #b662ad !important;
   background: url("../images/new_buttons.png") 0px -0px no-repeat !important;
   font-size: 12px !important;
@@ -1072,18 +1072,18 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-begin:hover {
+.unisubs-begin:hover {
    background: url("../images/new_buttons.png") 0px -141px no-repeat !important;
    text-shadow: 1px 1px 0px #e48fd8 !important;
 }
 
-.mirosubs-begin:active, .mirosubs-begin-down {
+.unisubs-begin:active, .unisubs-begin-down {
    background: url("../images/new_buttons.png") 0px -283px no-repeat !important;
    text-shadow: none !important;
 }
 
 
-.mirosubs-skip{
+.unisubs-skip{
   text-shadow: 1px 1px 0px #6db8ca !important;
   background: url("../images/new_buttons.png") right -73px no-repeat !important;
   font-size: 11px !important;
@@ -1100,7 +1100,7 @@ margin-right: 20px !important;
 
 /* FIXME: pretty bad duplication */
 
-.mirosubs-green-button {
+.unisubs-green-button {
    -moz-border-radius: 3px !important;
    -webkit-border-radius: 3px !important;
    border-radius:3px !important;
@@ -1111,7 +1111,7 @@ margin-right: 20px !important;
 }
 
 
-.mirosubs-green-button.mirosubs-big {
+.unisubs-green-button.unisubs-big {
    font-size: 14px !important;
    padding: 8px 16px !important;
 }
@@ -1119,7 +1119,7 @@ margin-right: 20px !important;
 
 /*---- Green Button ----*/
 
-.mirosubs-green-button {
+.unisubs-green-button {
    color: #485a0c !important;
    
    text-shadow: 0 1px 0px #aed011 !important;
@@ -1138,7 +1138,7 @@ margin-right: 20px !important;
 }
 
 
-.mirosubs-green-button:hover{
+.unisubs-green-button:hover{
    color: #485a0c !important;
    
    text-shadow: 0 1px 0px #ebff6b !important;
@@ -1154,19 +1154,19 @@ margin-right: 20px !important;
 
   
 
-.mirosubs-skip:hover{
+.unisubs-skip:hover{
   background: url("../images/new_buttons.png") right -214px no-repeat !important;
   text-shadow: 1px 1px 0px #86bfcc !important;
   }
 
 
-.mirosubs-skip:active, .mirosubs-skip-down {
+.unisubs-skip:active, .unisubs-skip-down {
   background: url("../images/new_buttons.png") right -356px no-repeat !important;
   text-shadow: none !important;
   }
 
 
-.mirosubs-skip .mirosubs-control{
+.unisubs-skip .unisubs-control{
   font-size: 20px !important;
   color: #333 !important;
   font-size: 10px !important;
@@ -1182,8 +1182,8 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-play .mirosubs-tab, 
-.mirosubs-begin .mirosubs-down{
+.unisubs-play .unisubs-tab, 
+.unisubs-begin .unisubs-down{
   font-size: 20px !important;
   color: #333 !important;
   font-size: 10px !important;
@@ -1198,8 +1198,8 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-begin .mirosubs-spacebar,
-.mirosubs-play .mirosubs-spacebar{
+.unisubs-begin .unisubs-spacebar,
+.unisubs-play .unisubs-spacebar{
   font-size: 20px !important;
   color: #333 !important;
   font-size: 11px !important;
@@ -1216,13 +1216,13 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-auto{
+.unisubs-auto{
   float: left !important;
   line-height: 1.7em !important;
   margin: 0px 30px 0 40px !important;
   }
 
-.mirosubs-auto .mirosubs-enable{
+.unisubs-auto .unisubs-enable{
   padding-left: 40px !important;
   float: left !important;
   line-height: 1.7em !important;
@@ -1231,12 +1231,12 @@ margin-right: 20px !important;
   }
 
 
-.mirosubs-auto a{
+.unisubs-auto a{
     color: #fff !important;
 }
 
 
-.mirosubs-hide{
+.unisubs-hide{
   float: right !important;
   color: #555 !important;
   padding-left: 15px !important;
@@ -1244,12 +1244,12 @@ margin-right: 20px !important;
   text-decoration: none !important;
   }
 
-.mirosubs-clear{
+.unisubs-clear{
   clear:both !important;
   height: 0 !important;
   }
 
-.mirosubs-watch {
+.unisubs-watch {
   color: #fff !important;
   margin: 20px 0 !important;
   display: block !important;
@@ -1257,66 +1257,66 @@ margin-right: 20px !important;
   background: url("../images/sprite.png") 0px -328px no-repeat !important;
   }
 
-.mirosubs-watch span {
+.unisubs-watch span {
 
 }
 
-.mirosubs-video-decorated {
+.unisubs-video-decorated {
    display: block !important;
    margin-bottom: 30px !important;
 }
 
-.mirosubs-widget span.mirosubs-videoplayer {
+.unisubs-widget span.unisubs-videoplayer {
    width: 480px;
    height: 360px;
    background-color: black;
 }
 
-span.mirosubs-videoplayer {
+span.unisubs-videoplayer {
    display: block !important;
 }
 
-.mirosubs-videoDiv {
+.unisubs-videoDiv {
 
 }
 
-.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv {
+.unisubs-modal-widget .unisubs-left .unisubs-videoDiv {
   width: 400px !important;
   height: 300px !important;
   }
 
-.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv video,
-.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv object,
-.mirosubs-modal-widget .mirosubs-left .mirosubs-videoDiv embed,
-.mirosubs-modal-widget .mirosubs-videoDiv embed{
+.unisubs-modal-widget .unisubs-left .unisubs-videoDiv video,
+.unisubs-modal-widget .unisubs-left .unisubs-videoDiv object,
+.unisubs-modal-widget .unisubs-left .unisubs-videoDiv embed,
+.unisubs-modal-widget .unisubs-videoDiv embed{
   width: 400px !important;
   height: 300px !important;
 display: block !important;
   }
 
 
-.mirosubs-modal-widget .mirosubs-videoDiv video,
-.mirosubs-modal-widget .mirosubs-videoDiv video *,
-.mirosubs-modal-widget .mirosubs-videoDiv object,
-.mirosubs-modal-widget .mirosubs-videoDiv embed{
+.unisubs-modal-widget .unisubs-videoDiv video,
+.unisubs-modal-widget .unisubs-videoDiv video *,
+.unisubs-modal-widget .unisubs-videoDiv object,
+.unisubs-modal-widget .unisubs-videoDiv embed{
   width: 440px !important;
 margin: 0
   display: block !important;
   }
 
-.mirosubs-captioningArea {
+.unisubs-captioningArea {
   position: relative !important;
   background: #fff url("../images/big_grad.png") 0 bottom repeat-x !important;
   }
 
-.mirosubs-widget video{
+.unisubs-widget video{
 display: block !important;
 }
 
 
 
 
-ul.mirosubs-titlesList {
+ul.unisubs-titlesList {
   margin: 0 !important;
   padding: 0 !important;
   overflow: auto !important;
@@ -1324,7 +1324,7 @@ ul.mirosubs-titlesList {
   height: 336px !important;
   }
 
-ul.mirosubs-titlesList li {
+ul.unisubs-titlesList li {
   font-weight: bold !important;
   border-bottom: 1px solid #ccc !important;
   margin: 0 !important;
@@ -1334,7 +1334,7 @@ ul.mirosubs-titlesList li {
   list-style: none !important;
   }
 
-.mirosubs-sub-delete, .mirosubs-sub-insert {
+.unisubs-sub-delete, .unisubs-sub-insert {
   position: absolute !important;
   top: 0px !important;
   cursor: pointer !important;
@@ -1342,7 +1342,7 @@ ul.mirosubs-titlesList li {
   
   }
 
-.mirosubs-sub-delete {
+.unisubs-sub-delete {
   right: 3px !important;
   width: 18px !important;
   top: 3px !important;
@@ -1350,16 +1350,16 @@ ul.mirosubs-titlesList li {
   background: url("../images/remove-title.png") 0 0 no-repeat !important;
   }
 
-.mirosubs-sub-delete:hover {
+.unisubs-sub-delete:hover {
    background: url("../images/remove-title.png") 0 -21px no-repeat !important;
 }
 
 
-.mirosubs-sub-delete:active {
+.unisubs-sub-delete:active {
    background: url("../images/remove-title.png") 0 -41px no-repeat !important;
 }
 
-.mirosubs-sub-insert {
+.unisubs-sub-insert {
    left: 180px !important;
    width: 30px !important;
    top: -5px !important;
@@ -1367,27 +1367,27 @@ ul.mirosubs-titlesList li {
    background: url("../images/add-title.png") 0 0 no-repeat !important;
 }
 
-.mirosubs-sub-insert:hover {
+.unisubs-sub-insert:hover {
    background: url("../images/add-title.png") 0 -29px no-repeat !important;
 }
 
-.mirosubs-sub-insert:active {
+.unisubs-sub-insert:active {
    background: url("../images/add-title.png") 0 0 no-repeat !important;
 }
 
-li.mirosubs-append-sub-button {
+li.unisubs-append-sub-button {
    height: 150px !important;
 }
 
-.mirosubs-modal-widget-transcribe .mirosubs-append-sub-link {
+.unisubs-modal-widget-transcribe .unisubs-append-sub-link {
    display: none !important;
 }
 
-ul.mirosubs-titlesList.taller {
+ul.unisubs-titlesList.taller {
     height: 210px !important;
 }
 
-ul.mirosubs-titlesList.sync {
+ul.unisubs-titlesList.sync {
     margin: 0 !important;
     padding: 0 !important;
     height: 200px !important;
@@ -1396,24 +1396,24 @@ ul.mirosubs-titlesList.sync {
 }
 
 
-.mirosubs-widget a:active,
-.mirosubs-widget a:focus,
-.mirosubs-widget a:hover {
+.unisubs-widget a:active,
+.unisubs-widget a:focus,
+.unisubs-widget a:hover {
     outline: none !important;
 }
 
-.mirosubs-widget li.selected{
+.unisubs-widget li.selected{
     background: #0090cb !important;
 }
 
-.mirosubs-modal-dialog-bg {
+.unisubs-modal-dialog-bg {
   position: absolute !important;
   background-color: #666 !important;
   top: 0 !important;
   left: 0 !important;
 }
 
-.mirosubs-modal-widget-bg {
+.unisubs-modal-widget-bg {
   z-index: 2147483630 !important;
   position: absolute !important;
   background: #000 !important;
@@ -1421,7 +1421,7 @@ ul.mirosubs-titlesList.sync {
   left: 0 !important;
 }
 
-.mirosubs-forkdialog-bg {
+.unisubs-forkdialog-bg {
   z-index: 2147483631 !important;
   position: absolute !important;
   background: #FFF !important;
@@ -1429,7 +1429,7 @@ ul.mirosubs-titlesList.sync {
   left: 0 !important;
 }
 
-.mirosubs-modal-lang-bg, .mirosubs-modal-completed-bg {
+.unisubs-modal-lang-bg, .unisubs-modal-completed-bg {
   z-index: 2147483631 !important;
   position: absolute !important;
   background: #FFF !important;
@@ -1437,7 +1437,7 @@ ul.mirosubs-titlesList.sync {
   left: 0 !important;
 }
 
-.mirosubs-modal-dialog {
+.unisubs-modal-dialog {
   position: absolute !important;
   padding: 5px !important;
   background-color: #bcf !important;
@@ -1448,14 +1448,14 @@ ul.mirosubs-titlesList.sync {
   outline: none !important;
 }
 
-.mirosubs-modal-dialog a,
-.mirosubs-modal-dialog a:link,
-.mirosubs-modal-dialog a:visited  {
+.unisubs-modal-dialog a,
+.unisubs-modal-dialog a:link,
+.unisubs-modal-dialog a:visited  {
   color: #0066cc !important;
   cursor: pointer !important;
 }
 
-.mirosubs-modal-dialog-title {
+.unisubs-modal-dialog-title {
   position: relative !important;
   background-color: #ebeff9 !important;
   color: #000000 !important;
@@ -1467,7 +1467,7 @@ ul.mirosubs-titlesList.sync {
   cursor: hand !important;
 }
 
-.mirosubs-modal-dialog-title-close {
+.unisubs-modal-dialog-title-close {
     position: absolute !important;
     top: 10px !important;
     right: 15px !important;
@@ -1477,13 +1477,13 @@ ul.mirosubs-titlesList.sync {
     cursor: default !important;
 }
 
-.mirosubs-modal-dialog-content {
+.unisubs-modal-dialog-content {
     padding: 15px !important;
     font-size: 90% !important;
     background-color: #fff !important;
 }
 
-.mirosubs-modal-dialog-buttons {
+.unisubs-modal-dialog-buttons {
     padding: 0 15px 15px !important;
     background-color: #fff !important;
 }
@@ -1492,15 +1492,15 @@ ul.mirosubs-titlesList.sync {
     font-weight: bold !important;
 }
 
-.mirosubs-label-input-label {
+.unisubs-label-input-label {
     color: #666 !important;
 }
 
-.mirosubs-activecaption-input-label {
+.unisubs-activecaption-input-label {
     background-color: #fbb !important;
 }
 
-span.mirosubs-captionSpan {
+span.unisubs-captionSpan {
    display: block !important;
    position: absolute !important;
    letter-spacing: .06em !important;
@@ -1529,7 +1529,7 @@ span.mirosubs-captionSpan {
    padding: 10px 3px !important;
 }
 
-iframe.mirosubs-captionSpanBg { 
+iframe.unisubs-captionSpanBg { 
     position: absolute !important; 
     border: none !important; 
 } 
@@ -1537,7 +1537,7 @@ iframe.mirosubs-captionSpanBg {
 
 /*--- "Finished Page" version ---*/
 
-ul.mirosubs-titlesList.finished {
+ul.unisubs-titlesList.finished {
     margin: 0 !important;
     padding: 0 !important;
     height: 206px !important;
@@ -1547,7 +1547,7 @@ ul.mirosubs-titlesList.finished {
 
 
 
-ul.mirosubs-titlesList.mirosubs-beginTab {
+ul.unisubs-titlesList.unisubs-beginTab {
 overflow: hidden !important;
 margin-bottom: 0px !important;
 background: url("../images/begin_tab.jpg") 0 -74px no-repeat !important;
@@ -1556,7 +1556,7 @@ border-bottom: none !important;
 }
 
 
-ul.mirosubs-titlesList.mirosubs-beginTab .mirosubs-beginTabLi {
+ul.unisubs-titlesList.unisubs-beginTab .unisubs-beginTabLi {
 height: 102px !important;
 padding: 110px 0px !important;
 text-align: center !important;
@@ -1567,15 +1567,15 @@ color: #fff !important;
 }
 
 
-ul.mirosubs-titlesList li:hover {
+ul.unisubs-titlesList li:hover {
 cursor: default !important;
 }
 
-ul.mirosubs-titlesList li.active {
+ul.unisubs-titlesList li.active {
     background: #caf3ff !important;
 }
 
-ul.mirosubs-titlesList li textarea {
+ul.unisubs-titlesList li textarea {
     width: 350px !important;
     padding: 5px !important;
     font-family: Arial, Helvetica, sans-serif !important;
@@ -1588,7 +1588,7 @@ ul.mirosubs-titlesList li textarea {
 }
 
 
-ul.mirosubs-titlesList li input.mirosubs-translateInput {
+ul.unisubs-titlesList li input.unisubs-translateInput {
     width: 95% !important;
     padding: 5px !important;
     font-family: Arial, Helvetica, sans-serif !important;
@@ -1603,7 +1603,7 @@ margin: 7px 0 0 0 !important;
 
 
 
-ul.mirosubs-titlesList li:hover .mirosubs-timestamp {
+ul.unisubs-titlesList li:hover .unisubs-timestamp {
 border: 1px solid #ddd !important;
 padding-top: 0px !important;
 padding-right: 9px !important;
@@ -1611,7 +1611,7 @@ padding-right: 9px !important;
 
 
 
-.mirosubs-timestamp {
+.unisubs-timestamp {
     margin: 0 !important;
     right: 50px !important;
     font-size: 10px !important;
@@ -1626,16 +1626,16 @@ padding-right: 9px !important;
     padding: 1px 10px 0 5px !important;
 }
 
-.mirosubs-timestamp.none {
+.unisubs-timestamp.none {
     color: #aaa !important;
 }
 
-.mirosubs-timestamp-time {
+.unisubs-timestamp-time {
 float: right !important;
 }
 
 
-.mirosubs-changeTime {
+.unisubs-changeTime {
 width: 31px !important;
 margin: 0 !important;
 position: absolute !important;
@@ -1644,11 +1644,11 @@ height: 22px !important;
 top: 0px !important;
 }
 
-.mirosubs-titlesList li:hover .mirosubs-changeTime a{
+.unisubs-titlesList li:hover .unisubs-changeTime a{
 display: block !important;
 }
 
-.mirosubs-changeTime a{
+.unisubs-changeTime a{
 width: 15px !important;
 float: right !important;
 display: none !important;
@@ -1657,7 +1657,7 @@ padding-top: 18px !important;
 overflow: hidden !important;
 }
 
-.mirosubs-changeTime a.mirosubs-up{
+.unisubs-changeTime a.unisubs-up{
 float: right !important;
 height: 0 !important;
 overflow: hidden !important;
@@ -1667,7 +1667,7 @@ background: url("../images/time_arrows.png") right -1px no-repeat !important;
 
 
 
-.mirosubs-changeTime a.mirosubs-down{
+.unisubs-changeTime a.unisubs-down{
 height: 0 !important;
 float: left !important;
 overflow: hidden !important;
@@ -1675,28 +1675,28 @@ background: url("../images/time_arrows.png") left -1px no-repeat !important;
 }
 
 
-.mirosubs-changeTime a.mirosubs-down:hover{
+.unisubs-changeTime a.unisubs-down:hover{
 background: url("../images/time_arrows.png") left -20px no-repeat !important;
 }
 
 
 
-.mirosubs-changeTime a.mirosubs-down:active{
+.unisubs-changeTime a.unisubs-down:active{
 background: url("../images/time_arrows.png") left -39px no-repeat !important;
 }
 
 
-.mirosubs-changeTime a.mirosubs-up:hover{
+.unisubs-changeTime a.unisubs-up:hover{
 background: url("../images/time_arrows.png") right -20px no-repeat !important;
 }
 
 
-.mirosubs-changeTime a.mirosubs-up:active{
+.unisubs-changeTime a.unisubs-up:active{
 background: url("../images/time_arrows.png") right -39px no-repeat !important;
 }
 
 
-.mirosubs-title {
+.unisubs-title {
     line-height: 1.4em !important;
     display: block !important;
     padding:10px !important;
@@ -1706,7 +1706,7 @@ cursor: pointer !important;
     margin-right: 65px !important;
 }
 
-li span.mirosubs-title textarea{
+li span.unisubs-title textarea{
 width: 334px !important;
   -moz-border-radius: 5px !important;
     -webkit-border-radius: 5px !important;
@@ -1716,15 +1716,15 @@ padding: 3px !important;
 }
 
 
-.mirosubs-title:hover {
+.unisubs-title:hover {
 }
 
 
-.mirosubs-title-notime {
+.unisubs-title-notime {
     padding-left: 0 !important;
 }
 
-.mirosubs-nextStep {
+.unisubs-nextStep {
     padding: 10px 0 !important;
     text-align: right !important;
     float: left !important;
@@ -1732,16 +1732,16 @@ padding: 3px !important;
     background: #fcfcfc url("../images/gradient.png") 0 14px repeat-x !important;
 }
 
-.mirosubs-nextStep strong {
+.unisubs-nextStep strong {
     padding-right: 17px !important;
     background: url("../images/right_arrow.png") right 3px no-repeat !important;
 }
 
-.mirosubs-nextStep span {
+.unisubs-nextStep span {
     padding-right: 15px !important;
 }
 
-.mirosubs-nextStep a {
+.unisubs-nextStep a {
     float: right !important;
     padding: 1px 10px 0 !important;
     line-height: 2em !important;
@@ -1754,11 +1754,11 @@ padding: 3px !important;
     margin-right: 10px !important;
 }
 
-.mirosubs-nextStep a:hover {
+.unisubs-nextStep a:hover {
     border: 1px solid #333 !important;
 }
 
-.mirosubs-nextStep a.mirosubs-logoutLink {
+.unisubs-nextStep a.unisubs-logoutLink {
     background: none !important;
     color: #aaa !important;
     text-decoration: underline !important;
@@ -1768,26 +1768,26 @@ padding: 3px !important;
 }
 
 
-.mirosubs-nextStep a.mirosubs-logoutLink:hover {
+.unisubs-nextStep a.unisubs-logoutLink:hover {
     background: none !important;
     color: #666 !important;
     border: 0 !important;
 }
 
-.mirosubs-nextStep a.mirosubs-logoutLink:active {
+.unisubs-nextStep a.unisubs-logoutLink:active {
     background: none !important;
     color: #666 !important;
     border: 0 !important;
 }
 
-.mirosubs-nav {
+.unisubs-nav {
     margin: 0 !important;
     padding: 0 !important;
     clear: both !important;
     height: 2.5em !important;
 }
 
-.mirosubs-nav li {
+.unisubs-nav li {
     margin: 0 !important;
     padding: 0 !important;
     list-style: none !important;
@@ -1795,12 +1795,12 @@ padding: 3px !important;
     float: left !important;
 }
 
-.mirosubs-nav li.active a {
+.unisubs-nav li.active a {
     border-top: 1px solid #ededed !important;
     background: #efefef url("../images/gradient.png") 0 -39px repeat-x !important;
 }
 
-.mirosubs-nav a {
+.unisubs-nav a {
     margin: 0 !important;
     display: block !important;
     text-align: center !important;
@@ -1815,59 +1815,59 @@ padding: 3px !important;
     background: #efefef url("../images/gradient.png") 0 -9px repeat-x !important;
 }
 
-.mirosubs-navTranscribe a {
+.unisubs-navTranscribe a {
     -moz-border-radius-bottomleft: 5px !important;
     -webkit-border-bottom-left-radius: 5px !important;
 }
 
-.mirosubs-navSync a {
+.unisubs-navSync a {
     border-left: 1px solid #ccc !important;
 }
 
-.mirosubs-navReview {
+.unisubs-navReview {
     width: 34% !important;
 }
 
-.mirosubs-navReview a {
+.unisubs-navReview a {
     -moz-border-radius-bottomright: 5px !important;
     -webkit-border-bottom-right-radius: 5px !important;
 }
 
-.mirosubs-navSync a {
+.unisubs-navSync a {
    border-right: 1px solid #ccc !important;
    width: 99% !important;
 }
 
-.mirosubs-nav a:hover {
+.unisubs-nav a:hover {
     border-top: 1px solid #ededed !important;
     background: #efefef url("../images/gradient.png") 0 -39px repeat-x !important;
 }
 
-.mirosubs-transcribeControls {
+.unisubs-transcribeControls {
     background: #ddd !important;
     border-bottom: 1px solid #999 !important;
     border-top: 1px solid #eee !important;
 }
 
-.mirosubs-transcribeControls input.trans {
+.unisubs-transcribeControls input.trans {
     width: 91% !important;
     margin: 10px !important;
     padding: 5px !important;
     font-size: 13px !important;
 }
 
-.mirosubs-widget li.mirosubs-transcribeHelp {
+.unisubs-widget li.unisubs-transcribeHelp {
     margin:0px !important;
     padding: 0px !important; 
     background: #eee !important;
     border-bottom: 1px solid #ddd !important;
 }
 
-.mirosubs-widget li.mirosubs-transcribeHelp:hover {
+.unisubs-widget li.unisubs-transcribeHelp:hover {
     background: #eee !important;
 }
 
-.mirosubs-widget li.mirosubs-transcribeHelp .mirosubs-helpInner {
+.unisubs-widget li.unisubs-transcribeHelp .unisubs-helpInner {
     margin: 10px !important;
     padding: 0px !important; 
     border: 1px solid #333 !important;
@@ -1879,7 +1879,7 @@ padding: 3px !important;
     -webkit-border-radius: 5px !important;
 }
 
-li.mirosubs-transcribeHelp p {
+li.unisubs-transcribeHelp p {
     color: #fff !important;
     font-weight: bold !important;
     padding: 0 25px 5px 15px !important;
@@ -1888,16 +1888,16 @@ li.mirosubs-transcribeHelp p {
     text-shadow: #6374AB 1px 1px 1px !important;
 }
 
-li.mirosubs-transcribeHelp p.mirosubs-topP {
+li.unisubs-transcribeHelp p.unisubs-topP {
     padding-top: 10px !important;
 }
 
-.mirosubs-transcribeHelp,
-.mirosubs-transcribeHelp li:hover {
+.unisubs-transcribeHelp,
+.unisubs-transcribeHelp li:hover {
 
 }
 
-.mirosubs-transcribeHelp .mirosubs-keys {
+.unisubs-transcribeHelp .unisubs-keys {
     width: 100% !important;
     height: 127px !important; 
     border: 1px solid #333 !important; 
@@ -1915,13 +1915,13 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     -webkit-border-top-left-radius: 5px !important; 
 }
 
-.mirosubs-transcribeHelp .mirosubs-keys h3{ 
+.unisubs-transcribeHelp .unisubs-keys h3{ 
     margin: 0 0 10px !important; 
     padding: 0 0 0 10px !important; 
     color: #fff !important; 
 } 
 
-.mirosubs-transcribeHelp .mirosubs-keys a { 
+.unisubs-transcribeHelp .unisubs-keys a { 
     margin: 0 !important; 
     padding: 0 0 0 10px !important; 
     color: #fff !important; 
@@ -1930,7 +1930,7 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     right: 10px !important; 
 } 
 
-.mirosubs-transcribeHelp .mirosubs-keys span {
+.unisubs-transcribeHelp .unisubs-keys span {
     float: left !important;
     font-weight: bold !important;
     font-size: 10px !important;
@@ -1940,7 +1940,7 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     padding: 5px 5px 5px 15px !important;
 }
 
-.mirosubs-transcribeHelp .mirosubs-keys span.mirosubs-tab{
+.unisubs-transcribeHelp .unisubs-keys span.unisubs-tab{
     float: left !important;
     font-weight: bold !important;
     font-size: 10px !important;
@@ -1948,7 +1948,7 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     background: url("../images/keys_buttons.png") 10px -48px no-repeat !important;
 }
 
-.mirosubs-transcribeHelp .mirosubs-keys span.mirosubs-back{
+.unisubs-transcribeHelp .unisubs-keys span.unisubs-back{
     float: left !important;
     font-weight: bold !important;
     font-size: 10px !important;
@@ -1956,18 +1956,18 @@ li.mirosubs-transcribeHelp p.mirosubs-topP {
     background: url("../images/keys_buttons.png") 10px -97px no-repeat !important;
 }
 
-li.mirosubs-transcribeHelp span.mirosubs-space_bar{
+li.unisubs-transcribeHelp span.unisubs-space_bar{
     background: url("../images/keys_buttons.png") 10px 1px no-repeat !important;
     padding: 6px 0 5px 100px !important;
 }
 
-.mirosubs-transcribeHelp ol {
+.unisubs-transcribeHelp ol {
     margin: 0 !important;
     background: none !important;
     padding: 0 !important;
 }
 
-li.mirosubs-transcribeHelp ol li {
+li.unisubs-transcribeHelp ol li {
     background: none !important;
     margin: 0 !important;
     font-weight: bold !important;
@@ -1977,33 +1977,33 @@ li.mirosubs-transcribeHelp ol li {
     padding: 3px !important;
 }
 
-.mirosubs-tips p {
+.unisubs-tips p {
     padding: 0 0 4px !important;
     font-size: 11px !important;
     margin: 0 !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-    .mirosubs-navSync {
+    .unisubs-navSync {
         border-left: 1px solid #ccc !important;
         border-right: 1px solid #ccc !important;
 
     }
 
-    .mirosubs-navSync a{
+    .unisubs-navSync a{
         border-left: none !important;
         width: 100% !important;
     }
 
-    .mirosubs-navReview a{
+    .unisubs-navReview a{
         border-left: none !important;
     }
 
-    .mirosubs-navReview {
+    .unisubs-navReview {
     }
 }
 
-.mirosubs-langmenu {
+.unisubs-langmenu {
     background-color:#FFFFFF !important;
     border-color:#CCCCCC #666666 #666666 #CCCCCC !important;
     border-style:solid !important;
@@ -2023,31 +2023,31 @@ li.mirosubs-transcribeHelp ol li {
    z-index: 2147483631 !important;
 }
 
-.mirosubs-langmenuitem {
+.unisubs-langmenuitem {
     font-size:11px !important;
     margin:0 !important;
     padding:4px 7px !important;
 }
 
-.mirosubs-langmenuitem-highlight {
+.unisubs-langmenuitem-highlight {
     background-color: #333 !important;
     cursor: pointer !important;
     color: white !important;
 }
 
-.mirosubs-langmenuitem-highlight .mirosubs-langmenuitem-content {
+.unisubs-langmenuitem-highlight .unisubs-langmenuitem-content {
 
     color: white !important;
 }
 
-.mirosubs-langmenusep {
+.unisubs-langmenusep {
     border-top: 1px solid #666 !important;
     margin: 0px 0 !important;
     padding: 0 !important;
 }
 
 
-.mirosubs-embed{
+.unisubs-embed{
 position: relative !important;
 }
 
@@ -2060,7 +2060,7 @@ left: 230px !important;
 }
 
 
-.mirosubs-embed input {
+.unisubs-embed input {
 width: 205px !important;
 overflow: hidden !important;
 padding: 5px !important;
@@ -2069,7 +2069,7 @@ font-size: 11px !important;
 }
 
 
-.mirosubs-share{
+.unisubs-share{
 background: #e1eff4 !important;
 padding: 20px 20px 30px !important;
 position: relative !important;
@@ -2078,21 +2078,21 @@ position: relative !important;
 }
 
 
-.mirosubs-share h2{
+.unisubs-share h2{
 margin: 0 !important;
 }
 
 
-.mirosubs-share h3{
+.unisubs-share h3{
 margin: 15px 0 5px 0 !important;
 }
 
-.mirosubs-permalink{
+.unisubs-permalink{
 color: #777 !important;
 }
 
 
-.mirosubs-blueTriangle{
+.unisubs-blueTriangle{
 
 position: absolute !important;
 left: -8px !important;
@@ -2100,19 +2100,19 @@ top: 18px !important;
 }
 
 
-.mirosubs-share ul{
+.unisubs-share ul{
 margin: 0 0 0 0px !important;
 padding: 0 !important;
 }
 
 
-.mirosubs-share ul li {
+.unisubs-share ul li {
   list-style: none !important;
   margin-bottom: 5px
 }
 
 
-.mirosubs-share ul li a {
+.unisubs-share ul li a {
   list-style: none !important;
   line-height: 1.8em !important;
   padding: 0 !important;
@@ -2122,29 +2122,29 @@ padding: 0 !important;
   font-weight: bold !important;
 }
 
-.mirosubs-twitter-share {
+.unisubs-twitter-share {
   background: url("../images/share_icons.png") 0 -37px no-repeat !important;
   text-decoration: underline !important;
   padding: 0 0 0 28px !important;
 }
 
-.mirosubs-facebook {
+.unisubs-facebook {
   background: url("../images/share_icons.png") 0 0px no-repeat !important;
   text-decoration: underline !important;
   padding: 0 0 0 28px !important;
 }
 
-.mirosubs-friends {
+.unisubs-friends {
   background: url("../images/share_icons.png") 0 -73px no-repeat !important;
   text-decoration: underline !important;
   padding: 0 0 0 28px !important;
 }
 
-.mirosubs-facebook-like {
+.unisubs-facebook-like {
   margin: -5px 0 -5px 0 !important;
 }
 
-.mirosubs-translating{
+.unisubs-translating{
 padding: 5px !important;
 color: #fff !important;
 background: #444 url("../images/big_grad.png") right bottom repeat-x !important;
@@ -2161,7 +2161,7 @@ height: 110px !important;
 width: 720px !important;
 }
 
-.mirosubs-translating .mirosubs-buttons .mirosubs-done{
+.unisubs-translating .unisubs-buttons .unisubs-done{
 width: 230px !important;
 margin: 0 0 20px !important;
 }
@@ -2169,7 +2169,7 @@ margin: 0 0 20px !important;
 
 
 
-.mirosubs-translating p{
+.unisubs-translating p{
 float: left !important;
 width: 460px !important;
 font-size: 13px !important;
@@ -2178,16 +2178,16 @@ line-height: 1.6em !important;
 
 }
 
-.mirosubs-translating .mirosubs-buttons{
+.unisubs-translating .unisubs-buttons{
 float: right !important;
 width: 240px !important;
 }
 
-.mirosubs-translating .mirosubs-done{
+.unisubs-translating .unisubs-done{
 margin: 0 0 35px !important;
 }
 
-.mirosubs-autopause {
+.unisubs-autopause {
     font-size: 16px !important;
     margin: 10px 0 0 95px !important;
     line-height: 16px !important;
@@ -2224,18 +2224,18 @@ margin: 0 0 35px !important;
 }
 
 
-.mirosubs-videoHelp video{
+.unisubs-videoHelp video{
 width: 600px !important;
 height: 300px !important;
 margin: 30px 0 0 125px !important;
 }
 
 
-.mirosubs-langmenu{
+.unisubs-langmenu{
 width: 110px !important;
 }
 
-.mirosubs-langmenuitem-content, .mirosubs-langmenuitem-content a{
+.unisubs-langmenuitem-content, .unisubs-langmenuitem-content a{
 font-family: Arial, Helvetica, sans-serif !important;
 color: #333 !important;
 text-decoration: none !important;
@@ -2249,7 +2249,7 @@ text-decoration: none !important;
 
 ///////////////////////////////////////////////*/
 
-.mirosubs-videoControls{
+.unisubs-videoControls{
 width: 100% !important;
 border-bottom: 1px solid #000 !important;
 width: 400px !important;
@@ -2259,7 +2259,7 @@ background: #000 url("../images/gradient.png") 0 -20px repeat-x !important;
 
 
 
-.mirosubs-timespan {
+.unisubs-timespan {
 float: left !important;
 font-size: 11px !important;
 color: #fff !important;
@@ -2268,41 +2268,41 @@ font-weight: bold !important;
 }
 
 
-.mirosubs-timespan .mirosubs-timeElapsed{
+.unisubs-timespan .unisubs-timeElapsed{
 float: left !important; 
 padding-right: 1px !important;
 font-size: 11px !important;
 }
 
 
-.mirosubs-playPause {
+.unisubs-playPause {
 float: left !important;
 padding: 9px 10px 8px 11px !important;
 margin-right: 8px !important;
 }
 
-.mirosubs-playPause:hover {
+.unisubs-playPause:hover {
 background: url("../images/gradient.png") 0 0px repeat-x !important;
 cursor: pointer !important;
 }
 
 
-.mirosubs-playPause span{
+.unisubs-playPause span{
    width: 10px !important;
    padding-top: 13px !important;
    overflow: hidden !important;
    float: left !important;
 }
 
-.mirosubs-playPause.play span {
+.unisubs-playPause.play span {
    background: url("../images/play_pause.png") 0 0px no-repeat !important;
 }
 
-.mirosubs-playPause.pause span {
+.unisubs-playPause.pause span {
    background: url("../images/play_pause.png") 0 -32px no-repeat !important;
 }
 
-.mirosubs-volume {
+.unisubs-volume {
    height: 30px !important;
    float: right !important;
    width: 31px !important;
@@ -2310,19 +2310,19 @@ cursor: pointer !important;
 }
 
 
-.mirosubs-volume span{
+.unisubs-volume span{
    height: 30px !important;
    float: right !important;
    width: 31px !important;
    background: url("../images/play_pause.png") 9px -55px no-repeat !important;
 }
 
-.mirosubs-volume:hover {
+.unisubs-volume:hover {
    background: url("../images/gradient.png") 0 0px repeat-x !important;
    cursor: pointer !important;
 }
 
-.mirosubs-volume .mirosubs-volume-container {
+.unisubs-volume .unisubs-volume-container {
    overflow: hidden !important;
    height: 0 ;
    bottom: 29px !important;
@@ -2338,7 +2338,7 @@ cursor: pointer !important;
 }
 
 
-.mirosubs-volume-slider {
+.unisubs-volume-slider {
    height: 75px !important;
    width: 10px !important; 
    border: 1px solid !important;
@@ -2353,7 +2353,7 @@ cursor: pointer !important;
 }
 
 
-.mirosubs-volume-scrobbler {
+.unisubs-volume-scrobbler {
    height: 0px !important;
    width: 0px !important;
    border: 1px solid red !important;
@@ -2375,7 +2375,7 @@ cursor: pointer !important;
 
 
 
-.mirosubs-scrobbler {
+.unisubs-scrobbler {
    border: 1px solid !important;
    width: 4px !important;
    height: 20px !important;
@@ -2395,7 +2395,7 @@ cursor: pointer !important;
 display: none !important;
 }
 
-.mirosubs-scrobbler span {
+.unisubs-scrobbler span {
 	position: absolute !important;
 	top: -8px !important;
 	left: -8px !important;
@@ -2405,7 +2405,7 @@ display: none !important;
 	display: none !important;
 }
 
-.mirosubs-scrobbler:hover {
+.unisubs-scrobbler:hover {
 	background: #fff url("../images/gradient.png") 0 31px repeat-x !important;
 	border-top: 1px solid #666 !important;
 	border-right: 1px solid #333 !important;
@@ -2413,7 +2413,7 @@ display: none !important;
 	border-left: 1px solid #333 !important;
 }
 
-.mirosubs-progress-slider {
+.unisubs-progress-slider {
 	position: absolute !important;
 	height: 10px !important;
 	outline: none !important;
@@ -2421,7 +2421,7 @@ display: none !important;
 	width: 250px !important;
 }
 
-.mirosubs-progress{
+.unisubs-progress{
 height: 10px !important;
 position: relative !important;
 background: #fff url("../images/gradient.png") 0 -109px repeat-x !important;
@@ -2437,7 +2437,7 @@ width: 250px !important;
 margin: 9px !important;
 }
 
-.mirosubs-progress .mirosubs-buffered-container {
+.unisubs-progress .unisubs-buffered-container {
 position: relative !important;
 width: 250px !important;
 height: 10px !important;
@@ -2446,7 +2446,7 @@ outline: none !important;
 -moz-outline: none !important;
 }
 
-.mirosubs-progress .mirosubs-buffered {
+.unisubs-progress .unisubs-buffered {
 height: 10px !important;      
 background: #222 url("../images/gradient.png") 0 40px !important;
 -moz-border-radius: 5px !important;
@@ -2456,7 +2456,7 @@ outline: none !important;
 -moz-outline: none !important;
 }
 
-.mirosubs-progress .mirosubs-played {
+.unisubs-progress .unisubs-played {
    width: 0 !important;
 left:-1px !important;
    height: 11px !important;
@@ -2477,7 +2477,7 @@ background: #a6dd13 url("../images/gradient.png") 0 0px repeat-x !important;
 
 ////////////////////// */
 
-.mirosubs-timeline {
+.unisubs-timeline {
     margin: 0 !important;
     padding: 0 0 3px !important;
     width: 400px !important;
@@ -2489,34 +2489,34 @@ border-bottom: 1px solid #000 !important;
 
 }
 
-.mirosubs-timeline .top {
+.unisubs-timeline .top {
     height: 22px !important;
     background: #000 !important;
 }
 
-.mirosubs-timeline-inner, .mirosubs-timeline-timerow, 
-.mirosubs-timeline-time, .mirosubs-timeline-subs, 
-.mirosubs-timeline-sub {
+.unisubs-timeline-inner, .unisubs-timeline-timerow, 
+.unisubs-timeline-time, .unisubs-timeline-subs, 
+.unisubs-timeline-sub {
     position: absolute !important;
 }
 
-.mirosubs-timeline-inner {
+.unisubs-timeline-inner {
     top: 0px !important;
 }
 
-.mirosubs-timeline-subs {
+.unisubs-timeline-subs {
     top: 22px !important;
     height: 30px !important;
 }
 
-.mirosubs-timeline .mirosubs-subpanel div {
+.unisubs-timeline .unisubs-subpanel div {
     position: absolute !important;
     top: 3px !important;
     height: 2px !important;
     background-color: #FFDDDD !important;
 }
 
-.mirosubs-timeline .marker {
+.unisubs-timeline .marker {
     background: url("../images/marker.png") 0 0px no-repeat !important;
     position: absolute !important;
     top: 0px !important;
@@ -2525,18 +2525,18 @@ border-bottom: 1px solid #000 !important;
     width: 13px !important;
 }
 
-.mirosubs-timeline ul {
+.unisubs-timeline ul {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 16px !important
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-time {
+.unisubs-timeline ul.unisubs-timeline-time {
 	width: 975px !important;
 	left: 0px !important;
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-time li {
+.unisubs-timeline ul.unisubs-timeline-time li {
     margin: 0 !important;
     list-style: none !important;
     font-size: 10px !important;
@@ -2549,13 +2549,13 @@ border-bottom: 1px solid #000 !important;
     cursor: pointer;
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-time li span{
+.unisubs-timeline ul.unisubs-timeline-time li span{
    display: block !important;
    width: 15px !important;
    text-align: center !important;
 }
 
-.mirosubs-timeline-sub {
+.unisubs-timeline-sub {
    top: 7px !important;
    height: 46px !important;
 cursor: default !important;
@@ -2566,34 +2566,34 @@ cursor: default !important;
    background: #fefefe url("../images/gradient.png") 0 21px repeat-x !important;
 }
 
-.mirosubs-timeline-sub .mirosubs-subtext {
+.unisubs-timeline-sub .unisubs-subtext {
    margin: 17px 10px 0 10px !important;
    white-space: nowrap !important;
    overflow: hidden !important;
 }
 
-.mirosubs-timeline-sub-unsynced {
+.unisubs-timeline-sub-unsynced {
    background: #777 !important;
    color: #aaa !important;
 }
 
-.mirosubs-timeline-sub-selected{
+.unisubs-timeline-sub-selected{
    background: #46d8ff url("../images/gradient.png") 0 0px repeat-x !important;
 }
 
-.mirosubs-titlesList-sub-selected{
+.unisubs-titlesList-sub-selected{
    background: #46d8ff url("../images/gradient.png") 0 0px repeat-x !important;
    border-bottom: 1px solid #333 !important;
 }
 
-.mirosubs-timeline-sub-rightbump{
+.unisubs-timeline-sub-rightbump{
    -moz-border-radius-topright: 0px !important;
    -moz-border-radius-bottomright: 0px !important;
    -webkit-border-radius-bottom-right: 0px !important;
    -webkit-border-radius-top-right: 0px !important;
 }
 
-.mirosubs-timeline-sub-leftbump{
+.unisubs-timeline-sub-leftbump{
     -moz-border-radius-topleft: 0px !important;
     -moz-border-radius-bottomleft: 0px !important;
     -moz-box-shadow: 1px 1px 3px rgba(0,0,0,01) !important;
@@ -2603,11 +2603,11 @@ cursor: default !important;
 }
 
 
-.mirosubs-timeline ul.mirosubs-timeline-titles li.selected a{
+.unisubs-timeline ul.unisubs-timeline-titles li.selected a{
     color: #fff !important;
 }
 
-.mirosubs-timeline ul.mirosubs-timeline-titles li a{
+.unisubs-timeline ul.unisubs-timeline-titles li a{
     display: block !important;
     padding: 15px 20px 10px 20px !important;
     position: relative !important;
@@ -2616,7 +2616,7 @@ cursor: default !important;
     cursor: default !important;
 }
 
-.mirosubs-timeline-sub .mirosubs-grabber {
+.unisubs-timeline-sub .unisubs-grabber {
     position: absolute !important;
     height: 30px !important;
     width: 13px !important;
@@ -2630,7 +2630,7 @@ cursor: default !important;
     display: none !important;
 }
 
-.mirosubs-timeline-sub .mirosubs-grabber strong {
+.unisubs-timeline-sub .unisubs-grabber strong {
     position: absolute !important;
     height: 17px !important;
     width: 13px !important;
@@ -2639,34 +2639,34 @@ cursor: default !important;
     display: block !important;
 }
 
-.mirosubs-timeline-sub .mirosubs-grabber-over {
+.unisubs-timeline-sub .unisubs-grabber-over {
     background: #fefefe !important;
     display: block !important;
 }
 
 
 
-.mirosubs-timeline-sub span.mirosubs-grabber{
+.unisubs-timeline-sub span.unisubs-grabber{
 cursor: -moz-grab !important;
 }
 
-.mirosubs-timeline-sub span.mirosubs-grabber:active{
+.unisubs-timeline-sub span.unisubs-grabber:active{
 cursor: -moz-grabbing !important;
 cursor: 
 }
 
 
-.mirosubs-timeline-sub span.mirosubs-leftGrabber {
+.unisubs-timeline-sub span.unisubs-leftGrabber {
     left: 0 !important;
     margin: -7px 0 0 -3px !important;
 }
 
-.mirosubs-timeline-sub span.mirosubs-rightGrabber {
+.unisubs-timeline-sub span.unisubs-rightGrabber {
     right: 0 !important;
     margin: -7px -3px 0 0 !important;
 }
 
-.mirosubs-modal-login, .mirosubs-modal-lang, .mirosubs-forkdialog, .mirosubs-modal-completed {
+.unisubs-modal-login, .unisubs-modal-lang, .unisubs-forkdialog, .unisubs-modal-completed {
   border: 3px solid !important;
   position: absolute !important;
   z-index: 2147483633 !important;
@@ -2678,37 +2678,37 @@ cursor:
   outline: none !important;
 }
 
-.mirosubs-forkdialog {
+.unisubs-forkdialog {
    width: 400px !important;
 }
 
-.mirosubs-modal-lang p.warning {
+.unisubs-modal-lang p.warning {
    max-width: 300px;
 }
 
-.mirosubs-modal-login {
+.unisubs-modal-login {
    width: 650px !important;
    height: 200px !important;
    padding: 15px 0 !important;
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
 }
 
-.mirosubs-modal-login-bg {
+.unisubs-modal-login-bg {
    position: absolute !important;
    top: 0 !important;
    left: 0 !important;
    z-index: 2147483632 !important;
 }
 
-.mirosubs-modal-lang-content {
+.unisubs-modal-lang-content {
    max-width: 400px;
 }
 
-.mirosubs-modal-lang, .mirosubs-forkdialog, .mirosubs-modal-completed {
+.unisubs-modal-lang, .unisubs-forkdialog, .unisubs-modal-completed {
    background-color: #fff !important;
 }
 
-.mirosubs-modal-lang h3, .mirosubs-modal-completed h3 {
+.unisubs-modal-lang h3, .unisubs-modal-completed h3 {
    -moz-border-radius-topleft:5px !important;
    -moz-border-radius-topright:5px !important;
    background:url("../images/gradient.png") repeat-x scroll 0 0 #FFFFFF !important;
@@ -2721,7 +2721,7 @@ cursor:
    color: #777 !important;
 }
 
-.mirosubs-modal-lang p, .mirosubs-forkdialog p, .mirosubs-modal-completed p {
+.unisubs-modal-lang p, .unisubs-forkdialog p, .unisubs-modal-completed p {
    margin:0 !important;
    padding:12px !important;
    color: #666 !important;
@@ -2730,40 +2730,40 @@ cursor:
    min-width: 300px !important;
 }
 
-.mirosubs-modal-lang p div, .mirosubs-modal-completed p div {
+.unisubs-modal-lang p div, .unisubs-modal-completed p div {
    margin-bottom: 8px !important;
 }
 
-.mirosubs-modal-lang .mirosubs-green-button, .mirosubs-forkdialog .mirosubs-green-button, .mirosubs-modal-completed .mirosubs-green-button {
+.unisubs-modal-lang .unisubs-green-button, .unisubs-forkdialog .unisubs-green-button, .unisubs-modal-completed .unisubs-green-button {
    float: right !important;
    margin-right: 20px !important;
 }
 
-.mirosubs-modal-login-content h4 {
+.unisubs-modal-login-content h4 {
    text-align:center !important;
    font-size: 16px !important;
 }
 
-.mirosubs-modal-login-content .mirosubs-small {
+.unisubs-modal-login-content .unisubs-small {
    padding-top: 20px !important;
    clear: both !important;
 }
 
-.mirosubs-modal-login-content p {
+.unisubs-modal-login-content p {
    text-align:center !important;
    font-size: 12px !important;
    font-style: italic !important;
    clear: both !important;
 }
 
-.mirosubs-modal-login-content a {
+.unisubs-modal-login-content a {
    float: left !important;
    color: #333 !important;
    font-weight:bold !important;
    text-decoration: none !important;
 }
 
-.mirosubs-modal-login-content a.mirosubs-log:hover {
+.unisubs-modal-login-content a.unisubs-log:hover {
    background: #fff url("../images/gradient.png") right -101px repeat-x !important;
    -moz-box-shadow: 0px 0px 0px rgba(0,0,0,01) !important;
    border-top: 1px solid #666 !important;
@@ -2772,13 +2772,13 @@ cursor:
    border-bottom: 1px solid #ddd !important;
 }
 
-.mirosubs-modal-login-content a span {
+.unisubs-modal-login-content a span {
    display: block !important;
    float:left !important;
    padding: 10px 17px !important;
 }
 
-.mirosubs-modal-login-content a.mirosubs-log {
+.unisubs-modal-login-content a.unisubs-log {
    margin: 0 10px 0 30px !important;
    border-top: 1px solid #ddd !important;
    border-right: 1px solid #bbb !important;
@@ -2792,16 +2792,16 @@ cursor:
    text-shadow: #fff 1px 1px 1px !important;
 }
 
-a.mirosubs-twitter span{
+a.unisubs-twitter span{
    padding-left: 35px !important;
    background: url("../images/social_login.png") -120px 0px no-repeat !important;
 }
 
-a.mirosubs-openid span{
+a.unisubs-openid span{
    margin-right: 0 !important;
 }
 
-.mirosubs-openid {
+.unisubs-openid {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
@@ -2811,7 +2811,7 @@ a.mirosubs-openid span{
    background: url("../images/social_login.png") 0 0px no-repeat !important;
 }
 
-.mirosubs-twitter{
+.unisubs-twitter{
    background: url("../images/social_login.png") -120px 0px no-repeat !important;
    margin-top: 4px !important;
    height: 0 !important;
@@ -2820,7 +2820,7 @@ a.mirosubs-openid span{
    width: 99px !important;
 }
 
-.mirosubs-google {
+.unisubs-google {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
@@ -2836,7 +2836,7 @@ a.mirosubs-openid span{
    display: block !important;
 }
 
-.mirosubs-warning {
+.unisubs-warning {
    position: absolute !important;
    border: 5px solid red !important;
    padding: 15px !important;
@@ -2848,15 +2848,15 @@ a.mirosubs-openid span{
    z-index: 2147483639 !important;
 }
 
-.mirosubs-warning .mirosubs-label {
+.unisubs-warning .unisubs-label {
    margin-bottom: 15px !important;
 }
 
-.mirosubs-warning .mirosubs-link {
+.unisubs-warning .unisubs-link {
    margin-right: 10px !important;
 }
 
-.mirosubs-howtopanel {
+.unisubs-howtopanel {
    position: absolute !important;
    top: 0 !important;
    left: 0 !important;
@@ -2867,26 +2867,26 @@ a.mirosubs-openid span{
 }
 
 
-.mirosubs-howtopanel,
-.mirosubs-howtopanel h2,
-.mirosubs-howtopanel .mirosubs-videoDiv{
+.unisubs-howtopanel,
+.unisubs-howtopanel h2,
+.unisubs-howtopanel .unisubs-videoDiv{
    text-align: center !important;
 	text-shadow: 0 0 0 !important;
 }
 
-.mirosubs-howtopanel .mirosubs-done {
+.unisubs-howtopanel .unisubs-done {
   float: none !important;
   display: block !important;
    width: 180px !important;
    margin: 10px auto !important;
 }
 
-.mirosubs-howto-videocontainer {
+.unisubs-howto-videocontainer {
    position: relative !important;
    margin: 36px auto 20px !important;
 }
 
-.mirosubs-howto-image {
+.unisubs-howto-image {
    position: absolute !important;
    top: 0 !important;
    left: 0px !important;
@@ -2894,7 +2894,7 @@ a.mirosubs-openid span{
    cursor: hand !important;
 }
 
-a.mirosubs-smallButton{
+a.unisubs-smallButton{
 padding-right: 18px !important;
 font-size: 12px !important;
 text-decoration: none !important;
@@ -2903,7 +2903,7 @@ float: left !important;
 background: url(../images/small_buttons.png) right 0px no-repeat !important;
 }
 
-a.mirosubs-smallButton span{
+a.unisubs-smallButton span{
 padding: 8px 0 8px 20px !important;
 float: left !important;
 color: #485c14 !important;
@@ -2912,26 +2912,26 @@ text-shadow: 0px 1px 1px #abce1d !important;
 background: url(../images/small_buttons.png) left 0px no-repeat !important;
 }
 
-a.mirosubs-smallButton:hover{
+a.unisubs-smallButton:hover{
    background: url(../images/small_buttons.png) right -34px no-repeat !important;
 }
 
-a.mirosubs-smallButton:hover span{
+a.unisubs-smallButton:hover span{
    text-shadow: 0px 1px 1px #beec32  !important;
    background: url(../images/small_buttons.png) left -34px no-repeat !important;
 }
 
-a.mirosubs-smallButton:active{
+a.unisubs-smallButton:active{
    background: url(../images/small_buttons.png) right -68px no-repeat !important;
 }
 
-a.mirosubs-smallButton:active span{
+a.unisubs-smallButton:active span{
    background: url(../images/small_buttons.png) left -68px no-repeat !important;
 }
 
 
 
-.mirosubs-googleLogin{
+.unisubs-googleLogin{
 background: url(../images/social_login.png) -222px 0px no-repeat !important;
 display: block !important;
 width: 113px !important;
@@ -2941,27 +2941,27 @@ height: 0 !important;
 overflow: hidden !important;
 }
 
-.mirosubs-translationResources h3.mirosubs-resources {
+.unisubs-translationResources h3.unisubs-resources {
     color: #fff !important;
 }
 
-.mirosubs-translationResources ul.mirosubs-resourceList {
+.unisubs-translationResources ul.unisubs-resourceList {
     list-style: disc !important;
     color: #fff !important;
 }
 
-.mirosubs-translationResources a {
+.unisubs-translationResources a {
     text-decoration: none !important;
 }
 
-.mirosubs-translationResources a:visited {
+.unisubs-translationResources a:visited {
     color: #fff !important;
 }
 
 
 
 
-.mirosubs-twitter-share{
+.unisubs-twitter-share{
     background: url("../images/share_icons.png") 0 -37px no-repeat !important;
 }
 
@@ -2976,13 +2976,13 @@ overflow: hidden !important;
 ///////////////////////////////////////////////*/
 
 
-div.mirosubs-videoTab-container {
+div.unisubs-videoTab-container {
    height: 32px !important;
 }
 
 
 
-.mirosubs-loginStatus {
+.unisubs-loginStatus {
     margin: 0 !important;
     padding: 5px 8px !important;
     list-style: none !important;
@@ -2990,20 +2990,20 @@ div.mirosubs-videoTab-container {
     display: none !important;
 }
 
-.mirosubs-loginStatus.notLogged {
+.unisubs-loginStatus.notLogged {
     display: none !important;
 }
 
-div.mirosubs-videoTab-static {
+div.unisubs-videoTab-static {
    width: 100% !important;
 }
 
-div.mirosubs-videoTab-anchoring {
+div.unisubs-videoTab-anchoring {
    position: absolute !important;
    z-index: 2147483622 !important;
 }
 
-.mirosubs-videoTab a {
+.unisubs-videoTab a {
    font-size: 13px !important;
    background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
    text-decoration: none !important;
@@ -3013,7 +3013,7 @@ div.mirosubs-videoTab-anchoring {
 }
 
 
-.mirosubs-videoTab a:hover {
+.unisubs-videoTab a:hover {
 
 background: #333 !important;
 
@@ -3021,21 +3021,21 @@ background: #333 !important;
 
 
 
-.mirosubs-videoTab a.mirosubs-subtitleMeLink  {
+.unisubs-videoTab a.unisubs-subtitleMeLink  {
     min-width: 200px !important;
 
 }
 
 
 
-.mirosubs-videoTab a.mirosubs-subtitleMeLink  .mirosubs-tabText{
+.unisubs-videoTab a.unisubs-subtitleMeLink  .unisubs-tabText{
 margin-right: 10px !important;   
 
 }
 
 
 
-.mirosubs-videoTab a.mirosubs-subtitleMeLink img {
+.unisubs-videoTab a.unisubs-subtitleMeLink img {
     float: left !important;
     border: none !important;
     height: 17px
@@ -3047,7 +3047,7 @@ padding: 0 !important;
 
 
 
-.mirosubs-widgetBar{
+.unisubs-widgetBar{
    font-family: Arial, Helvetica, sans-serif !important;
    font-size: 12px !important;
    color: #000 !important;
@@ -3059,8 +3059,8 @@ min-width: 480px !important;
 
 }
 
-.mirosubs-widgetBar .mirosubs-languageTrigger,
-.mirosubs-widgetBar .mirosubs-finishTranslation
+.unisubs-widgetBar .unisubs-languageTrigger,
+.unisubs-widgetBar .unisubs-finishTranslation
 {
 float: left !important;
 color: #fff !important;
@@ -3070,7 +3070,7 @@ background: #333 url("../images/gradient_light.png") 0 0px repeat-x !important;
 text-decoration: none !important;
 }
 
-.mirosubs-videoTab a.mirosubs-subtitleMeLink{
+.unisubs-videoTab a.unisubs-subtitleMeLink{
 float: left !important;
 color: #fff !important;
 width: 30% !important;
@@ -3081,28 +3081,28 @@ text-shadow: 0 0 0 !important;
 }
 
 
-span.mirosubs-tabTextchoose{
+span.unisubs-tabTextchoose{
 margin-right: 10px !important;
 min-width: 160px !important;
 }
 
-span.mirosubs-tabTextchoose,
-span.mirosubs-tabText,
-span.mirosubs-tabTextfinish {
+span.unisubs-tabTextchoose,
+span.unisubs-tabText,
+span.unisubs-tabTextfinish {
 	display: block !important;
 	padding: 8px 12px 8px 5px !important;
 	background: url("../images/white_arrows.png") right -12px no-repeat !important;
 	font-family: Helvetica Arial, sans-serif !important;
 }
 
-span.mirosubs-tabTextShare {
+span.unisubs-tabTextShare {
 	display: block !important;
 	padding: 8px 12px 8px 9px !important;
 	font-family: Helvetica Arial, sans-serif !important;
     border-left: 1px solid #666 !important;
 }
 
-span.mirosubs-tabTextfinish {
+span.unisubs-tabTextfinish {
 padding-right: 25px !important;
 padding-left: 14px !important;
 margin-right: 10px !important;
@@ -3113,8 +3113,8 @@ background-position: right 10px !important;
 
 
 
-.mirosubs-languageTrigger:hover,
-.mirosubs-finishTranslation:hover{
+.unisubs-languageTrigger:hover,
+.unisubs-finishTranslation:hover{
 background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 }
 
@@ -3122,7 +3122,7 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 
 
 
-.mirosubs-dropdown {
+.unisubs-dropdown {
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
 	position: absolute !important;
@@ -3138,7 +3138,7 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-languageList ul {
+.unisubs-dropdown .unisubs-languageList ul {
 	padding: 0 !important;
 	margin: 0 !important;
 	width: 290px !important;
@@ -3148,27 +3148,27 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 	overflow-y: auto !important;
 }
 
-.mirosubs-dropdown .mirosubs-languageList ul li {
+.unisubs-dropdown .unisubs-languageList ul li {
    list-style: none !important;
    border-bottom: 1px solid #ddd !important;
    margin: 0 !important;
    background: none;
 }
 
-.mirosubs-dropdown .mirosubs-languageList ul li:hover {
+.unisubs-dropdown .unisubs-languageList ul li:hover {
     list-style: none !important;
     border-bottom: 1px solid #aaa !important;
 background: url("../images/gradient_light.png") 0 1px repeat-x !important;
 }
 
-.mirosubs-dropdown .mirosubs-languageList li.mirosubs-activeLanguage {
+.unisubs-dropdown .unisubs-languageList li.unisubs-activeLanguage {
     list-style: none !important;
     border-bottom: 1px solid #aaa !important;
 background: url("../images/gradient_light.png") 0 1px repeat-x !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-languageList li.mirosubs-activeLanguage a {
+.unisubs-dropdown .unisubs-languageList li.unisubs-activeLanguage a {
     text-decoration: none !important;
 font-weight: bold !important;
 background: url("../images/dropdown_icons.png") 250px -231px no-repeat !important;
@@ -3177,7 +3177,7 @@ background: url("../images/dropdown_icons.png") 250px -231px no-repeat !importan
 
 
 
-.mirosubs-dropdown .mirosubs-languageList ul li a {
+.unisubs-dropdown .unisubs-languageList ul li a {
     margin: 0 !important;
     font-size: 14px !important;
     display: block !important;
@@ -3186,13 +3186,13 @@ color: #333 !important;
     padding: 10px 0 8px 10px !important;
 }
 
-.mirosubs-dropdown .mirosubs-languageList ul li a:hover {
+.unisubs-dropdown .unisubs-languageList ul li a:hover {
     text-decoration: none !important;
 }
 
 
 
-.mirosubs-dropdown .mirosubs-languageList ul li span.mirosubs-languageStatus {
+.unisubs-dropdown .unisubs-languageList ul li span.unisubs-languageStatus {
 color: #999 !important;
 font-size: 11px !important;
 line-height: 1em !important;
@@ -3200,31 +3200,31 @@ padding-left: 5px !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-languageList ul li span.mirosubs-languageStatus-auto {
+.unisubs-dropdown .unisubs-languageList ul li span.unisubs-languageStatus-auto {
 
 }
 
-.mirosubs-dropdown  ul li {
+.unisubs-dropdown  ul li {
    background: none;
 }
 
-.mirosubs-asterisk{
+.unisubs-asterisk{
 color: red !important;
 padding-left: 3px !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-actions{
+.unisubs-dropdown .unisubs-actions{
 margin-left: 290px
 }
 
 
-.mirosubs-dropdown .mirosubs-actions ul{
+.unisubs-dropdown .unisubs-actions ul{
 margin: 0 !important;
 padding: 5px 0 5px !important;
 }
 
-.mirosubs-dropdown .mirosubs-actions ul li{
+.unisubs-dropdown .unisubs-actions ul li{
 margin: 0 !important;
 padding: 0 !important;
 list-style: none !important;
@@ -3232,7 +3232,7 @@ text-shadow: 0 0 0 !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-actions ul a{
+.unisubs-dropdown .unisubs-actions ul a{
 color: #fff !important;
 text-decoration: none !important;
 padding: 5px 4px 5px 40px !important;
@@ -3243,7 +3243,7 @@ text-shadow: 0 0 0 !important;
 
 
 
-.mirosubs-dropdown .mirosubs-actions h5{
+.unisubs-dropdown .unisubs-actions h5{
 margin: 0 !important;
 padding: 0 !important;
 overflow: hidden !important;
@@ -3254,7 +3254,7 @@ background: url("../images/tiny_logo.png") 18px 8px no-repeat !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-actions h4{
+.unisubs-dropdown .unisubs-actions h4{
 margin: 0 !important;
 padding: 5px 4px 5px 20px !important;
 background: #333 !important;
@@ -3270,56 +3270,56 @@ text-shadow: 0 0 0 !important;
 
 
 
-.mirosubs-dropdown .mirosubs-addTranslation{
+.unisubs-dropdown .unisubs-addTranslation{
 background: url("../images/dropdown_icons.png") 19px 7px no-repeat !important;
 color: #a9c712 !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-improveSubtitles{
+.unisubs-dropdown .unisubs-improveSubtitles{
 background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
 color: #42bce9 !important;
 }
 
-.mirosubs-dropdown .mirosubs-requestSubtitles{
+.unisubs-dropdown .unisubs-requestSubtitles{
 /*background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;*/
 color: #42bce9 !important;
 }
 
-.mirosubs-dropdown .mirosubs-improveSubtitles{
+.unisubs-dropdown .unisubs-improveSubtitles{
 background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;
 color: #42bce9 !important;
 }
 
-.mirosubs-dropdown .mirosubs-addTranslation a{
+.unisubs-dropdown .unisubs-addTranslation a{
 color: #a9c712 !important;
 }
 
-.mirosubs-dropdown .mirosubs-improveSubtitles a{
+.unisubs-dropdown .unisubs-improveSubtitles a{
 color: #42bce9 !important;
 }
 
 
-.mirosubs-dropdown .mirosubs-subtitleHomepage{
+.unisubs-dropdown .unisubs-subtitleHomepage{
 background: url("../images/dropdown_icons.png") 19px -64px no-repeat !important;
 }
 
-.mirosubs-dropdown .mirosubs-downloadSubtitles{
+.unisubs-dropdown .unisubs-downloadSubtitles{
 background: url("../images/dropdown_icons.png") 19px -100px no-repeat !important;
 }
 
-.mirosubs-dropdown .mirosubs-createAccount{
+.unisubs-dropdown .unisubs-createAccount{
 background: url("../images/dropdown_icons.png") 19px -137px no-repeat !important;
 }
 
-.mirosubs-dropdown .mirosubs-languagePreferences{
+.unisubs-dropdown .unisubs-languagePreferences{
 background: url("../images/dropdown_icons.png") 19px -174px no-repeat !important;
 }
 
 
 
 
-.mirosubs-hintTranslate{
+.unisubs-hintTranslate{
 clear: both !important;
 padding: 3px 3px 3px 6px !important;
 font-size: 11px !important;
@@ -3329,13 +3329,13 @@ color: #999 !important;
 
 
 
-.mirosubs-modal-widget-content.mirosubs-modal-widget-finished .mirosubs-right{
+.unisubs-modal-widget-content.unisubs-modal-widget-finished .unisubs-right{
 background: none !important;
 }
 
 
 
-.mirosubs-otherClose {
+.unisubs-otherClose {
 color: #fff !important;
 font-size: 20px !important;
 text-decoration: none !important;
@@ -3345,7 +3345,7 @@ margin-left: 28px !important;
 }
 
 
-.mirosubs-otherClose span{
+.unisubs-otherClose span{
 background: url("../images/sprite.png") -2px -258px no-repeat !important;
 padding-top: 24px !important;
 color: #fff !important;
@@ -3361,7 +3361,7 @@ text-decoration: none !important;
 
 
 
-.mirosubs-goBack {
+.unisubs-goBack {
 color: #fff !important;
 font-size: 20px !important;
 text-decoration: none !important;
@@ -3370,7 +3370,7 @@ line-height: 1.3em !important;
 margin-right: 28px !important;
 }
 
-.mirosubs-extension {
+.unisubs-extension {
    position: fixed !important;
    right: 10px !important;
    bottom: 10px !important;
@@ -3380,13 +3380,13 @@ margin-right: 28px !important;
    background-color: #FFFFFF !important;
 }
 
-.mirosubs-extension-enabled {
+.unisubs-extension-enabled {
    background-color: #99FF99 !important;
 }
 
 
 
-.mirosubs-standalone_spinner{
+.unisubs-standalone_spinner{
 height: 110px !important;
 width: 110px !important;
 border: 1px solid !important;
@@ -3397,7 +3397,7 @@ border: 1px solid !important;
   background:  #000 url(../images/modal_spinner.gif) center no-repeat !important;
 }
 
-.mirosubs-loading-indicator {
+.unisubs-loading-indicator {
 	display: none !important;
 	color: #999 !important;
 }
@@ -3406,29 +3406,29 @@ border: 1px solid !important;
   margin: 7px 0 0 0;
 }
 
-.mirosubs-request-div{
+.unisubs-request-div{
     width:400px;
 }
 
-.mirosubs-request-div select{
+.unisubs-request-div select{
   margin: 10px 10px;
 }
 
-.mirosubs-request-addlang{
+.unisubs-request-addlang{
   font-size:small;
   margin: 0 10px 20px;
 }
 
-#mirosubs-request-track{
+#unisubs-request-track{
   margin: 10px;
   clear:both;
 }
 
-label[for="mirosubs-request-track"]{
+label[for="unisubs-request-track"]{
   margin: 3px 0 0;
 }
 
-#mirosubs-request-description{
+#unisubs-request-description{
   width: 370px;
   height: 60px;
   margin: 10px 10px;

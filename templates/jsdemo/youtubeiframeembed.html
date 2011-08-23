@@ -17,7 +17,7 @@
   var logConsole = new goog.debug.DivConsole(document.getElementById('log'));
   logConsole.setCapturing(true);
 
-  var videoSource = new mirosubs.video.YTIFrameVideoSource('CtTZCZG2A8c');
+  var videoSource = new unisubs.video.YTIFrameVideoSource('CtTZCZG2A8c');
   var player = videoSource.createPlayer();
   var container = new goog.ui.Component();
   container.decorate(document.getElementById('playerContainer'));
@@ -41,7 +41,7 @@
   }
 
   goog.events.listen(player, goog.object.getValues(
-      mirosubs.video.AbstractVideoPlayer.EventType), 
+      unisubs.video.AbstractVideoPlayer.EventType), 
       playerEventHandler);
 
 </script>

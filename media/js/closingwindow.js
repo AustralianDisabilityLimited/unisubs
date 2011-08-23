@@ -16,13 +16,13 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.ClosingWindow');
+goog.provide('unisubs.ClosingWindow');
 
 /**
  * @constructor
- * This is a singleton, so use mirosubs.ClosingWindow.getInstance() instead.
+ * This is a singleton, so use unisubs.ClosingWindow.getInstance() instead.
  */
-mirosubs.ClosingWindow = function() {
+unisubs.ClosingWindow = function() {
     goog.events.EventTarget.call(this);
     var w = window;
     var oldOnBeforeUnload = w.onbeforeunload,
@@ -54,28 +54,28 @@ mirosubs.ClosingWindow = function() {
         }
     };
 };
-goog.inherits(mirosubs.ClosingWindow, goog.events.EventTarget);
-goog.addSingletonGetter(mirosubs.ClosingWindow);
+goog.inherits(unisubs.ClosingWindow, goog.events.EventTarget);
+goog.addSingletonGetter(unisubs.ClosingWindow);
 
-mirosubs.ClosingWindow.BEFORE_UNLOAD = 'beforeunload';
-mirosubs.ClosingWindow.UNLOAD = 'unload';
+unisubs.ClosingWindow.BEFORE_UNLOAD = 'beforeunload';
+unisubs.ClosingWindow.UNLOAD = 'unload';
 
-mirosubs.ClosingWindow.prototype.beforeunload_ = function() {
-    var event = new mirosubs.ClosingWindow.BeforeUnloadEvent();
+unisubs.ClosingWindow.prototype.beforeunload_ = function() {
+    var event = new unisubs.ClosingWindow.BeforeUnloadEvent();
     goog.events.dispatchEvent(this, event);
     return event.message;
 };
 
-mirosubs.ClosingWindow.prototype.unload_ = function() {
-    this.dispatchEvent(mirosubs.ClosingWindow.UNLOAD);
+unisubs.ClosingWindow.prototype.unload_ = function() {
+    this.dispatchEvent(unisubs.ClosingWindow.UNLOAD);
 };
 
 /**
 * @constructor
 *
 */
-mirosubs.ClosingWindow.BeforeUnloadEvent = function() {
-    goog.events.Event.call(this, mirosubs.ClosingWindow.BEFORE_UNLOAD);
+unisubs.ClosingWindow.BeforeUnloadEvent = function() {
+    goog.events.Event.call(this, unisubs.ClosingWindow.BEFORE_UNLOAD);
     this.message = null;
 };
-goog.inherits(mirosubs.ClosingWindow.BeforeUnloadEvent, goog.events.Event);
+goog.inherits(unisubs.ClosingWindow.BeforeUnloadEvent, goog.events.Event);

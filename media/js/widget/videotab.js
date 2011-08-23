@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.VideoTab');
+goog.provide('unisubs.widget.VideoTab');
 
 /**
  * @constructor
  * @param {boolean=} opt_forAnchoring If true, will add a style that gives 
  *     the tab absolute position.
  */
-mirosubs.widget.VideoTab = function(opt_forAnchoring) {
+unisubs.widget.VideoTab = function(opt_forAnchoring) {
     goog.ui.Component.call(this);
     this.anchorElem_ = null;
     this.imageElem_ = null;
@@ -34,48 +34,48 @@ mirosubs.widget.VideoTab = function(opt_forAnchoring) {
     this.shareSpanElem_ = null;
     this.shareElem_ = null;
     this.forAnchoring_ = !!opt_forAnchoring;
-    this.spinnerGifURL_ = mirosubs.imageAssetURL('spinner.gif');
-    this.logoURL_ = mirosubs.imageAssetURL('small_logo.png');
+    this.spinnerGifURL_ = unisubs.imageAssetURL('spinner.gif');
+    this.logoURL_ = unisubs.imageAssetURL('small_logo.png');
     this.imageLoader_ = new goog.net.ImageLoader();
     this.imageLoader_.addImage('spinner', this.spinnerGifURL_);
     this.imageLoader_.addImage('small_logo', this.logoURL_);
     this.imageLoader_.start();
 };
-goog.inherits(mirosubs.widget.VideoTab, goog.ui.Component);
+goog.inherits(unisubs.widget.VideoTab, goog.ui.Component);
 
-mirosubs.widget.VideoTab.prototype.createDom = function() {
-    mirosubs.widget.VideoTab.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-videoTab mirosubs-videoTab-' + 
+unisubs.widget.VideoTab.prototype.createDom = function() {
+    unisubs.widget.VideoTab.superClass_.createDom.call(this);
+    this.getElement().className = 'unisubs-videoTab unisubs-videoTab-' + 
         (this.forAnchoring_ ? 'anchoring' : 'static');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.imageElem_ = $d('img', {'alt': 'small logo'});
-    this.spanElem_ = $d('span', 'mirosubs-tabTextchoose');
+    this.spanElem_ = $d('span', 'unisubs-tabTextchoose');
     this.anchorElem_ = 
-        $d('a', {'className': 'mirosubs-subtitleMeLink', 'href':'javascript:void(0);'},
+        $d('a', {'className': 'unisubs-subtitleMeLink', 'href':'javascript:void(0);'},
            this.imageElem_, this.spanElem_);
-    this.nudgeSpanElem_ = $d('span', 'mirosubs-tabTextfinish', 'NUDGE TEXT');
+    this.nudgeSpanElem_ = $d('span', 'unisubs-tabTextfinish', 'NUDGE TEXT');
     this.nudgeElem_ = $d('a', {'href':'#'}, this.nudgeSpanElem_);
     this.getElement().appendChild(this.anchorElem_);
     this.getElement().appendChild(this.nudgeElem_);
 };
 
-mirosubs.widget.VideoTab.prototype.enterDocument = function() {
-    mirosubs.widget.VideoTab.superClass_.enterDocument.call(this);
+unisubs.widget.VideoTab.prototype.enterDocument = function() {
+    unisubs.widget.VideoTab.superClass_.enterDocument.call(this);
     this.showNudge(false);
     this.getHandler().
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
-mirosubs.widget.VideoTab.prototype.getMenuAnchor = function() {
+unisubs.widget.VideoTab.prototype.getMenuAnchor = function() {
     return this.anchorElem_;
 };
 
-mirosubs.widget.VideoTab.prototype.showLoading = function() {
+unisubs.widget.VideoTab.prototype.showLoading = function() {
     this.imageElem_.src = this.spinnerGifURL_;
     goog.dom.setTextContent(this.spanElem_, "Loading");
 };
 
-mirosubs.widget.VideoTab.prototype.showError = function() {
+unisubs.widget.VideoTab.prototype.showError = function() {
     this.imageElem_.src = this.logoURL_;
     goog.dom.setTextContent(this.spanElem_, "Subs Unavailable");
     this.getHandler().listen(
@@ -91,7 +91,7 @@ mirosubs.widget.VideoTab.prototype.showError = function() {
  * calling showContent instead.
  *
  */
-mirosubs.widget.VideoTab.prototype.stopLoading = function() {
+unisubs.widget.VideoTab.prototype.stopLoading = function() {
     this.imageElem_.src = this.logoURL_;
     if (this.text_)
         goog.dom.setTextContent(this.spanElem_, this.text_);
@@ -100,17 +100,17 @@ mirosubs.widget.VideoTab.prototype.stopLoading = function() {
 /**
  * Stops loading, and shows text appropriate for content.
  * @param {boolean} hasSubtitles Do subs currently exist for this video?
- * @param {mirosubs.widget.SubtitleState=} opt_playSubState Subtitles 
+ * @param {unisubs.widget.SubtitleState=} opt_playSubState Subtitles 
  *     that are currently loaded to play in widget.
  */
-mirosubs.widget.VideoTab.prototype.showContent = function(
+unisubs.widget.VideoTab.prototype.showContent = function(
     hasSubtitles, opt_playSubState) 
 {
     this.imageElem_.src = this.logoURL_;
     var text;
     if (opt_playSubState)
         text = opt_playSubState.LANGUAGE ? 
-            mirosubs.languageNameForCode(opt_playSubState.LANGUAGE) :
+            unisubs.languageNameForCode(opt_playSubState.LANGUAGE) :
             "Original Language";
     else
         text = hasSubtitles ? "Select Language" : "Subtitle Me";
@@ -118,25 +118,25 @@ mirosubs.widget.VideoTab.prototype.showContent = function(
     goog.dom.setTextContent(this.spanElem_, text);
 };
 
-mirosubs.widget.VideoTab.prototype.getAnchorElem = function() {
+unisubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
 
-mirosubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
+unisubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
     e.preventDefault();
-    mirosubs.Tracker.getInstance().trackPageview('Clicks_Improve_Subtitles_or_translation');
+    unisubs.Tracker.getInstance().trackPageview('Clicks_Improve_Subtitles_or_translation');
     if (this.nudgeClickCallback_)
         this.nudgeClickCallback_();
 };
 
-mirosubs.widget.VideoTab.prototype.showNudge = function(shows) {
-    mirosubs.style.setVisibility(this.nudgeElem_, shows);
-    mirosubs.style.setVisibility(this.nudgeSpanElem_, shows);
+unisubs.widget.VideoTab.prototype.showNudge = function(shows) {
+    unisubs.style.setVisibility(this.nudgeElem_, shows);
+    unisubs.style.setVisibility(this.nudgeSpanElem_, shows);
      if (shows){
-         mirosubs.style.setProperty(this.nudgeElem_, 'width', null);
+         unisubs.style.setProperty(this.nudgeElem_, 'width', null);
         
      }else{
-         mirosubs.style.setWidth(this.nudgeElem_, 0);
+         unisubs.style.setWidth(this.nudgeElem_, 0);
      }
     return;
 };
@@ -148,14 +148,14 @@ mirosubs.widget.VideoTab.prototype.showNudge = function(shows) {
  * @param shareURL {goog.URI} The url for the 'share' link.
  * @param newWindow {bool=} If true will open on new window.
  */
-mirosubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow){
-    if (!mirosubs.isEmbeddedInDifferentDomain()){
+unisubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow){
+    if (!unisubs.isEmbeddedInDifferentDomain()){
         // no point in taking to the unisubs site if we're here already
         return;
     }
     if(!this.shareElem_){
         var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-        this.shareSpanElem_ = $d('span', {'href':'', 'class':'mirosubs-tabTextShare'}, 'Share');
+        this.shareSpanElem_ = $d('span', {'href':'', 'class':'unisubs-tabTextShare'}, 'Share');
         this.shareElem_ = $d('a', {'href':'', 'class':''}, this.shareSpanElem_);
         this.getElement().appendChild(this.shareElem_);    
     }
@@ -163,14 +163,14 @@ mirosubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWi
     goog.dom.setProperties(this.shareElem_, {"href": shareURL.toString(), "target":target});
 };
 
-mirosubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
+unisubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
     goog.dom.setTextContent(this.nudgeSpanElem_, text);
     this.nudgeClickCallback_ = fn;
 };
-mirosubs.widget.VideoTab.prototype.show = function(shown) {
-    mirosubs.style.showElement(this.getElement(), shown);
+unisubs.widget.VideoTab.prototype.show = function(shown) {
+    unisubs.style.showElement(this.getElement(), shown);
 };
-mirosubs.widget.VideoTab.prototype.disposeInternal = function() {
-    mirosubs.widget.VideoTab.superClass_.disposeInternal.call(this);
+unisubs.widget.VideoTab.prototype.disposeInternal = function() {
+    unisubs.widget.VideoTab.superClass_.disposeInternal.call(this);
     this.imageLoader_.dispose();
 };

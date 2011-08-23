@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.BaseState');
+goog.provide('unisubs.widget.BaseState');
 
 /**
  * @fileoverview Provides a strongly-typed version of base state params 
@@ -29,7 +29,7 @@ goog.provide('mirosubs.widget.BaseState');
  * @constructor
  * @param {Object} baseStateParam parameter from the embed code on the page.
  */
-mirosubs.widget.BaseState = function(baseStateParam) {
+unisubs.widget.BaseState = function(baseStateParam) {
     this.LANGUAGE = baseStateParam['language_code'];
     this.LANGUAGE_PK = baseStateParam['language_pk'];
     if (typeof(this.LANGUAGE) == 'undefined')
@@ -41,7 +41,7 @@ mirosubs.widget.BaseState = function(baseStateParam) {
     this.ORIGINAL_PARAM = baseStateParam;
 };
 
-mirosubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
+unisubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
     var params = {};
     if (opt_language != null)
         params['language'] = opt_language;
@@ -54,16 +54,16 @@ mirosubs.widget.BaseState.createParams = function(opt_language, opt_revision) {
  * Either language code, or null for native language.
  * @type {?string}
  */
-mirosubs.widget.BaseState.prototype.LANGUAGE = null;
+unisubs.widget.BaseState.prototype.LANGUAGE = null;
 
 /**
  * Either the revision number, or null for most recent revision.
  * @type {?number}
  */
-mirosubs.widget.BaseState.prototype.REVISION = null;
+unisubs.widget.BaseState.prototype.REVISION = null;
 
 /**
  * The original parameter object from javascript on page.
  * @type {?object}
  */
-mirosubs.widget.BaseState.prototype.ORIGINAL_PARAM = null;
+unisubs.widget.BaseState.prototype.ORIGINAL_PARAM = null;

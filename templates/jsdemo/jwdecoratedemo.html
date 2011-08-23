@@ -35,14 +35,14 @@
 
   function decorateTheVideo() {
     logger.info('decorating');
-    var videoSource = mirosubs.video.VideoSource.videoSourceForURL('http://www.youtube.com/v/0a1EYZLXQRM');
-    var videoPlayer = new mirosubs.video.JWVideoPlayer(videoSource);
+    var videoSource = unisubs.video.VideoSource.videoSourceForURL('http://www.youtube.com/v/0a1EYZLXQRM');
+    var videoPlayer = new unisubs.video.JWVideoPlayer(videoSource);
     videoPlayer.decorate(goog.dom.getElement('player21'));
   }
 
   goog.events.listen(
-    mirosubs.LoadingDom.getInstance(),
-    mirosubs.LoadingDom.DOMLOAD,
+    unisubs.LoadingDom.getInstance(),
+    unisubs.LoadingDom.DOMLOAD,
     decorateTheVideo);
 </script>
 

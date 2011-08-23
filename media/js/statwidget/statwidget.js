@@ -16,47 +16,47 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.statwidget.StatWidget');
+goog.provide('unisubs.statwidget.StatWidget');
 
 /**
  * @constructor
  *
  */
-mirosubs.statwidget.StatWidget = function() {
-    mirosubs.siteConfig = mirosubs.StatWidgetConfig.siteConfig;
+unisubs.statwidget.StatWidget = function() {
+    unisubs.siteConfig = unisubs.StatWidgetConfig.siteConfig;
     var scripts = document.getElementsByTagName('script');
     this.script_ = scripts[scripts.length - 1];
     this.div_ = goog.dom.createDom('div');
-    this.div_.innerHTML = mirosubs.StatWidgetConfig.innerHTML;
+    this.div_.innerHTML = unisubs.StatWidgetConfig.innerHTML;
 };
-goog.addSingletonGetter(mirosubs.statwidget.StatWidget);
+goog.addSingletonGetter(unisubs.statwidget.StatWidget);
 
-mirosubs.statwidget.StatWidget.prototype.add = function() {
+unisubs.statwidget.StatWidget.prototype.add = function() {
     if (!goog.userAgent.IE)
         this.insertDiv_();
     else {
-        if (mirosubs.LoadingDom.getInstance().isDomLoaded())
+        if (unisubs.LoadingDom.getInstance().isDomLoaded())
             this.insertDiv_();
         else
             goog.events.listenOnce(
-                mirosubs.LoadingDom.getInstance(),
-                mirosubs.LoadingDom.DOMLOAD,
+                unisubs.LoadingDom.getInstance(),
+                unisubs.LoadingDom.DOMLOAD,
                 goog.bind(this.insertDiv_, this));
     }
 };
 
-mirosubs.statwidget.StatWidget.prototype.insertDiv_ = 
+unisubs.statwidget.StatWidget.prototype.insertDiv_ = 
     function()
 {
     this.script_.parentNode.insertBefore(this.div_, this.script_);
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
         'get_widget_info', {},
         goog.bind(this.infoReceived_, this));
 };
 
-mirosubs.statwidget.StatWidget.prototype.infoReceived_ = function(result) {
-    var statDiv = this.div_.getElementsByClassName('mirosubs-stats')[0];
+unisubs.statwidget.StatWidget.prototype.infoReceived_ = function(result) {
+    var statDiv = this.div_.getElementsByClassName('unisubs-stats')[0];
     goog.dom.setTextContent(statDiv, result['all_videos'] + '');
 };
 
-mirosubs.statwidget.StatWidget.getInstance().add()
+unisubs.statwidget.StatWidget.getInstance().add()

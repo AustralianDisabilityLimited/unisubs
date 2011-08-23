@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.CaptionView');
+goog.provide('unisubs.video.CaptionView');
 
 /**
  * * @constructor
  * @param needsIFrame {bool} If an iframe is needed
  * @param isDraggable {bool=} If the caption can be dragged by the user
  */
-mirosubs.video.CaptionView = function( needsIFrame, isDraggable) {
+unisubs.video.CaptionView = function( needsIFrame, isDraggable) {
     goog.ui.Component.call(this);
 
     /*
@@ -53,22 +53,22 @@ mirosubs.video.CaptionView = function( needsIFrame, isDraggable) {
     this.userHasDragged_ = false;
 };
 
-goog.inherits(mirosubs.video.CaptionView, goog.ui.Component);
+goog.inherits(unisubs.video.CaptionView, goog.ui.Component);
 
 /*
  * @conts {int} 
  */
-mirosubs.video.CaptionView.VERTICAL_MARGIN = 40;
+unisubs.video.CaptionView.VERTICAL_MARGIN = 40;
 
 /*
  * @cont {int}
  */
-mirosubs.video.CaptionView.HORIZONTAL_MARGIN = 10;
+unisubs.video.CaptionView.HORIZONTAL_MARGIN = 10;
 
 /*
  * @const {int}
  */
-mirosubs.video.CaptionView.MAXIMUM_WIDTH = 400;
+unisubs.video.CaptionView.MAXIMUM_WIDTH = 400;
 
 /*
  * @param boundingBox {goog.math.Rect} The rectangle to which
@@ -78,15 +78,15 @@ mirosubs.video.CaptionView.MAXIMUM_WIDTH = 400;
  * BOTTOM_CENTER if not provided.
  * @return The same bounding box or null if box is empty
  */
-mirosubs.video.CaptionView.prototype.setUpPositioning = 
+unisubs.video.CaptionView.prototype.setUpPositioning = 
     function ( boundingBox, anchor){
     if (!boundingBox){
         return null;
     }
     this.boundingBox_ = boundingBox;
-    this.captionWidth_ = Math.min(mirosubs.video.CaptionView.MAXIMUM_WIDTH, 
+    this.captionWidth_ = Math.min(unisubs.video.CaptionView.MAXIMUM_WIDTH, 
         this.boundingBox_.width - 
-          (mirosubs.video.CaptionView.HORIZONTAL_MARGIN * 2));
+          (unisubs.video.CaptionView.HORIZONTAL_MARGIN * 2));
     this.captionLeft_ =  this.boundingBox_.left + 
             ((  this.boundingBox_.width - this.captionWidth_) / 2);
     this.anchor_ = anchor || "BOTTOM_CENTER";
@@ -97,7 +97,7 @@ mirosubs.video.CaptionView.prototype.setUpPositioning =
 /*
  * @param The html text to show, or null for blank caption
  */
-mirosubs.video.CaptionView.prototype.setCaptionText = function(text) {
+unisubs.video.CaptionView.prototype.setCaptionText = function(text) {
     if (text == null || text == "") {
         this.setVisibility(false);
     }
@@ -109,9 +109,9 @@ mirosubs.video.CaptionView.prototype.setCaptionText = function(text) {
     }
 };
 
-mirosubs.video.CaptionView.prototype.createDom  = function (){
+unisubs.video.CaptionView.prototype.createDom  = function (){
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    var el = $d('span', 'mirosubs-captionSpan');
+    var el = $d('span', 'unisubs-captionSpan');
     this.setElementInternal(el);
     // ie < 9 will throw an error if acessing offsetParent on an element with a null parent
     // see http://www.google.com/search?q=ie8+offsetParent+unspecified+error
@@ -119,20 +119,20 @@ mirosubs.video.CaptionView.prototype.createDom  = function (){
     if (!videoOffsetParent)
         videoOffsetParent = goog.dom.getOwnerDocument(el).body;
     if (this.needsIFrame_){
-        mirosubs.style.setVisibility(el, false);
+        unisubs.style.setVisibility(el, false);
     }
     goog.dom.appendChild(videoOffsetParent, el);
     this.setVisibility(false);
-    mirosubs.style.setWidth(this.getElement(), this.captionWidth_);
-    mirosubs.style.setPosition(this.getElement(), this.captionLeft_);
+    unisubs.style.setWidth(this.getElement(), this.captionWidth_);
+    unisubs.style.setPosition(this.getElement(), this.captionLeft_);
     if (this.isDraggable_){
         this.dragger_ = new goog.fx.Dragger(this.getElement());
     }
     
 };
 
-mirosubs.video.CaptionView.prototype.enterDocument = function() {
-    mirosubs.video.CaptionView.superClass_.enterDocument.call(this);
+unisubs.video.CaptionView.prototype.enterDocument = function() {
+    unisubs.video.CaptionView.superClass_.enterDocument.call(this);
     if (this.isDraggable_){
         this.getHandler().
             listen(
@@ -149,19 +149,19 @@ mirosubs.video.CaptionView.prototype.enterDocument = function() {
 /* 
  * @param e {fx.DragEvent} The dragging event.
  */
-mirosubs.video.CaptionView.prototype.startDrag = function(e){
+unisubs.video.CaptionView.prototype.startDrag = function(e){
     this.userHasDragged_ = true;
 };
 /* 
  * @param e {fx.DragEvent} The dragging event.
  */
-mirosubs.video.CaptionView.prototype.onDrag = function(e){
-    mirosubs.style.setPosition(this.getElement(), 
+unisubs.video.CaptionView.prototype.onDrag = function(e){
+    unisubs.style.setPosition(this.getElement(), 
                                this.dragger_.deltaX ,
                                this.dragger_.deltaY);
 };
 
-mirosubs.video.CaptionView.prototype.redrawInternal = function(){
+unisubs.video.CaptionView.prototype.redrawInternal = function(){
     if (this.userHasDragged_) return;
 
     var captionSize = goog.style.getSize(this.getElement());
@@ -170,8 +170,8 @@ mirosubs.video.CaptionView.prototype.redrawInternal = function(){
         return;
     }
     var newTop = (this.boundingBox_.top + this.boundingBox_.height - captionSize.height ) - 
-        mirosubs.video.CaptionView.VERTICAL_MARGIN;
-    mirosubs.style.setPosition(this.getElement(), this.captionLeft_, newTop);
+        unisubs.video.CaptionView.VERTICAL_MARGIN;
+    unisubs.style.setPosition(this.getElement(), this.captionLeft_, newTop);
     if (this.needsIFrame_ && this.captionBgElem_) {
         goog.style.setPosition(this.captionBgElem_, newLeft, newTop);
         goog.style.setSize(this.captionBgElem_, captionSize);
@@ -183,16 +183,16 @@ mirosubs.video.CaptionView.prototype.redrawInternal = function(){
 /* 
  * @param {bool} If it will be made visible.
  */
-mirosubs.video.CaptionView.prototype.setVisibility = function(show){
+unisubs.video.CaptionView.prototype.setVisibility = function(show){
     if(this.captionBgElem_){
-        mirosubs.style.setVisibility(this.captionBgElem_, show);   
+        unisubs.style.setVisibility(this.captionBgElem_, show);   
     }
-    mirosubs.style.setVisibility(this.getElement(), show);
+    unisubs.style.setVisibility(this.getElement(), show);
 };
 
-mirosubs.video.CaptionView.prototype.dispose = function() {
+unisubs.video.CaptionView.prototype.dispose = function() {
   if (!this.isDisposed()) {
-    mirosubs.video.CaptionView.superClass_.dispose.call(this);
+    unisubs.video.CaptionView.superClass_.dispose.call(this);
     this.dragger_ && this.dragger_.dispose();
   }
 };

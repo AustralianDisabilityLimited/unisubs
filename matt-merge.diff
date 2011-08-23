@@ -362,10 +362,10 @@ index f21475a..8ded629 100644
 -}
 \ No newline at end of file
 +}
-diff --git a/media/css/mirosubs-mainsite.css b/media/css/mirosubs-mainsite.css
+diff --git a/media/css/unisubs-mainsite.css b/media/css/unisubs-mainsite.css
 index 8e0095a..c0bc420 100644
---- a/media/css/mirosubs-mainsite.css
-+++ b/media/css/mirosubs-mainsite.css
+--- a/media/css/unisubs-mainsite.css
++++ b/media/css/unisubs-mainsite.css
 @@ -2,7 +2,7 @@
  Decompressed Stylesheets
  */
@@ -678,7 +678,7 @@ index b2571ac..0c3e6d3 100644
 +  </div><!-- // intro -->
 +  <div id="intro_video">
      {% block widget_container %}
-     <div id="widget_div" class="mirosubs-widget"></div> 
+     <div id="widget_div" class="unisubs-widget"></div> 
              <script type="text/javascript"> 
 @@ -151,8 +151,8 @@
                          "http://www.youtube.com/watch?v=Y2IJb1YnAmQ"]});
@@ -694,7 +694,7 @@ index b2571ac..0c3e6d3 100644
 @@ -171,7 +171,7 @@
          <div class="section_secondary_top_right">
            <h4>{% trans "For every video on a page or site" %}</h4>
-           <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+           <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
 -          <span class="indication">{% trans "paste this single line of code into your page header and every HTML 5 and YouTube video will be subtitle enabled" %}</span>
 +          <span class="indication">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
          </div><!-- // section_secondary_top_right -->
@@ -808,11 +808,11 @@ index b2571ac..0c3e6d3 100644
 -
 -      <li>
 -          {% trans 'The code is free and open source' %}
--           (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
+-           (<a href="http://github.com/8planes/unisubs/">{% trans 'get the source code' %}</a>)
 +      <li>{% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}(<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
        </li>
 -
-+      <li>{% trans 'The code is free and open source' %}(<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)</li>
++      <li>{% trans 'The code is free and open source' %}(<a href="http://github.com/8planes/unisubs/">{% trans 'get the source code' %}</a>)</li>
        <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
 -
        <li>{% trans "It's 100% web-based, there’s no software to download." %}</li>

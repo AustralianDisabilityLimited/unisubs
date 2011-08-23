@@ -16,35 +16,35 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.UnitOfWork');
-goog.provide('mirosubs.UnitOfWork.EventType');
+goog.provide('unisubs.UnitOfWork');
+goog.provide('unisubs.UnitOfWork.EventType');
 /**
 * @constructor
 * @extends goog.events.EventTarget
 */
-mirosubs.UnitOfWork = function() {
+unisubs.UnitOfWork = function() {
     goog.events.EventTarget.call(this);
     this.instantiateLists_();
     this.everContainedWork_ = false;
 };
-goog.inherits(mirosubs.UnitOfWork, goog.events.EventTarget);
+goog.inherits(unisubs.UnitOfWork, goog.events.EventTarget);
 
-mirosubs.UnitOfWork.EventType = {
+unisubs.UnitOfWork.EventType = {
     WORK_PERFORMED: 'workperformed'
 };
 
-mirosubs.UnitOfWork.prototype.instantiateLists_ = function() {
+unisubs.UnitOfWork.prototype.instantiateLists_ = function() {
     this.updated_ = [];
     this.deleted_ = [];
     this.inserted_ = [];
     this.title = '';
 };
 
-mirosubs.UnitOfWork.prototype.setTitle = function(title){
+unisubs.UnitOfWork.prototype.setTitle = function(title){
     this.title = title;
 };
 
-mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
+unisubs.UnitOfWork.prototype.registerNew = function(obj) {
     if (goog.array.contains(this.updated_, obj) ||
         goog.array.contains(this.deleted_, obj) ||
         goog.array.contains(this.inserted_, obj))
@@ -54,7 +54,7 @@ mirosubs.UnitOfWork.prototype.registerNew = function(obj) {
     this.issueWorkEvent_();
 };
 
-mirosubs.UnitOfWork.prototype.registerUpdated = function(obj) {
+unisubs.UnitOfWork.prototype.registerUpdated = function(obj) {
     if (goog.array.contains(this.deleted_, obj))
         throw new "registerUpdated failed";
     if (!goog.array.contains(this.inserted_, obj) &&
@@ -65,7 +65,7 @@ mirosubs.UnitOfWork.prototype.registerUpdated = function(obj) {
     }
 };
 
-mirosubs.UnitOfWork.prototype.registerDeleted = function(obj) {
+unisubs.UnitOfWork.prototype.registerDeleted = function(obj) {
     if (goog.array.contains(this.inserted_, obj))
         goog.array.remove(this.inserted_, obj);
     else {
@@ -77,25 +77,25 @@ mirosubs.UnitOfWork.prototype.registerDeleted = function(obj) {
     }
 };
 
-mirosubs.UnitOfWork.prototype.everContainedWork = function() {
+unisubs.UnitOfWork.prototype.everContainedWork = function() {
     return this.everContainedWork_;
 };
 
-mirosubs.UnitOfWork.prototype.containsWork = function() {
+unisubs.UnitOfWork.prototype.containsWork = function() {
     return this.updated_.length > 0 ||
         this.deleted_.length > 0 ||
         this.inserted_.length > 0;
 };
 
-mirosubs.UnitOfWork.prototype.clear = function() {
+unisubs.UnitOfWork.prototype.clear = function() {
     this.instantiateLists_();
 };
 
-mirosubs.UnitOfWork.prototype.issueWorkEvent_ = function() {
-    this.dispatchEvent(mirosubs.UnitOfWork.EventType.WORK_PERFORMED);
+unisubs.UnitOfWork.prototype.issueWorkEvent_ = function() {
+    this.dispatchEvent(unisubs.UnitOfWork.EventType.WORK_PERFORMED);
 };
 
-mirosubs.UnitOfWork.prototype.getWork = function() {
+unisubs.UnitOfWork.prototype.getWork = function() {
     return {
         inserted: goog.array.clone(this.inserted_),
         updated: goog.array.clone(this.updated_),

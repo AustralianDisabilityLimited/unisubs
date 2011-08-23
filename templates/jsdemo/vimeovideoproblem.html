@@ -15,8 +15,7 @@
 <div id="videodiv">
 </div>
 <div>
-  <input type="text" id="seconds" value="0"/>
-  <a href="#" onclick="seek(); return false;">seek</a>
+  <a href="#" onclick="seek(); return false;">seek to 0</a>
 </div>
  <!-- Event log. -->
  <fieldset class="goog-debug-panel">
@@ -33,17 +32,6 @@
 
   function vimeo_player_loaded(apiID) {
       logger.info('ready with api id ' + apiID);
-  console.log('what');
-      var player = goog.dom.getElement('videodiv');
-  console.log('yes');
-      var timer = new goog.Timer(100);
-  console.log('timer');
-      goog.events.listen(timer, goog.Timer.TICK,
-          function() {
-              logger.info('current time: ' + player.api_getCurrentTime());
-          });
-     console.log(timer);
-     timer.start();
   }
 
   var params = {
@@ -53,14 +41,13 @@
 
   var atts = { 'id': 'videodiv' };
 
-  swfURL = 'http://vimeo.com/moogaloop.swf?js_api=1&width=480&height=360&clip_id=673565&js_swf_id=myswfid';
+  swfURL = 'http://vimeo.com/moogaloop.swf?js_api=1&width=480&height=360&clip_id=2674991&js_swf_id=myswfid';
   swfobject.embedSWF(swfURL, 'videodiv', 480, 360, "8", null, null, params, atts);
 
   function seek() {
-      var seconds = parseInt(goog.dom.$('seconds').value);
-      logger.info('seeking to ' + seconds);
-      var player = goog.dom.$('videodiv');
-      player.api_seekTo(seconds);
+      logger.info('seeking to 0');
+      var player = document.getElementById('videodiv');
+      player.api_seekTo(0);
   }
 
 </script>

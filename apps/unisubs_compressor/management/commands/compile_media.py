@@ -335,7 +335,7 @@ class Command(BaseCommand):
         logging.info(("_compile_conf_and_embed_js with cache_base_url {0}").format(
                 get_cache_base_url()))
 
-        file_name = os.path.join(self.temp_dir, 'js/config.js')
+        file_name = os.path.join(JS_LIB, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
                    'MEDIA_URL': get_cache_base_url()+ "/"}
@@ -350,7 +350,7 @@ class Command(BaseCommand):
         for version in settings.PREVIOUS_EMBED_JS_VERSIONS:
             self._output_embed_to_dir(settings.MEDIA_ROOT, version)
 
-        file_name = os.path.join(self.temp_dir, 'js/statwidget/statwidgetconfig.js')
+        file_name = os.path.join(JS_LIB, 'js/statwidget/statwidgetconfig.js')
         rendered = render_to_string(
             'widget/statwidgetconfig.js', context)
         with open(file_name, 'w') as f:

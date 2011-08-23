@@ -16,51 +16,51 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.play.Manager');
+goog.provide('unisubs.play.Manager');
 /**
 * @constructor
 * @extends goog.events.EventTarget
 */
-mirosubs.play.Manager = function(videoPlayer, baseState, captions) {
+unisubs.play.Manager = function(videoPlayer, baseState, captions) {
     goog.events.EventTarget.call(this);
     this.videoPlayer_ = videoPlayer;
     this.baseState_ = baseState;
     var captionSet =
-        new mirosubs.subtitle.EditableCaptionSet(captions);
+        new unisubs.subtitle.EditableCaptionSet(captions);
     this.captionManager_ =
-        new mirosubs.CaptionManager(videoPlayer, captionSet);
+        new unisubs.CaptionManager(videoPlayer, captionSet);
     this.handler_ = new goog.events.EventHandler(this);
     this.handler_.
         listen(this.captionManager_,
-               mirosubs.CaptionManager.CAPTION,
+               unisubs.CaptionManager.CAPTION,
                this.captionReached_).
         listen(this.captionManager_,
-               mirosubs.CaptionManager.CAPTIONS_FINISHED,
+               unisubs.CaptionManager.CAPTIONS_FINISHED,
                this.finished_).
         listen(this.videoPlayer_,
-               mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+               unisubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
                this.finished_);
     this.finished_ = false;
 };
-goog.inherits(mirosubs.play.Manager, goog.events.EventTarget);
+goog.inherits(unisubs.play.Manager, goog.events.EventTarget);
 
-mirosubs.play.Manager.FINISHED = 'finished';
+unisubs.play.Manager.FINISHED = 'finished';
 
-mirosubs.play.Manager.prototype.getBaseState = function() {
+unisubs.play.Manager.prototype.getBaseState = function() {
     return this.baseState_;
 };
-mirosubs.play.Manager.prototype.finished_ = function(event) {
+unisubs.play.Manager.prototype.finished_ = function(event) {
     if (!this.finished_) {
-        this.dispatchEvent(mirosubs.play.Manager.FINISHED);
+        this.dispatchEvent(unisubs.play.Manager.FINISHED);
         this.finished_ = true;
     }
 };
-mirosubs.play.Manager.prototype.captionReached_ = function(event) {
+unisubs.play.Manager.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.videoPlayer_.showCaptionText(c ? c.getText() : '');
 };
-mirosubs.play.Manager.prototype.disposeInternal = function() {
-    mirosubs.play.Manager.superClass_.disposeInternal.call(this);
+unisubs.play.Manager.prototype.disposeInternal = function() {
+    unisubs.play.Manager.superClass_.disposeInternal.call(this);
     this.captionManager_.dispose();
     this.handler_.dispose();
 };

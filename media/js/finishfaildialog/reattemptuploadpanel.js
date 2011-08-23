@@ -17,26 +17,26 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
- * @fileoverview Meant to be used in mirosubs.finishfaildialog.Dialog. 
+ * @fileoverview Meant to be used in unisubs.finishfaildialog.Dialog. 
  *    Corresponds to 'reattempt upload' state of that dialog.
  */
 
-goog.provide('mirosubs.finishfaildialog.ReattemptUploadPanel');
+goog.provide('unisubs.finishfaildialog.ReattemptUploadPanel');
 
 /**
  * @constructor
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  * @param {function()} saveFn function to reattempt the sub save.
  */
-mirosubs.finishfaildialog.ReattemptUploadPanel = function(captionSet, saveFn) {
+unisubs.finishfaildialog.ReattemptUploadPanel = function(captionSet, saveFn) {
     goog.ui.Component.call(this);
     this.captionSet_ = captionSet;
     this.saveFn_ = saveFn;
 };
-goog.inherits(mirosubs.finishfaildialog.ReattemptUploadPanel, goog.ui.Component);
+goog.inherits(unisubs.finishfaildialog.ReattemptUploadPanel, goog.ui.Component);
 
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.createDom = function() {
-    mirosubs.finishfaildialog.ReattemptUploadPanel.superClass_.createDom.call(this);
+unisubs.finishfaildialog.ReattemptUploadPanel.prototype.createDom = function() {
+    unisubs.finishfaildialog.ReattemptUploadPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.saveAgainLink_ = $d('a', {'href':'#'}, 'Try saving your subtitles again');
     this.downloadLink_ = $d('a', {'href': '#'}, 'Download your subtitles to your computer');
@@ -49,8 +49,8 @@ mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.createDom = function() 
         $d('p', null, this.downloadLink_));
 };
 
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = function() {
-    mirosubs.finishfaildialog.ReattemptUploadPanel.superClass_.enterDocument.call(this);
+unisubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = function() {
+    unisubs.finishfaildialog.ReattemptUploadPanel.superClass_.enterDocument.call(this);
     this.getHandler()
         .listen(
             this.saveAgainLink_, 'click',
@@ -60,19 +60,19 @@ mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.enterDocument = functio
             this.downloadClicked_);
 };
 
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.saveAgainClicked_ = function(e) {
+unisubs.finishfaildialog.ReattemptUploadPanel.prototype.saveAgainClicked_ = function(e) {
     e.preventDefault();
     this.saveContainer_.innerHTML = "Saving...";
     this.saveFn_();
 };
 
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.downloadClicked_ = function(e) {
+unisubs.finishfaildialog.ReattemptUploadPanel.prototype.downloadClicked_ = function(e) {
     e.preventDefault();
-    mirosubs.finishfaildialog.CopyDialog.showForSubs(
+    unisubs.finishfaildialog.CopyDialog.showForSubs(
         this.captionSet_.makeJsonSubs());
 };
 
-mirosubs.finishfaildialog.ReattemptUploadPanel.prototype.showTryAgain = function() {
+unisubs.finishfaildialog.ReattemptUploadPanel.prototype.showTryAgain = function() {
     goog.dom.removeChildren(this.saveContainer_);
     this.saveAgainLink_.innerHTML = "Try again.";
     goog.dom.append(

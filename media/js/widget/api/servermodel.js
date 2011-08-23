@@ -16,12 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.api.ServerModel');
+goog.provide('unisubs.api.ServerModel');
 
 /**
  * @constructor
  */
-mirosubs.api.ServerModel = function(config) {
+unisubs.api.ServerModel = function(config) {
     this.config_ = config;
     /**
      * @type {function(string)} Gets called with json array 
@@ -42,11 +42,11 @@ mirosubs.api.ServerModel = function(config) {
     this.embedCode_ = config['embedCode'];
 };
 
-mirosubs.api.ServerModel.prototype.init = function(unitOfWork) {
+unisubs.api.ServerModel.prototype.init = function(unitOfWork) {
     // no-op
 };
 
-mirosubs.api.ServerModel.prototype.finish = function(
+unisubs.api.ServerModel.prototype.finish = function(
     jsonSubs, callback, opt_cancelCallback) {
     this.save_(jsonSubs, callback, opt_cancelCallback);
 };
@@ -54,22 +54,22 @@ mirosubs.api.ServerModel.prototype.finish = function(
 /**
  * Instances implementing this interface must extend goog.Disposable
  */
-mirosubs.api.ServerModel.prototype.dispose = function() {
+unisubs.api.ServerModel.prototype.dispose = function() {
     // no-op
 };
 
-mirosubs.api.ServerModel.prototype.getEmbedCode = function() {
+unisubs.api.ServerModel.prototype.getEmbedCode = function() {
     return this.embedCode_;
 };
 
-mirosubs.api.ServerModel.prototype.currentUsername = function() {
-    return mirosubs.currentUsername;
+unisubs.api.ServerModel.prototype.currentUsername = function() {
+    return unisubs.currentUsername;
 };
 
-mirosubs.api.ServerModel.prototype.logIn = function() {
+unisubs.api.ServerModel.prototype.logIn = function() {
     this.login_();
 };
 
-mirosubs.api.ServerModel.prototype.getPermalink = function() {
+unisubs.api.ServerModel.prototype.getPermalink = function() {
     return this.permalink_;
 };

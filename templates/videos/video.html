@@ -18,7 +18,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" %}
     <script src="{{ MEDIA_URL }}js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
@@ -30,12 +30,12 @@
     
             $('#add_subtitles').click( function() {
                 widget_widget_div.selectMenuItem(
-                mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                unisubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
             $('.add-translation-behavior').click( function() {
                 widget_widget_div.selectMenuItem(
-                mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
+                unisubs.widget.DropDown.Selection.ADD_LANGUAGE);
                 return false;
             });
             var VIDEO_ID = '{{ video.pk }}';
@@ -190,7 +190,7 @@
 {% block bottom_scripts %}
     <script>
         $(window).load( function() {
-            mirosubs.messaging.simplemessage.displayPendingMessages();
+            unisubs.messaging.simplemessage.displayPendingMessages();
         });
     </script>
 {% endblock %}

@@ -20,7 +20,7 @@ from settings import *
 import logging
 
 SITE_ID = 4
-SITE_NAME = 'mirosubs-dev'
+SITE_NAME = 'unisubs-dev'
 
 JS_USE_COMPILED = True
 
@@ -29,7 +29,7 @@ debug = False
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
-MEDIA_URL = "http://mirosubs.example.com:8000/site_media/"
+MEDIA_URL = "http://unisubs.example.com:8000/site_media/"
 
 # MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
 

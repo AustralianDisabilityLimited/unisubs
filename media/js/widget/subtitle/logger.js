@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.Logger');
+goog.provide('unisubs.subtitle.Logger');
 
 /**
  * @constructor
  */
-mirosubs.subtitle.Logger = function(draftPK) {
+unisubs.subtitle.Logger = function(draftPK) {
     this.logs_ = [goog.json.serialize({
-        'date': mirosubs.dateString(),
+        'date': unisubs.dateString(),
         'draft_pk': draftPK })];
     this.totalSize_ = 0;
     this.sizeExceeded_ = false;
@@ -31,24 +31,24 @@ mirosubs.subtitle.Logger = function(draftPK) {
     this.jsonSubs_ = null;
 };
 
-mirosubs.subtitle.Logger.MAX_SIZE = 4 * 1024 * 1024; // 4 mb
+unisubs.subtitle.Logger.MAX_SIZE = 4 * 1024 * 1024; // 4 mb
 
-mirosubs.subtitle.Logger.prototype.logSave = 
+unisubs.subtitle.Logger.prototype.logSave = 
     function(subIDPackets, success, opt_response) 
 {
     try {
         if (subIDPackets.length == 0)
             return;
-        if (this.totalSize_ > mirosubs.subtitle.Logger.MAX_SIZE && 
+        if (this.totalSize_ > unisubs.subtitle.Logger.MAX_SIZE && 
             !this.sizeExceeded_) {
             this.sizeExceeded_ = true;
             this.logs_.push({
-                'time': mirosubs.dateString(),
+                'time': unisubs.dateString(),
                 'sizeExceeded': true
             });
         }
         var serialized = goog.json.serialize({
-            'time': mirosubs.dateString(),
+            'time': unisubs.dateString(),
             'packets': subIDPackets,
             'success': success,
             'response': (opt_response || null) });
@@ -60,19 +60,19 @@ mirosubs.subtitle.Logger.prototype.logSave =
     }
 };
 
-mirosubs.subtitle.Logger.prototype.getContents = function() {
+unisubs.subtitle.Logger.prototype.getContents = function() {
     return '[' + this.logs_.join(',') + ']';
 };
 
-mirosubs.subtitle.Logger.prototype.getDraftPK = function() {
+unisubs.subtitle.Logger.prototype.getDraftPK = function() {
     return this.draftPK_;
 };
 
-mirosubs.subtitle.Logger.prototype.getJsonSubs = function() {
+unisubs.subtitle.Logger.prototype.getJsonSubs = function() {
      return goog.array.map(this.jsonSubs_,
-                    mirosubs.subtitle.EditableCaption.adjustUndefinedTiming );
+                    unisubs.subtitle.EditableCaption.adjustUndefinedTiming );
 };
 
-mirosubs.subtitle.Logger.prototype.setJsonSubs = function(subs) {
+unisubs.subtitle.Logger.prototype.setJsonSubs = function(subs) {
     this.jsonSubs_ = subs;
 };

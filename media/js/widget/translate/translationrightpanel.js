@@ -16,13 +16,13 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.TranslationRightPanel');
+goog.provide('unisubs.translate.TranslationRightPanel');
 /**
 * @constructor
-* @extends mirosubs.RightPanel
+* @extends unisubs.RightPanel
 */
 
-mirosubs.translate.TranslationRightPanel = function(dialog,
+unisubs.translate.TranslationRightPanel = function(dialog,
                                                     serverModel,
                                                     helpContents,
                                                     extraHelp,
@@ -31,27 +31,27 @@ mirosubs.translate.TranslationRightPanel = function(dialog,
                                                     doneStrongText,
                                                     doneText,
                                                     extraHelpHeader) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
+    unisubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);
     this.extraHelpHeader_ = extraHelpHeader;
     this.dialog_ = dialog;
 };
-goog.inherits(mirosubs.translate.TranslationRightPanel, mirosubs.RightPanel);
+goog.inherits(unisubs.translate.TranslationRightPanel, unisubs.RightPanel);
 
-mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
+unisubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
     function($d, el)
 {
-    var extraDiv = $d('div', 'mirosubs-extra mirosubs-translationResources');
-    extraDiv.appendChild($d('h3', {'className': 'mirosubs-resources'}, this.extraHelpHeader_));
+    var extraDiv = $d('div', 'unisubs-extra unisubs-translationResources');
+    extraDiv.appendChild($d('h3', {'className': 'unisubs-resources'}, this.extraHelpHeader_));
 
-    var lst = $d('ul', {'className': 'mirosubs-resourceList'});
+    var lst = $d('ul', {'className': 'unisubs-resourceList'});
     for (var i = 0; i < this.extraHelp_.length; i++) {
         var linkText = this.extraHelp_[i][0];
         var linkHref = this.extraHelp_[i][1];
-        lst.appendChild($d('li', {'className': 'mirosubs-resource'},
+        lst.appendChild($d('li', {'className': 'unisubs-resource'},
                            $d('a', {'target':'_blank', 'href': linkHref,
-                                    'className': 'mirosubs-resourceLink' },
+                                    'className': 'unisubs-resourceLink' },
                               linkText)));
     }
     extraDiv.appendChild(lst);
@@ -61,27 +61,27 @@ mirosubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
     this.changeTimingLink_ =
         $d('a', {'href':'#'}, 'Change subtitle timing');
 
-    var isGoogleTranslateable = mirosubs.translate.GoogleTranslator.isTranslateable(
+    var isGoogleTranslateable = unisubs.translate.GoogleTranslator.isTranslateable(
         this.dialog_.getStandardLanguage(),
         this.dialog_.getSubtitleLanguage());
     
-    var ul =  $d('ul', 'mirosubs-translationOptions');
+    var ul =  $d('ul', 'unisubs-translationOptions');
     
     if (isGoogleTranslateable) {
-        ul.appendChild($d('li', 'mirosubs-autoTranslate', this.autoTranslateLink_, 
+        ul.appendChild($d('li', 'unisubs-autoTranslate', this.autoTranslateLink_, 
             $d('span', null, ' (using google)')));
     }
     
     ul.appendChild(
-        $d('li', 'mirosubs-changeTiming',
+        $d('li', 'unisubs-changeTiming',
            this.changeTimingLink_,
            $d('span', null, ' (advanced users)')));
 
     el.appendChild(ul);
 };
 
-mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
-    mirosubs.translate.TranslationRightPanel.superClass_.enterDocument.call(this);
+unisubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
+    unisubs.translate.TranslationRightPanel.superClass_.enterDocument.call(this);
     
     var handler = this.getHandler();
     
@@ -93,12 +93,12 @@ mirosubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
     handler.listen(this.autoTranslateLink_, 'click', this.autoTranslateClicked_)
 };
 
-mirosubs.translate.TranslationRightPanel.prototype.autoTranslateClicked_ = function(e){
+unisubs.translate.TranslationRightPanel.prototype.autoTranslateClicked_ = function(e){
     e.preventDefault();
     this.dialog_.translateViaGoogle();
 }
 
-mirosubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ = 
+unisubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ = 
     function(e) 
 {
     e.preventDefault();

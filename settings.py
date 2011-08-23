@@ -16,7 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-# Django settings for mirosubs project.
+# Django settings for unisubs project.
 import os, sys
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -141,7 +141,7 @@ WIDGET_LOG_EMAIL = 'widget-logs@universalsubtitles.org'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': rel('mirosubs.sqlite3'), # Or path to database file if using sqlite3.
+        'NAME': rel('unisubs.sqlite3'), # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -165,7 +165,7 @@ USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
 JS_CORE = \
-    ['js/mirosubs.js', 
+    ['js/unisubs.js', 
      'js/rpc.js',
      'js/clippy.js',
      'js/flash.js',
@@ -390,7 +390,7 @@ MIDDLEWARE_CLASSES = (
     'middleware.SaveUserIp',
 )
 
-ROOT_URLCONF = 'mirosubs.urls'
+ROOT_URLCONF = 'unisubs.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -452,7 +452,7 @@ INSTALLED_APPS = (
     'unisubs_compressor',
     'subrequests',
     'doorman',
-    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
+    'unisubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
 # Celery settings
@@ -571,7 +571,7 @@ EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
 
-#for mirosubs.example.com
+#for unisubs.example.com
 RECAPTCHA_PUBLIC = '6LdoScUSAAAAANmmrD7ALuV6Gqncu0iJk7ks7jZ0'
 RECAPTCHA_SECRET = ' 6LdoScUSAAAAALvQj3aI1dRL9mHgh85Ks2xZH1qc'
 
@@ -619,7 +619,7 @@ MEDIA_BUNDLES = {
     "video_history":{
         "type":"css",
         "files":(
-               "css/mirosubs-widget.css" ,
+               "css/unisubs-widget.css" ,
                "css/nyroModal.css",
                "css/dev.css"
          ),
@@ -629,7 +629,7 @@ MEDIA_BUNDLES = {
         "type":"css",
         "files":(
             "css/nyroModal.css",
-            "css/mirosubs-widget.css",
+            "css/unisubs-widget.css",
          ),
         },
      "new_home":{
@@ -637,25 +637,25 @@ MEDIA_BUNDLES = {
          "files":(
             "css/new_index.css",
              "css/nyroModal.css",
-             "css/mirosubs-widget.css",
+             "css/unisubs-widget.css",
           ),
          },
     "widget-css":{
          "type":"css",
          "files":(
-             "css/mirosubs-widget.css",
+             "css/unisubs-widget.css",
           ),
         },
-    "mirosubs-offsite-compiled":{
+    "unisubs-offsite-compiled":{
         "type": "js",
         "files": JS_OFFSITE,
         },
 
-    "mirosubs-onsite-compiled":{
+    "unisubs-onsite-compiled":{
         "type": "js",
         "files": JS_ONSITE,
      },
-     "mirosubs-widgetizer":{
+     "unisubs-widgetizer":{
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
@@ -664,17 +664,17 @@ MEDIA_BUNDLES = {
             "render_bootloader": True
         }
      },
-    "mirosubs-widgetizer-sumo": {
+    "unisubs-widgetizer-sumo": {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
-        "extra_defines": {"mirosubs.REPORT_ANALYTICS": "false"},
+        "extra_defines": {"unisubs.REPORT_ANALYTICS": "false"},
         "bootloader": { 
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
     },
-    "mirosubs-widgetizer-debug": {
+    "unisubs-widgetizer-debug": {
         "type": "js",
         "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
@@ -684,23 +684,23 @@ MEDIA_BUNDLES = {
             "render_bootloader": True
         }
      },
-    "mirosubs-extension":{
+    "unisubs-extension":{
         "type": "js",
         "files": ["js/config.js" ] + JS_EXTENSION,
      },
-    "mirosubs-statwidget":{
+    "unisubs-statwidget":{
         "type": "js",
         "closure_deps": "js/closure-stat-dependencies.js",
         "include_flash_deps": False,
         "files": [
-            'js/mirosubs.js',
+            'js/unisubs.js',
             'js/rpc.js',
             'js/loadingdom.js',
             'js/statwidget/statwidgetconfig.js',
             'js/statwidget/statwidget.js'],
      },
 
-    "mirosubs-api":{
+    "unisubs-api":{
         "type": "js",
         "files": ["js/config.js"] + JS_API,
         "bootloader": { 

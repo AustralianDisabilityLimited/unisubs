@@ -16,49 +16,49 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.VimeoVideoSource');
+goog.provide('unisubs.video.VimeoVideoSource');
 
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  * @param {string} videoID Vimeo video id (unrelated to unisubs video id)
  * @param {string} videoURL URL of Vimeo page
  * @param {Object.<string, *>=} opt_videoConfig Params to use for moogaloop player.
  */
-mirosubs.video.VimeoVideoSource = function(videoID, videoURL, opt_videoConfig) {
+unisubs.video.VimeoVideoSource = function(videoID, videoURL, opt_videoConfig) {
     this.videoID_ = videoID;
     this.videoURL_ = videoURL;
-    this.uuid_ = mirosubs.randomString();
+    this.uuid_ = unisubs.randomString();
     this.videoConfig_ = opt_videoConfig;
 };
 
-mirosubs.video.VimeoVideoSource.prototype.createPlayer = function() {
+unisubs.video.VimeoVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.VimeoVideoSource.prototype.createControlledPlayer = function() {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+unisubs.video.VimeoVideoSource.prototype.createControlledPlayer = function() {
+    return new unisubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.VimeoVideoSource.prototype.createPlayer_ = function(forDialog) {
-    return new mirosubs.video.VimeoVideoPlayer(
-        new mirosubs.video.VimeoVideoSource(
+unisubs.video.VimeoVideoSource.prototype.createPlayer_ = function(forDialog) {
+    return new unisubs.video.VimeoVideoPlayer(
+        new unisubs.video.VimeoVideoSource(
             this.videoID_, this.videoURL_, this.videoConfig_),
         forDialog);
 };
 
-mirosubs.video.VimeoVideoSource.prototype.getVideoId = function() {
+unisubs.video.VimeoVideoSource.prototype.getVideoId = function() {
     return this.videoID_;
 };
 
-mirosubs.video.VimeoVideoSource.prototype.getUUID = function() {
+unisubs.video.VimeoVideoSource.prototype.getUUID = function() {
     return this.uuid_;
 };
 
-mirosubs.video.VimeoVideoSource.prototype.getVideoConfig = function() {
+unisubs.video.VimeoVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-mirosubs.video.VimeoVideoSource.prototype.getVideoURL = function() {
+unisubs.video.VimeoVideoSource.prototype.getVideoURL = function() {
     return this.videoURL_;
 };

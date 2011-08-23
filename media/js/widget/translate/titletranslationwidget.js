@@ -16,29 +16,29 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.TitleTranslation');
+goog.provide('unisubs.translate.TitleTranslation');
 
 /**
  * @constructor
  * @param {string} video title
  */
-mirosubs.translate.TitleTranslationWidget = function(videoTitle, captionSet) {
+unisubs.translate.TitleTranslationWidget = function(videoTitle, captionSet) {
     goog.ui.Component.call(this);
     this.originalVideoTitle_ = videoTitle || '';
     this.captionSet_ = captionSet;
 };
-goog.inherits(mirosubs.translate.TitleTranslationWidget, goog.ui.Component);
+goog.inherits(unisubs.translate.TitleTranslationWidget, goog.ui.Component);
 
-mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
+unisubs.translate.TitleTranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     this.setElementInternal(
         $d('li', null,
            $d('div', null,
-              $d('span', 'mirosubs-title mirosubs-title-notime', 'TITLE: '+this.originalVideoTitle_),
-              this.loadingIndicator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
+              $d('span', 'unisubs-title unisubs-title-notime', 'TITLE: '+this.originalVideoTitle_),
+              this.loadingIndicator_ = $d('span', 'unisubs-loading-indicator', 'loading...')
            ),
-           this.translateInput_ = $d('textarea', 'mirosubs-translateField')
+           this.translateInput_ = $d('textarea', 'unisubs-translateField')
         )
     );
 
@@ -47,30 +47,30 @@ mirosubs.translate.TitleTranslationWidget.prototype.createDom = function() {
         this.inputLostFocus_);
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.showLoadingIndicator = function(){
-    mirosubs.style.showElement(this.loadingIndicator_, true);
+unisubs.translate.TitleTranslationWidget.prototype.showLoadingIndicator = function(){
+    unisubs.style.showElement(this.loadingIndicator_, true);
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.hideLoadingIndicator = function(){
-    mirosubs.style.showElement(this.loadingIndicator_, false);
+unisubs.translate.TitleTranslationWidget.prototype.hideLoadingIndicator = function(){
+    unisubs.style.showElement(this.loadingIndicator_, false);
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.getOriginalValue = function(){
+unisubs.translate.TitleTranslationWidget.prototype.getOriginalValue = function(){
     return this.originalVideoTitle_;
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
+unisubs.translate.TitleTranslationWidget.prototype.isEmpty = function(){
     return ! goog.string.trim(this.translateInput_.value);
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
+unisubs.translate.TitleTranslationWidget.prototype.setTranslation = function(value){
     this.translateInput_.value = value;
     this.inputLostFocus_();
 };
 
-mirosubs.translate.TitleTranslationWidget.prototype.setTranslationContent = 
-    mirosubs.translate.TitleTranslationWidget.prototype.setTranslation;
+unisubs.translate.TitleTranslationWidget.prototype.setTranslationContent = 
+    unisubs.translate.TitleTranslationWidget.prototype.setTranslation;
 
-mirosubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
+unisubs.translate.TitleTranslationWidget.prototype.inputLostFocus_ = function(event) {
     this.captionSet_.title = this.translateInput_.value;
 };

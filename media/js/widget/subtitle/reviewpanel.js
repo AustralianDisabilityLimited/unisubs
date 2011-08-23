@@ -16,24 +16,24 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.ReviewPanel');
+goog.provide('unisubs.subtitle.ReviewPanel');
 /**
 * @constructor
-* @extends mirosubs.subtitle.SyncPanel
+* @extends unisubs.subtitle.SyncPanel
 */
-mirosubs.subtitle.ReviewPanel = function(subtitles, videoPlayer,
+unisubs.subtitle.ReviewPanel = function(subtitles, videoPlayer,
                                          serverModel, captionManager) {
-    mirosubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer,
+    unisubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer,
                                      serverModel, captionManager);
 };
-goog.inherits(mirosubs.subtitle.ReviewPanel, mirosubs.subtitle.SyncPanel);
+goog.inherits(unisubs.subtitle.ReviewPanel, unisubs.subtitle.SyncPanel);
 /**
  * @override
  */
-mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
+unisubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
     function()
 {
-    var helpContents = new mirosubs.RightPanel.HelpContents(
+    var helpContents = new unisubs.RightPanel.HelpContents(
         "Review and make corrections",
         null, 3, 2);
     helpContents.html =
@@ -43,7 +43,7 @@ mirosubs.subtitle.ReviewPanel.prototype.createRightPanelInternal =
         "<li>Include important sounds in [brackets]</li>" +
         "<li>It's best to split subtitles at the end of a sentence or a long phrase.</li>" +
         "</ul>";
-    return new mirosubs.subtitle.ReviewRightPanel(
+    return new unisubs.subtitle.ReviewRightPanel(
         this.serverModel, helpContents, [],
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");

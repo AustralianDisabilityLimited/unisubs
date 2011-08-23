@@ -16,15 +16,15 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.VimeoVideoPlayer');
+goog.provide('unisubs.video.VimeoVideoPlayer');
 
 /**
  * @constructor
- * @param {mirosubs.video.VimeoVideoSource} videoSource
+ * @param {unisubs.video.VimeoVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
-mirosubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.forDialog_ = !!opt_forDialog;
 
@@ -56,34 +56,34 @@ mirosubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
     this.commands_ = [];
     this.swfEmbedded_ = false;
     this.timeUpdateTimer_ = new goog.Timer(
-        mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
-goog.inherits(mirosubs.video.VimeoVideoPlayer, mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.video.VimeoVideoPlayer, unisubs.video.AbstractVideoPlayer);
 
-mirosubs.video.VimeoVideoPlayer.prototype.createDom = function() {
+unisubs.video.VimeoVideoPlayer.prototype.createDom = function() {
     // FIXME: this is copied directly from youtube video player.
-    mirosubs.video.VimeoVideoPlayer.superClass_.createDom.call(this);
+    unisubs.video.VimeoVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
-    mirosubs.video.VimeoVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
+    unisubs.video.VimeoVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoSpan = this.getDomHelper().createDom('span');
-        videoSpan.id = mirosubs.randomString();
+        videoSpan.id = unisubs.randomString();
         this.getElement().appendChild(videoSpan);
         var params = { 'allowScriptAccess': 'always', 
                        'wmode' : 'opaque',
                        'allowfullscreen': 'true'};
         var atts = { 'id': this.playerElemID_,
-                     'style': mirosubs.style.setSizeInString(
+                     'style': unisubs.style.setSizeInString(
                          '', this.playerSize_) };
         this.setDimensionsKnownInternal();
         var swfURL = this.createSWFURL_();
@@ -97,7 +97,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
+unisubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
     var baseQuery = {};
     var config = this.videoSource_.getVideoConfig();
     if (!this.forDialog_ && config)
@@ -114,12 +114,12 @@ mirosubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
         goog.Uri.QueryData.createFromMap(baseQuery).toString();
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.exitDocument = function() {
-    mirosubs.video.VimeoVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.video.VimeoVideoPlayer.prototype.exitDocument = function() {
+    unisubs.video.VimeoVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
+unisubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
     // FIXME: duplicates same method in youtube player
     var config = this.videoSource_.getVideoConfig();
     if (config && config['width'] && config['height'])
@@ -129,33 +129,33 @@ mirosubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
         return null;
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['api_getCurrentTime']() : 0;
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
+unisubs.video.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.sendTimeUpdateInternal();
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.getDuration = function() {
+unisubs.video.VimeoVideoPlayer.prototype.getDuration = function() {
     return this.player_['api_getDuration']();
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.getBufferedLength = function() {
+unisubs.video.VimeoVideoPlayer.prototype.getBufferedLength = function() {
     return this.player_ ? 1 : 0;
 };
-mirosubs.video.VimeoVideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.video.VimeoVideoPlayer.prototype.getBufferedStart = function(index) {
     // vimeo seems to only buffer from the start
     return 0;
 };
-mirosubs.video.VimeoVideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.video.VimeoVideoPlayer.prototype.getBufferedEnd = function(index) {
     return this.loadedFraction_ * this.getDuration();
 };
-mirosubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
+unisubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
     return this.player_ ? this.player_['api_getVolume']() : 0.5;
 };
-mirosubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
+unisubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
         this.player_['api_setVolume'](volume);
     }
@@ -163,7 +163,7 @@ mirosubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
         this.commands_.push(goog.bind(this.setVolume, this, volume));
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+unisubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
         this.player_['api_seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
@@ -172,43 +172,43 @@ mirosubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTim
         this.commands_.push(goog.bind(this.setPlayheadTime, this, playheadTime));
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
-    return new goog.math.Size(mirosubs.video.VimeoVideoPlayer.WIDTH,
-                              mirosubs.video.VimeoVideoPlayer.HEIGHT);
+unisubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
+    return new goog.math.Size(unisubs.video.VimeoVideoPlayer.WIDTH,
+                              unisubs.video.VimeoVideoPlayer.HEIGHT);
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.isPausedInternal = function() {
     return !this.isPlaying_;
 };
-mirosubs.video.VimeoVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.isPlayingInternal = function() {
     return this.isPlaying_;
 };
-mirosubs.video.VimeoVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.videoEndedInternal = function() {
     return this.getPlayheadTime() == this.getDuration();
 };
-mirosubs.video.VimeoVideoPlayer.prototype.playInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.playInternal = function() {
     if (this.swfLoaded_)
         this.player_['api_play']();
     else
         this.commands_.push(goog.bind(this.playInternal, this));
 };
-mirosubs.video.VimeoVideoPlayer.prototype.pauseInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.pauseInternal = function() {
     if (this.swfLoaded_)
         this.player_['api_pause']();
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.video.VimeoVideoPlayer.prototype.stopLoadingInternal = function() {
     this.pause();
 };
-mirosubs.video.VimeoVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.video.VimeoVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     this.play();
 };
 
 
 
-mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) {
+unisubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) {
     if (swf_id != this.playerAPIID_)
         return;
 
@@ -220,12 +220,12 @@ mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id)
     
     var that = this;
 
-    var randomString = mirosubs.randomString();
+    var randomString = unisubs.randomString();
 
     var onLoadingFn = "onVimeoLoa" + randomString;
     window[onLoadingFn] = function(data, swf_id) {
         that.loadedFraction_ = data;
-        that.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+        that.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PROGRESS);
     };
     this.player_['api_addEventListener']('onLoading', onLoadingFn);
 
@@ -250,11 +250,11 @@ mirosubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id)
     this.player_['api_addEventListener']('onPause', onPauseFn);
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
+unisubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
 
-mirosubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {
-    mirosubs.video.VimeoVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.video.VimeoVideoPlayer.superClass_.disposeInternal.call(this);
     this.timeUpdateTimer_.dispose();
 };

@@ -18,7 +18,7 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 goog.require("goog.ui.Dialog");
-goog.provide('mirosubs.SimpleWarning');
+goog.provide('unisubs.SimpleWarning');
 
 /***
 * This is an wrapper for the simplest modeal alert possible. Title, text and OK and Cancel buttons. Shows up when instantiated, it's a
@@ -27,8 +27,8 @@ goog.provide('mirosubs.SimpleWarning');
 * @param Main html text
 * @param buttons Button set
 */
-mirosubs.SimpleWarning = function(title, content, okBtLabel,  confirmCallback, cancelBtLabel, opt_cancelCallback) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+unisubs.SimpleWarning = function(title, content, okBtLabel,  confirmCallback, cancelBtLabel, opt_cancelCallback) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this._content = content;
@@ -40,33 +40,33 @@ mirosubs.SimpleWarning = function(title, content, okBtLabel,  confirmCallback, c
     this.setModal(true);
 
 };
-goog.inherits(mirosubs.SimpleWarning, goog.ui.Dialog);
+goog.inherits(unisubs.SimpleWarning, goog.ui.Dialog);
 
-mirosubs.SimpleWarning.prototype.createDom = function() {
-    mirosubs.SimpleWarning.superClass_.createDom.call(this);
+unisubs.SimpleWarning.prototype.createDom = function() {
+    unisubs.SimpleWarning.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var text =  "<h3" + this.title_ + "</h3>" + 
         this._content ;
-    this.okLink_ = $d('a', {'className':'mirosubs-link mirosubs-green-button', 'href':'#'}, this._okBtLabel);
+    this.okLink_ = $d('a', {'className':'unisubs-link unisubs-green-button', 'href':'#'}, this._okBtLabel);
     if (this._cancelBtLabel){
-        this.cancelLink_ = $d('a', {'className':'mirosubs-link mirosubs-green-button', 'href':'#'}, this._cancelBtLabel);
+        this.cancelLink_ = $d('a', {'className':'unisubs-link unisubs-green-button', 'href':'#'}, this._cancelBtLabel);
     }else{
         this.cancelLink_  = {};
     }
-    this.getElement().className = 'mirosubs-warning';
-    var label = $d('div', 'mirosubs-label');
+    this.getElement().className = 'unisubs-warning';
+    var label = $d('div', 'unisubs-label');
     label.innerHTML = text;
     this.getElement().appendChild(label);
-    this.getElement().appendChild($d('div', 'mirosubs-buttons', this.okLink_));
+    this.getElement().appendChild($d('div', 'unisubs-buttons', this.okLink_));
     if (this._cancelBtLabel){
-        this.getElement().appendChild($d('div', 'mirosubs-buttons', this.cancelLink_));
+        this.getElement().appendChild($d('div', 'unisubs-buttons', this.cancelLink_));
     }
     
                                      
 };
 
-mirosubs.SimpleWarning.prototype.enterDocument = function() {
-    mirosubs.SimpleWarning.superClass_.enterDocument.call(this);
+unisubs.SimpleWarning.prototype.enterDocument = function() {
+    unisubs.SimpleWarning.superClass_.enterDocument.call(this);
     var that = this;
     this.getHandler().listenOnce(
         this.okLink_, 'click', 

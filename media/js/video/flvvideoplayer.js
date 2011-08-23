@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.FlvVideoPlayer');
+goog.provide('unisubs.video.FlvVideoPlayer');
 
 /**
  * @constructor
  */
-mirosubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
 
     this.forDialog_ = !!opt_forDialog;
     this.videoSource_ = videoSource;
@@ -35,34 +35,34 @@ mirosubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
      */
     this.commands_ = [];
     this.progressTimer_ = new goog.Timer(
-        mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
-goog.inherits(mirosubs.video.FlvVideoPlayer,
-              mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.video.FlvVideoPlayer,
+              unisubs.video.AbstractVideoPlayer);
 
-mirosubs.video.FlvVideoPlayer.prototype.createDom = function() {
-    mirosubs.video.FlvVideoPlayer.superClass_.createDom.call(this);
+unisubs.video.FlvVideoPlayer.prototype.createDom = function() {
+    unisubs.video.FlvVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
-    mirosubs.video.FlvVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
+    unisubs.video.FlvVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoDiv = this.getDomHelper().createDom('div');
-        videoDiv.id = mirosubs.randomString();
+        videoDiv.id = unisubs.randomString();
         this.getElement().appendChild(videoDiv);
         this.setDimensionsKnownInternal();
         var flashEmbedParams = {
-            'src': mirosubs.mediaURL() + 'flowplayer/flowplayer-3.2.2.swf',
+            'src': unisubs.mediaURL() + 'flowplayer/flowplayer-3.2.2.swf',
             'width': this.playerSize_.width + '',
             'height': this.playerSize_.height + '',
             'wmode': 'opaque'
@@ -87,7 +87,7 @@ mirosubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
     this.progressTimer_.start();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
+unisubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
     var plugins;
     if (this.forDialog_)
         plugins = { 'controls' : null };
@@ -105,7 +105,7 @@ mirosubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
         playerConfig['plugins'] = plugins;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
+unisubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
     var config = this.videoSource_.getVideoConfig();
     if (config && config['width'] && config['height'])
         return new goog.math.Size(
@@ -114,14 +114,14 @@ mirosubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
         return null;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
-    mirosubs.video.FlvVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
+    unisubs.video.FlvVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
     this.progressTimer_.stop();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
-    mirosubs.style.setSize(
+unisubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
+    unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
         this.playerSize_)
     this.swfLoaded_ = true;
@@ -142,55 +142,55 @@ mirosubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     });
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {
+unisubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {
     if (this.getDuration() > 0) {
         this.refreshStatus_();
         if (this.status_['bufferEnd'] >= this.getDuration() - 0.10)
             this.progressTimer_.stop();
-        this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+        this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PROGRESS);
     }
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.refreshStatus_ = function() {
+unisubs.video.FlvVideoPlayer.prototype.refreshStatus_ = function() {
     this.status_ = this.player_['getStatus']();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
+unisubs.video.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.sendTimeUpdateInternal();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.onPlay_ = function() {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
+unisubs.video.FlvVideoPlayer.prototype.onPlay_ = function() {
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PLAY);
     this.timeUpdateTimer_.start();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.onPause_ = function() {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
+unisubs.video.FlvVideoPlayer.prototype.onPause_ = function() {
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PAUSE);
     this.timeUpdateTimer_.stop();
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getClip_ = function() {
+unisubs.video.FlvVideoPlayer.prototype.getClip_ = function() {
     return this.player_['getClip'](0);
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getBufferedLength = function() {
+unisubs.video.FlvVideoPlayer.prototype.getBufferedLength = function() {
     return this.getDuration() > 0 ? 1 : 0;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.video.FlvVideoPlayer.prototype.getBufferedStart = function(index) {
     if (!this.status_)
         this.refreshStatus_();
     return this.status_['bufferStart'];
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
     if (!this.status_)
         this.refreshStatus_();
     return this.status_['bufferEnd'];
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getDuration = function() {
+unisubs.video.FlvVideoPlayer.prototype.getDuration = function() {
     if (!this.duration_) {
         this.duration_ = this.swfLoaded_ ? this.getClip_()['fullDuration'] : 0;
         if (isNaN(this.duration_))
@@ -199,30 +199,30 @@ mirosubs.video.FlvVideoPlayer.prototype.getDuration = function() {
     return this.duration_;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getVolume = function() {
+unisubs.video.FlvVideoPlayer.prototype.getVolume = function() {
     return this.swfLoaded_ ? (this.player_['getVolume']() / 100) : 0;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.setVolume = function(vol) {
+unisubs.video.FlvVideoPlayer.prototype.setVolume = function(vol) {
     if (this.swfLoaded_)
         this.player_['setVolume'](vol * 100);
     else
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.isPausedInternal = function() {
     return this.swfLoaded_ ? this.player_['isPaused']() : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.videoEndedInternal = function() {
     return this.swfLoaded_ ? (this.player_['getState']() == 5) : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
     return this.swfLoaded_ ? this.player_['isPlaying']() : false;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.playInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.playInternal = function() {
     if (this.swfLoaded_) {
         if (!this.isPlaying())
             this.player_['play']();
@@ -231,14 +231,14 @@ mirosubs.video.FlvVideoPlayer.prototype.playInternal = function() {
         this.commands_.push(goog.bind(this.playInternal, this));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
     if (this.swfLoaded_)
         this.player_['pause']();
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
     if (this.swfLoaded_) {
         this.player_['stopBuffering']();
 	this.setLoadingStopped(true);
@@ -250,7 +250,7 @@ mirosubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
     }
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     if (this.swfLoaded_) {
         this.player_['startBuffering']();
 	this.setLoadingStopped(false);
@@ -259,11 +259,11 @@ mirosubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playhea
         this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
+unisubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['getTime']() : 0;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpdateEvent) {
+unisubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpdateEvent) {
     if (this.swfLoaded_) {
         this.player_['seek'](time);
         if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
@@ -272,16 +272,16 @@ mirosubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUp
         this.commands_.push(goog.bind(this.setPlayheadTime, this, time));
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.needsIFrame = function() {
+unisubs.video.FlvVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.getVideoSize = function() {
+unisubs.video.FlvVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
 
-mirosubs.video.FlvVideoPlayer.prototype.disposeInternal = function() {
-    mirosubs.video.FlvVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.video.FlvVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.video.FlvVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
 };

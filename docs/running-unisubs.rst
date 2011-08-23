@@ -6,9 +6,9 @@ To run the development version:
 
 1. Git clone the repository::
 
-       git clone git://github.com/8planes/mirosubs.git mirosubs
+       git clone git://github.com/8planes/unisubs.git unisubs
 
-   Now the entire project will be in the mirosubs directory.
+   Now the entire project will be in the unisubs directory.
 
 2. Install virtualenv http://pypi.python.org/pypi/virtualenv
 
@@ -17,22 +17,22 @@ To run the development version:
 
 4. Create a virtual environment and activate it. Here is how to do it 
    *without* the virtualenv wrapper. Run these commands from the parent 
-   of the mirosubs directory created in #1::
+   of the unisubs directory created in #1::
 
-   $ virtualenv mirosubs-env
-   $ source mirosubs-env/bin/activate
+   $ virtualenv unisubs-env
+   $ source unisubs-env/bin/activate
 
    If you're using the virtualenv wrapper (run from any directory)::
 
-   $ mkvirtualenv mirosubs
-   $ workon mirosubs
+   $ mkvirtualenv unisubs
+   $ workon unisubs
 
 5. run::
 
    $ easy_install -U setuptools
    $ easy_install pip
    $ cd deploy
-   # this is the mirosubs directory you cloned from git, not the parent you created the virtualenv in.
+   # this is the unisubs directory you cloned from git, not the parent you created the virtualenv in.
    $ pip install -r requirements.txt
        note: you'll need mercurial installed to make this last command work.
        note2: If you do not have the MySQL bindings installed (MySQLdb) and wish to keep it that way, unisubs runs just fine on sqlite, just comment out the line "MySQL_python>=1.2.2" on deploy/requirements.txt before running this command.
@@ -41,15 +41,15 @@ To run the development version:
 6. Check out google closure into directory of your choice: svn checkout 
    http://closure-library.googlecode.com/svn/trunk/ <directory>. Then 
    symlink media/js/closure-library to the checkout location. From the 
-   mirosubs directory in step 1::
+   unisubs directory in step 1::
 
    $ cd media/js
    $ ln -s <google closure checkout directory> closure-library
 
-7. Add mirosubs.example.com to your hosts file, pointing at 127.0.0.1. 
+7. Add unisubs.example.com to your hosts file, pointing at 127.0.0.1. 
    This is necessary for Twitter oauth to work correctly.
 
-8. From the mirosubs directory created in step 1, first create the 
+8. From the unisubs directory created in step 1, first create the 
    database with::
 
        python manage.py syncdb
@@ -62,7 +62,7 @@ To run the development version:
 
        ./dev-runserver.sh
 
-   You can access the site at http://mirosubs.example.com:8000.
+   You can access the site at http://unisubs.example.com:8000.
 
 9. (optional) If you want to run video searches  / watch page locally, you need to set up solr:
 
@@ -73,7 +73,7 @@ To run the development version:
       list of haystack commands at 
       http://docs.haystacksearch.org/dev/management_commands.html
    * If you want to install SOLR as a daemon on your Mac, please see
-     https://github.com/8planes/mirosubs/wiki/Running-SOLR-as-a-daemon-on-Mac
+     https://github.com/8planes/unisubs/wiki/Running-SOLR-as-a-daemon-on-Mac
 
 10. Celeryd:
 
@@ -87,7 +87,7 @@ To run the development version:
       BROKER_HOST = "localhost"
       BROKER_VHOST = "/"
  
-  D. Cd in to the mirosubs directory and run ::
+  D. Cd in to the unisubs directory and run ::
 
       python manage.py celeryd --loglevel=INFO --settings=dev_settings
 

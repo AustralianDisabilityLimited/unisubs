@@ -16,33 +16,33 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.SRTWriter');
+goog.provide('unisubs.SRTWriter');
 
-mirosubs.SRTWriter.toSRT = function(jsonSubs) {
+unisubs.SRTWriter.toSRT = function(jsonSubs) {
     var stringBuffer = new goog.string.StringBuffer();
     for (var i = 0; i < jsonSubs.length; i++)
-        mirosubs.SRTWriter.subToSrt_(jsonSubs[i], i, stringBuffer);
+        unisubs.SRTWriter.subToSrt_(jsonSubs[i], i, stringBuffer);
     return stringBuffer.toString();
 };
 
-mirosubs.SRTWriter.subToSrt_ = function(sub, index, stringBuffer) {
+unisubs.SRTWriter.subToSrt_ = function(sub, index, stringBuffer) {
     stringBuffer.
         append(index + 1).
         append("\n");
-    mirosubs.SRTWriter.writeSrtTimeLine_(sub, stringBuffer);
+    unisubs.SRTWriter.writeSrtTimeLine_(sub, stringBuffer);
     stringBuffer.
         append(sub['text']).
         append("\n\n");
 };
 
-mirosubs.SRTWriter.writeSrtTimeLine_ = function(sub, stringBuffer) {
-    mirosubs.SRTWriter.writeSrtTime_(sub['start_time'], stringBuffer);
+unisubs.SRTWriter.writeSrtTimeLine_ = function(sub, stringBuffer) {
+    unisubs.SRTWriter.writeSrtTime_(sub['start_time'], stringBuffer);
     stringBuffer.append(' --> ');
-    mirosubs.SRTWriter.writeSrtTime_(sub['end_time'], stringBuffer);
+    unisubs.SRTWriter.writeSrtTime_(sub['end_time'], stringBuffer);
     stringBuffer.append('\n');
 };
 
-mirosubs.SRTWriter.writeSrtTime_ = function(seconds, stringBuffer) {
+unisubs.SRTWriter.writeSrtTime_ = function(seconds, stringBuffer) {
     if (seconds == -1 || !goog.isDefAndNotNull(seconds)) {
         stringBuffer.append("99:59:59,000");
     }

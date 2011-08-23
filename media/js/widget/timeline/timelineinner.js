@@ -16,7 +16,7 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.timeline.TimelineInner');
+goog.provide('unisubs.timeline.TimelineInner');
 
 
 /**
@@ -26,35 +26,35 @@ goog.provide('mirosubs.timeline.TimelineInner');
  * @param {Timeline} timeline The timeline containing this object.
  * @param {number} spacing The space, in seconds, between two
  *     major ticks.
- * @param {mirosubs.timeline.SubtitleSet} subtitleSet
+ * @param {unisubs.timeline.SubtitleSet} subtitleSet
  */
-mirosubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet) {
+unisubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet) {
     goog.ui.Component.call(this);
     this.timeline_ = timeline;
     this.spacing_ = spacing;
     this.subtitleSet_ = subtitleSet;
-    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
+    this.pixelsPerSecond_ = unisubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
     this.left_ = 0;
     this.time_ = 0;
 };
-goog.inherits(mirosubs.timeline.TimelineInner, goog.ui.Component);
-mirosubs.timeline.TimelineInner.prototype.createDom = function() {
-    mirosubs.timeline.TimelineInner.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-timeline-inner';
-    this.timerow_ = new mirosubs.timeline.TimeRow(this, this.spacing_);
+goog.inherits(unisubs.timeline.TimelineInner, goog.ui.Component);
+unisubs.timeline.TimelineInner.prototype.createDom = function() {
+    unisubs.timeline.TimelineInner.superClass_.createDom.call(this);
+    this.getElement().className = 'unisubs-timeline-inner';
+    this.timerow_ = new unisubs.timeline.TimeRow(this, this.spacing_);
     this.addChild(this.timerow_, true);
-    this.timelineSubs_ = new mirosubs.timeline.TimelineSubs(
+    this.timelineSubs_ = new unisubs.timeline.TimelineSubs(
         this.subtitleSet_,
         this.pixelsPerSecond_);
     this.addChild(this.timelineSubs_, true);
 };
-mirosubs.timeline.TimelineInner.prototype.ensureVisible = function(time) {
+unisubs.timeline.TimelineInner.prototype.ensureVisible = function(time) {
     this.timerow_.ensureVisible(time);
 };
-mirosubs.timeline.TimelineInner.prototype.getLeft = function() {
+unisubs.timeline.TimelineInner.prototype.getLeft = function() {
     return this.left_;
 };
-mirosubs.timeline.TimelineInner.prototype.setLeft = function(left, offset, maxTime) {
+unisubs.timeline.TimelineInner.prototype.setLeft = function(left, offset, maxTime) {
     // ensure that we never try to set the playhead time below 0
     // or above the duration of the video (if we know it)
     left = Math.min(left, 0);
@@ -65,34 +65,34 @@ mirosubs.timeline.TimelineInner.prototype.setLeft = function(left, offset, maxTi
     var newTime = -left / this.pixelsPerSecond_;
     this.left_ = left;
     this.time_ = newTime;
-    mirosubs.style.setPosition(this.getElement(), left + offset, null);
+    unisubs.style.setPosition(this.getElement(), left + offset, null);
     this.ensureVisible(newTime);
 };
 
-mirosubs.timeline.TimelineInner.prototype.getTime = function() {
+unisubs.timeline.TimelineInner.prototype.getTime = function() {
     
     return this.time_;
 };
-mirosubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTime) {
+unisubs.timeline.TimelineInner.prototype.setTime = function(time, offset, maxTime) {
     if (maxTime != 0) {
         time = Math.min(time, maxTime);
     }
     var newLeft = -time * this.pixelsPerSecond_;
     this.left_ = newLeft;
-    mirosubs.style.setPosition(this.getElement(), newLeft + offset, null);
+    unisubs.style.setPosition(this.getElement(), newLeft + offset, null);
     this.ensureVisible(time);
 };
-mirosubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {
+unisubs.timeline.TimelineInner.prototype.beforeDrag = function(e) {
     return this.timeline_.beforeDrag(e);
 };
-mirosubs.timeline.TimelineInner.prototype.startDrag = function(e) {
+unisubs.timeline.TimelineInner.prototype.startDrag = function(e) {
     this.timerow_.changeCursor(true);
     this.timeline_.startDrag(e);
 };
-mirosubs.timeline.TimelineInner.prototype.onDrag = function(e) {
+unisubs.timeline.TimelineInner.prototype.onDrag = function(e) {
     this.timeline_.onDrag(e);
 };
-mirosubs.timeline.TimelineInner.prototype.endDrag = function(e) {
+unisubs.timeline.TimelineInner.prototype.endDrag = function(e) {
     this.timerow_.changeCursor(false);
     this.timeline_.endDrag(e);
 };

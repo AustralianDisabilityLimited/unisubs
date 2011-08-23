@@ -16,7 +16,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "mirosubs-onsite-compiled" 0 %}
+    {% include_bundle "unisubs-onsite-compiled" 0 %}
     {% if user_can_moderate %}
        {% include_bundle "js-moderation-dashboard" 0 %}
     {% endif %}
@@ -59,13 +59,13 @@
     
             $('#add_subtitles').click( function() {
                 widget_widget_div.selectMenuItem(
-                mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                unisubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
             $('.add-translation-behavior').click( function(e) {
                 e.preventDefault();
                 widget_widget_div.selectMenuItem(
-                mirosubs.widget.DropDown.Selection.ADD_LANGUAGE);
+                unisubs.widget.DropDown.Selection.ADD_LANGUAGE);
                 return false;
             });
             $('.time_link').click( function() {
@@ -363,7 +363,7 @@
 {% block bottom_scripts %}
     <script>
         $(window).load( function() {
-            mirosubs.messaging.simplemessage.displayPendingMessages();
+            unisubs.messaging.simplemessage.displayPendingMessages();
             {% if user_can_moderate %}
                 {% include 'moderation/moderation-buttons.js' %}
             {% endif %}

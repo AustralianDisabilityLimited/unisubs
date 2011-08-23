@@ -17,9 +17,9 @@
     WSGIDaemonProcess unisubs-INSERT_SITE_NAME user=www-data group=pcf-web processes=8 threads=25 maximum-requests=10000
     WSGIProcessGroup unisubs-INSERT_SITE_NAME
 
-    WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/mirosubs/deploy/unisubs.wsgi
+    WSGIScriptAlias / /var/www/INSERT_SITE_DIRECTORY/unisubs/deploy/unisubs.wsgi
 
-    Alias /site_media /var/www/INSERT_SITE_DIRECTORY/mirosubs/media/
+    Alias /site_media /var/www/INSERT_SITE_DIRECTORY/unisubs/media/
     <Location "/site_media">
         SetHandler None
         Order allow,deny

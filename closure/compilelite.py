@@ -16,7 +16,7 @@ JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
 FLOWPLAYER_JS = os.path.join(BASE, "../media/flowplayer/flowplayer-3.2.2.min.js")
 
-calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
+calcdeps_js = os.path.join(JS_LIB, 'unisubs-calcdeps.js')
 
 def call_command(command):
     process = subprocess.Popen(command.split(' '),
@@ -48,21 +48,21 @@ def compile(output_file_name, js_file_list):
                 compiled_js_file.write(dep_file.read())
         compiled_js_file.write('})();');
 
-# compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
-# compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
+# compile('unisubs-offsite-compiled.js', settings.JS_OFFSITE)
+# compile('unisubs-onsite-compiled.js', settings.JS_ONSITE)
 
 # widgetizer_js_files = list(settings.JS_OFFSITE)
 # assumes that some other process has generated widgetizer/widgetizerconfig.js
 # widgetizer_js_files.append('widgetizer/widgetizerconfig.js')
 # widgetizer_js_files.append('widgetizer/widgetizer.js')
 # widgetizer_js_files.append('widgetizer/dowidgetize.js')
-compile('mirosubs-widgetizer.js', [])
+compile('unisubs-widgetizer.js', [])
 
 # extension_js_files = list(settings.JS_OFFSITE)
 # assumes that some other process has generated widgetizer/widgetizerconfig.js
 # extension_js_files.append('widgetizer/widgetizerconfig.js')
 # extension_js_files.append('widgetizer/widgetizer.js')
 # extension_js_files.append('widgetizer/extension.js')
-# compile('mirosubs-extension.js', extension_js_files)
+# compile('unisubs-extension.js', extension_js_files)
 
 logging.info("Success")

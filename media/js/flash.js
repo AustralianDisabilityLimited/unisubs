@@ -16,9 +16,9 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Flash');
+goog.provide('unisubs.Flash');
 
-mirosubs.Flash.FF_HTML_ =
+unisubs.Flash.FF_HTML_ =
     '<embed quality="high"' +
     ' id="%s"' +
     ' name="%s"' +
@@ -36,7 +36,7 @@ mirosubs.Flash.FF_HTML_ =
     ' wmode="transparent">' +
     '</embed>';
 
-mirosubs.Flash.IE_HTML_ =
+unisubs.Flash.IE_HTML_ =
     '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"' +
     ' id="%s"' +
     ' name="%s"' +
@@ -59,9 +59,9 @@ mirosubs.Flash.IE_HTML_ =
  *
  * @param {goog.structs.Map} flashVars
  */
-mirosubs.Flash.getHTML = function(id, swfURL, width, height, flashVars) {
+unisubs.Flash.getHTML = function(id, swfURL, width, height, flashVars) {
     var template = goog.userAgent.IE ? 
-        mirosubs.Flash.IE_HTML_ : mirosubs.Flash.FF_HTML_;
+        unisubs.Flash.IE_HTML_ : unisubs.Flash.FF_HTML_;
     var keys = flashVars.getKeys();
     var values = flashVars.getValues();
     var flashVarsArr = [];
@@ -73,7 +73,7 @@ mirosubs.Flash.getHTML = function(id, swfURL, width, height, flashVars) {
     return goog.string.subs(
         template,
         id, id,
-        'mirosubs-flash',
+        'unisubs-flash',
         '' + width,
         '' + height,
         goog.string.htmlEscape(swfURL),
@@ -81,13 +81,13 @@ mirosubs.Flash.getHTML = function(id, swfURL, width, height, flashVars) {
         "#000000");
 };
 
-mirosubs.Flash.findFlashParam =
+unisubs.Flash.findFlashParam =
     function(element, embedParamName, opt_objectParamName) 
 {
     if (element.nodeName == "EMBED") {
         return element.getAttribute(embedParamName);
     } else {
-        var paramNode = mirosubs.Flash.findObjectParam_(
+        var paramNode = unisubs.Flash.findObjectParam_(
             element, opt_objectParamName || embedParamName);
         if (paramNode) {
             return paramNode['value'];
@@ -96,19 +96,19 @@ mirosubs.Flash.findFlashParam =
     return null;
 };
 
-mirosubs.Flash.swfURL = function(element) {
+unisubs.Flash.swfURL = function(element) {
     if (element.nodeName == "OBJECT" && element['data']) {
         return element['data'];
     } else {
-        return mirosubs.Flash.findFlashParam(element, 'src', 'movie');
+        return unisubs.Flash.findFlashParam(element, 'src', 'movie');
     }
 };
 
-mirosubs.Flash.flashVars = function(element) {
-    return mirosubs.Flash.findFlashParam(element, 'flashvars');
+unisubs.Flash.flashVars = function(element) {
+    return unisubs.Flash.findFlashParam(element, 'flashvars');
 };
 
-mirosubs.Flash.findObjectParam_ = 
+unisubs.Flash.findObjectParam_ = 
     function(objElem, paramName) 
 {
     return goog.dom.findNode(

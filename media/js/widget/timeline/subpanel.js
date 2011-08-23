@@ -16,26 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.timeline.SubPanel');
+goog.provide('unisubs.timeline.SubPanel');
 
 /**
  * @constructor
  * @param {number} spacing Space between major ticks, in seconds.
  */
-mirosubs.timeline.SubPanel = function(spacing) {
+unisubs.timeline.SubPanel = function(spacing) {
     goog.ui.Component.call(this);
-    this.pixelsPerSecond_ = mirosubs.timeline.TimeRowUL.PX_PER_TICK / spacing;    
+    this.pixelsPerSecond_ = unisubs.timeline.TimeRowUL.PX_PER_TICK / spacing;    
 };
-goog.inherits(mirosubs.timeline.SubPanel, goog.ui.Component);
-mirosubs.timeline.SubPanel.prototype.createDom = function() {
-    mirosubs.timeline.SubPanel.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-subpanel';
+goog.inherits(unisubs.timeline.SubPanel, goog.ui.Component);
+unisubs.timeline.SubPanel.prototype.createDom = function() {
+    unisubs.timeline.SubPanel.superClass_.createDom.call(this);
+    this.getElement().className = 'unisubs-subpanel';
     var i, div;
     var el = this.getElement();
     for (i = 0; i < 1000; i++) {
         div = document.createElement('div');
-        mirosubs.style.setPosition(div, i * this.pixelsPerSecond_ * 5, null);
-        mirosubs.style.setWidth(this.pixelsPerSecond_ * 2.5);
+        unisubs.style.setPosition(div, i * this.pixelsPerSecond_ * 5, null);
+        unisubs.style.setWidth(this.pixelsPerSecond_ * 2.5);
         div.innerHTML = '' + i;
         el.appendChild(div);
     }

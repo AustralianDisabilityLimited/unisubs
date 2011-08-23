@@ -16,7 +16,7 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Spinner');
+goog.provide('unisubs.Spinner');
 
 /**
  * @constructor
@@ -29,10 +29,10 @@ goog.provide('mirosubs.Spinner');
  *     max value for this spinner.
  * @param {function(number):string} valueExpression
  */
-mirosubs.Spinner = function(value, minFn, maxFn, valueExpression) {
+unisubs.Spinner = function(value, minFn, maxFn, valueExpression) {
     goog.ui.Component.call(this);
     this.timer_ = new goog.Timer(100);
-    this.speed_ = mirosubs.Spinner.INITIAL_SPEED;
+    this.speed_ = unisubs.Spinner.INITIAL_SPEED;
     this.counter_ = 0;
     this.value_ = value;
     this.minFn_ = minFn;
@@ -49,9 +49,9 @@ mirosubs.Spinner = function(value, minFn, maxFn, valueExpression) {
      */
     this.activated_ = false;
 };
-goog.inherits(mirosubs.Spinner, goog.ui.Component);
+goog.inherits(unisubs.Spinner, goog.ui.Component);
 
-mirosubs.Spinner.EventType = {
+unisubs.Spinner.EventType = {
     /**
      * Dispatched when arrow button is first pressed.
      */
@@ -62,30 +62,30 @@ mirosubs.Spinner.EventType = {
      */
     VALUE_CHANGED: "valueChanged"
 };
-mirosubs.Spinner.INITIAL_SPEED = 4;
-mirosubs.Spinner.prototype.createDom = function() {
+unisubs.Spinner.INITIAL_SPEED = 4;
+unisubs.Spinner.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.valueSpan_ = $d('span', 'mirosubs-timestamp-time');
+    this.valueSpan_ = $d('span', 'unisubs-timestamp-time');
     this.upAnchor_ =
-        $d('a', {'className': 'mirosubs-up', 'href':'#'}, "Up");
+        $d('a', {'className': 'unisubs-up', 'href':'#'}, "Up");
     this.downAnchor_ =
-        $d('a', {'className': 'mirosubs-down', 'href':'#'}, "Down");
+        $d('a', {'className': 'unisubs-down', 'href':'#'}, "Down");
     this.setElementInternal(
         $d('span', null,
            this.valueSpan_,
-           $d('span', 'mirosubs-changeTime',
+           $d('span', 'unisubs-changeTime',
               this.upAnchor_,
               this.downAnchor_)));
     this.updateText_();
 };
-mirosubs.Spinner.prototype.enterDocument = function() {
-    mirosubs.Spinner.superClass_.enterDocument.call(this);
+unisubs.Spinner.prototype.enterDocument = function() {
+    unisubs.Spinner.superClass_.enterDocument.call(this);
     goog.array.forEach(
         [this.upAnchor_, this.downAnchor_],
         this.addAnchorEventHandlers_, this);
     this.getHandler().listen(this.timer_, goog.Timer.TICK, this.timerTick_);
 };
-mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
+unisubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
     var et = goog.events.EventType;
     this.getHandler().
         listen(elem, et.CLICK, function(e) { e.preventDefault(); }).
@@ -93,22 +93,22 @@ mirosubs.Spinner.prototype.addAnchorEventHandlers_ = function(elem) {
         listen(elem, et.MOUSEUP, this.mouseUp_).
         listen(elem, et.MOUSEOUT, this.mouseOut_);
 };
-mirosubs.Spinner.prototype.updateText_ = function() {
+unisubs.Spinner.prototype.updateText_ = function() {
     var displayValue = 
-    mirosubs.subtitle.EditableCaption.isTimeUndefined(this.value_) ?
+    unisubs.subtitle.EditableCaption.isTimeUndefined(this.value_) ?
          "" : this.value_;
     goog.dom.setTextContent(this.valueSpan_,
                             this.valueExpression_(displayValue));
 };
-mirosubs.Spinner.prototype.cancelTimer_ = function() {
+unisubs.Spinner.prototype.cancelTimer_ = function() {
     this.activated_ = false;
     this.timer_.stop();
-    this.speed_ = mirosubs.Spinner.INITIAL_SPEED;
+    this.speed_ = unisubs.Spinner.INITIAL_SPEED;
     this.counter_ = 0;
     this.step_ = this.minStep_;
-    this.dispatchEvent(new mirosubs.Spinner.ValueChangedEvent(this.value_));
+    this.dispatchEvent(new unisubs.Spinner.ValueChangedEvent(this.value_));
 };
-mirosubs.Spinner.prototype.timerTick_ = function(event) {
+unisubs.Spinner.prototype.timerTick_ = function(event) {
     this.counter_++;
     if (this.speed_ <= 0 || this.counter_ % this.speed_ == 0) {
         if (this.counter_ > 10) {
@@ -123,9 +123,9 @@ mirosubs.Spinner.prototype.timerTick_ = function(event) {
     if (this.speed_ < 0 && this.step_ < this.maxStep_)
         this.step_ += this.stepIncrease_;
 };
-mirosubs.Spinner.prototype.mouseDown_ = function(event) {
+unisubs.Spinner.prototype.mouseDown_ = function(event) {
     if (this.enabled_) {
-        this.dispatchEvent(mirosubs.Spinner.EventType.ARROW_PRESSED);
+        this.dispatchEvent(unisubs.Spinner.EventType.ARROW_PRESSED);
         this.activated_ = true;
         if (event.target == this.upAnchor_) {
             this.increment_ = true;
@@ -138,19 +138,19 @@ mirosubs.Spinner.prototype.mouseDown_ = function(event) {
         this.timer_.start();
     };
 };
-mirosubs.Spinner.prototype.mouseUp_ = function(event) {
+unisubs.Spinner.prototype.mouseUp_ = function(event) {
     if (this.activated_)
         this.cancelTimer_();
 };
-mirosubs.Spinner.prototype.mouseOut_ = function(event) {
+unisubs.Spinner.prototype.mouseOut_ = function(event) {
     if (this.activated_)
         this.cancelTimer_();
 };
-mirosubs.Spinner.prototype.setValue = function(value) {
+unisubs.Spinner.prototype.setValue = function(value) {
     this.value_ = value;
     this.updateText_();
 };
-mirosubs.Spinner.prototype.decrease_ = function() {
+unisubs.Spinner.prototype.decrease_ = function() {
     this.value_ -= this.step_;
     if (this.value_ < this.minFn_()) {
         this.value_ = this.minFn_();
@@ -158,7 +158,7 @@ mirosubs.Spinner.prototype.decrease_ = function() {
     }
     this.updateText_();
 };
-mirosubs.Spinner.prototype.increase_ = function() {
+unisubs.Spinner.prototype.increase_ = function() {
     this.value_ += this.step_;
     if (this.value_ > this.maxFn_()) {
         this.value_ = this.maxFn_();
@@ -166,15 +166,15 @@ mirosubs.Spinner.prototype.increase_ = function() {
     }
     this.updateText_();
 };
-mirosubs.Spinner.prototype.disposeInternal = function() {
-    mirosubs.Spinner.superClass_.disposeInternal.call(this);
+unisubs.Spinner.prototype.disposeInternal = function() {
+    unisubs.Spinner.superClass_.disposeInternal.call(this);
     this.timer_.dispose();
     this.valueExpression_ = null;
 };
 /**
 * @constructor
 */
-mirosubs.Spinner.ValueChangedEvent = function(value) {
-    this.type = mirosubs.Spinner.EventType.VALUE_CHANGED;
+unisubs.Spinner.ValueChangedEvent = function(value) {
+    this.type = unisubs.Spinner.EventType.VALUE_CHANGED;
     this.value = value;
 };

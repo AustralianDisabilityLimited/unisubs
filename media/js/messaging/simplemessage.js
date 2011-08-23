@@ -17,11 +17,11 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.messaging.simplemessage');
+goog.provide('unisubs.messaging.simplemessage');
 
-mirosubs.messaging.simplemessage.MESSAGE_COOKIE_NAME = '_user_message';
+unisubs.messaging.simplemessage.MESSAGE_COOKIE_NAME = '_user_message';
 
-mirosubs.messaging.simplemessage.showAndRemove = function(messageKey){
+unisubs.messaging.simplemessage.showAndRemove = function(messageKey){
     var cookie = new goog.net.Cookies(document);
     var message = cookie.get(messageKey);
     if (message && message.length > 0){
@@ -30,11 +30,11 @@ mirosubs.messaging.simplemessage.showAndRemove = function(messageKey){
     return cookie.remove(messageKey);
 }
  
-mirosubs.messaging.simplemessage.displayPendingMessages = function(){
-    mirosubs.messaging.simplemessage.showAndRemove(
-        mirosubs.messaging.simplemessage.MESSAGE_COOKIE_NAME);
+unisubs.messaging.simplemessage.displayPendingMessages = function(){
+    unisubs.messaging.simplemessage.showAndRemove(
+        unisubs.messaging.simplemessage.MESSAGE_COOKIE_NAME);
 }
 
 goog.exportSymbol(
-    "mirosubs.messaging.simplemessage.displayPendingMessages",
-    mirosubs.messaging.simplemessage.displayPendingMessages);
+    "unisubs.messaging.simplemessage.displayPendingMessages",
+    unisubs.messaging.simplemessage.displayPendingMessages);

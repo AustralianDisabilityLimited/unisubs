@@ -16,12 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SubtitleState');
+goog.provide('unisubs.widget.SubtitleState');
 
 /**
  * @constructor
  */
-mirosubs.widget.SubtitleState = function(json, opt_subs) {
+unisubs.widget.SubtitleState = function(json, opt_subs) {
     /**
      * Language code. Null if and only if original language.
      * @type {?string}
@@ -42,23 +42,23 @@ mirosubs.widget.SubtitleState = function(json, opt_subs) {
     this.TITLE = json['title'];
 };
 
-mirosubs.widget.SubtitleState.fromJSON = function(json) {
+unisubs.widget.SubtitleState.fromJSON = function(json) {
     if (json)
-        return new mirosubs.widget.SubtitleState(json);
+        return new unisubs.widget.SubtitleState(json);
     else
         return null;
 };
 
-mirosubs.widget.SubtitleState.fromJSONSubs = function(subs) {
-    return new mirosubs.widget.SubtitleState({}, subs);
+unisubs.widget.SubtitleState.fromJSONSubs = function(subs) {
+    return new unisubs.widget.SubtitleState({}, subs);
 };
 
-mirosubs.widget.SubtitleState.prototype.baseParams = function() {
-    return mirosubs.widget.BaseState.createParams(
+unisubs.widget.SubtitleState.prototype.baseParams = function() {
+    return unisubs.widget.BaseState.createParams(
         this.LANGUAGE, this.VERSION);
 };
 
-mirosubs.widget.SubtitleState.prototype.fork = function() {
+unisubs.widget.SubtitleState.prototype.fork = function() {
     this.FORKED = true;
     this.BASE_LANGUAGE = null;
     this.BASE_LANGUAGE_PK = null;

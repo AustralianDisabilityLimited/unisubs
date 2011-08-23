@@ -16,7 +16,7 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.TranslationPanel');
+goog.provide('unisubs.translate.TranslationPanel');
 
 // FIXME: I think that since the latest translation changes, this class no 
 //     longer really does anything. Probably just go straight to TranslationList
@@ -26,36 +26,36 @@ goog.provide('mirosubs.translate.TranslationPanel');
  *
  *
  * @constructor
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
- * @param {mirosubs.subtitle.SubtitleState} standardSubState
+ * @param {unisubs.subtitle.EditableCaptionSet} captionSet
+ * @param {unisubs.subtitle.SubtitleState} standardSubState
  */
-mirosubs.translate.TranslationPanel = function(captionSet,
+unisubs.translate.TranslationPanel = function(captionSet,
                                                standardSubState) {
     goog.ui.Component.call(this);
     this.captionSet_ = captionSet
     this.standardSubState_ = standardSubState;
     this.contentElem_ = null;
 };
-goog.inherits(mirosubs.translate.TranslationPanel, goog.ui.Component);
+goog.inherits(unisubs.translate.TranslationPanel, goog.ui.Component);
 
-mirosubs.translate.TranslationPanel.prototype.getContentElement = function() {
+unisubs.translate.TranslationPanel.prototype.getContentElement = function() {
     return this.contentElem_;
 };
-mirosubs.translate.TranslationPanel.prototype.createDom = function() {
-    mirosubs.translate.TranslationPanel.superClass_.createDom.call(this);
+unisubs.translate.TranslationPanel.prototype.createDom = function() {
+    unisubs.translate.TranslationPanel.superClass_.createDom.call(this);
     var el = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     el.appendChild(this.contentElem_ = $d('div'));
     this.translationList_ =
-        new mirosubs.translate.TranslationList(
+        new unisubs.translate.TranslationList(
             this.captionSet_,
             this.standardSubState_.SUBTITLES,
             this.standardSubState_.TITLE);
     this.addChild(this.translationList_, true);
     this.translationList_.getElement().className =
-        "mirosubs-titlesList";
+        "unisubs-titlesList";
 };
-mirosubs.translate.TranslationPanel.prototype.getTranslationList = function(){
+unisubs.translate.TranslationPanel.prototype.getTranslationList = function(){
     return this.translationList_;
 };

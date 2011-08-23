@@ -2,7 +2,7 @@
 {% block testscript %}
 
 /**
- * @type {mirosubs.subtitle.MSServerModel}
+ * @type {unisubs.subtitle.MSServerModel}
  */
 var _serverModel;
 
@@ -32,12 +32,12 @@ function makeJsonTranslations() {
 }
 
 function makeEditableCaptionSet(opt_notComplete) {
-    return new mirosubs.subtitle.EditableCaptionSet(
+    return new unisubs.subtitle.EditableCaptionSet(
         makeJsonSubs(), !opt_notComplete);
 }
 
 function makeTransCaptionSet() {
-    return new mirosubs.subtitle.EditableCaptionSet(
+    return new unisubs.subtitle.EditableCaptionSet(
         makeJsonTranslations());
 }
 
@@ -50,21 +50,21 @@ function failureCallback() {
 }
 
 function setUp() {
-    mirosubs.REPORT_ANALYTICS = false;
-    mirosubs.SubTracker.getInstance().start(false);
-    mirosubs.testing.TimerStub.timers = [];
-    mirosubs.testing.calls = [];
-    goog.Timer = mirosubs.testing.TimerStub;
-    mirosubs.Rpc.call = mirosubs.testing.rpcCallStub;
+    unisubs.REPORT_ANALYTICS = false;
+    unisubs.SubTracker.getInstance().start(false);
+    unisubs.testing.TimerStub.timers = [];
+    unisubs.testing.calls = [];
+    goog.Timer = unisubs.testing.TimerStub;
+    unisubs.Rpc.call = unisubs.testing.rpcCallStub;
 }
 
 function makeServerModel(forTrans) {
     var editableCaptionSet = forTrans ? 
         makeTransCaptionSet() : makeEditableCaptionSet();
-    var savedSubs = new mirosubs.widget.SavedSubtitles(
+    var savedSubs = new unisubs.widget.SavedSubtitles(
         150, editableCaptionSet);
-    mirosubs.widget.SavedSubtitles.saveInitial(savedSubs);
-    _serverModel = new mirosubs.subtitle.MSServerModel(
+    unisubs.widget.SavedSubtitles.saveInitial(savedSubs);
+    _serverModel = new unisubs.subtitle.MSServerModel(
         150,
         2,
         "http://www.youtube.com/watch?v=ArQCkbP07Ao",
@@ -93,8 +93,8 @@ function testMakeSubsBlank() {
     for (var i = 0; i < 100; i++)
         captionSet.caption(i).setText('  ');
     _serverModel.finish(successCallback, failureCallback)
-    assertEquals(1, mirosubs.testing.calls.length);
-    var call = mirosubs.testing.calls[0];
+    assertEquals(1, unisubs.testing.calls.length);
+    var call = unisubs.testing.calls[0];
     assertEquals('finished_subtitles', call.methodName);
     var args = call.args;
     assertEquals(0, args['subtitles'].length);
@@ -105,21 +105,21 @@ function testMakeSubsBlank() {
 function testFinishedNoChanges() {
     makeServerModel(false);
     _serverModel.finish(successCallback, failureCallback);
-    assertEquals(0, mirosubs.testing.calls.length);
+    assertEquals(0, unisubs.testing.calls.length);
 }
 
 function testFinishedNoChanges2() {
     makeServerModel(false);
     _serverModel.finish(successCallback, failureCallback);
-    assertEquals(0, mirosubs.testing.calls.length);
+    assertEquals(0, unisubs.testing.calls.length);
 }
 
 function testFinishedOnlyChange() {
     makeServerModel(false);
     _serverModel.getCaptionSet().completed = false;
     _serverModel.finish(successCallback, failureCallback);
-    assertEquals(1, mirosubs.testing.calls.length);
-    var call = mirosubs.testing.calls[0];
+    assertEquals(1, unisubs.testing.calls.length);
+    var call = unisubs.testing.calls[0];
     var args = call.args;
     assertEquals(undefined, args['subtitles']);
     assertEquals(undefined, args['new_title']);
@@ -132,7 +132,7 @@ function testFork() {
         'subtitles': makeJsonSubs(),
         'forked': true
     }
-    var standardSubState = new mirosubs.widget.SubtitleState(
+    var standardSubState = new unisubs.widget.SubtitleState(
         stdSubsJson);
     _serverModel.fork(standardSubState);
     var captionSet = _serverModel.getCaptionSet();
@@ -140,7 +140,7 @@ function testFork() {
     assertEquals(2, caption.getStartTime());
     caption.setText('ccc');
     _serverModel.finish(successCallback, failureCallback);
-    var call = mirosubs.testing.calls[0];
+    var call = unisubs.testing.calls[0];
     var args = call.args;
     assertEquals(true, args['forked']);
 }
@@ -151,10 +151,10 @@ function testForkCloseThenOpen() {
         'subtitles': makeJsonSubs(),
         'forked': true
     }
-    var standardSubState = new mirosubs.widget.SubtitleState(
+    var standardSubState = new unisubs.widget.SubtitleState(
         stdSubsJson);
     _serverModel.fork(standardSubState);
-    var savedSubs = mirosubs.widget.SavedSubtitles.fetchLatest();
+    var savedSubs = unisubs.widget.SavedSubtitles.fetchLatest();
     assertEquals(true, savedSubs.CAPTION_SET.wasForkedDuringEdits());
 }
 

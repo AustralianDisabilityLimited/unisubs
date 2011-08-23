@@ -13,8 +13,8 @@ var MS_eventHandler;
 var MS_videoPlayer;
 var MS_unitOfWork;
 
-var MIN_LENGTH = mirosubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
-var UNASSIGNED_SPACING = mirosubs.timeline.Subtitle.UNASSIGNED_SPACING;
+var MIN_LENGTH = unisubs.timeline.Subtitle.MIN_UNASSIGNED_LENGTH;
+var UNASSIGNED_SPACING = unisubs.timeline.Subtitle.UNASSIGNED_SPACING;
 
 function MS_addUpdateCount(captionID) {
     if (!MS_subtitleUpdateCounts[captionID])
@@ -59,7 +59,7 @@ function captionJSON(start_time, end_time, caption_id, sub_order) {
 function listenToSubtitle(timelineSub) {
     MS_eventHandler.listen(
         timelineSub,
-        mirosubs.timeline.Subtitle.CHANGE,
+        unisubs.timeline.Subtitle.CHANGE,
         MS_subUpdateListener);
 }
 
@@ -69,24 +69,24 @@ function sendVideoTimeUpdate(time) {
 }
 
 function createSet(existingCaptions) {
-    var captionSet = new mirosubs.subtitle.EditableCaptionSet(
+    var captionSet = new unisubs.subtitle.EditableCaptionSet(
         existingCaptions, MS_unitOfWork);
-    var subtitleSet = new mirosubs.timeline.SubtitleSet(
+    var subtitleSet = new unisubs.timeline.SubtitleSet(
         captionSet, MS_videoPlayer);
     var subsToDisplay = subtitleSet.getSubsToDisplay();
     for (var i = 0; i < subsToDisplay.length; i++)
         listenToSubtitle(subsToDisplay[i]);
     MS_eventHandler.listen(
         subtitleSet, 
-        mirosubs.timeline.SubtitleSet.CLEAR_TIMES,
+        unisubs.timeline.SubtitleSet.CLEAR_TIMES,
         MS_clearListener);
     MS_eventHandler.listen(
         subtitleSet,
-        mirosubs.timeline.SubtitleSet.DISPLAY_NEW,
+        unisubs.timeline.SubtitleSet.DISPLAY_NEW,
         MS_displaySubListener);
     MS_eventHandler.listen(
         subtitleSet,
-        mirosubs.timeline.SubtitleSet.REMOVE,
+        unisubs.timeline.SubtitleSet.REMOVE,
         MS_removeSubListener);
     return subtitleSet;
 };
@@ -99,16 +99,16 @@ function assertTimes(sub, start, end) {
 /* setup/teardown */
 
 function setUp() {
-    MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
+    MS_videoPlayer = new unisubs.testing.StubVideoPlayer();
     MS_videoPlayer.playheadTime = 0;
-    MS_unitOfWork = new mirosubs.UnitOfWork();
+    MS_unitOfWork = new unisubs.UnitOfWork();
     MS_eventHandler = new goog.events.EventHandler();
     MS_subtitleUpdateCounts = {};
     MS_subtitleUpdateCount = 0;
     MS_addedSubtitles = [];
     MS_removedSubtitles = [];
-    mirosubs.REPORT_ANALYTICS = false;
-    mirosubs.SubTracker.getInstance().start(false);
+    unisubs.REPORT_ANALYTICS = false;
+    unisubs.SubTracker.getInstance().start(false);
 }
 
 function testSubsToDisplayLength() {

@@ -65,7 +65,7 @@ def widget_public_demo(request):
 def onsite_widget(request):
     """Used for subtitle dialog"""
     context = widget.add_config_based_js_files(
-        {}, settings.JS_API, 'mirosubs-api.js')
+        {}, settings.JS_API, 'unisubs-api.js')
     config = request.GET.get('config', '{}')
 
     try:
@@ -120,7 +120,7 @@ def widget_demo(request):
 
 def video_demo(request, template):
     context = widget.add_config_based_js_files(
-        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+        {}, settings.JS_WIDGETIZER, 'unisubs-widgetizer.js')
     context['embed_js_url'] = \
         "http://{0}/embed{1}.js".format(
         Site.objects.get_current().domain,
@@ -133,7 +133,7 @@ def video_demo(request, template):
 
 def widgetize_demo(request, page_name):
     context = widget.add_config_based_js_files(
-        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+        {}, settings.JS_WIDGETIZER, 'unisubs-widgetizer.js')
     return render_to_response('widget/widgetize_demo/{0}.html'.format(page_name),
                               context,
                               context_instance=RequestContext(request))
@@ -145,7 +145,7 @@ def statwidget_demo(request):
             settings.MEDIA_URL))
     context = widget.add_js_files({}, settings.COMPRESS_MEDIA,
                                settings.JS_OFFSITE,
-                               'mirosubs-statwidget.js',
+                               'unisubs-statwidget.js',
                                full_path_js_files=js_files)
     return render_to_response('widget/statwidget_demo.html',
                               context,

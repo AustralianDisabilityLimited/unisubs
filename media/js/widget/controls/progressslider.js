@@ -16,35 +16,35 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.controls.ProgressSlider');
+goog.provide('unisubs.controls.ProgressSlider');
 /**
 * @constructor
-* @extends mirosubs.SliderBase
+* @extends unisubs.SliderBase
 */
-mirosubs.controls.ProgressSlider = function(opt_domHelper) {
-    mirosubs.SliderBase.call(this, opt_domHelper);
+unisubs.controls.ProgressSlider = function(opt_domHelper) {
+    unisubs.SliderBase.call(this, opt_domHelper);
     this.setClickToMove(false);
 };
-goog.inherits(mirosubs.controls.ProgressSlider, mirosubs.SliderBase);
+goog.inherits(unisubs.controls.ProgressSlider, unisubs.SliderBase);
 
-mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX =
-    goog.getCssName('mirosubs');
+unisubs.controls.ProgressSlider.CSS_CLASS_PREFIX =
+    goog.getCssName('unisubs');
 
-mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS =
-    goog.getCssName(mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX,
+unisubs.controls.ProgressSlider.THUMB_CSS_CLASS =
+    goog.getCssName(unisubs.controls.ProgressSlider.CSS_CLASS_PREFIX,
                     'scrobbler');
 
-mirosubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
-    return goog.getCssName(mirosubs.controls.ProgressSlider.CSS_CLASS_PREFIX,
+unisubs.controls.ProgressSlider.prototype.getCssClass = function(orient) {
+    return goog.getCssName(unisubs.controls.ProgressSlider.CSS_CLASS_PREFIX,
 			   'progress-slider');
 };
 
 /** @inheritDoc */
-mirosubs.controls.ProgressSlider.prototype.createThumb = function() {
+unisubs.controls.ProgressSlider.prototype.createThumb = function() {
     var element = this.getElement();
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var thumb =
-        $d('div', mirosubs.controls.ProgressSlider.THUMB_CSS_CLASS,
+        $d('div', unisubs.controls.ProgressSlider.THUMB_CSS_CLASS,
            $d('span'));
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
     element.appendChild(thumb);

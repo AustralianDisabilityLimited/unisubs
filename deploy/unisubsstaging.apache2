@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+    ServerAdmin adam@8planes.com
+
+    ServerName unisubsstaging.8planes.com
+    ServerAlias unisubsstaging.8planes.com
+    ServerAlias mswidgetstaging.8planes.com
+
+    LogLevel warn
+    ErrorLog /home/unisubsstaging/log/apache.error.log
+    CustomLog /home/unisubsstaging/log/apache.custom.log combined
+
+    WSGIDaemonProcess unisubsstaging user=unisubsstaging group=www-data threads=2
+    WSGIProcessGroup unisubsstaging
+
+    WSGIScriptAlias / /home/unisubsstaging/unisubs/deploy/unisubsstaging.wsgi
+
+    Alias /site_media /home/unisubsstaging/unisubs/media/
+    <Location "/site_media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /home/unisubsstaging/env/lib/python2.6/site-packages/django/contrib/admin/media/
+    <Location "/media">
+        SetHandler None
+        Order allow,deny
+        Allow from all
+    </Location>
+</VirtualHost>

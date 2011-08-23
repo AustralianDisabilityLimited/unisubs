@@ -101,7 +101,7 @@ def unisubs(username):
 
 def syncdb():
     env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
+    with cd(os.path.join(env.static_dir, 'unisubs')):
         _git_pull()
         run('{0}/env/bin/python manage.py syncdb '
             '--settings=unisubs_settings'.format(env.static_dir))
@@ -112,7 +112,7 @@ def syncdb():
 
 def migrate(app_name=''):
     env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
+    with cd(os.path.join(env.static_dir, 'unisubs')):
         _git_pull()
         if env.separate_uslogging_db:
             run('{0}/env/bin/python manage.py migrate sentry '
@@ -126,7 +126,7 @@ def migrate(app_name=''):
 
 def run_command(command):
     env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
+    with cd(os.path.join(env.static_dir, 'unisubs')):
         _git_pull()
         run('{0}/env/bin/python manage.py {1} '
             '--settings=unisubs_settings'.format(env.static_dir, command))
@@ -139,7 +139,7 @@ def migrate_fake(app_name):
     in a subsequent version, but now we're stuck with this solution.
     """
     env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
+    with cd(os.path.join(env.static_dir, 'unisubs')):
         run('yes no | {0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs_settings'.format(env.static_dir, app_name))
 
 def refresh_db():
@@ -154,7 +154,7 @@ def update_closure():
     pass
 
 def _switch_branch(dir, branch_name):
-    with cd(os.path.join(dir, 'mirosubs')):
+    with cd(os.path.join(dir, 'unisubs')):
         _git_pull()
         run('git fetch')
         # the following command will harmlessly fail if branch already exists.
@@ -178,14 +178,14 @@ def switch_branch(branch_name):
     _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
 
 def _remove_pip_package(base_dir, package_name):
-    with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
+    with cd(os.path.join(base_dir, 'unisubs', 'deploy')):
         run('yes y | {0}/env/bin/pip uninstall {1}'.format(base_dir, package_name), pty=True)
 
 def remove_pip_package(package_egg_name):
     _execute_on_all_hosts(lambda dir: _remove_pip_package(dir, package_egg_name))
 
 def _update_environment(base_dir):
-    with cd(os.path.join(base_dir, 'mirosubs', 'deploy')):
+    with cd(os.path.join(base_dir, 'unisubs', 'deploy')):
         _git_pull()
         run('export PIP_REQUIRE_VIRTUALENV=true')
         # see http://lincolnloop.com/blog/2010/jul/1/automated-no-prompt-deployment-pip/
@@ -205,7 +205,7 @@ def clear_environment_permissions():
 def clear_permissions():
     for host in env.web_hosts:
         env.host_string = host
-        _clear_permissions('{0}/mirosubs'.format(env.web_dir))
+        _clear_permissions('{0}/unisubs'.format(env.web_dir))
 
 def _git_pull():
     run('git checkout --force')
@@ -221,19 +221,19 @@ def _reload_app_server():
     and also that we make the server reload code (currently
     with mod_wsgi this is touching the wsgi file)
     """
-    with cd('{0}/mirosubs'.format(env.web_dir)):
+    with cd('{0}/unisubs'.format(env.web_dir)):
         run('python deploy/create_commit_file.py')
         run('touch deploy/unisubs.wsgi')
     
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
-        run('touch {0}/mirosubs/disabled'.format(env.web_dir))
+        run('touch {0}/unisubs/disabled'.format(env.web_dir))
 
 def remove_disabled():
     for host in env.web_hosts:
         env.host_string = host
-        run('rm {0}/mirosubs/disabled'.format(env.web_dir))
+        run('rm {0}/unisubs/disabled'.format(env.web_dir))
 
 def update_web():
     """
@@ -251,11 +251,11 @@ def update_web():
     """
     if env.admin_dir is not None:
         env.host_string = ADMIN_HOST
-        with cd(os.path.join(env.admin_dir, 'mirosubs')):
+        with cd(os.path.join(env.admin_dir, 'unisubs')):
             _git_pull()
     for host in env.web_hosts:
         env.host_string = host
-        with cd('{0}/mirosubs'.format(env.web_dir)):
+        with cd('{0}/unisubs'.format(env.web_dir)):
             python_exe = '{0}/env/bin/python'.format(env.web_dir)
             _git_pull()
             with settings(warn_only=True):
@@ -282,7 +282,7 @@ def update_solr_schema():
         env.host_string = ADMIN_HOST
         dir = env.admin_dir
         python_exe = '{0}/env/bin/python'.format(env.admin_dir)
-        with cd(os.path.join(dir, 'mirosubs')):
+        with cd(os.path.join(dir, 'unisubs')):
             _git_pull()
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
                     python_exe, 
@@ -293,7 +293,7 @@ def update_solr_schema():
         env.host_string = DEV_HOST
         dir = env.web_dir
         python_exe = '{0}/env/bin/python'.format(env.web_dir)
-        with cd(os.path.join(dir, 'mirosubs')):
+        with cd(os.path.join(dir, 'unisubs')):
             _git_pull()
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
@@ -310,8 +310,8 @@ def _bounce_celeryd():
         sudo(env.celeryd_bounce_cmd)
 
 def _update_static(dir):
-    with cd(os.path.join(dir, 'mirosubs')):
-        media_dir = '{0}/mirosubs/media/'.format(dir)
+    with cd(os.path.join(dir, 'unisubs')):
+        media_dir = '{0}/unisubs/media/'.format(dir)
         python_exe = '{0}/env/bin/python'.format(dir)
         _git_pull()
         _clear_permissions(media_dir)
@@ -320,9 +320,9 @@ def _update_static(dir):
 def update_static():
     env.host_string = DEV_HOST
     if env.s3_bucket is not None:
-        with cd(os.path.join(env.static_dir, 'mirosubs')):
+        with cd(os.path.join(env.static_dir, 'unisubs')):
             _update_static(env.static_dir)
-            media_dir = '{0}/mirosubs/media/'.format(env.static_dir)
+            media_dir = '{0}/unisubs/media/'.format(env.static_dir)
             python_exe = '{0}/env/bin/python'.format(env.static_dir)
             run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
     else:
@@ -333,7 +333,7 @@ def update():
     update_web()
 
 def _promote_django_admins(dir, email=None, new_password=None, userlist_path=None):
-    with cd(os.path.join(dir, 'mirosubs')):
+    with cd(os.path.join(dir, 'unisubs')):
         python_exe = '{0}/env/bin/python'.format(dir)
         args = ""
         if email is not None:
@@ -381,7 +381,7 @@ def update_translations():
 def test_celeryd():
     print '=== TEST CELERYD SCHEDULLER ==='
     env.host_string = env.celeryd_host
-    output = run('ps aux | grep "%s/mirosubs/manage\.py.*celeryd.*-B" | grep -v grep' % env.celeryd_proj_root)
+    output = run('ps aux | grep "%s/unisubs/manage\.py.*celeryd.*-B" | grep -v grep' % env.celeryd_proj_root)
     assert len(output.split('\n'))
 
 def test_services():
@@ -390,7 +390,7 @@ def test_services():
     print '=== TEST SERVICES ==='
     for host in env.web_hosts:
         env.host_string = host    
-        with cd(os.path.join(env.web_dir, 'mirosubs')):
+        with cd(os.path.join(env.web_dir, 'unisubs')):
             run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
                 env.web_dir))
 
@@ -403,7 +403,7 @@ def test_memcached():
             [alphanum[random.randint(0, len(alphanum)-1)] 
              for i in xrange(12)])
         env.host_string = host
-        with cd(os.path.join(env.web_dir, 'mirosubs')):
+        with cd(os.path.join(env.web_dir, 'unisubs')):
             run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
                 env.web_dir,
                 random_string))
@@ -411,7 +411,7 @@ def test_memcached():
         for other_host in other_hosts:
             env.host_string = host
             output = ''
-            with cd(os.path.join(env.web_dir, 'mirosubs')):
+            with cd(os.path.join(env.web_dir, 'unisubs')):
                 output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
                     env.web_dir))
             if output.find(random_string) == -1:
@@ -420,8 +420,8 @@ def test_memcached():
 
 def generate_docs():
     env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'mirosubs')):
-        run('%s/env/bin/sphinx-build %s/mirosubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
+    with cd(os.path.join(env.static_dir, 'unisubs')):
+        run('%s/env/bin/sphinx-build %s/unisubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
     
 try:
     from local_env import *

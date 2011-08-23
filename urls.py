@@ -29,7 +29,7 @@ admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUser
 from doorman import feature_is_on
 
 js_info_dict = {
-    'packages': ('mirosubs'),
+    'packages': ('unisubs'),
 }
 
 urlpatterns = patterns(

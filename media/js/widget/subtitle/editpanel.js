@@ -16,21 +16,21 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.EditPanel');
+goog.provide('unisubs.subtitle.EditPanel');
 /**
 * @constructor
-* @extends mirosubs.subtitle.SyncPanel
+* @extends unisubs.subtitle.SyncPanel
 */
-mirosubs.subtitle.EditPanel = function(subtitles, videoPlayer,
+unisubs.subtitle.EditPanel = function(subtitles, videoPlayer,
                                          serverModel, captionManager) {
-    mirosubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer,
+    unisubs.subtitle.SyncPanel.call(this, subtitles, videoPlayer,
                                      serverModel, captionManager);
 };
-goog.inherits(mirosubs.subtitle.EditPanel, mirosubs.subtitle.SyncPanel);
-mirosubs.subtitle.EditPanel.prototype.createRightPanelInternal =
+goog.inherits(unisubs.subtitle.EditPanel, unisubs.subtitle.SyncPanel);
+unisubs.subtitle.EditPanel.prototype.createRightPanelInternal =
     function()
 {
-    return new mirosubs.subtitle.EditRightPanel(
+    return new unisubs.subtitle.EditRightPanel(
         this.serverModel, null, null,
         this.makeKeySpecsInternal(), false, "Done?",
         "Submit your work");

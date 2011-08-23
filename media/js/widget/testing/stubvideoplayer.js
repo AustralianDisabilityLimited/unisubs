@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.testing.StubVideoPlayer');
+goog.provide('unisubs.testing.StubVideoPlayer');
 
 /**
  * @fileoverview This is for testing components that interact with 
@@ -24,8 +24,8 @@ goog.provide('mirosubs.testing.StubVideoPlayer');
  *
  */
 
-mirosubs.testing.StubVideoPlayer = function() {
-    mirosubs.video.AbstractVideoPlayer.call(this);
+unisubs.testing.StubVideoPlayer = function() {
+    unisubs.video.AbstractVideoPlayer.call(this);
     /**
      * Can be set to artificial values for the purpose of unit 
      * testing components.
@@ -33,26 +33,26 @@ mirosubs.testing.StubVideoPlayer = function() {
     this.playheadTime = 0;
     this.playing = false;
 };
-goog.inherits(mirosubs.testing.StubVideoPlayer, 
-              mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.testing.StubVideoPlayer, 
+              unisubs.video.AbstractVideoPlayer);
 
-mirosubs.testing.StubVideoPlayer.prototype.getPlayheadTime = function() {
+unisubs.testing.StubVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime;
 };
-mirosubs.testing.StubVideoPlayer.prototype.play = function() {
+unisubs.testing.StubVideoPlayer.prototype.play = function() {
     this.playing = true;
 };
-mirosubs.testing.StubVideoPlayer.prototype.pause = function() {
+unisubs.testing.StubVideoPlayer.prototype.pause = function() {
     this.playing = false;
 };
-mirosubs.testing.StubVideoPlayer.prototype.isPlaying = function() {
+unisubs.testing.StubVideoPlayer.prototype.isPlaying = function() {
     return this.playing;
 };
-mirosubs.testing.StubVideoPlayer.prototype.playWithNoUpdateEvents = 
+unisubs.testing.StubVideoPlayer.prototype.playWithNoUpdateEvents = 
     function(timeToStart, secondsToPlay) 
 {
     // do nothing!
 };
-mirosubs.testing.StubVideoPlayer.prototype.dispatchTimeUpdate = function() {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+unisubs.testing.StubVideoPlayer.prototype.dispatchTimeUpdate = function() {
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };

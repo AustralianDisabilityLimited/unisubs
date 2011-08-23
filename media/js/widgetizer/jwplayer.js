@@ -16,25 +16,25 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.JWPlayer');
+goog.provide('unisubs.widgetizer.JWPlayer');
 
 /**
  * @constructor
  *
  */
-mirosubs.widgetizer.JWPlayer = function() {
-    mirosubs.widgetizer.VideoPlayerMaker.call(this);
+unisubs.widgetizer.JWPlayer = function() {
+    unisubs.widgetizer.VideoPlayerMaker.call(this);
     this.VIDS_ARE_JW_ =
         window.location.hostname.match(/ocw\.mit\.edu/) != null ||
         window['UNISUBS_JW_ONLY'];
     this.logger_ =
-        goog.debug.Logger.getLogger('mirosubs.widgetizer.JWPlayer');
+        goog.debug.Logger.getLogger('unisubs.widgetizer.JWPlayer');
 };
 goog.inherits(
-    mirosubs.widgetizer.JWPlayer,
-    mirosubs.widgetizer.VideoPlayerMaker);
+    unisubs.widgetizer.JWPlayer,
+    unisubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
+unisubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
     if (goog.DEBUG) {
         this.logger_.info("Found this number of unwidgetized elements: " + 
@@ -43,25 +43,25 @@ mirosubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
         var videoSource = this.makeVideoSource_(elements[i]);
-        var videoPlayer = new mirosubs.video.JWVideoPlayer(videoSource);
+        var videoPlayer = new unisubs.video.JWVideoPlayer(videoSource);
         videoPlayers.push(videoPlayer);
         videoPlayer.decorate(elements[i]);
     }
     return videoPlayers;
 };
 
-mirosubs.widgetizer.JWPlayer.prototype.makeVideoSource_ = function(elem) {
-    var matches = /file=([^&]+)/.exec(mirosubs.Flash.flashVars(elem));
-    return mirosubs.video.YoutubeVideoSource.forURL(matches[1]);
+unisubs.widgetizer.JWPlayer.prototype.makeVideoSource_ = function(elem) {
+    var matches = /file=([^&]+)/.exec(unisubs.Flash.flashVars(elem));
+    return unisubs.video.YoutubeVideoSource.forURL(matches[1]);
 };
 
-mirosubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {
-    return mirosubs.widgetizer.JWPlayer.superClass_.
+unisubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {
+    return unisubs.widgetizer.JWPlayer.superClass_.
         unwidgetizedFlashElements.call(this);
 };
 
-mirosubs.widgetizer.JWPlayer.prototype.isFlashElementAPlayer = function(element) {    
-    var swfSrc = mirosubs.Flash.swfURL(element);
+unisubs.widgetizer.JWPlayer.prototype.isFlashElementAPlayer = function(element) {    
+    var swfSrc = unisubs.Flash.swfURL(element);
     var isJW = this.VIDS_ARE_JW_ && swfSrc.match(/player[^\.]*.swf$/i) != null;
     if (goog.DEBUG) {
         this.logger_.info(

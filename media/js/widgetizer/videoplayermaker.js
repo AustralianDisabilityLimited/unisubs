@@ -16,28 +16,28 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.VideoPlayerMaker');
+goog.provide('unisubs.widgetizer.VideoPlayerMaker');
 
 /**
  * Abstract base class for making AbstractVideoPlayers out of 
  * video-playing elements on the page.
  * @constructor
  */
-mirosubs.widgetizer.VideoPlayerMaker = function() {
+unisubs.widgetizer.VideoPlayerMaker = function() {
 };
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.logger_ = 
+unisubs.widgetizer.VideoPlayerMaker.prototype.logger_ = 
     goog.debug.Logger.getLogger(
-        'mirosubs.widgetizer.VideoPlayerMaker');
+        'unisubs.widgetizer.VideoPlayerMaker');
 
-mirosubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
+unisubs.widgetizer.VideoPlayerMaker.prototype.makeVideoPlayers =
     goog.abstractMethod;
 
 /**
  * @protected
  * @param {Array.<Element>} videoElements
  */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized = 
+unisubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized = 
     function(videoElements) 
 {
     return goog.array.filter(
@@ -49,9 +49,9 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized =
  * @protected
  * @param {Element} element
  */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
+unisubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
     return !goog.array.find(
-        mirosubs.video.AbstractVideoPlayer.players,
+        unisubs.video.AbstractVideoPlayer.players,
         function(p) { return p.videoElementsContain(element); });
 };
 
@@ -60,12 +60,12 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element
  * @protected
  * @returns {Boolean}
  */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.isFlashElementAPlayer = goog.abstractMethod;
+unisubs.widgetizer.VideoPlayerMaker.prototype.isFlashElementAPlayer = goog.abstractMethod;
 
 /**
  * @protected
  */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = function() {
+unisubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = function() {
     var unwidgetizedElements = [];
     var objects = goog.dom.getElementsByTagNameAndClass('object');
     for (var i = 0; i < objects.length; i++)
@@ -87,7 +87,7 @@ mirosubs.widgetizer.VideoPlayerMaker.prototype.unwidgetizedFlashElements = funct
 /**
  * @protected
  */
-mirosubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
+unisubs.widgetizer.VideoPlayerMaker.prototype.objectContainsEmbed = function(element) {
     return !!goog.dom.findNode(
         element,
         function(node) {

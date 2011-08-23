@@ -16,23 +16,23 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Extension');
+goog.provide('unisubs.Extension');
 
 /**
  * @constructor
  */
-mirosubs.Extension = function() {
+unisubs.Extension = function() {
     this.shown_ = false;
-    var element = document.createElement('MirosubsExtensionLoaded');
+    var element = document.createElement('unisubsExtensionLoaded');
     document.documentElement.appendChild(element);
     var evt = document.createEvent('Events');
-    evt.initEvent("MirosubsExtensionLoadedEvent", true, false);
+    evt.initEvent("unisubsExtensionLoadedEvent", true, false);
     element.dispatchEvent(evt);
     this.show_(evt.target.getAttribute('enabled') == 'true');
 };
-goog.addSingletonGetter(mirosubs.Extension);
+goog.addSingletonGetter(unisubs.Extension);
 
-mirosubs.Extension.prototype.show_ = function(enabled) {
+unisubs.Extension.prototype.show_ = function(enabled) {
     if (this.shown_)
         return;
     this.shown_ = true;
@@ -40,23 +40,23 @@ mirosubs.Extension.prototype.show_ = function(enabled) {
     // When this is worked on again, this should first check for widgetizedVideos, then
     // subscribe to an event from Widgetizer that gets fired whenever a new widgetized 
     // video is found on the page.
-    if (mirosubs.Widgetizer.getInstance().videosExist())
+    if (unisubs.Widgetizer.getInstance().videosExist())
         this.addElementToPage_(enabled);
     if (enabled)
-        mirosubs.Widgetizer.getInstance().widgetize();
+        unisubs.Widgetizer.getInstance().widgetize();
 };
 
-mirosubs.Extension.prototype.addElementToPage_ = function(enabled) {
+unisubs.Extension.prototype.addElementToPage_ = function(enabled) {
     this.enabled_ = enabled;
-    mirosubs.Widgetizer.getInstance().addHeadCss();
+    unisubs.Widgetizer.getInstance().addHeadCss();
     var $d = goog.dom.createDom;
     var $t = goog.dom.createTextNode;
     this.enableLink_ = this.createEnableLink_($d);
     this.reportProblemLink_ = this.createReportProblemLink_($d);
     this.learnMoreLink_ = this.createLearnMoreLink_($d);
     this.enabledSpan_ = $d('span', null, this.enabledSpanText_());
-    this.element_ = $d('div', 'mirosubs-extension' + 
-                       (enabled ? ' mirosubs-extension-enabled' : ''),
+    this.element_ = $d('div', 'unisubs-extension' + 
+                       (enabled ? ' unisubs-extension-enabled' : ''),
                        $d('span', null, 'Universal Subtitles Addon '),
                        this.enabledSpan_,
                        $d('span', null, ' '),
@@ -70,63 +70,63 @@ mirosubs.Extension.prototype.addElementToPage_ = function(enabled) {
                        this.enableClicked_, false, this);
 };
 
-mirosubs.Extension.prototype.enableClicked_ = function(e) {
+unisubs.Extension.prototype.enableClicked_ = function(e) {
     e.preventDefault();
     this.enabled_ = !this.enabled_;
     goog.dom.setTextContent(this.enableLink_, this.enableLinkText_());
     goog.dom.setTextContent(this.enabledSpan_, this.enabledSpanText_());
     goog.dom.classes.enable(
-        this.element_, 'mirosubs-extension-enabled', this.enabled_);
+        this.element_, 'unisubs-extension-enabled', this.enabled_);
 
     if (!this.toggleElement_) {
-        this.toggleElement_ = document.createElement('MirosubsExtensionToggled');
+        this.toggleElement_ = document.createElement('unisubsExtensionToggled');
         document.documentElement.appendChild(this.toggleElement_);
     }
     this.toggleElement_.setAttribute(
         'enabled', this.enabled_ ? 'true' : 'false');
     var evt = document.createEvent('Events');
-    evt.initEvent("MirosubsExtensionToggledEvent", true, false);
+    evt.initEvent("unisubsExtensionToggledEvent", true, false);
     this.toggleElement_.dispatchEvent(evt);
 
     if (this.enabled_)
-        mirosubs.Widgetizer.getInstance().widgetize();
+        unisubs.Widgetizer.getInstance().widgetize();
 };
 
-mirosubs.Extension.prototype.createEnableLink_ = function($d) {
+unisubs.Extension.prototype.createEnableLink_ = function($d) {
     return $d('a', {'href':'#'}, this.enableLinkText_());
 };
 
-mirosubs.Extension.prototype.enableLinkText_ = function() {
+unisubs.Extension.prototype.enableLinkText_ = function() {
     return this.enabled_ ? 'disable' : 'enable';
 };
 
-mirosubs.Extension.prototype.enabledSpanText_ = function() {
+unisubs.Extension.prototype.enabledSpanText_ = function() {
     return this.enabled_ ? "Enabled!" : "Disabled";
 };
 
-mirosubs.Extension.prototype.createReportProblemLink_ = function($d) {
+unisubs.Extension.prototype.createReportProblemLink_ = function($d) {
     var message = 
         'I had a problem with the Universal Subtitles Firefox ' +
         'extension on this page: ' + 
         window.location.href;
-    var uri = new goog.Uri(mirosubs.Config.siteConfig['siteURL'] + 
+    var uri = new goog.Uri(unisubs.Config.siteConfig['siteURL'] + 
                            '/videos/site_feedback/');
     uri.setParameterValue('text', message);
     return $d('a', {'href': uri.toString(), 
-                    'target': mirosubs.randomString()},
+                    'target': unisubs.randomString()},
               'report problem');
 };
 
-mirosubs.Extension.prototype.createLearnMoreLink_ = function($d) {
+unisubs.Extension.prototype.createLearnMoreLink_ = function($d) {
     return $d('a', {'href': 'http://universalsubtitles.org', 
-                    'target': mirosubs.randomString()},
+                    'target': unisubs.randomString()},
               'learn more');
 };
 
 (function() {
-    var extension = mirosubs.Extension.getInstance();
-    window['mirosubs'] = {};
-    window['mirosubs']['showExtension'] = function(enabled) {
+    var extension = unisubs.Extension.getInstance();
+    window['unisubs'] = {};
+    window['unisubs']['showExtension'] = function(enabled) {
         extension.show(enabled);
     };
 })();

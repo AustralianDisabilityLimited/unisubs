@@ -12,7 +12,7 @@
                 'caption_id': caption_id, 'caption_text' : text};
     }
 
-    var stubVideoPlayer = new mirosubs.testing.StubVideoPlayer();
+    var stubVideoPlayer = new unisubs.testing.StubVideoPlayer();
     var UPDATEFREQ = 80;
     var playerTimer = new goog.Timer(UPDATEFREQ);
     var playheadTime = 0;
@@ -55,21 +55,21 @@
     var logconsole = new goog.debug.DivConsole(goog.dom.$('log'));
     logconsole.setCapturing(true);
 
-    var unitOfWork = new mirosubs.UnitOfWork();
+    var unitOfWork = new unisubs.UnitOfWork();
     var existingCaptions = [
         captionJSON(0, 1.5, 1, 'sub 1'),
         captionJSON(2.0, -1, 2, 'sub 2'),
         captionJSON(-1, -1, 3, 'sub 3'),
         captionJSON(-1, -1, 4, 'sub 4')
     ];
-    var captionSet = new mirosubs.subtitle.EditableCaptionSet(
+    var captionSet = new unisubs.subtitle.EditableCaptionSet(
         existingCaptions, unitOfWork);
-    var subtitleSet = new mirosubs.timeline.SubtitleSet(
+    var subtitleSet = new unisubs.timeline.SubtitleSet(
         captionSet, stubVideoPlayer);
 
     var subLogger = goog.debug.Logger.getLogger('subtitles');
     subLogger.fine(['Listening for: ', 
-                    mirosubs.subtitle.EditableCaption.CHANGE, 
+                    unisubs.subtitle.EditableCaption.CHANGE, 
                     '.'].join(''));
 
     function logSubEvent(e) {
@@ -79,10 +79,10 @@
     }
 
     goog.events.listen(captionSet, 
-                        mirosubs.subtitle.EditableCaption.CHANGE, 
+                        unisubs.subtitle.EditableCaption.CHANGE, 
                         logSubEvent);
 
-    var timeline = new mirosubs.timeline.Timeline(1, subtitleSet, stubVideoPlayer);
+    var timeline = new unisubs.timeline.Timeline(1, subtitleSet, stubVideoPlayer);
     var container = new goog.ui.Component();
     container.decorate(goog.dom.$('timeline'));
     container.addChild(timeline, true);

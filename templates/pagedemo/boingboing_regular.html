@@ -37,7 +37,7 @@
 {% endifequal %}
 
 {% ifequal type "embed" %}
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" %}
 {% endifequal %}
 </head>
 
@@ -228,7 +228,7 @@ United States and other countries.</small></p>
         var us = document.createElement('script'); 
         us.type = 'text/javascript'; 
         us.async = true;
-        us.src = '{{MEDIA_URL}}js/mirosubs-widgetizer.js';
+        us.src = '{{MEDIA_URL}}js/unisubs-widgetizer.js';
         var s = document.getElementsByTagName('script')[0]; 
         s.parentNode.insertBefore(us, s);
 </script>

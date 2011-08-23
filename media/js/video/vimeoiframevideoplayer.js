@@ -16,21 +16,21 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.VimeoIFrameVideoPlayer');
+goog.provide('unisubs.video.VimeoIFrameVideoPlayer');
 
 /**
  * @constructor
- * @param {mirosubs.video.VimeoIFrameVideoSource} videoSource
+ * @param {unisubs.video.VimeoIFrameVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
-mirosubs.video.VimeoIFrameVideoPlayer = function(videoSource, opt_forDialog) {
+unisubs.video.VimeoIFrameVideoPlayer = function(videoSource, opt_forDialog) {
     
 
 };
-goog.inherits(mirosubs.video.VimeoIFrameVideoPlayer, mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.video.VimeoIFrameVideoPlayer, unisubs.video.AbstractVideoPlayer);
 
-mirosubs.video.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
-    mirosubs.video.VimeoIFrameVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.video.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
+    unisubs.video.VimeoIFrameVideoPlayer.superClass_.enterDocument.call(this);
     var checkFn = function() {
         return !!goog.global['Froogaloop'];
     };
@@ -38,14 +38,14 @@ mirosubs.video.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
         this.makePlayer_();
     }
     else {
-        mirosubs.addScript(
+        unisubs.addScript(
             'http://a.vimeocdn.com/js/froogaloop2.min.js',
             checkFn,
             goog.bind(this.makePlayer_, this));
     }
 };
 
-mirosubs.video.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
+unisubs.video.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
     if (goog.DEBUG) {
         this.logger_.info('makePlayer_ called');
     }
@@ -54,6 +54,6 @@ mirosubs.video.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
         'ready', goog.bind(this.playerReady_, this));
 };
 
-mirosubs.video.VimeoIFrameVideoPlayer.prototype.playerReady_ = function() {
+unisubs.video.VimeoIFrameVideoPlayer.prototype.playerReady_ = function() {
     
 };

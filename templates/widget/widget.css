@@ -1,14 +1,14 @@
 /* Should only contain css for the actual widget */
-div.mirosubs-widget {
+div.unisubs-widget {
     position: relative !important;
 }
-.mirosubs-videoDiv {
+.unisubs-videoDiv {
     text-align: center !important;
 }
 
 {% if null_widget %}
 
-.mirosubs-widget {
+.unisubs-widget {
     margin: 0 auto !important;
 }
 

@@ -16,40 +16,40 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.DailymotionVideoSource');
+goog.provide('unisubs.video.DailymotionVideoSource');
 
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  */
-mirosubs.video.DailymotionVideoSource = function(videoID, videoURL) {
+unisubs.video.DailymotionVideoSource = function(videoID, videoURL) {
     this.videoID_ = videoID;
     this.videoURL_ = videoURL;
-    this.uuid_ = mirosubs.randomString();
+    this.uuid_ = unisubs.randomString();
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.createPlayer = function() {
+unisubs.video.DailymotionVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.createControlledPlayer = function() {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+unisubs.video.DailymotionVideoSource.prototype.createControlledPlayer = function() {
+    return new unisubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.createPlayer_ = function(chromeless) {
-    return new mirosubs.video.DailymotionVideoPlayer(
-        new mirosubs.video.DailymotionVideoSource(this.videoID_, this.videoURL_), 
+unisubs.video.DailymotionVideoSource.prototype.createPlayer_ = function(chromeless) {
+    return new unisubs.video.DailymotionVideoPlayer(
+        new unisubs.video.DailymotionVideoSource(this.videoID_, this.videoURL_), 
         chromeless);
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.getVideoId = function() {
+unisubs.video.DailymotionVideoSource.prototype.getVideoId = function() {
     return this.videoID_;
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.getUUID = function() {
+unisubs.video.DailymotionVideoSource.prototype.getUUID = function() {
     return this.uuid_;
 };
 
-mirosubs.video.DailymotionVideoSource.prototype.getVideoURL = function() {
+unisubs.video.DailymotionVideoSource.prototype.getVideoURL = function() {
     return this.videoURL_;
 };

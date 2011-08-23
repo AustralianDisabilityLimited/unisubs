@@ -16,17 +16,17 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.TranslationList');
+goog.provide('unisubs.translate.TranslationList');
 
 /**
  *
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  * @param {array.<object.<string, *>>} baseLanguageSubtitles Array of json base-language subs.
  * @param {string} baseLanguageTitle 
  * @extends {goog.ui.Component}
  * @constructor
  */
-mirosubs.translate.TranslationList = function(captionSet, baseLanguageSubtitles, baseLanguageTitle) {
+unisubs.translate.TranslationList = function(captionSet, baseLanguageSubtitles, baseLanguageTitle) {
     goog.ui.Component.call(this);
     this.captionSet_ = captionSet;
     this.baseLanguageTitle_ = baseLanguageTitle || '';
@@ -40,21 +40,21 @@ mirosubs.translate.TranslationList = function(captionSet, baseLanguageSubtitles,
             return goog.array.defaultCompare(a['sub_order'], b['sub_order']);
         });
     /**
-     * @type {Array.<mirosubs.translate.TranslationWidget>}
+     * @type {Array.<unisubs.translate.TranslationWidget>}
      */
     this.translationWidgets_ = [];
     this.titleTranslationWidget_ = null;
 };
-goog.inherits(mirosubs.translate.TranslationList, goog.ui.Component);
+goog.inherits(unisubs.translate.TranslationList, goog.ui.Component);
 
-mirosubs.translate.TranslationList.prototype.createDom = function() {
+unisubs.translate.TranslationList.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createDom('ul'));
     var that = this;
     var w;
 
     if (this.baseLanguageTitle_) {
         this.titleTranslationWidget_ = 
-            new mirosubs.translate.TitleTranslationWidget(
+            new unisubs.translate.TitleTranslationWidget(
                 this.baseLanguageTitle_, this.captionSet_);
         this.addChild(this.titleTranslationWidget_, true);
         this.titleTranslationWidget_.setTranslation(this.captionSet_.title || '');
@@ -69,7 +69,7 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
             if (!editableCaption)
                 editableCaption = this.captionSet_.addNewDependentTranslation(
                     subtitle['sub_order'], subtitle['subtitle_id']);
-            w = new mirosubs.translate.TranslationWidget(
+            w = new unisubs.translate.TranslationWidget(
                 subtitle, editableCaption);
             this.addChild(w, true);
             this.translationWidgets_.push(w);
@@ -80,10 +80,10 @@ mirosubs.translate.TranslationList.prototype.createDom = function() {
 /**
  * Callback that is called by aut-translator
  * @param {Array.<string>} Array of translations
- * @param {Array.<mirosubs.translate.TranslationWidget>} widgets that were translated
+ * @param {Array.<unisubs.translate.TranslationWidget>} widgets that were translated
  * @param {?string} error happened while translating
  */
-mirosubs.translate.TranslationList.prototype.translateCallback_ = function(translations, widgets, error) {
+unisubs.translate.TranslationList.prototype.translateCallback_ = function(translations, widgets, error) {
     if (error) {
         
     } else {
@@ -96,10 +96,10 @@ mirosubs.translate.TranslationList.prototype.translateCallback_ = function(trans
 /**
  * Find widgets for all not translated subtitles and translate them with GoogleTranslator
  */
-mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromLang, toLang) {
+unisubs.translate.TranslationList.prototype.translateViaGoogle = function(fromLang, toLang) {
     /**
      * Translation widgets that does not contain any user's translation
-     * @type {Array.<mirosubs.translate.TranslationWidget>}
+     * @type {Array.<unisubs.translate.TranslationWidget>}
      */
     var needTranslating = [];
 
@@ -114,9 +114,9 @@ mirosubs.translate.TranslationList.prototype.translateViaGoogle = function(fromL
     });
     
     /**
-     * @type {mirosubs.translate.GoogleTranslator.translateWidgets}
+     * @type {unisubs.translate.GoogleTranslator.translateWidgets}
      */
-    var translateWidgets = mirosubs.translate.GoogleTranslator.translateWidgets;
+    var translateWidgets = unisubs.translate.GoogleTranslator.translateWidgets;
 
     needTranslating.length && translateWidgets(needTranslating, fromLang, toLang, 
         this.translateCallback_);

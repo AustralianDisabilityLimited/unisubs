@@ -95,13 +95,13 @@
     containingElement.appendChild(styleElement);
 
     var widgetSpan = $c('span');
-    widgetSpan.className = 'mirosubs-widget';
+    widgetSpan.className = 'unisubs-widget';
     widgetSpan.style.cssText = "display: block !important;";
     containingElement.appendChild(widgetSpan);
 
     var head = document.getElementsByTagName('head')[0];
-    if (typeof(MiroSubsCrossDomainLoaded) == 'undefined' && !window.MiroSubsLoading) {
-        window.MiroSubsLoading = true;
+    if (typeof(unisubsCrossDomainLoaded) == 'undefined' && !window.unisubsLoading) {
+        window.unisubsLoading = true;
         for (var i = 0; i < scriptsToLoad.length; i++) {
             console.log('adding script ' + scriptsToLoad[i]);
             var curScript = $c('script');
@@ -129,14 +129,14 @@
             return;
         insertCalled = true;
         script.parentNode.insertBefore(containingElement, script);
-        if (typeof(mirosubs) != 'undefined' &&
-            typeof(mirosubs.widget) != 'undefined' &&
-            typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
-            mirosubs.widget.CrossDomainEmbed.embed(widgetSpan, widgetConfig, siteConfig);
+        if (typeof(unisubs) != 'undefined' &&
+            typeof(unisubs.widget) != 'undefined' &&
+            typeof(unisubs.widget.CrossDomainEmbed) != 'undefined')
+            unisubs.widget.CrossDomainEmbed.embed(widgetSpan, widgetConfig, siteConfig);
         else {
-            if (typeof(MiroSubsToEmbed) == 'undefined')
-                window.MiroSubsToEmbed = [];
-            window.MiroSubsToEmbed.push([widgetSpan, widgetConfig, siteConfig]);
+            if (typeof(unisubsToEmbed) == 'undefined')
+                window.unisubsToEmbed = [];
+            window.unisubsToEmbed.push([widgetSpan, widgetConfig, siteConfig]);
         }
     }
 

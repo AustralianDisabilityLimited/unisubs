@@ -16,17 +16,17 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.DropDownContents');
+goog.provide('unisubs.widget.DropDownContents');
 
 /**
  * @constructor
  */
-mirosubs.widget.DropDownContents = function(languages, isModerated) {
+unisubs.widget.DropDownContents = function(languages, isModerated) {
     /**
-     * @type {Array.<mirosubs.startdialog.VideoLanguage>}
+     * @type {Array.<unisubs.startdialog.VideoLanguage>}
      */
     this.LANGUAGES = goog.array.map(languages, function(l){
-        return new mirosubs.startdialog.VideoLanguage(l);
+        return new unisubs.startdialog.VideoLanguage(l);
     });
     /**
      * @type {bool}

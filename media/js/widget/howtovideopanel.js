@@ -16,36 +16,36 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.HowToVideoPanel');
+goog.provide('unisubs.HowToVideoPanel');
 
 /**
  * @constructor
- * @param {mirosubs.HowToVideoPanel.VideoChoice} videoChoice
+ * @param {unisubs.HowToVideoPanel.VideoChoice} videoChoice
  */
-mirosubs.HowToVideoPanel = function(videoChoice) {
+unisubs.HowToVideoPanel = function(videoChoice) {
     goog.ui.Component.call(this);
-    if (mirosubs.video.supportsOgg())
+    if (unisubs.video.supportsOgg())
         this.videoPlayer_ = 
-            (new mirosubs.video.Html5VideoSource(
+            (new unisubs.video.Html5VideoSource(
                 videoChoice.videos.ogg, 
-                mirosubs.video.Html5VideoType.OGG)).createPlayer();
-    else if (mirosubs.video.supportsH264())
+                unisubs.video.Html5VideoType.OGG)).createPlayer();
+    else if (unisubs.video.supportsH264())
         this.videoPlayer_ = 
-            (new mirosubs.video.Html5VideoSource(
+            (new unisubs.video.Html5VideoSource(
                 videoChoice.videos.h264, 
-                mirosubs.video.Html5VideoType.H264)).createPlayer();
+                unisubs.video.Html5VideoType.H264)).createPlayer();
     else
-        this.videoPlayer_ = (new mirosubs.video.YoutubeVideoSource(
+        this.videoPlayer_ = (new unisubs.video.YoutubeVideoSource(
             videoChoice.videos.yt)).createPlayer();
-    this.howToImageURL_ = mirosubs.imageAssetURL(videoChoice.image);
+    this.howToImageURL_ = unisubs.imageAssetURL(videoChoice.image);
     this.usingHtml5Video_ = 
-        mirosubs.video.supportsOgg() ||
-        mirosubs.video.supportsH264();
+        unisubs.video.supportsOgg() ||
+        unisubs.video.supportsH264();
 };
-goog.inherits(mirosubs.HowToVideoPanel, goog.ui.Component);
+goog.inherits(unisubs.HowToVideoPanel, goog.ui.Component);
 
-mirosubs.HowToVideoPanel.CONTINUE = 'continue';
-mirosubs.HowToVideoPanel.VideoChoice = {
+unisubs.HowToVideoPanel.CONTINUE = 'continue';
+unisubs.HowToVideoPanel.VideoChoice = {
     TRANSCRIBE: {
         videos: {
             ogg: 'http://blip.tv/file/get/Miropcf-tutorialstep1573.ogv',
@@ -72,26 +72,26 @@ mirosubs.HowToVideoPanel.VideoChoice = {
     }
 };
 
-mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
+unisubs.HowToVideoPanel.HTML5_VIDEO_SIZE_ =
     new goog.math.Size(512, 384);
 
-mirosubs.HowToVideoPanel.prototype.getContentElement = function() {
+unisubs.HowToVideoPanel.prototype.getContentElement = function() {
     return this.contentElement_;
 };
 
-mirosubs.HowToVideoPanel.prototype.createDom = function() {
-    mirosubs.HowToVideoPanel.superClass_.createDom.call(this);
+unisubs.HowToVideoPanel.prototype.createDom = function() {
+    unisubs.HowToVideoPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.contentElement_ = $d('div');
     var el = this.getElement();
-    el.className = 'mirosubs-howtopanel';
+    el.className = 'unisubs-howtopanel';
     el.appendChild(this.contentElement_);
     this.skipVideosSpan_ = $d('span', 'goog-checkbox-unchecked');
     el.appendChild($d('div', null, this.skipVideosSpan_,
                       goog.dom.createTextNode(' Skip these videos')));
     this.continueLink_ = 
         $d('a', 
-           {'className': 'mirosubs-done', 
+           {'className': 'unisubs-done', 
             'href': '#'}, 
            $d('span', null, 'Continue'))
     el.appendChild(this.continueLink_);
@@ -99,17 +99,17 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     vidPlayer.addChild(this.videoPlayer_, true);
     this.howToImage_ = $d('img', 
                           {'src': this.howToImageURL_, 
-                           'className': 'mirosubs-howto-image'});
+                           'className': 'unisubs-howto-image'});
     vidPlayer.getElement().appendChild(this.howToImage_);
     this.addChild(vidPlayer, true);
-    vidPlayer.getElement().className = 'mirosubs-howto-videocontainer';
+    vidPlayer.getElement().className = 'unisubs-howto-videocontainer';
     var videoSize;
     if (this.usingHtml5Video_) {
         var viewportSize = goog.dom.getViewportSize();
         var videoTop = 
             Math.max(0, goog.style.getClientLeftTop(
                 this.videoPlayer_.getElement()).y);
-        videoSize = mirosubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
+        videoSize = unisubs.HowToVideoPanel.HTML5_VIDEO_SIZE_;
         if (videoTop + videoSize.height > viewportSize.height - 60) {
             var newVideoHeight = 
                 Math.max(270, viewportSize.height - videoTop - 60);
@@ -122,12 +122,12 @@ mirosubs.HowToVideoPanel.prototype.createDom = function() {
     }
     else
         videoSize = this.videoPlayer_.getVideoSize();
-    mirosubs.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
-    mirosubs.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
+    unisubs.style.setSize(vidPlayer.getElement(), videoSize.width, videoSize.height);
+    unisubs.style.setSize(this.howToImage_, videoSize.width, videoSize.height);
 };
 
-mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
-    mirosubs.HowToVideoPanel.superClass_.enterDocument.call(this);
+unisubs.HowToVideoPanel.prototype.enterDocument = function() {
+    unisubs.HowToVideoPanel.superClass_.enterDocument.call(this);
     if (!this.skipVideosCheckbox_) {
         this.skipVideosCheckbox_ = new goog.ui.Checkbox();
         this.skipVideosCheckbox_.decorate(this.skipVideosSpan_);
@@ -142,28 +142,28 @@ mirosubs.HowToVideoPanel.prototype.enterDocument = function() {
     this.getHandler().listen(this.howToImage_, 'click', this.startPlaying_);
 };
 
-mirosubs.HowToVideoPanel.prototype.startPlaying_ = function(e) {
+unisubs.HowToVideoPanel.prototype.startPlaying_ = function(e) {
     e.preventDefault();
     goog.dom.removeNode(this.howToImage_);
     this.videoPlayer_.play();
 };
 
-mirosubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
-    mirosubs.UserSettings.setBooleanValue(
-        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
+unisubs.HowToVideoPanel.prototype.skipVideosCheckboxChanged_ = function(e) {
+    unisubs.UserSettings.setBooleanValue(
+        unisubs.UserSettings.Settings.SKIP_HOWTO_VIDEO,
         this.skipVideosCheckbox_.isChecked());
 };
 
-mirosubs.HowToVideoPanel.prototype.continue_ = function(e) {
+unisubs.HowToVideoPanel.prototype.continue_ = function(e) {
     e.preventDefault();
-    this.dispatchEvent(mirosubs.HowToVideoPanel.CONTINUE);
+    this.dispatchEvent(unisubs.HowToVideoPanel.CONTINUE);
 };
 
-mirosubs.HowToVideoPanel.prototype.stopVideo = function() {
+unisubs.HowToVideoPanel.prototype.stopVideo = function() {
     this.videoPlayer_.pause();
     this.videoPlayer_.dispose();
 };
 
-mirosubs.HowToVideoPanel.prototype.disposeInternal = function() {
-    mirosubs.HowToVideoPanel.superClass_.disposeInternal.call(this);
+unisubs.HowToVideoPanel.prototype.disposeInternal = function() {
+    unisubs.HowToVideoPanel.superClass_.disposeInternal.call(this);
 };

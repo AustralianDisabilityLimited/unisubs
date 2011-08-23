@@ -16,49 +16,49 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.TranslationWidget');
+goog.provide('unisubs.translate.TranslationWidget');
 
 /**
  * @constructor
  * @param {Object.<string, *>} subtitle Base language subtitle in json format
- * @param {mirosubs.subtitle.EditableCaption} translation
+ * @param {unisubs.subtitle.EditableCaption} translation
  */
-mirosubs.translate.TranslationWidget = function(subtitle,
+unisubs.translate.TranslationWidget = function(subtitle,
                                                 translation) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
     /**
-     * @type {mirosubs.subtitle.EditableCaption}
+     * @type {unisubs.subtitle.EditableCaption}
      */
     this.translation_ = translation;
 };
-goog.inherits(mirosubs.translate.TranslationWidget, goog.ui.Component);
+goog.inherits(unisubs.translate.TranslationWidget, goog.ui.Component);
 
-mirosubs.translate.TranslationWidget.prototype.getSubtitle = function(){
+unisubs.translate.TranslationWidget.prototype.getSubtitle = function(){
     return this.subtitle_;
 };
 
-mirosubs.translate.TranslationWidget.prototype.getOriginalValue = function(){
+unisubs.translate.TranslationWidget.prototype.getOriginalValue = function(){
     return this.subtitle_.text;
 };
 
-mirosubs.translate.TranslationWidget.prototype.getSubJson = function() {
+unisubs.translate.TranslationWidget.prototype.getSubJson = function() {
     return {
         'subtitle_id': this.getCaptionID(),
         'text': this.translateInput_.value
     };
 };
 
-mirosubs.translate.TranslationWidget.prototype.createDom = function() {
+unisubs.translate.TranslationWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     this.setElementInternal(
         $d('li', null,
            $d('div', null,
-              $d('span', 'mirosubs-title mirosubs-title-notime', this.subtitle_['text']),
-              this.loadingIndicator_ = $d('span', 'mirosubs-loading-indicator', 'loading...')
+              $d('span', 'unisubs-title unisubs-title-notime', this.subtitle_['text']),
+              this.loadingIndicator_ = $d('span', 'unisubs-loading-indicator', 'loading...')
            ),
-           this.translateInput_ = $d('textarea', 'mirosubs-translateField')
+           this.translateInput_ = $d('textarea', 'unisubs-translateField')
         )
     );
     
@@ -72,35 +72,35 @@ mirosubs.translate.TranslationWidget.prototype.createDom = function() {
     this.translateInput_.value = this.translation_ ? this.translation_.getText() : '';
 };
 
-mirosubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(event) {
+unisubs.translate.TranslationWidget.prototype.inputGainedFocus_ = function(event) {
     this.onFocusText_ = this.translateInput_.value;
 };
 
-mirosubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(track) {
+unisubs.translate.TranslationWidget.prototype.inputLostFocus_ = function(track) {
     var value = goog.string.trim(this.translateInput_.value);
     var edited = value != this.onFocusText_;
     if (track && edited) {
         if (this.onFocusText_ == "")
-            mirosubs.SubTracker.getInstance().trackAdd(this.getCaptionID());
+            unisubs.SubTracker.getInstance().trackAdd(this.getCaptionID());
         else
-            mirosubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
+            unisubs.SubTracker.getInstance().trackEdit(this.getCaptionID());
     }
     this.translation_.setText(value);
 };
 
 
-mirosubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
+unisubs.translate.TranslationWidget.prototype.setTranslationContent = function(value){
     this.translateInput_.value = value;
     this.inputLostFocus_(false);
 };
 
-mirosubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
+unisubs.translate.TranslationWidget.prototype.setEnabled = function(enabled) {
     this.translateInput_.disabled = !enabled;
     if (!enabled)
         this.translateInput_.value = '';
 };
 
-mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
+unisubs.translate.TranslationWidget.prototype.getCaptionID = function() {
     return this.subtitle_['subtitle_id'];
 };
 
@@ -108,14 +108,14 @@ mirosubs.translate.TranslationWidget.prototype.getCaptionID = function() {
  * Return if translate input has some value
  * @return {boolean}
  */
-mirosubs.translate.TranslationWidget.prototype.isEmpty = function(){
+unisubs.translate.TranslationWidget.prototype.isEmpty = function(){
     return ! goog.string.trim(this.translateInput_.value);
 };
 
-mirosubs.translate.TranslationWidget.prototype.showLoadingIndicator = function(){
-    mirosubs.style.showElement(this.loadingIndicator_, true);
+unisubs.translate.TranslationWidget.prototype.showLoadingIndicator = function(){
+    unisubs.style.showElement(this.loadingIndicator_, true);
 };
 
-mirosubs.translate.TranslationWidget.prototype.hideLoadingIndicator = function(){
-    mirosubs.style.showElement(this.loadingIndicator_, false);
+unisubs.translate.TranslationWidget.prototype.hideLoadingIndicator = function(){
+    unisubs.style.showElement(this.loadingIndicator_, false);
 };

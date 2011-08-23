@@ -16,14 +16,14 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.RequestDialog');
+goog.provide('unisubs.RequestDialog');
 
 /**
  * @constructor
  * @param {string} videoID
  */
-mirosubs.RequestDialog = function(videoID) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+unisubs.RequestDialog = function(videoID) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.videoID_ = videoID;
@@ -72,28 +72,28 @@ mirosubs.RequestDialog = function(videoID) {
      */
     this.SUBMIT_ERROR_ = 'An error occured in submitting the request.';
 };
-goog.inherits(mirosubs.RequestDialog, goog.ui.Dialog);
+goog.inherits(unisubs.RequestDialog, goog.ui.Dialog);
 
-mirosubs.RequestDialog.prototype.createDom = function() {
-    mirosubs.RequestDialog.superClass_.createDom.call(this);
+unisubs.RequestDialog.prototype.createDom = function() {
+    unisubs.RequestDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
     var el = this.getContentElement();
     this.headingDiv_ = $d('h3', null, 'Request subtitles');
     this.loadingDiv_ = $d('p', null, 'Loading...')
-    this.contentDiv_ = $d('div', {'className':'mirosubs-request-div'}, this.loadingDiv_);
+    this.contentDiv_ = $d('div', {'className':'unisubs-request-div'}, this.loadingDiv_);
     goog.dom.append(el, this.headingDiv_, this.contentDiv_);
 };
 
-mirosubs.RequestDialog.prototype.enterDocument = function() {
-    mirosubs.RequestDialog.superClass_.enterDocument.call(this);
+unisubs.RequestDialog.prototype.enterDocument = function() {
+    unisubs.RequestDialog.superClass_.enterDocument.call(this);
     this.connectEvents_();
 };
 
-mirosubs.RequestDialog.prototype.setVisible = function(visible) {
-    mirosubs.startdialog.Dialog.superClass_.setVisible.call(this, visible);
+unisubs.RequestDialog.prototype.setVisible = function(visible) {
+    unisubs.startdialog.Dialog.superClass_.setVisible.call(this, visible);
     if (visible)
-        mirosubs.Rpc.call(
+        unisubs.Rpc.call(
             'fetch_request_dialog_contents',
             { 'video_id': this.videoID_ },
             goog.bind(this.responseReceived_, this));
@@ -102,21 +102,21 @@ mirosubs.RequestDialog.prototype.setVisible = function(visible) {
 /**
  * Create a language select dropdown
  */
-mirosubs.RequestDialog.prototype.makeDropdown_ = function($d){
+unisubs.RequestDialog.prototype.makeDropdown_ = function($d){
     var options = [];
     contents = this.allLanguages_
     options.push($d('option', {'value': ''}, this.EMPTY_LANG_));
     for (var i = 0; i < contents.length; i++){
          options.push($d('option', {'value': contents[i][0]}, contents[i][1]));
     }
-    return $d('select', {'id':'mirosubs-requestlang-'+ ++this.langMenuCount_}, options);
+    return $d('select', {'id':'unisubs-requestlang-'+ ++this.langMenuCount_}, options);
 };
 
 /**
  * Adds two dropdown to the dialog contents.
  * Each call creats two dropdowns.
  */
-mirosubs.RequestDialog.prototype.addDropdowns_ = function($d){
+unisubs.RequestDialog.prototype.addDropdowns_ = function($d){
     goog.dom.append(this.langDiv_, this.makeDropdown_($d));
 };
 
@@ -124,17 +124,17 @@ mirosubs.RequestDialog.prototype.addDropdowns_ = function($d){
  * Add the rest of the fields (tracking request, description) to the
  * form.
  */
-mirosubs.RequestDialog.prototype.addMetaForm_ = function($d){
+unisubs.RequestDialog.prototype.addMetaForm_ = function($d){
     this.metaDiv_ = $d('div');
-    this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'mirosubs-request-track'});
-    this.checkBoxLabel_ = $d('label', {'for':'mirosubs-request-track'}, this.TRACK_REQUEST_LABEL_);
-    this.descriptionText_ = $d('textarea', { 'id':'mirosubs-request-description' }, this.DESCRIPTION_INITIAL_);
+    this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'unisubs-request-track'});
+    this.checkBoxLabel_ = $d('label', {'for':'unisubs-request-track'}, this.TRACK_REQUEST_LABEL_);
+    this.descriptionText_ = $d('textarea', { 'id':'unisubs-request-description' }, this.DESCRIPTION_INITIAL_);
     goog.dom.append(this.metaDiv_, this.checkBox_, this.checkBoxLabel_,
                     this.descriptionText_);
     goog.dom.append(this.contentDiv_, this.metaDiv_);
 }
 
-mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
+unisubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
     this.fetchCompleted_ = true;
 
     //The data required to create the form
@@ -144,7 +144,7 @@ mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
     goog.array.removeDuplicates(this.myLanguages_);
     this.myLanguages_ = goog.array.filter(
         this.myLanguages_, function(l) {
-            return !!mirosubs.languageNameForCode(l);
+            return !!unisubs.languageNameForCode(l);
         });
 
     // Create a Request object which will store the request relevent info.
@@ -154,27 +154,27 @@ mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
 
     // Create the form
     this.warningElem_ = $d('p', 'warning');
-    this.langDiv_ = $d('div', {'class':'mirosubs-request-langs'}, $d('p', null, 'Select the languages in which subtitles are required'));
+    this.langDiv_ = $d('div', {'class':'unisubs-request-langs'}, $d('p', null, 'Select the languages in which subtitles are required'));
     this.addLangButton_ =
     $d('a',
            {'href':'#',
-            'className': "mirosubs-request-addlang"},
+            'className': "unisubs-request-addlang"},
             'Add Language');
     this.okButton_ =
     $d('a',
            {'href':'#',
-            'className': "mirosubs-green-button mirosubs-big",
+            'className': "unisubs-green-button unisubs-big",
             'style':'clear:both;'},
            'Request');
     this.volunteerButton_ =
     $d('a',
-           {'href':mirosubs.getVolunteerPageURL(),
-            'className': "mirosubs-green-button mirosubs-big"},
+           {'href':unisubs.getVolunteerPageURL(),
+            'className': "unisubs-green-button unisubs-big"},
            'Visit Volunteer Page');
     this.closeButton_ =
     $d('a',
            {'href':'#',
-            'className': "mirosubs-green-button mirosubs-big",
+            'className': "unisubs-green-button unisubs-big",
             'style':'clear:both;'},
            'Close');
 
@@ -186,14 +186,14 @@ mirosubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
     this.addMetaForm_($d);
     goog.dom.append(this.contentDiv_, this.okButton_);
     this.clearDiv = $d('div');
-    mirosubs.style.setProperty(this.clearDiv, 'clear', 'both');
+    unisubs.style.setProperty(this.clearDiv, 'clear', 'both');
     this.clearDiv.innerHTML = "&nbsp;";
     this.contentDiv_.appendChild(this.clearDiv);
     this.reposition();
     this.connectEvents_();
 };
 
-mirosubs.RequestDialog.prototype.connectEvents_ = function() {
+unisubs.RequestDialog.prototype.connectEvents_ = function() {
     if (!this.isInDocument() || !this.fetchCompleted_)
         return;
     this.getHandler().
@@ -211,7 +211,7 @@ mirosubs.RequestDialog.prototype.connectEvents_ = function() {
             this.closeClicked_);
 };
 
-mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
+unisubs.RequestDialog.prototype.okClicked_ = function(e) {
     e.preventDefault();
     if (this.okHasBeenClicked_)
         goog.style.showElement(this.warningElem_, false);
@@ -220,7 +220,7 @@ mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
 
     // Stores the languages selected from the select box in the model
     for (i = 1; i <= this.langMenuCount_; i++){
-        var e = document.getElementById('mirosubs-requestlang-' + i);
+        var e = document.getElementById('unisubs-requestlang-' + i);
         var lang = e.options[e.selectedIndex].value
         if (lang){
             this.requestLanguages_.push(lang);
@@ -229,8 +229,8 @@ mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
 
     // Submit the request if at least one language is there
     if (this.requestLanguages_.length > 0){
-        var track = document.getElementById('mirosubs-request-track').checked;
-        var description = document.getElementById('mirosubs-request-description').value;
+        var track = document.getElementById('unisubs-request-track').checked;
+        var description = document.getElementById('unisubs-request-description').value;
         alert(description + ' ' + description);
         this.track_ = track;
         if (description != this.DESCRIPTION_INITIAL_){
@@ -250,7 +250,7 @@ mirosubs.RequestDialog.prototype.okClicked_ = function(e) {
 /**
  * Add more languages to the form
  */
-mirosubs.RequestDialog.prototype.addLangClicked_ = function(e) {
+unisubs.RequestDialog.prototype.addLangClicked_ = function(e) {
     e.preventDefault();
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
@@ -261,7 +261,7 @@ mirosubs.RequestDialog.prototype.addLangClicked_ = function(e) {
 /**
  * Close the request dialog
  */
-mirosubs.RequestDialog.prototype.closeClicked_ = function(e) {
+unisubs.RequestDialog.prototype.closeClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
 };
@@ -270,7 +270,7 @@ mirosubs.RequestDialog.prototype.closeClicked_ = function(e) {
  * Callback after a request has been posted.  
  * Notifies about successful or unsuccessful request
  */
-mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
+unisubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
     // If response has a key status, set to true, hide the dialog
     if (jsonResult["status"]){
         // Recreate the dialog with thank you message
@@ -279,7 +279,7 @@ mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
         goog.dom.removeChildren(this.contentDiv_);
         this.confirmDiv_ = $d('p', null, this.SUBMISSION_CONFIRM_);
         this.volunteerDiv_ = $d('p', null, 'If you can, help others on our ',
-                                            $d('a', {"href":mirosubs.getVolunteerPageURL()},
+                                            $d('a', {"href":unisubs.getVolunteerPageURL()},
                                                "Volunteer Page"), '.');
 
         this.contentDiv_.appendChild(this.confirmDiv_);
@@ -297,13 +297,13 @@ mirosubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
 /**
  * Submit the request data generated by the form to the server.
  */
-mirosubs.RequestDialog.prototype.submitRequest = function(){
+unisubs.RequestDialog.prototype.submitRequest = function(){
     var $d = goog.bind(this.getDomHelper().createDom,
                        this.getDomHelper());
     goog.dom.removeChildren(this.contentDiv_);
-    this.contentDiv_.appendChild($d('div', {'className':'mirosubs-request-div'}, this.loadingDiv_));
+    this.contentDiv_.appendChild($d('div', {'className':'unisubs-request-div'}, this.loadingDiv_));
 
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
             'submit_subtitle_request',
             {
                 'video_id':this.videoID_,

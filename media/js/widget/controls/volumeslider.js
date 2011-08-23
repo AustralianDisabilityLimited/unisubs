@@ -16,34 +16,34 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.controls.VolumeSlider');
+goog.provide('unisubs.controls.VolumeSlider');
 /**
 * @constructor
-* @extends mirosubs.SliderBase
+* @extends unisubs.SliderBase
 */
-mirosubs.controls.VolumeSlider = function(opt_domHelper) {
-    mirosubs.SliderBase.call(this, opt_domHelper);
-    this.setOrientation(mirosubs.SliderBase.Orientation.VERTICAL);
+unisubs.controls.VolumeSlider = function(opt_domHelper) {
+    unisubs.SliderBase.call(this, opt_domHelper);
+    this.setOrientation(unisubs.SliderBase.Orientation.VERTICAL);
 };
-goog.inherits(mirosubs.controls.VolumeSlider, mirosubs.SliderBase);
+goog.inherits(unisubs.controls.VolumeSlider, unisubs.SliderBase);
 
-mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX =
-    goog.getCssName('mirosubs');
+unisubs.controls.VolumeSlider.CSS_CLASS_PREFIX =
+    goog.getCssName('unisubs');
 
-mirosubs.controls.VolumeSlider.THUMB_CSS_CLASS =
-    goog.getCssName(mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX,
+unisubs.controls.VolumeSlider.THUMB_CSS_CLASS =
+    goog.getCssName(unisubs.controls.VolumeSlider.CSS_CLASS_PREFIX,
                     'volume-scrobbler');
 
-mirosubs.controls.VolumeSlider.prototype.getCssClass = function(orient) {
-    return goog.getCssName(mirosubs.controls.VolumeSlider.CSS_CLASS_PREFIX,
+unisubs.controls.VolumeSlider.prototype.getCssClass = function(orient) {
+    return goog.getCssName(unisubs.controls.VolumeSlider.CSS_CLASS_PREFIX,
 			   'volume-slider');
 };
 
 /** @inheritDoc */
-mirosubs.controls.VolumeSlider.prototype.createThumb = function() {
+unisubs.controls.VolumeSlider.prototype.createThumb = function() {
     var element = this.getElement();
     var thumb = this.getDomHelper().createDom(
-	'div', mirosubs.controls.VolumeSlider.THUMB_CSS_CLASS);
+	'div', unisubs.controls.VolumeSlider.THUMB_CSS_CLASS);
     goog.dom.a11y.setRole(thumb, goog.dom.a11y.Role.BUTTON);
     element.appendChild(thumb);
     this.thumb = thumb;

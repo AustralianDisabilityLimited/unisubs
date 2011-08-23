@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block scripts %}
-{% include_bundle "mirosubs-onsite-compiled" %}
+{% include_bundle "unisubs-onsite-compiled" %}
 
 {% endblock %}
 
@@ -37,9 +37,9 @@
   </div><!-- // intro -->
   <div id="intro_video">
     {% block widget_container %}
-        <div id="widget_div" class="mirosubs-widget"></div> 
+        <div id="widget_div" class="unisubs-widget"></div> 
         <script type="text/javascript"> 
-          var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+          var widget_widget_div = unisubs.widget.SameDomainEmbed.embed(
               document.getElementById('widget_div'), 
               { 
                   base_state: {},
@@ -69,7 +69,7 @@
       </fieldset>
       <fieldset id="any_video">
       <label>{% trans "For every video on a page or site" %}</label>
-      <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+      <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
       <span class="caption">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
       </fieldset>
     </form>
@@ -157,7 +157,7 @@
     <ul>
       <li>{% trans "It's built by a 501(c)3 nonprofit working with a community of volunteers" %}(<a href="{% url about_page %}">{% trans 'find out how to volunteer' %}</a>).
       </li>
-      <li>{% trans 'The code is free and open source' %}(<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)</li>
+      <li>{% trans 'The code is free and open source' %}(<a href="http://github.com/8planes/unisubs/">{% trans 'get the source code' %}</a>)</li>
       <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>
       <li>{% trans "It's 100% web-based, there’s no software to download." %}</li>
       <li>{% trans "You don't have to host your video with us, and you're not dependent on any one video host, platform, or format." %}</li>

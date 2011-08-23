@@ -8,8 +8,8 @@
   var unloadEventHandler = new goog.events.EventHandler();
 
   function listenForClose() {
-      unloadEventHandler.listen(mirosubs.ClosingWindow.getInstance(),
-          mirosubs.ClosingWindow.BEFORE_UNLOAD,
+      unloadEventHandler.listen(unisubs.ClosingWindow.getInstance(),
+          unisubs.ClosingWindow.BEFORE_UNLOAD,
           function(event) {
               event.message = "Please don't close me!";
           });

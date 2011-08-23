@@ -16,34 +16,34 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.CrossDomainEmbed');
+goog.provide('unisubs.widget.CrossDomainEmbed');
 
-mirosubs.widget.CrossDomainEmbed = {};
+unisubs.widget.CrossDomainEmbed = {};
 
-mirosubs.widget.CrossDomainEmbed.embed = 
+unisubs.widget.CrossDomainEmbed.embed = 
     function(widgetDiv, widgetConfig, siteConfig) 
 {
-    mirosubs.siteConfig = siteConfig;
+    unisubs.siteConfig = siteConfig;
     if (goog.DEBUG) {
         if (widgetConfig['debug_js']) {
             var debugWindow = new goog.debug.FancyWindow('main');
             debugWindow.setEnabled(true);
             debugWindow.init();
-            mirosubs.DEBUG = true;
+            unisubs.DEBUG = true;
         }
     }
-    mirosubs.IS_NULL = !!widgetConfig['null_widget'];
-    var widget = new mirosubs.widget.Widget(widgetConfig);
+    unisubs.IS_NULL = !!widgetConfig['null_widget'];
+    var widget = new unisubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
 };
 
-mirosubs.widget.Widget.exportJSSymbols(true);
+unisubs.widget.Widget.exportJSSymbols(true);
 
-var m = window["MiroSubsToEmbed"];
+var m = window["unisubsToEmbed"];
 if (typeof(m) != 'undefined'){
     for (var i = 0; i < m.length; i++){
-        mirosubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
+        unisubs.widget.CrossDomainEmbed.embed(m[i][0], m[i][1], m[i][2]);
     }
 }
 
-window['MiroSubsCrossDomainLoaded'] = true;
+window['unisubsCrossDomainLoaded'] = true;

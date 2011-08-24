@@ -25,7 +25,7 @@ from piston.utils import rc
 from piston.utils import decorator, FormValidationError
 from api import validate
 from django.contrib.sites.models import Site
-from forms import GetVideoForm, AddSubtitlesForm, UpdateSubtitlesForm
+from .forms import GetVideoForm, AddSubtitlesForm, UpdateSubtitlesForm
 from django.utils import simplejson as json
 from widget.srt_subs import GenerateSubtitlesHandler
 from django.http import HttpResponse

@@ -83,11 +83,6 @@
 {% block main_content %}
     <h2 class="main-title">
         <span class="title-container" style="float: none;">{{ video }}</span>
-        {% if user.is_authenticated %}
-            {% if not video.title or video.is_html5 or user.is_superuser %}
-            <a class="edit-title" href="#" data-modal="edit-title-dialog">{% trans 'edit title' %}</a>
-            {% endif %}
-        {% endif %}
     </h2>
     {% if saved %}
     <div id="messages">
@@ -169,7 +164,12 @@
         </div>
         <div class="grid_9 omega pod">
             <div class="hd">
-                <h2>{% trans 'Video Info' %}</h2>
+                <h2>{{ video }}</h2>
+                {% if user.is_authenticated %}
+                    {% if not video.title or video.is_html5 or user.is_superuser %}
+                        <a class="heading_button edit-title" href="#" data-modal="edit-title-dialog">{% trans 'Edit title' %}</a>
+                    {% endif %}
+                {% endif %}
                 <ul class="inline_tabs">
                     <li class="active">
                         <a href="#activity-tab">

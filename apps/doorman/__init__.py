@@ -1,3 +1,4 @@
+from django.utils.functional import  wraps
 from django.conf import settings
 
 flags = getattr(settings, "FEATURE_FLAGS", {})
@@ -15,3 +16,14 @@ def feature_is_on(feature_flag_name, request=None, *extra):
     if callable(flag_status ):
         return flag_status(request, *extra)
     return bool(flag_status)
+
+def when_feature(feature_flag_name=None, request=None):
+
+    def _f(func):
+        def wrapper(*args, **kwargs):
+
+            if feature_is_on(feature_flag_name, request):
+                return func(*args, **kwargs)
+            return
+        return wraps(func)(wrapper)
+    return _f

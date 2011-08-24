@@ -36,7 +36,7 @@ from apps.teams.moderation_const import SUBJECT_EMAIL_VERSION_REJECTED
 from apps.teams.moderation import  UNMODERATED, APPROVED, WAITING_MODERATION, \
     add_moderation, remove_moderation, approve_version, is_moderated, reject_version
 from apps.videos.models import SubtitleVersion, Subtitle, VideoUrl
-from apps.teams.forms import EditTeamVideoForm
+from apps.teams.forms import EditTeamVideoForm, AddTeamVideoForm
 
 
 class BaseTestModeration(TestCase):
@@ -122,6 +122,52 @@ class TestVideoModerationForm(BaseTestModeration):
         self.assertTrue(form.is_valid())
         self.video = Video.objects.get(pk=self.video.pk)
         self.assertFalse(is_moderated(self.video))
+
+    def test_team_wide_moderation_settings_on_form(self):
+        non_team = Video.objects.exclude(pk__in=[tv.pk for tv in self.team.videos.all()])
+        form = AddTeamVideoForm(user=self.user, team=self.team)
+        is_moderated = form.fields["is_moderated"]
+
+        self.assertEquals(is_moderated.initial,False)
+        self.team.is_moderated = True
+
+        
+        form = AddTeamVideoForm(user=self.user, team=self.team)
+        is_moderated_field = form.fields["is_moderated"]
+
+        self.assertEquals(is_moderated_field.initial,self.team.is_moderated)
+
+        self.team.is_moderated = not self.team.is_moderated
+        form = AddTeamVideoForm(user=self.user, team=self.team)
+        is_moderated_field = form.fields["is_moderated"]
+
+        self.assertEquals(is_moderated_field.initial,self.team.is_moderated)
+
+        self.team.is_moderated = not self.team.is_moderated
+    def test_team_wide_moderation_setting_on_new_tvs(self):
+        self.team.is_moderated = True
+        self.team.save()
+        d = dict(is_moderated=True,title="title", description="fdfa", language="en", video_url="http://www.example.com/v1.mp4")
+            
+            
+        form = AddTeamVideoForm(data =d, user=self.user, team=self.team)
+        print form.errors
+        self.assertTrue(form.is_valid())
+        
+        tv = form.save( added_by=self.user)
+        self.assertEquals(tv.video.moderated_by , self.team)
+
+
+        self.team.is_moderated = False
+        self.team.save()
+        d.update({"video_url": "http://www.example.com/v2.mp4", "is_moderated":False})
+        form = AddTeamVideoForm(data =d, user=self.user, team=self.team)
+        self.assertTrue(form.is_valid())
+
+        tv = form.save( added_by=self.user)
+        self.assertEquals(tv.video.moderated_by, None)
+
+        
 
 class TestBusinessLogic( BaseTestModeration):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]

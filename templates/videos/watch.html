@@ -109,7 +109,7 @@
     <div class="bd">
         <div class="watch-page-content">
             {% with latest_videos as video_list %}
-                {% include 'videos/_watch_page.html' %}
+                {% include 'videos/_watch_page.html' with showdate="true" %}
             {% endwith %}    
         </div>
     </div><!-- // bd -->

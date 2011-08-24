@@ -255,7 +255,7 @@ ul.video_list {
 ul.video_list li {
     width: 120px;
     float: left;
-    margin: 0 13px 0 13px;
+    margin: 13px;
     height: 250px;
 }
 

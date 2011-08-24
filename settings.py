@@ -763,5 +763,5 @@ MEDIA_BUNDLES = {
 
 
 FEATURE_FLAGS  = {
-    "MODERATION" : True
+    "MODERATION" : False
 }

@@ -1,6 +1,6 @@
 
-from settings import *
-#from dev_settings import *
+#from settings import *
+from dev_settings import *
 
 ROOT_URLCONF = 'urls'
 
@@ -12,14 +12,14 @@ DATABASES = {
 }
 
 
-HAYSTACK_SOLR_URL = 'http://localhost:38983/solr/testing'
+HAYSTACK_SOLR_URL = 'http://localhost:8983/solr/core1'
 
 CELERY_ALWAYS_EAGER = True
 
 INSTALLED_APPS += ('django_nose', )
 INSTALLED_APPS = list(INSTALLED_APPS)
 INSTALLED_APPS.remove('unisubs')
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 
 SITE_ID = 4

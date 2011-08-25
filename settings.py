@@ -413,6 +413,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INSTALLED_APPS = (
+    'django.contrib.sites',
     'auth',
     'django.contrib.auth',
     'localeurl',
@@ -420,7 +421,6 @@ INSTALLED_APPS = (
     'openid_consumer',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.sitemaps',
     'django.contrib.admin',
     'django.contrib.markup',
@@ -763,5 +763,5 @@ MEDIA_BUNDLES = {
 
 
 FEATURE_FLAGS  = {
-    "MODERATION" : True
+    "MODERATION" : True,
 }

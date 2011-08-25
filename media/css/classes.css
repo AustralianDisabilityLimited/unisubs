@@ -53,14 +53,6 @@ border: 1px solid;
   border: none !important;
   }
 
-
-.edit-title{
-display: none;
-}
-
-
-
-
 .main-title:hover .edit-title{
 display: inline;
 }
@@ -365,7 +357,7 @@ font-size: 16px;
   font-size: 16px;
   border-bottom: 1px solid #bfbe78;
 	padding: 15px;
-	margin: 0 0 10px 0;
+	margin: 0;
 }
 
 .note a {
@@ -504,4 +496,8 @@ clear: both !important;;
 
 .meta h4 {
   margin-top: 1em;
+}
+
+h2.main-title {
+  padding-bottom: .5em;
 }

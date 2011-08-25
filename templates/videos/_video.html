@@ -19,12 +19,10 @@
                 {{ video_views }}
             </strong> 
             {% blocktrans count video_views as views %}view{% plural %}views{% endblocktrans %}
-            {% comment %}
+            {% if showdate = 'true' %}
             <br/>
             {% trans "Added" %}: {{ video.created|date:"M j Y" }}
-            <br/>
-            {% trans "Last edited" %}: {{ video.edited|date:"M j Y" }}
-            {% endcomment %}
+            {% endif %}
         </span>
         <span class="languages">
             {% if video.languages_count %}

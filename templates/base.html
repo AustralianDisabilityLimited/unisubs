@@ -28,6 +28,7 @@
 
 <script type="text/javascript">
 jQuery(function($){
+
     /** Django will guard against csrf even on XHR requests, so we need to read
       the value from the cookie and add the header for it */
     function addCSRFHeader($){
@@ -46,7 +47,6 @@ jQuery(function($){
                             }
                         }
                     }
-
                     return cookieValue;
                 }
                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {

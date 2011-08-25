@@ -190,3 +190,4 @@ function decorateItems(){
 }
 
 decorateItems();
+window.addCSRFHeader($);

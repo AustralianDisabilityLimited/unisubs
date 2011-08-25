@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+
+		<title>Streaming Transcript HTML Demo</title>
+
+		<meta name="robots" content="noindex, nofollow" />
+
+		<style type="text/css">
+
+			html {
+				background-color: #f8f8f8;
+			}
+
+			body {
+				width: 560px;
+				position: relative;
+				top: 0;
+				left: 50%;
+				margin-left: -280px;
+				padding: 50px 0;
+				font-family: 'Droid Sans', helvetica, arial, sans-serif;
+			}
+
+			.video {
+			}
+
+			.controls {
+				position: relative;
+				height: 28px;
+				margin-top: -5px;
+				padding: 5px;
+				background-color: #ebebeb;
+				background: -moz-linear-gradient(
+					top,
+					hsla(0, 0%, 96%, 1),
+					hsla(0, 0%, 92%, 1) 20%,
+					hsla(0, 0%, 92%, 1)
+				);
+				background: -webkit-gradient(
+					linear,
+					left top,
+					left bottom,
+					color-stop(0, hsla(0, 0%, 96%, 1)),
+					color-stop(.2, hsla(0, 0%, 92%, 1)),
+					color-stop(1, hsla(0, 0%, 92%, 1))
+				);
+				border: 1px solid #ddd;
+				border-bottom: none;
+				font-size: 12px;
+			}
+
+			.controls ul, .controls ul li {
+				display: inline;
+				list-style: none;
+				padding: 0;
+			}
+
+			.controls ul a {
+				float: left;
+				display: block;
+				padding: 7px 5px;
+				text-decoration: none;
+				color: #666;
+			}
+
+			.controls ul a#edit-link {
+				margin: -5px 0 -5px 5px;
+				padding: 14px 10px 10px 12px;
+				border-left: 1px solid #d3d3d3;
+				color: #aaa;
+			}
+
+			.controls input {
+				position: absolute;
+				right: 5px;
+				border: 1px solid #ddd;
+				padding: 4px;
+				-moz-border-radius: 3px;
+				-webkit-border-radius: 3px;
+				border-radius: 3px;
+				color: #888;
+			}
+
+			.transcript {
+				clear: both;
+				font-size: 13px;
+				line-height: 225%;
+				padding: 15px 50px;
+				height: 345px;
+				overflow: auto;
+				border: 1px solid #ddd;
+				background-color: #fff;
+			}
+
+			.transcript .current {
+				color: #232323;
+				border: 1px solid #b8c7d9;
+				background-color: #d9ebff;
+				padding: 5px 2px;
+				margin: -5px -2px;
+				-moz-border-radius: 5px;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="video-transcript-viewer">
+			<div class="video">
+				<iframe width="560" height="345" src="http://www.youtube.com/embed/FgzcmFeWfng" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<div class="controls">
+				<ul>
+					<li><a href=""><img src="http://f.cl.ly/items/2E0E0I0S2Q190S283n45/twitter.png" alt="Twitter" /></a></li>
+					<li><a href=""><img src="http://f.cl.ly/items/2E0E0I0S2Q190S283n45/fb.png" alt="Facebook" /></a></li>
+					<!-- <li><a href="" id="edit-link">Edit Transcript</a></li> -->
+				</ul>
+				<input value="search..."/>
+			</div>
+			<div class="transcript">
+				<p>
+					<span>I live in Western Sonoma County, in the town of Occidental</span>
+					<span>and kind of near the coast up in the Redwood country, some know it as wine country.</span>
+					<span>I'm a biologist by birth, one of those characters that chase the creepy-crawlies around</span>
+					<span>since I came out of the womb, and ultimately that's led me to water because ultimately</span>
+					<span class="current">the recognition that the hydrologic integrity of any</span> <span class="current">ecosystem, if it has an imbalance,</span>
+					<span>then the capacity to support life in that system will be always compromised.</span>
+				<p>
+				<p>
+					<span>And so tonight, a little bit of what we want to talk about or what we were asked to talk about</span>
+					<span>is the wisdom of the watershed, and so then we've gotta engage with the anthropomophization</span>
+					<span>of what is a watershed and all of that, and so I wanna dive right into this and I just</span>
+					<span>put together a series of images and slides about water primarily and then we'll get into</span>
+					<span>watersheds and different kinds of things that we can do to engage with or, as you might say, "think like a watershed."</span>
+				</p>
+				<p>
+					<span>So many of you may know this is planet earth here, right? But ultimately as we really know, it's planet</span> 
+					<span>water. And why is that it's because 70% of the surface area is water.</span>
+					<span>It's 70% saline solution actually. Very similar to the amount of saline solution each of you</span>
+					<span>has in your body right now. So you're a bunch of bipedal bags of saline solution.</span>
+				</p>
+				<p>
+					<span>I live in Western Sonoma County, in the town of Occidental</span>
+					<span>and kind of near the coast up in the Redwood country, some know it as wine country</span>
+					I'm a biologist by birth, one of those characters that chase the creepy-crawlies around
+					<span>since I came out of the womb, and ultimately that's led me to water because ultimately</span>
+					<span>the recognition that the hydrologic integrity of any ecosystem, if it has an imbalance,</span>
+					<span>then the capacity to support life in that system will be always compromised</span>
+				<p>
+				<p>
+					<span>And so tonight, a little bit of what we want to talk about or what we were asked to talk about</span>
+					<span>is the wisdom of the watershed, and so then we've gotta engage with the anthropomophization</span>
+					<span>of what is a watershed and all of that, and so I wanna dive right into this and I just</span>
+					<span>put together a series of images and slides about water primarily and then we'll get into</span>
+					<span>watersheds and different kinds of things that we can do to engage with or, as you might say, "think like a watershed."</span>
+				</p>
+				<p>
+					<span>So many of you may know this is planet earth here, right? But ultimately as we really know, it's planet</span> 
+					<span>water. And why is that it's because 70% of the surface area is water.</span>
+					<span>It's 70% saline solution actually. Very similar to the amount of saline solution each of you</span>
+					<span>has in your body right now. So you're a bunch of bipedal bags of saline solution.</span>
+				</p>
+			</div>
+		</div>
+
+	</body>
+</html>

@@ -120,7 +120,7 @@
     <div class="section">
         <div class="grid_3 left_nav_wrapper alpha">
             <h3>{% trans "Video" %}</h3>
-            <ul class="left_nav">
+            <ul class="left_nav" id="video-menu">
                 <li class="active">
                     <a href="{{ video.get_absolute_url }}">{% trans 'Info' %}</a>
                 </li>
@@ -135,13 +135,13 @@
                 <li class="contribute">{% paste_transcription %}</li>
             </ul>
             <h3>{% trans "Subtitles" %}</h3>
-            <ul class="left_nav">
+            <ul class="left_nav" id="subtitles-menu">
                 {% include 'videos/_left_navigation.html' %}
             </ul>
 
             {% switch_feature MODERATION %}
               <h3>{% trans "Moderation" %}</h3>
-              <ul class="left_nav">
+              <ul class="left_nav" id="moderation-menu">
                 <li>{% render_approve_all_button video user %}</li>
                 <li>{% team_add_video_select %}</li>
                 <li>{% render_belongs_to_team_list video %}</li>
@@ -150,7 +150,7 @@
 
             {% if user.is_staff and perms.videos.edit_video %}
               <h3>{% trans "Admin" %}</h3>
-              <ul class="left_nav">
+              <ul class="left_nav" id="admin-menu">
                 <li>
                   <a href="{% url videos:video_debug video.video_id %}" target="blank"> View debug info </a>
                 </li>

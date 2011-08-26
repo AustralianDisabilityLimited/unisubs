@@ -112,7 +112,7 @@ def call_command(command):
     return process.communicate()
 
 def get_cache_base_url():
-    return "%s%s/%s" % (settings.MEDIA_URL_BASE, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
+    return "%s%s/%s" % (settings.STATIC_URL_BASE, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def get_cache_dir():
     return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
@@ -320,7 +320,7 @@ class Command(BaseCommand):
         file_name = 'embed{0}.js'.format(version)
         context = widget.add_offsite_js_files(
             {'current_site': Site.objects.get_current(),
-             'MEDIA_URL': get_cache_base_url() +"/",
+             'STATIC_URL': get_cache_base_url() +"/",
              "js_file": get_cache_base_url() +"/js/unisubs-offsite-compiled.js" })
         rendered = render_to_string(
             'widget/{0}'.format(file_name), context)
@@ -339,7 +339,7 @@ class Command(BaseCommand):
         file_name = os.path.join(JS_LIB, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
-                   'MEDIA_URL': get_cache_base_url()+ "/"}
+                   'STATIC_URL': get_cache_base_url()+ "/"}
         rendered = render_to_string(
             'widget/config.js', context)
         with open(file_name, 'w') as f:

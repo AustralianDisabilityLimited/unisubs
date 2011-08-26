@@ -317,7 +317,7 @@ def edit(request, slug):
 @login_required
 def edit_logo(request, slug):
     team = Team.get(slug, request.user)
-    
+
     if not team.is_member(request.user):
         raise Http404
     

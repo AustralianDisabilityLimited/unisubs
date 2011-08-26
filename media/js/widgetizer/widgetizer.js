@@ -98,7 +98,7 @@ unisubs.Widgetizer.prototype.addHeadCss = function() {
         var css = document.createElement('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = unisubs.Config.siteConfig['mediaURL'] + 
+        css.href = unisubs.Config.siteConfig['staticURL'] + 
             'css/unisubs-widget.css';
         css.media = 'screen';
         head.appendChild(css);

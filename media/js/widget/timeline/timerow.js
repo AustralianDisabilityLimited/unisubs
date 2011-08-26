@@ -30,7 +30,7 @@ unisubs.timeline.TimeRow = function(timelineInner, spacing) {
         unisubs.timeline.TimeRowUL.PX_PER_TICK;
     this.uls_ = [];
 
-    var imagesPath = unisubs.mediaURL + 'images/';
+    var imagesPath = unisubs.staticURL + 'images/';
     this.openHandStyle_ = goog.style.cursor.getDraggableCursorStyle(
         imagesPath);
     this.closedHandStyle_ = goog.style.cursor.getDraggingCursorStyle(

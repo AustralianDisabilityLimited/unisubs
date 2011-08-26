@@ -359,6 +359,7 @@ USE_I18N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = rel('media')+'/'
+STATIC_ROOT = rel('user-data')+'/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -559,6 +560,7 @@ AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
+
 
 AVATAR_MAX_SIZE = 500*1024
 THUMBNAILS_SIZE = (

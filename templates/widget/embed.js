@@ -56,7 +56,7 @@
 
     var siteConfig = {
         siteURL: 'http://{{current_site.domain}}',
-        mediaURL: '{{MEDIA_URL}}'
+        staticURL: '{{STATIC_URL}}'
     };
 
     var scripts = document.getElementsByTagName('script');
@@ -116,7 +116,7 @@
         var css = $c('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = '{{MEDIA_URL}}{% url_for "widget-css" %}';
+        css.href = '{{STATIC_URL}}{% url_for "widget-css" %}';
         css.media = 'screen';
         head.appendChild(css);
     }

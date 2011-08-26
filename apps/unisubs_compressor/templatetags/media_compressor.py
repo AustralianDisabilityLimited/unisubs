@@ -29,14 +29,14 @@ should_compress = None
 def _urls_for(bundle_name, should_compress):
     # if we want to turn off compilation at runtime (eg/ on javascript unit tests)
     # then we need to know the media url prior the the unique mungling
-    media_url = settings.MEDIA_URL
+    media_url = settings.STATIC_URL
     if should_compress is None :
         should_compress = getattr(settings, "COMPRESS_MEDIA",
                                   not getattr(settings, "DEBUG", False))
     else:
         should_compress = bool(should_compress)
         if bool(should_compress) is False:
-            media_url = settings.MEDIA_URL_BASE
+            media_url = settings.STATIC_URL_BASE
     bundle = settings.MEDIA_BUNDLES.get(bundle_name)
     bundle_type = bundle["type"]
 

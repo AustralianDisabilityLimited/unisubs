@@ -216,7 +216,7 @@ class Video(models.Model):
         if self.thumbnail.startswith('http://'):
             return self.thumbnail
         
-        return settings.MEDIA_URL+self.thumbnail
+        return settings.STATIC_URL+self.thumbnail
         
     def is_html5(self):
         try:

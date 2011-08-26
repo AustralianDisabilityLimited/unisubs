@@ -22,7 +22,7 @@ goog.provide('unisubs.Config');
 
 unisubs.Config.siteConfig = {
     'siteURL': 'http://{{current_site.domain}}',
-    'mediaURL': '{{MEDIA_URL}}'
+    'staticURL': '{{STATIC_URL}}'
 };
 
 unisubs.Config.innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';

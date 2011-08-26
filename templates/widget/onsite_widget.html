@@ -6,7 +6,7 @@
 
   {% include_bundle "unisubs-api" %}
   <script type="text/javascript">
-    window.MEDIA_URL = '{{MEDIA_URL}}';
+    window.STATIC_URL = '{{STATIC_URL}}';
     {% if DEBUG %}
     goog.require('goog.debug.FancyWindow');
     {% endif %}

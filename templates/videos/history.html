@@ -394,6 +394,7 @@
     <script>
         $(window).load( function() {
             unisubs.messaging.simplemessage.displayPendingMessages();
+            window.UNISUBS_MOD_REPLACE_HTML_BUTTON = true;
             {% if user_can_moderate %}
                 {% include 'moderation/moderation-buttons.js' %}
             {% endif %}

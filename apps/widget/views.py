@@ -39,6 +39,7 @@ from django.db.models import ObjectDoesNotExist
 from uslogging.models import WidgetDialogCall
 from auth.models import CustomUser
 from django.contrib.admin.views.decorators import staff_member_required
+from widget.models import SubtitlingSession
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -158,19 +159,11 @@ def save_emailed_translations(request):
             'widget/save_emailed_translations.html',
             context_instance=RequestContext(request))
     else:
-        draft = models.SubtitleDraft.objects.get(pk=request.POST['draft_pk'])
+        session = SubtitlingSession.objects.get(pk=request.POST['session_pk'])
         user = CustomUser.objects.get(pk=request.POST['user_pk'])
         subs = json.loads(request.POST['sub_text'])
-        draft.subtitle_set.all().delete()
-        for sub in subs:
-            subtitle = models.Subtitle(
-                draft=draft,
-                subtitle_id=sub['subtitle_id'],
-                subtitle_text=sub['text'])
-            subtitle.save()
-        draft = models.SubtitleDraft.objects.get(pk=draft.pk)
-        rpc_views.save_finished(draft, user)
-        return redirect(draft.video.video_link())        
+        rpc_views.save_finished(user, session, subs)
+        return redirect(session.language.video.video_link())        
 
 def base_widget_params(request, extra_params={}):
     params = {}

@@ -302,13 +302,17 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
+        self.save_finished(
+            request.user, session, subtitles, new_title, completed, forked)
+
+    def save_finished(self, user, session, subtitles, new_title=None, completed=None, forked=False):
         from apps.teams.moderation import is_moderated, user_can_moderate
         
         language = session.language
         new_version = None
         if subtitles is not None and \
                 (len(subtitles) > 0 or language.latest_version(public_only=False) is not None):
-            new_version = self._create_version_from_session(session, request.user, forked)
+            new_version = self._create_version_from_session(session, user, forked)
             new_version.save()
             self._save_subtitles(
                 new_version.subtitle_set, subtitles, new_version.is_forked)
@@ -332,8 +336,7 @@ class Rpc(BaseRpc):
         if new_version is not None and new_version.version_no == 0:
             user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
-            
-            if user_can_moderate(language.video, request.user) is False:
+            if user_can_moderate(language.video, user) is False:
                 user_message = """This video is moderated by %s. 
 
 You will not see your subtitles in our widget when you leave this page, they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles, they will show up on our site and in the widget.

@@ -312,6 +312,7 @@ class Announcement(models.Model):
     hidden = models.BooleanField(default=False)
     
     cache_key = 'last_accouncement'
+    cookie_name = 'hide_accouncement'
     
     class Meta:
         ordering = ['-created']
@@ -325,16 +326,17 @@ class Announcement(models.Model):
         self.clear_cache()
 
     def delete(self, *args, **kwargs):
-        self.clear_cache()
         return super(Announcement, self).delete(*args, **kwargs)
+        self.clear_cache()
     
     @classmethod
-    def last(cls):
+    def last(cls, hidden_id=None):
         last = cache.get(cls.cache_key, '')
 
         if last == '':
             try:
-                last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
+                last = cls.objects.exclude(pk=hidden_id).filter(created__lte=datetime.today()) \
+                    .filter(hidden=False)[0:1].get()
             except cls.DoesNotExist:
                 last = None
             cache.set(cls.cache_key, last, 60*60)

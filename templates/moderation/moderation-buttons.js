@@ -123,7 +123,7 @@ function sendModeration(el, extra){
     $(el).attr('#');
     var btn = $(el);
     var isRejection = $(el).hasClass(rejectionMarkerClass);
-    $(el).data("")
+    $(el).data("");
     $.ajax( {
         url: url,
         dataType: 'json',
@@ -168,3 +168,4 @@ function ajaxifyApproveButtons(el){
 }
 ajaxifyApproveButtons();
 window.ajaxifyApproveButtons = ajaxifyApproveButtons;
+window.addCSRFHeader($);

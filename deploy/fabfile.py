@@ -148,6 +148,8 @@ def refresh_db():
     sudo('/scripts/univsubs_refresh_db.sh {0}'.format(env.installation_name))
     promote_django_admins()
     bounce_memcached()
+    run('{0}/env/bin/python manage.py fix_static_files '
+        '--settings=unisubs_settings'.format(env.static_dir))
 
 def update_closure():
     # this happens so rarely, it's not really worth putting it here.

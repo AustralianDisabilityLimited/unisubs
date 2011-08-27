@@ -52,3 +52,20 @@ unisubs.UserSettings.getStringValue = function(setting) {
     else
         return null;
 };
+
+unisubs.UserSettings.setFloatValue = function(setting, value) {
+    if (goog.net.cookies.isEnabled())
+        goog.net.cookies.set(setting, value);
+};
+
+unisubs.UserSettings.getFloatValue = function(setting, ifNanVal) {
+    var val = null;
+    if (goog.net.cookies.isEnabled()){
+        val = parseFloat(goog.net.cookies.get(setting));
+        if (isNaN(val) && goog.isDefAndNotNull(ifNanVal)){
+            val =  ifNanVal;
+        }
+
+    }
+    return val;    
+};

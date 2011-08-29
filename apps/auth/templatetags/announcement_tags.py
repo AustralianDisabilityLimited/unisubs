@@ -18,17 +18,21 @@
 
 from django import template
 from auth.models import Announcement
+from datetime import datetime
+from urllib2 import unquote
 
 register = template.Library()
 
 @register.inclusion_tag('auth/_announcement.html', takes_context=True)
 def announcement(context):
     try:
-        hidden_id = int(context['request'].COOKIES.get(Announcement.cookie_name))
-    except (TypeError, ValueError):
-        hidden_id = None
+        date_str = unquote(context['request'].COOKIES.get(Announcement.hide_cookie_name))
+        hidden_date = datetime.strptime(date_str, Announcement.cookie_date_format)
+    except (ValueError, TypeError, AttributeError):
+        hidden_date = None
         
     return {
-        'obj': Announcement.last(hidden_id),
-        'cookie_name': Announcement.cookie_name
+        'obj': Announcement.last(hidden_date),
+        'cookie_name': Announcement.hide_cookie_name,
+        'date': datetime.now().strftime(Announcement.cookie_date_format)
     }

@@ -22,7 +22,8 @@ from django.views.generic.list_detail import object_list
 from messages.rpc import MessagesApiClass
 from utils.rpc import RpcRouter
 from messages.forms import SendMessageForm
-
+from django.utils.http import cookie_date
+import time
 
 rpc_router = RpcRouter('messages:rpc_router', {
     'MessagesApi': MessagesApiClass()
@@ -52,11 +53,20 @@ def index(request, message_pk=None):
         except (Message.DoesNotExist, ValueError):
             pass
 
-    return object_list(request, queryset=qs,
+    response = object_list(request, queryset=qs,
                        paginate_by=MESSAGES_ON_PAGE,
                        template_name='messages/index.html',
                        template_object_name='message',
                        extra_context=extra_context)
+    try:
+        last_message = qs[:1].get()
+        max_age = 60*60*24*365
+        expires = cookie_date(time.time()+max_age)
+        response.set_cookie(Message.hide_cookie_name, last_message.pk, max_age, expires)
+    except Message.DoesNotExist:
+        pass
+    
+    return response
     
 @login_required    
 def sent(request):

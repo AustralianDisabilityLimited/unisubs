@@ -167,14 +167,14 @@
                 <li>
                     <a href="{{ video.get_absolute_url }}">{% trans 'Info' %}</a>
                 </li>
-                <li class="contribute">{% upload_subtitles video %}<li>
-                <li class="contribute">
+                 <li class="contribute">
                   {% if not video.subtitle_language %}
                       <a href="#" id="add_subtitles"> {% trans 'Add Subtitles' %}</a><br /><br />
                   {% else %}
                       <a class="add-translation-behavior" id="add_translation " href="#">{% trans 'Add Translation' %}</a>
                   {% endif %}
                 <li>
+                <li class="contribute">{% upload_subtitles video %}<li>
                 <li class="contribute">{% paste_transcription %}</li>
             </ul>
             <h3>{% trans "Subtitles" %}</h3>

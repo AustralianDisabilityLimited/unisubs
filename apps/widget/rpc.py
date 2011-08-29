@@ -115,10 +115,11 @@ class Rpc(BaseRpc):
         return_value['my_languages'] = \
             get_user_languages_from_request(request)
 
-        if base_state is not None and base_state.get("language_code", None) is not None:
+        # keeping both forms valid as backwards compatibility layer
+        lang_code = base_state.get("language_code", base_state.get("language", None))
+        if base_state is not None and lang_code is not None:
             lang_pk = base_state.get('language_pk', None)
             if lang_pk is  None:
-                lang_code = base_state.get('language_code', None)
                 lang_pk = video_cache.pk_for_default_language(video_id, lang_code)
             subtitles = self._autoplay_subtitles(
                 request.user, video_id, 

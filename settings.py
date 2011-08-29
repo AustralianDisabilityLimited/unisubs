@@ -178,6 +178,7 @@ JS_CORE = \
      'js/messaging/simplemessage.js',
      'js/video/video.js',
      'js/video/captionview.js',
+     'js/widget/usersettings.js',
      'js/video/abstractvideoplayer.js',
      'js/video/flashvideoplayer.js',
      'js/video/html5videoplayer.js',
@@ -208,7 +209,6 @@ JS_CORE = \
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
-     'js/widget/usersettings.js',
      'js/widget/logindialog.js',
      'js/widget/videotab.js',
      'js/widget/howtovideopanel.js',
@@ -359,6 +359,7 @@ USE_I18N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = rel('media')+'/'
+STATIC_ROOT = rel('user-data')+'/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -558,7 +559,9 @@ except ImportError:
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
+AWS_USER_DATA_BUCKET_NAME  = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
+
 
 AVATAR_MAX_SIZE = 500*1024
 THUMBNAILS_SIZE = (
@@ -765,3 +768,4 @@ MEDIA_BUNDLES = {
 FEATURE_FLAGS  = {
     "MODERATION" : False
 }
+

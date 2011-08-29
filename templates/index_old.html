@@ -69,19 +69,19 @@
       </fieldset>
       <fieldset id="any_video">
       <label>{% trans "For every video on a page or site" %}</label>
-      <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+      <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{STATIC_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
       <span class="caption">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
       </fieldset>
     </form>
           
     <h4>{% trans "Universal Subtitles works with these video sites and formats" %}</h5>
     <div id="video_sites">
-      <img id="example_video" src="{{ MEDIA_URL }}images/index/video2.jpg" alt="Example Video" />
-      <img src="{{ MEDIA_URL }}images/index/video_site/video_00.jpg" alt="YouTube" />
-      <img src="{{ MEDIA_URL }}images/index/video_site/video_01.jpg" alt="Vimeo" />
-      <img src="{{ MEDIA_URL }}images/index/video_site/video_02.jpg" alt="Blip.tv" />
-      <img src="{{ MEDIA_URL }}images/index/video_site/video_03.jpg" alt="h.264" />
-      <img src="{{ MEDIA_URL }}images/index/video_site/video_04.jpg" alt="HTML5" />
+      <img id="example_video" src="{{ STATIC_URL }}images/index/video2.jpg" alt="Example Video" />
+      <img src="{{ STATIC_URL }}images/index/video_site/video_00.jpg" alt="YouTube" />
+      <img src="{{ STATIC_URL }}images/index/video_site/video_01.jpg" alt="Vimeo" />
+      <img src="{{ STATIC_URL }}images/index/video_site/video_02.jpg" alt="Blip.tv" />
+      <img src="{{ STATIC_URL }}images/index/video_site/video_03.jpg" alt="h.264" />
+      <img src="{{ STATIC_URL }}images/index/video_site/video_04.jpg" alt="HTML5" />
     </div><!-- // video_site_box -->
     </div><!-- // add_subtitles -->
   

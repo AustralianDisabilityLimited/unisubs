@@ -10,20 +10,20 @@
   {% endif %}
   <script type="text/javascript">
     window.usStartTime = (new Date()).getTime();
-    window.MEDIA_URL = '{{MEDIA_URL}}';
+    window.STATIC_URL = '{{STATIC_URL}}';
   </script>
 {% block css %}{% include_bundle "base" %}{% endblock %}
 
 <!--[if gte IE 8]>
-<link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
+<link href="{{ STATIC_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
 <![endif]-->
 <!--[if IE 8]>
 <style>
 .notIE { display: none !important ; }
 </style>
 <![endif]-->
-<link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
-<link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
+<link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}images/favicon.png" />
+<link rel="icon" type="image/png" href="{{ STATIC_URL }}images/favicon.png" />
 {% include_bundle "site_base_js" %}
 
 <script type="text/javascript">

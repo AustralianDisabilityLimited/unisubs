@@ -21,7 +21,7 @@
             {% if team.logo %}
                 <img class="author-avatar" src="{{ team.small_logo_thumbnail }}" alt="{% trans 'avatar' %}"/>
             {% else %}
-                <img class="author-avatar" src="{{ MEDIA_URL }}images/default_thumb_small.png" alt="{% trans 'logo' %}"/>
+                <img class="author-avatar" src="{{ STATIC_URL }}images/default_thumb_small.png" alt="{% trans 'logo' %}"/>
             {% endif %} 
             <span class="author-username">{{ team }}</span>
         </span>

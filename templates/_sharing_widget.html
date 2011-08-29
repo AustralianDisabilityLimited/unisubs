@@ -1,7 +1,7 @@
 {% load i18n videos_tags %}
 <div class="unisubs-share">
   
-  <img src="{{MEDIA_URL}}images/blue_triangle.png" class="unisubs-blueTriangle" />
+  <img src="{{STATIC_URL}}images/blue_triangle.png" class="unisubs-blueTriangle" />
   <h2>{% trans 'Share your subtitles' %}</h2>
   
   <p>
@@ -23,14 +23,14 @@
             width="110"
             height="14"
             id="clippy" >
-    <param name="movie" value="{{MEDIA_URL}}swf/clippy.swf"/>
+    <param name="movie" value="{{STATIC_URL}}swf/clippy.swf"/>
     <param name="allowScriptAccess" value="always" />
     <param name="wmode" value="opaque" />
     <param name="quality" value="high" />
     <param name="scale" value="noscale" />
     <param NAME="FlashVars" value="text={{share_panel_embed_code|urlencode}}"/>
     <param name="bgcolor" value="#E4EFF3"/>
-    <embed src="{{MEDIA_URL}}swf/clippy.swf"
+    <embed src="{{STATIC_URL}}swf/clippy.swf"
            width="110"
            height="14"
            name="clippy"

@@ -143,7 +143,7 @@ def statwidget_demo(request):
     js_files = ['http://{0}/widget/statwidgetconfig.js'.format(
             Site.objects.get_current().domain)]
     js_files.append('{0}js/statwidget/statwidget.js'.format(
-            settings.MEDIA_URL))
+            settings.STATIC_URL))
     context = widget.add_js_files({}, settings.COMPRESS_MEDIA,
                                settings.JS_OFFSITE,
                                'unisubs-statwidget.js',

@@ -208,7 +208,7 @@ unisubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {
     return [
         '<sc',
         'ript type="text/javascript" src="',
-        unisubs.mediaURL(),
+        unisubs.staticURL(),
         'embed', unisubs.embedVersion, '.js',
         '">\n',
         '({\n',

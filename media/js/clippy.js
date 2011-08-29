@@ -21,7 +21,7 @@ goog.provide('unisubs.Clippy');
 unisubs.Clippy.getHTML = function(text) {
     return unisubs.Flash.getHTML(
         'clippy', 
-        unisubs.mediaURL() + 'swf/clippy.swf',
+        unisubs.staticURL() + 'swf/clippy.swf',
         110, 14, 
         new goog.structs.Map({'text' : text}));
 };

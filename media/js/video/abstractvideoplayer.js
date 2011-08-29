@@ -62,7 +62,7 @@ unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
   doesn't have to reset the volume for each edit, this is the identifier
   for that volume 
 */
-unisubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID  = "lastestVolume";
+unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME  = "lastestVolume";
 
 if (goog.DEBUG) {
     unisubs.video.AbstractVideoPlayer.logger_ = 
@@ -281,13 +281,11 @@ unisubs.video.AbstractVideoPlayer.prototype.setVolume = function(volume) {
 };
 
 unisubs.video.AbstractVideoPlayer.prototype.rememberVolume_ = function (volume){
-    var cookie = new goog.net.Cookies(document);
-    cookie.set(unisubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID, volume);
+    unisubs.UserSettings.setFloatValue(unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME, volume)
 }
 
 unisubs.video.AbstractVideoPlayer.prototype.fetchLastSetVolume_ = function (volume){
-
-    return new goog.net.Cookies(document).get(unisubs.video.AbstractVideoPlayer.VOLUME_COOKIE_ID, 1);
+    return unisubs.UserSettings.getFloatValue(unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME,  1)
 }
 
 unisubs.video.AbstractVideoPlayer.prototype.restorePreviousVolume_ = function (){

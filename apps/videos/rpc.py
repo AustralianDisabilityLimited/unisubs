@@ -418,7 +418,7 @@ def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
     if request:
         content = render_to_string(template, context, RequestContext(request))
     else:
-        context['MEDIA_URL'] = settings.MEDIA_URL
+        context['STATIC_URL'] = settings.STATIC_URL
         content = render_to_string(template, context)
         
     total = qs.count()

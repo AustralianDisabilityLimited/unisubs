@@ -28,7 +28,7 @@ unisubs.REPORT_ANALYTICS = true;
 /**
  * If a widget is embedded in a different domain, this is set by
  * unisubs.widget.CrossDomainEmbed. It has two properties: siteURL
- * and mediaURL. It is non-null iff the widget is embedded in a 
+ * and staticURL. It is non-null iff the widget is embedded in a 
  * different domain.
  */
 unisubs.siteConfig = null;
@@ -120,13 +120,13 @@ unisubs.siteURL = function() {
 /**
  * Includes trailing slash.
  */
-unisubs.mediaURL = function() {
+unisubs.staticURL = function() {
     return unisubs.siteConfig ? 
-        unisubs.siteConfig['mediaURL'] : window['MEDIA_URL'];
+        unisubs.siteConfig['staticURL'] : window['STATIC_URL'];
 };
 
 unisubs.imageAssetURL = function(imageFileName) {
-    return [unisubs.mediaURL(), 'images/', imageFileName].join('');
+    return [unisubs.staticURL(), 'images/', imageFileName].join('');
 };
 
 /**

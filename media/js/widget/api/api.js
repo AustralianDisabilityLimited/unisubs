@@ -25,8 +25,8 @@ goog.provide('unisubs.api');
  */
 unisubs.api.openDialog = function(config) {
     unisubs.siteConfig = unisubs.Config.siteConfig;
-    if (config['mediaURL'])
-        unisubs.Config.siteConfig['mediaURL'] = config['mediaURL'];
+    if (config['staticURL'])
+        unisubs.Config.siteConfig['staticURL'] = config['staticURL'];
     var subtitles = config['subtitles'];
     var closeListener = config['closeListener'];
     var videoURL = config['videoURL'];

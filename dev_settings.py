@@ -29,7 +29,8 @@ debug = False
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
-MEDIA_URL = "http://unisubs.example.com:8000/site_media/"
+STATIC_URL = "http://unisubs.example.com:8000/site_media/static/"
+MEDIA_URL = "http://unisubs.example.com:8000/site_media/user-uploads/"
 
 # MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
 
@@ -57,6 +58,6 @@ try:
 except ImportError:
     pass
 
-MEDIA_URL_BASE = MEDIA_URL
+STATIC_URL_BASE = STATIC_URL
 if COMPRESS_MEDIA:
-    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
+    STATIC_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])

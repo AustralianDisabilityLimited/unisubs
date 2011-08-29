@@ -18,7 +18,7 @@
 
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
     {% with write_video_type_js as jsinclude %}{% if jsinclude %}{% write_video_type_js video %}{% endif %}{% endwith %}
-    <script src="{{ MEDIA_URL }}js/jquery.tabs.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.tabs.js" type="text/javascript"></script>
     <script type="text/javascript">
         //create url template
         var DIFFING_URL = function() {
@@ -113,7 +113,7 @@
     {% if video.thumbnail %}
     <meta property="og:image" content="{{ video.get_thumbnail }}" />
     {% else %}
-    <meta property="og:image" content="{{ MEDIA_URL }}images/small_logo.png" />
+    <meta property="og:image" content="{{ STATIC_URL }}images/small_logo.png" />
     {% endif %}
 
     <meta property="og:site_name" content="Universal Subtitles"/>

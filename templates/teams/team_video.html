@@ -19,14 +19,15 @@
 {% endblock %}
 
 {% block settings_content %}
-    <h2>{{ team }}</h2>
-    {% with "videos" as active %}
-        {% include 'teams/_edit_top_navigation.html' %}
-    {% endwith %}
-    <div class="boxx">
+    <div class="hd">
+        <h2>{{ team }}</h2>
+        {% with "videos" as active %}
+            {% include 'teams/_edit_top_navigation.html' %}
+        {% endwith %}
+    </div>
         <div class="padding">
-            {% widget widget_params %}
             <form method='post' action="." enctype="multipart/form-data">
+            {% widget widget_params %}
             {{ form.as_p }}
             {% csrf_token %}              
             {% if form.is_moderated_by_other_team %}
@@ -35,15 +36,11 @@
 
             {% endif %}
 
-            <p>
-                <br/>
+            <div class="ft">
                 <button class="green_button small"><span>{% trans 'Save' %}</span></button>
-            </p>
+            </div>
             </form>
-            <div class="clearfix"></div>        
         </div>
-        <div class="clearfix"></div>
-    </div>
     <script type="text/javascript"> 
       {% include "teams/team_video.js" %}
     </script>

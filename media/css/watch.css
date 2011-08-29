@@ -267,13 +267,13 @@ ul.video_list > li {
     height: 250px;
 }
 
-ul.video_list li ul.meta {
+ul.video_list li ul.details {
     border-top: 1px solid #dae1e4;
     padding: 5px 0 0;
     font-size: 12px;
 }
 
-ul.video_list li ul.meta li {
+ul.video_list li ul.details li {
     padding-bottom: 5px;
 }
 

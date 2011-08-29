@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n media_compressor feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags %}
+{% load i18n media_compressor feedback recent_activity widget i18n announcement_tags messages_tags profiles_tags video_search %}
 {% block body_attrs %}id="index"{% endblock %}
 
 {% block css %}
@@ -134,52 +134,14 @@
       <h2>{% trans "Most Popular Today" %}</h2>
       
       <p class="links">
-        <a href="{% url videos:popular_videos %}/#/?sort=month">{% trans "Top this month" %}</a>
-        <a href="{% url videos:popular_videos %}/#/?sort=total">{% trans "Top all-time" %}</a>
+        <a href="{% url videos:popular_videos %}#?sort=month">{% trans "Top this month" %}</a>
+        <a href="{% url videos:popular_videos %}#?sort=total">{% trans "Top all-time" %}</a>
       </p>
        <ul class="video_list clearfix">
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
+            {% with popular_videos as video_list %}
+                {% include 'videos/_watch_page.html' with showdate="true" %}
+            {% endwith %}    
+
         </ul>
     </div><!-- // most_popular -->
     
@@ -192,50 +154,12 @@
       </p>
       
       <ul class="video_list clearfix">
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-          <span class="date_added">10/09/10</span>
-          <span class="date_edited">5/09/12</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ STATIC_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
+
+            {% with featured_videos as video_list %}
+                {% include 'videos/_watch_page.html' with showdate="true" %}
+            {% endwith %}    
+
+
       </ul>
     </div><!-- // featured_videos -->
 {% endblock %}<!-- // main_content -->

@@ -49,15 +49,18 @@ def get_user_languages_from_request(request, only_supported=False, with_names=Fa
     languages = []
     if request.user.is_authenticated():
         languages = [l.language for l in request.user.get_languages()]    
-        
+
     if not languages:
         languages = languages_from_request(request)
 
     if only_supported:
+        languages_to_remove = []
         for item in languages:
             if not item in SUPPORTED_LANGUAGES_DICT and \
                 not item.split('-')[0] in SUPPORTED_LANGUAGES_DICT:
-                    languages.remove(item)
+                    languages_to_remove.append(item)
+        for item in languages_to_remove:
+            languages.remove(item)
 
     return with_names and languages_with_names(languages) or languages
 

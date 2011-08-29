@@ -3155,6 +3155,10 @@ background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
    background: none;
 }
 
+.unisubs-dropdown .unisubs-languageList ul li.request {
+   padding: 18px !important;
+}
+
 .unisubs-dropdown .unisubs-languageList ul li:hover {
     list-style: none !important;
     border-bottom: 1px solid #aaa !important;
@@ -3174,22 +3178,31 @@ font-weight: bold !important;
 background: url("../images/dropdown_icons.png") 250px -231px no-repeat !important;
 }
 
-
-
-
 .unisubs-dropdown .unisubs-languageList ul li a {
-    margin: 0 !important;
-    font-size: 14px !important;
-    display: block !important;
-color: #333 !important;
-    text-decoration: none !important;
-    padding: 10px 0 8px 10px !important;
+   margin: 0 !important;
+   font-size: 14px !important;
+   display: block !important;
+   color: #333 !important;
+   text-decoration: none !important;
+   padding: 10px 0 8px 10px !important;
 }
 
 .unisubs-dropdown .unisubs-languageList ul li a:hover {
     text-decoration: none !important;
 }
 
+.unisubs-dropdown .unisubs-languageList ul li a.requestsubs {
+   margin: 0 !important;
+   font-size: inherit !important;
+   display: inline !important;
+   color: inherit !important;
+   text-decoration: underline !important;
+   padding: 0 !important;
+}
+
+.unisubs-dropdown .unisubs-languageList ul li a.requestsubs:hover {
+   text-decoration: underline !important;
+}
 
 
 .unisubs-dropdown .unisubs-languageList ul li span.unisubs-languageStatus {

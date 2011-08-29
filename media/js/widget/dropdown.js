@@ -57,6 +57,7 @@ unisubs.widget.DropDown.prototype.hasSubtitles = function() {
 };
 unisubs.widget.DropDown.prototype.setStats_ = function(dropDownContents) {
     this.videoLanguages_ = dropDownContents.LANGUAGES;
+    this.shouldShowRequestLink_ = dropDownContents.shouldShowRequestLink();
     this.isModerated_ = dropDownContents.IS_MODERATED;
 };
 
@@ -115,12 +116,30 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
     goog.dom.setTextContent(
         this.subCountSpan_, '(' + this.subtitleCount_ + ' lines)');
 
-    this.languageList_.appendChild(
+    goog.dom.append(
+        this.languageList_, 
         $d('li', 'unisubs-hintTranslate',
            $d('span', 'unisubs-asterisk', '*'),
-           ' = Missing sections translated by Google Translate'));
-    this.languageList_.appendChild(this.subtitlesOff_);
+           ' = Missing sections translated by Google Translate'),
+        this.subtitlesOff_);
 
+    if (this.shouldShowRequestLink_) {
+        this.addLanguageListRequestLink_($d);
+    }
+
+    this.addVideoLanguagesLinks_($d);
+};
+
+unisubs.widget.DropDown.prototype.addLanguageListRequestLink_ = function($d) {
+    this.languageListRequestLink_ = 
+        $d('a', {'href': '#', 'className': 'requestsubs'}, "request subtitles");
+    var li = $d('li', 'request',
+                "Don't see the language you want? Please ",
+                this.languageListRequestLink_, "!");
+    goog.dom.append(this.languageList_, li);
+};
+
+unisubs.widget.DropDown.prototype.addVideoLanguagesLinks_ = function($d) {
     this.videoLanguagesLinks_ = [];
 
     for (var i = 0; i < this.videoLanguages_.length; i++) {
@@ -136,7 +155,7 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
             { link: link, 
               linkLi: linkLi, 
               videoLanguage: data});
-        this.languageList_.appendChild(linkLi);
+        goog.dom.append(this.languageList_, linkLi);
     }
 };
 
@@ -239,28 +258,29 @@ unisubs.widget.DropDown.prototype.updateActions_ = function() {
 unisubs.widget.DropDown.prototype.enterDocument = function() {
     unisubs.widget.DropDown.superClass_.enterDocument.call(this);
     var s = unisubs.widget.DropDown.Selection;
+    var click = goog.events.EventType.CLICK;
     this.getHandler().
-        listen(this.unisubsLink_, 'click',
+        listen(this.unisubsLink_, click,
             function(e) { window.open('http://www.universalsubtitles.org'); }).
-        listen(this.addLanguageLink_, 'click',
+        listen(this.addLanguageLink_, click,
                goog.bind(this.menuItemClicked_, this, s.ADD_LANGUAGE)).
-        listen(this.improveSubtitlesLink_, 'click',
+        listen(this.improveSubtitlesLink_, click,
                goog.bind(this.menuItemClicked_, this, s.IMPROVE_SUBTITLES)).
-        listen(this.requestSubtitlesLink_, 'click',
+        listen(this.requestSubtitlesLink_, click,
                goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES)).
-        listen(this.subtitleHomepageLink_, 'click',
+        listen(this.subtitleHomepageLink_, click,
                goog.bind(this.menuItemClicked_, this, s.SUBTITLE_HOMEPAGE)).
-        listen(this.downloadSubtitlesLink_, 'click',
+        listen(this.downloadSubtitlesLink_, click,
                goog.bind(this.menuItemClicked_, this, s.DOWNLOAD_SUBTITLES)).
-        listen(this.createAccountLink_, 'click',
+        listen(this.createAccountLink_, click,
                goog.bind(this.menuItemClicked_, this, s.CREATE_ACCOUNT)).
-        listen(this.languagePreferencesLink_, 'click',
+        listen(this.languagePreferencesLink_, click,
                goog.bind(this.menuItemClicked_, this, s.LANGUAGE_PREFERENCES)).
-        listen(this.subtitlesOff_, 'click',
+        listen(this.subtitlesOff_, click,
                goog.bind(this.menuItemClicked_, this, s.SUBTITLES_OFF)).
-        listen(this.usernameLink_, 'click',
+        listen(this.usernameLink_, click,
                goog.bind(this.menuItemClicked_, this, s.USERNAME)).
-        listen(this.logoutLink_, 'click',
+        listen(this.logoutLink_, click,
                goog.bind(this.menuItemClicked_, this, s.LOGOUT)).
         listen(unisubs.userEventTarget,
                goog.object.getValues(unisubs.EventType),
@@ -268,6 +288,11 @@ unisubs.widget.DropDown.prototype.enterDocument = function() {
         listen(this.getDomHelper().getDocument(),
                goog.events.EventType.MOUSEDOWN,
                this.onDocClick_, true);
+    if (this.languageListRequestLink_) {
+        this.getHandler().listen(
+            this.languageListRequestLink_, click, 
+            goog.bind(this.menuItemClicked_, this, s.REQUEST_SUBTITLES));
+    }
 
     // Webkit doesn't fire a mousedown event when opening the context menu,
     // but we need one to update menu visibility properly. So in Safari handle

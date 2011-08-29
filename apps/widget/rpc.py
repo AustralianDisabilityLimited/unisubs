@@ -1,4 +1,3 @@
-
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -34,7 +33,7 @@ from django.utils.translation import ugettext as _
 from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
-
+from django.utils import translation
 
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
@@ -113,6 +112,9 @@ class Rpc(BaseRpc):
         return_value['drop_down_contents'] = \
             video_cache.get_video_languages(video_id)
 
+        return_value['my_languages'] = \
+            get_user_languages_from_request(request)
+
         if base_state is not None and base_state.get("language_code", None) is not None:
             lang_pk = base_state.get('language_pk', None)
             if lang_pk is  None:
@@ -132,6 +134,14 @@ class Rpc(BaseRpc):
                         request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
+
+    def _find_remote_autoplay_language(self, request):
+        language = None
+        if request.user.is_anonymous() or request.user.preferred_language == '':
+            language = translation.get_language_from_request(request)
+        else:
+            language = request.user.preferred_language
+        return language if language != '' else None
 
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)

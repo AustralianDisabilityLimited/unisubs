@@ -53,7 +53,9 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
     }
 
     var dropDownContents = new unisubs.widget.DropDownContents(
-        result['drop_down_contents'], result["is_moderated"]);
+        result['drop_down_contents'], 
+        result['my_languages'],
+        result["is_moderated"]);
     var subtitleState = unisubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
 
@@ -67,7 +69,7 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
     unisubs.style.showElement(popupMenu.getElement(), false);
 
     popupMenu.setCurrentSubtitleState(subtitleState);
-    popupMenu.dispatchLanguageSelection_(this.currentLang_);
+    popupMenu.dispatchLanguageSelection_(null);
 
     this.playController_ = new unisubs.widget.PlayController(
         videoID, this.videoPlayer_.getVideoSource(), this.videoPlayer_, 

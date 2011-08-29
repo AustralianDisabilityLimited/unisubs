@@ -21,16 +21,40 @@ goog.provide('unisubs.widget.DropDownContents');
 /**
  * @constructor
  */
-unisubs.widget.DropDownContents = function(languages, isModerated) {
+unisubs.widget.DropDownContents = function(languages, myLanguages,  isModerated) {
     /**
      * @type {Array.<unisubs.startdialog.VideoLanguage>}
      */
-    this.LANGUAGES = goog.array.map(languages, function(l){
+    this.LANGUAGES = goog.array.map(languages, function(l) {
         return new unisubs.startdialog.VideoLanguage(l);
     });
+    var allToLower = function(arr) {
+        return goog.array.map(arr, function(i) { return i.toLowerCase(); });
+    };
+    /**
+     * @type {Array.<string>} 
+     */
+    this.LANGUAGE_CODES_ = allToLower(
+        goog.array.map(languages, function(l) { 
+            return l['language']; 
+        }));
+    /**
+     * @type {Array.<string>}
+     */
+    this.MY_LANGUAGES = allToLower(myLanguages);
     /**
      * @type {bool}
      */
     this.IS_MODERATED = isModerated;
+};
 
+unisubs.widget.DropDownContents.prototype.shouldShowRequestLink = function() {
+    var allMyLanguagesMissing = goog.array.every(
+        this.MY_LANGUAGES,
+        function(l) {
+            return !goog.array.contains(this.LANGUAGE_CODES_, l);
+        },
+        this);
+    return this.LANGUAGES.length < 3 || allMyLanguagesMissing;
+        
 };

@@ -55,6 +55,6 @@ unisubs.widget.DropDownContents.prototype.shouldShowRequestLink = function() {
             return !goog.array.contains(this.LANGUAGE_CODES_, l);
         },
         this);
-    return this.LANGUAGES.length < 3 || allMyLanguagesMissing;
+    return this.LANGUAGES.length <= 3 || allMyLanguagesMissing;
         
 };

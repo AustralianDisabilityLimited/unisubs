@@ -83,10 +83,18 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
-    def unread_messages(self):
+    def unread_messages(self, hidden_meassage_id=None):
         from messages.models import Message
         
-        return Message.objects.for_user(self).filter(read=False)
+        qs = Message.objects.for_user(self).filter(read=False)
+        
+        try:
+            if hidden_meassage_id:
+                qs = qs.filter(pk__gt=hidden_meassage_id)
+        except (ValueError, TypeError):
+            pass
+        
+        return qs
     
     @classmethod
     def video_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -312,7 +320,8 @@ class Announcement(models.Model):
     hidden = models.BooleanField(default=False)
     
     cache_key = 'last_accouncement'
-    cookie_name = 'hide_accouncement'
+    hide_cookie_name = 'hide_accouncement'
+    cookie_date_format = '%d/%m/%Y %H:%M:%S'
     
     class Meta:
         ordering = ['-created']
@@ -330,13 +339,16 @@ class Announcement(models.Model):
         self.clear_cache()
     
     @classmethod
-    def last(cls, hidden_id=None):
+    def last(cls, hidden_date=None):
         last = cache.get(cls.cache_key, '')
-
+        
         if last == '':
             try:
-                last = cls.objects.exclude(pk=hidden_id).filter(created__lte=datetime.today()) \
-                    .filter(hidden=False)[0:1].get()
+                qs = cls.objects.filter(created__lte=datetime.today()) \
+                    .filter(hidden=False)
+                if hidden_date:
+                    qs = qs.filter(created__gt=hidden_date)
+                last = qs[0:1].get()
             except cls.DoesNotExist:
                 last = None
             cache.set(cls.cache_key, last, 60*60)

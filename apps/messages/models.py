@@ -64,7 +64,9 @@ class Message(models.Model):
     object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
 
     objects = MessageManager()
-
+    
+    hide_cookie_name = 'hide_new_messages'
+    
     class Meta:
         ordering = ['-created']
     

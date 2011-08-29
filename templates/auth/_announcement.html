@@ -4,12 +4,14 @@
 <div class="note">
     {{ obj.content|safe }}
     <div></div>
-    <a href="#" announcement_id="{{ obj.pk }}" class="hide-announcement" style="float: right; font-size: 0.8em">{% trans "hide" %}</a>
+    <a href="#" class="hide-announcement" style="float: right; font-size: 0.8em">{% trans "hide" %}</a>
     <script type="text/javascript">
         $('.note .hide-announcement').click(function(){
             var $this = $(this);
             $this.parents('.note').hide();
-            document.cookie = '{{ cookie_name }}='+$this.attr('announcement_id');
+            var d = new Date()
+            d.setTime(d.getTime() + 60*60*24*365*1000)
+            document.cookie = '{{ cookie_name }}={{ date|urlencode }}; path=/; expires='+d.toUTCString();
             return false;
         });
     </script>

@@ -3446,3 +3446,8 @@ label[for="unisubs-request-track"]{
   height: 60px;
   margin: 10px 10px;
 }
+
+.unisubs-modal-lang  .unisubs-request-div .warning {
+  font-weight: bold;
+  color: #c03 !important;
+}

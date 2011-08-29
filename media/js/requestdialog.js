@@ -40,37 +40,47 @@ unisubs.RequestDialog = function(videoID) {
     // Stores the description for the request
     this.description_ = null;
     /**
-     * The string which will denote no language selected
+     * Placeholder language option
      * @const
      * @type {string}
      */
-    this.EMPTY_LANG_ = '-------------'
+    this.EMPTY_LANG_ = 'Select a language';
+    /**
+     * Message shown to user if they don't select a language
+     * @const
+     * @type {string}
+     */
+    this.EMPTY_LANG_WARNING_ = 'Please select a language to continue';
+    /**
+     * Message shown to user if they don't enter a description
+     * @const
+     * @type {string}
+     */
+    this.EMPTY_DESC_WARNING_ = 'Please provide a reason for your request';
     /**
      * Label for tracking request checkbox
      * @const
      * @type {string}
      */
-    this.TRACK_REQUEST_LABEL_ = 'Keep me posted about future relating activity';
+    this.TRACK_REQUEST_LABEL_ = 'Subscribe to updates about this video';
     /**
      * The default content of request description text area
      * @const
      * @type {string}
      */
-    this.DESCRIPTION_INITIAL_ = 'Please tell us about the reason you need '+
-                                'the subtitles so that volunteers can act '+
-                                'appropriately.';
+    this.DESCRIPTION_INITIAL_ = 'Tell us why you\'re requesting these subtitles';
     /**
      * Displayed on a successfull request submission
      * @const
      * @type {string}
      */
-    this.SUBMISSION_CONFIRM_ = 'Request Submitted. Thanks!';
+    this.SUBMISSION_CONFIRM_ = 'Your request has been submitted. Thanks!';
     /**
      * Error to be shown when the response from server is negetive
      * @const
      * @type {string}
      */
-    this.SUBMIT_ERROR_ = 'An error occured in submitting the request.';
+    this.SUBMIT_ERROR_ = 'We weren\'t able to process your request. Please try again.';
 };
 goog.inherits(unisubs.RequestDialog, goog.ui.Dialog);
 
@@ -129,8 +139,8 @@ unisubs.RequestDialog.prototype.addMetaForm_ = function($d){
     this.checkBox_ = $d('input', {'type':'checkbox', 'checked':true, 'id':'unisubs-request-track'});
     this.checkBoxLabel_ = $d('label', {'for':'unisubs-request-track'}, this.TRACK_REQUEST_LABEL_);
     this.descriptionText_ = $d('textarea', { 'id':'unisubs-request-description' }, this.DESCRIPTION_INITIAL_);
-    goog.dom.append(this.metaDiv_, this.checkBox_, this.checkBoxLabel_,
-                    this.descriptionText_);
+    goog.dom.append(this.metaDiv_, this.descriptionText_,
+                    this.checkBox_, this.checkBoxLabel_);
     goog.dom.append(this.contentDiv_, this.metaDiv_);
 }
 
@@ -154,23 +164,18 @@ unisubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
 
     // Create the form
     this.warningElem_ = $d('p', 'warning');
-    this.langDiv_ = $d('div', {'class':'unisubs-request-langs'}, $d('p', null, 'Select the languages in which subtitles are required'));
+    this.langDiv_ = $d('div', {'class':'unisubs-request-langs'}, $d('p', null, 'Your request will be submitted to our community of volunteers.'));
     this.addLangButton_ =
     $d('a',
            {'href':'#',
             'className': "unisubs-request-addlang"},
-            'Add Language');
+            'Add another language');
     this.okButton_ =
     $d('a',
            {'href':'#',
             'className': "unisubs-green-button unisubs-big",
             'style':'clear:both;'},
            'Request');
-    this.volunteerButton_ =
-    $d('a',
-           {'href':unisubs.getVolunteerPageURL(),
-            'className': "unisubs-green-button unisubs-big"},
-           'Visit Volunteer Page');
     this.closeButton_ =
     $d('a',
            {'href':'#',
@@ -231,17 +236,18 @@ unisubs.RequestDialog.prototype.okClicked_ = function(e) {
     if (this.requestLanguages_.length > 0){
         var track = document.getElementById('unisubs-request-track').checked;
         var description = document.getElementById('unisubs-request-description').value;
-        alert(description + ' ' + description);
         this.track_ = track;
         if (description != this.DESCRIPTION_INITIAL_){
             this.description_ = description;
-        }
-
-        this.submitRequest(goog.bind(this.requestCallback_,
+            this.submitRequest(goog.bind(this.requestCallback_,
                                   this));
+        } else {
+            goog.dom.setTextContent(this.warningElem_, this.EMPTY_DESC_WARNING_);
+            goog.style.showElement(this.warningElem_, true);
+        }
     }
     else{
-        goog.dom.setTextContent(this.warningElem_, this.EMPTY_WARNING_);
+        goog.dom.setTextContent(this.warningElem_, this.EMPTY_LANG_WARNING_);
         goog.style.showElement(this.warningElem_, true);
     }
 };
@@ -278,14 +284,13 @@ unisubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
                            this.getDomHelper());
         goog.dom.removeChildren(this.contentDiv_);
         this.confirmDiv_ = $d('p', null, this.SUBMISSION_CONFIRM_);
-        this.volunteerDiv_ = $d('p', null, 'If you can, help others on our ',
+        this.volunteerDiv_ = $d('p', null, 'Want to pitch in yourself? Visit our ',
                                             $d('a', {"href":unisubs.getVolunteerPageURL()},
-                                               "Volunteer Page"), '.');
+                                               "volunteer page"), '!');
 
         this.contentDiv_.appendChild(this.confirmDiv_);
         this.contentDiv_.appendChild(this.volunteerDiv_);
         this.contentDiv_.appendChild(this.closeButton_);
-        this.contentDiv_.appendChild(this.volunteerButton_);
         this.contentDiv_.appendChild(this.clearDiv);
     }
     else{

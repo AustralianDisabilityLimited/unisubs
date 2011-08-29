@@ -65,6 +65,7 @@
 {% endblock %}
 
 {% block opengraph-head %}
+    {{block.super}}
     <meta property="og:title" content="{% title_for_video video  %}"/>
     <meta property="og:type" content="video"/>
     <meta property="og:url" content="http://{{ current_site.domain }}{{ video.get_absolute_url }}"/>

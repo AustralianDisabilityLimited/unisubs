@@ -192,6 +192,7 @@ body#watch h1 a {
     -webkit-border-bottom-left-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
     -webkit-box-shadow: 0 1px 3px #e5ebed;
+    z-index: 2;
 }
 
 #watch_search #advanced_menu .menu_item {
@@ -252,11 +253,21 @@ ul.video_list {
     margin: 20px 0 0 0;
 }
 
-ul.video_list li {
+ul.video_list > li {
     width: 120px;
     float: left;
     margin: 13px;
     height: 250px;
+}
+
+ul.video_list li ul.meta {
+    border-top: 1px solid #dae1e4;
+    padding: 5px 0 0;
+    font-size: 12px;
+}
+
+ul.video_list li ul.meta li {
+    padding-bottom: 5px;
 }
 
 ul.video_list li a {
@@ -289,34 +300,18 @@ ul.video_list li a span.video_thumb span.clip img {
 }
 
 ul.video_list li a h4 {
-    margin: 0 0 5px 0;
+    padding: 5px 0 8px;
     font-size: 13px;
     overflow: hidden;
     width: 120px;
+    height: 45px;
 }
 
 ul.video_list li a:hover h4 {
     color: #7f878d;
 }
 
-ul.video_list li span {
-    display: block;
-    font-size: 13px;
-}
-
-ul.video_list li span strong {
-    font-weight: normal;
-}
-
-ul.video_list li span.date {
-    margin: 0 0 5px 0;
-}
-
-ul.video_list li span.languages {
-    margin: 5px 0 0 0;
-}
-
-ul.video_list li span.languages div.lang_arrow {
+ul.video_list li li.languages div.lang_arrow {
     width: 18px;
     height: 18px;
     background: transparent url(../images/icon_lang_arrow.png) 0 0 no-repeat;
@@ -328,13 +323,13 @@ ul.video_list li span.languages div.lang_arrow {
     cursor: pointer;
 }
 
-ul.video_list li span.languages div.lang_arrow div.lang_menu {
+ul.video_list li li.languages div.lang_arrow div.lang_menu {
     display: block;
     background: #FFF;
     position: absolute;
     top: 0;
     left: 0;
-    width: 150px;
+    width: 130px;
     -webkit-box-shadow: 0 0 8px #BBB;
     -webkit-border-radius: 5px;
     border: 1px #b1bec3 solid;
@@ -342,11 +337,14 @@ ul.video_list li span.languages div.lang_arrow div.lang_menu {
 }
 
 div.lang_menu div.hd {
-    padding: 5px;
+    padding: 5px 0;
     background: -webkit-gradient(linear, left bottom, left top, from(#d3dee2), to(#eaeff1)) no-repeat;
     background: -moz-linear-gradient(bottom,  #d3dee2,  #eaeff1) no-repeat;
     -webkit-box-shadow: inset 0 1px 0 #FFF;
-    
+}
+
+div.lang_menu div.hd span {
+    padding-left: 5px;
 }
 
 div.lang_menu div.hd .menu_close {

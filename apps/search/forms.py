@@ -32,7 +32,7 @@ class SearchForm(forms.Form):
         ('month_views', _(u'Views This Month')),
         ('total_views', _(u'Total Views')),
     )
-    q = forms.CharField(label=_(u'query'), initial="title")
+    q = forms.CharField(label=_(u'query'), initial="Search")
     sort = forms.ChoiceField(choices=SORT_CHOICES, required=False, initial='languages_count',
                              label=_(u'Sort By'))
     langs = forms.ChoiceField(choices=ALL_LANGUAGES, required=False, label=_(u'Subtitled Into'),

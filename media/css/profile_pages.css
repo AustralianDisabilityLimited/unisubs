@@ -73,19 +73,39 @@
 
 .language_list li.user_language{
   margin: 0;
-  padding: 0;
+  padding: 10px;
   list-style: none;
-  border-bottom: 1px solid #b5ced2;
+  border-bottom: 1px solid #e2e6e7;
   margin: 12px 0;
-  padding-bottom: 12px;
+  position: relative;
   }
+
+.language_list li.user_language a.small_close {
+  position: absolute;
+  top: 12px; left: 0;
+  margin: 0;
+}
+
+.language_list li.user_language .entry {
+  position: relative;
+  margin-left: 12px
+}
 
 .user_language label{
   margin: 2px 0 0 30px;
-  width:180px;
   font-size:small;
 }
 
 .user_language input[type="checkbox"]{
   width:auto;
+}
+
+.user_language p {
+  margin-top: 10px;
+}
+
+.user_language p label, .user_language p input {
+  display: inline;
+  float: none;
+  margin: 0;
 }

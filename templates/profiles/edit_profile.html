@@ -83,7 +83,7 @@
               {{ form.picture.errors }}
               </p>
               <p class="avatar-container">
-                  <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}" style="margin-right: 5px"/>
+                  <img class="user-avatar" src="{{ user_info.avatar }}" style="margin-right: 5px"/>
                   {% if user_info.picture %}
                       <a class="remove-avatar" href="#">{% trans 'remove picture' %}</a>
                   {% endif %}
@@ -137,9 +137,11 @@
 
           <div class="grid_3 omega">
               <h3>{% trans 'Language Info' %}</h3>
-              <p>
+              <h4>
                   {{ form.preferred_language.errors }}
                   {{ form.preferred_language.label_tag }}
+              </h4>
+              <p>
                   {{ form.preferred_language }}
               </p>
               {% comment %}
@@ -151,17 +153,21 @@
               {% endcomment %}
               <h4>{% trans 'Languages I Know' %}</h4>
               <div class="empty-form" style="display: none">
-                  <li class="user_language">
-                      <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                  <li class="user_language clearfix">
                       {{ formset.empty_form.id }}
-                      {{ formset.empty_form.language }}
-                      {{ formset.empty_form.proficiency }}
-                      <label for="{{ formset.empty_form.follow_requests.auto_id }}">
-                          {{ formset.empty_form.follow_requests.label }}
-                      </label>
-                      {{ formset.empty_form.follow_requests }}
-                      <div style="display: none" class="delete-checkbox">
-                          {{ form.DELETE }}
+                      <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                      <div class="entry">
+                        {{ formset.empty_form.language }}
+                        {{ formset.empty_form.proficiency }}
+                        <p>
+                          {{ formset.empty_form.follow_requests }}
+                          <label for="{{ formset.empty_form.follow_requests.auto_id }}">
+                              {{ formset.empty_form.follow_requests.label }}
+                          </label>
+                        </p>
+                        <div style="display: none" class="delete-checkbox">
+                            {{ form.DELETE }}
+                        </div>
                       </div>                
                   </li>
               </div>
@@ -169,20 +175,24 @@
                   {{ formset.management_form }}
                   {{ formset.non_field_errors }}
                   {% for form in formset.forms %}
-                      <li class="user_language">
+                      <li class="user_language clearfix">
                           {{ form.non_field_errors }}
-                          <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                           {{ form.id }}
-                          {{ form.language.errors }}
-                          {{ form.language }}
-                          {{ form.proficiency.errors }}
-                          {{ form.proficiency }}
-                          <label for="{{ form.follow_requests.auto_id }}">
-                              {{ form.follow_requests.label }}
-                          </label>
-                          {{ form.follow_requests }}
-                          <div style="display: none" class="delete-checkbox">
-                              {{ form.DELETE }}
+                          <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                          <div class="entry">
+                            {{ form.language.errors }}
+                            {{ form.language }}
+                            {{ form.proficiency.errors }}
+                            {{ form.proficiency }}
+                            <p>
+                              {{ form.follow_requests }}
+                              <label for="{{ form.follow_requests.auto_id }}">
+                                  {{ form.follow_requests.label }}
+                              </label>
+                            </p>
+                            <div style="display: none" class="delete-checkbox">
+                                {{ form.DELETE }}
+                            </div>
                           </div>
                       </li>
                   {% endfor %}

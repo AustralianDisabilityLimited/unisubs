@@ -48,10 +48,6 @@
 .teams li a { 
   color: #4c6a70; }
 
-.meta h4 {
-  margin-top: 1em;
-}
-
 .settings_main .hd .heading_button:hover {
   background-color: #f4f8f9;
   border-color: #d6dadb;
@@ -136,4 +132,21 @@ table.video-moderation-item th:first-child, table.video-moderation-item td:first
 
 .approve-button-container a {
   margin-right: 10px;
+}
+
+.content .meta {
+  width: 200px;
+  margin: 10px 0 10px 20px;
+}
+
+.meta .help {
+    color: #52686E;
+}
+
+.meta h4 {
+  margin-top: 1em;
+}
+
+.meta .help p {
+  padding: 10px 0;
 }

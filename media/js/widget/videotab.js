@@ -148,8 +148,10 @@ unisubs.widget.VideoTab.prototype.showNudge = function(shows) {
  * @param shareURL {goog.URI} The url for the 'share' link.
  * @param newWindow {bool=} If true will open on new window.
  */
-unisubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow){
-    if (!unisubs.isEmbeddedInDifferentDomain()){
+unisubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow) {
+    // users can make share button never show by setting UNISUBS_HIDESHARE.
+    // see https://www.pivotaltracker.com/story/show/13700869
+    if (!unisubs.isEmbeddedInDifferentDomain() || window['UNISUBS_HIDESHARE']) {
         // no point in taking to the unisubs site if we're here already
         return;
     }

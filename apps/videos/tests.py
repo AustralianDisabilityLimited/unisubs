@@ -37,6 +37,7 @@ from django.core.management import call_command
 from django.core import mail
 from videos.rpc import VideosApiClass
 from widget.tests import RequestMockup
+from django.core.cache import cache
 
 math_captcha.forms.math_clean = lambda form: None
 
@@ -1019,15 +1020,16 @@ class VolunteerRpcTest(TestCase):
     def setUp(self):
         from teams.tests import reset_solr
 
+        cache.clear()
+        reset_solr()
+
         self.user = User.objects.all()[0]
         self.request = RequestMockup(self.user)
 
         for language in SubtitleLanguage.objects.all():
             v = language.version()
             if v:
-                video_changed_tasks.delay(v.video.pk, v.pk)
-
-        reset_solr()
+                video_changed_tasks.delay(v.video.pk)
 
     def test_get_volunteer_sqs(self):
 

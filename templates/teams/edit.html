@@ -71,14 +71,18 @@
                       {{ form.description }}
                       {{ form.description.help_text }}
                   </p>
-              <h3>{% trans 'Upload Team Logo' %}</h3>
+              <h3>{% trans 'Team Logo' %}</h3>
+              {% if form.logo.errors %}
               <p class="error_list" id="logo-errors">
                   {{ form.logo.errors }}
               </p>
+              {% endif %}
+              {% if team.logo_thumbnail %}
               <p class="avatar-container">
-                  <img class="team-logo" src="{{ team.logo_thumbnail|default:'' }}"/>
+                  <img class="team-logo" src="{{ team.logo_thumbnail }}"/>
               </p>
-              <p style="float: left; clear: both; margin-bottom: 30px;">
+              {% endif %}
+              <p style="float: left; clear: both; height: 15px; padding-bottom: 25px;">
                   <input type="file" id="id_logo" name="logo" size="6"/>
                   <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
                       <span><span class="plus"></span>{% trans 'Upload logo' %}</span>

@@ -358,8 +358,8 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = rel('media')+'/'
-STATIC_ROOT = rel('user-data')+'/'
+STATIC_ROOT = rel('media')+'/'
+MEDIA_ROOT  = rel('user-data')+'/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

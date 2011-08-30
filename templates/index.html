@@ -137,12 +137,9 @@
         <a href="{% url videos:popular_videos %}#?sort=month">{% trans "Top this month" %}</a>
         <a href="{% url videos:popular_videos %}#?sort=total">{% trans "Top all-time" %}</a>
       </p>
-       <ul class="video_list clearfix">
             {% with popular_videos as video_list %}
-                {% include 'videos/_watch_page.html' with showdate="true" %}
+                {% include 'videos/_watch_page.html' %}
             {% endwith %}    
-
-        </ul>
     </div><!-- // most_popular -->
     
     <div id="featured-videos" class="featured">
@@ -153,13 +150,9 @@
         <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
       </p>
       
-      <ul class="video_list clearfix">
 
             {% with featured_videos as video_list %}
                 {% include 'videos/_watch_page.html' with showdate="true" %}
             {% endwith %}    
-
-
-      </ul>
     </div><!-- // featured_videos -->
 {% endblock %}<!-- // main_content -->

@@ -116,7 +116,7 @@ class Rpc(BaseRpc):
             get_user_languages_from_request(request)
 
         # keeping both forms valid as backwards compatibility layer
-        lang_code = base_state.get("language_code", base_state.get("language", None))
+        lang_code = base_state and base_state.get("language_code", base_state.get("language", None))
         if base_state is not None and lang_code is not None:
             lang_pk = base_state.get('language_pk', None)
             if lang_pk is  None:
@@ -313,7 +313,7 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
-        self.save_finished(
+        return self.save_finished(
             request.user, session, subtitles, new_title, completed, forked)
 
     def save_finished(self, user, session, subtitles, new_title=None, completed=None, forked=False):

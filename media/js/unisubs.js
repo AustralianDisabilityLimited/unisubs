@@ -402,7 +402,7 @@ unisubs.supportsIFrameMessages = function() {
 unisubs.storage_ = window['localStorage'];
 
 unisubs.supportsLocalStorage = function() {
-    if (unisubs.storage_) {
+    if (goog.isDefAndNotNull(unisubs.storage_)) {
         return !!unisubs.storage_['getItem'];
     }
     else {

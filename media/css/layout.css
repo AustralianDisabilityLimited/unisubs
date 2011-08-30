@@ -793,9 +793,11 @@ left: -4px;
   }
 
 .left_nav{
-  margin: 0 0 15px;
+  float: left;
+  width: 100%;
+  clear: both;
+  margin: 0 0 30px;
   padding: 0;
-  overflow: hidden;
   }
 
 .left_nav li{

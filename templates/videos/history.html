@@ -44,7 +44,7 @@
             $('.compare_versions_button').click( function() {
                 var $checked = $('.version_checkbox:checked');
                 if ($checked.length !== 2) {
-                    alert('{% trans "Select two revisions for compare, please" %}');
+                    alert('{% trans "Select two revisions to compare, please" %}');
                 } else {
                     var url = get_compare_link($checked[0].value, $checked[1].value);
                     window.location.replace(url);
@@ -182,14 +182,14 @@
                 {% include 'videos/_left_navigation.html' %}
             </ul>
 
-            {% switch_feature MODERATION %}
-              <h3>{% trans "Moderation" %}</h3>
+             <h3>{% trans "Moderation" %}</h3>
               <ul class="left_nav" id="moderation-menu">
-                <li>{% render_approve_all_button video user %}</li>
+                {% switch_feature MODERATION %}
+                    <li>{% render_approve_all_button video user %}</li>
+                {% endswitch_feature %}
                 <li>{% team_add_video_select %}</li>
                 <li>{% render_belongs_to_team_list video %}</li>
               </ul>
-            {% endswitch_feature %}
 
             {% if user.is_staff and perms.videos.edit_video %}
               <h3>{% trans "Admin" %}</h3>

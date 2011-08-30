@@ -174,7 +174,6 @@ unisubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
 };
 
 unisubs.widget.SubtitleDialogOpener.prototype.disallow_ = function() {
-    alert('disallow_');
     if (!unisubs.supportsLocalStorage()) {
         alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
         return true;
@@ -189,7 +188,6 @@ unisubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect =
              opt_effectiveVideoURL,
              opt_completeCallback)
 {
-    alert('openDialogOrRedirect');
     if (this.disallow_()) {
         return;
     }

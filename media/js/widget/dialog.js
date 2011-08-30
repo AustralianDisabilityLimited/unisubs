@@ -87,9 +87,6 @@ unisubs.Dialog.prototype.enterDocument = function() {
         listen(unisubs.ClosingWindow.getInstance(),
                unisubs.ClosingWindow.BEFORE_UNLOAD,
                this.onBeforeWindowUnload_).
-        listen(unisubs.ClosingWindow.getInstance(),
-               unisubs.ClosingWindow.UNLOAD,
-               this.onWindowUnload_).
         listen(unisubs.userEventTarget,
                unisubs.EventType.LOGIN,
                this.updateLoginState).
@@ -223,9 +220,6 @@ unisubs.Dialog.prototype.onBeforeWindowUnload_ = function(event) {
     if (!this.isWorkSaved())
         event.message = "You have unsaved work.";
 };
-unisubs.Dialog.prototype.onWindowUnload_ = function() {
-    unisubs.widget.ResumeEditingRecord.clear();
-};
 unisubs.Dialog.prototype.setVisible = function(visible) {
     if (visible) {
         unisubs.Dialog.superClass_.setVisible.call(this, true);
@@ -280,7 +274,6 @@ unisubs.Dialog.prototype.hideDialogImpl_ = function() {
         args['session_pk'] = serverModel.getSessionPK();
         unisubs.Rpc.call("release_lock", args);    
     }
-    unisubs.widget.ResumeEditingRecord.clear();
     if (unisubs.returnURL != null) {
         goog.Timer.callOnce(function() {
             window.location.replace(unisubs.returnURL);

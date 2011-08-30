@@ -116,6 +116,7 @@ unisubs.translate.Dialog.prototype.onWorkSaved = function() {
         this.finishFailDialog_.setVisible(false);
         this.finishFailDialog_ = null;
     }
+    unisubs.widget.ResumeEditingRecord.clear();
     this.getRightPanelInternal().showLoading(false);
     this.saved_ = true;
     this.setVisible(false);

@@ -277,6 +277,7 @@ unisubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
 
 unisubs.subtitle.Dialog.prototype.onWorkSaved = function(closeAfterSave, isComplete){
     this.saved_ = true;
+    unisubs.widget.ResumeEditingRecord.clear();
     if (this.finishFailDialog_) {
         this.finishFailDialog_.setVisible(false);
         this.finishFailDialog_ = null;

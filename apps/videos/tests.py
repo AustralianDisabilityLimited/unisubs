@@ -993,21 +993,21 @@ class ViewsTest(WebUseTest):
     def test_policy_page(self):
         self._simple_test('policy_page')
 
-    def test_volunteer_page(self):
-        self._login()
-        url = reverse('videos:volunteer_page')
-        self._simple_test('videos:volunteer_page')
-
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 200)
-
+# FIXME: temporary for https://www.pivotaltracker.com/story/show/17619883
+#    def test_volunteer_page(self):
+#        self._login()
+#        url = reverse('videos:volunteer_page')
+#        self._simple_test('videos:volunteer_page')
+#
+#        response = self.client.post(url)
+#        self.assertEqual(response.status_code, 200)
+#
     def test_volunteer_page_category(self):
         self._login()
         categories = ['featured', 'popular', 'requested', 'latest']
         for category in categories:
             url = reverse('videos:volunteer_category',
                           kwargs={'category': category})
-            self._simple_test('videos:volunteer_page')
 
             response = self.client.post(url)
             self.assertEqual(response.status_code, 200)

@@ -1,0 +1,11 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+<form method="POST" id="join-team-{{team.pk}}" action="{{url}}">
+  {% csrf_token %}
+  <a class="join-team green_button {{button_size}}"  href="#">{% trans "Join this team now!" %}</a>
+</form>
+
+<div class="clearfix"></div>
+{% else %}
+  <a class="join-team green_button huge"  href="{{url}}">{% trans "Join this team now!" %}</a>
+{% endif %}

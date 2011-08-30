@@ -140,14 +140,14 @@
                 {% include 'videos/_left_navigation.html' %}
             </ul>
 
-            {% switch_feature MODERATION %}
               <h3>{% trans "Moderation" %}</h3>
               <ul class="left_nav" id="moderation-menu">
-                <li>{% render_approve_all_button video user %}</li>
+                {% switch_feature MODERATION %}
+                    <li>{% render_approve_all_button video user %}</li>
+                {% endswitch_feature %}
                 <li>{% team_add_video_select %}</li>
                 <li>{% render_belongs_to_team_list video %}</li>
               </ul>
-            {% endswitch_feature %}
 
             {% if user.is_staff and perms.videos.edit_video %}
               <h3>{% trans "Admin" %}</h3>

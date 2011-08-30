@@ -1,0 +1,5 @@
+{% load i18n %}
+<form method="POST" id="leave-team-{{team.pk}}" action="{{url}}">
+  {% csrf_token %}
+  <a class="leave-team green_button"  href="#">{% trans "Leave" %}</a>
+</form>

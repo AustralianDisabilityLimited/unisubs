@@ -32,11 +32,20 @@ register = template.Library()
 def messages(context):
     user = context['user']
     if user.is_authenticated():
-        qs = user.unread_messages()
+        hidden_meassage_id = context['request'].COOKIES.get(Message.hide_cookie_name)
+        qs = user.unread_messages(hidden_meassage_id)
+        try:
+            last_unread = qs[:1].get().pk
+        except Message.DoesNotExist:
+            last_unread = ''
     else:
         qs = Message.objects.none()
+        last_unread = ''
+        
     return {
-        'msg_count': qs.count()
+        'msg_count': qs.count(),
+        'last_unread': last_unread,
+        'cookie_name': Message.hide_cookie_name
     }
 
 @register.inclusion_tag('messages/_send_message_form.html', takes_context=True)    

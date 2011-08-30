@@ -28,6 +28,8 @@ from videos.models import Action
 from apps.widget import video_cache
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
+from django.utils.http import urlquote
 from widget.views import base_widget_params
 from django.utils import simplejson as json
 from django.utils.http import urlquote
@@ -175,4 +177,32 @@ def team_video_in_progress_list(team_video_search_record):
     langs = [_(ALL_LANGUAGES_DICT[x]) for x in langs_raw]
     return  {
         'languages': langs
+        }
+@register.inclusion_tag('teams/_join_button.html')
+def render_team_join(team, user, request, button_size="huge"):
+
+    if user.is_authenticated():
+        url = reverse("teams:join_team", kwargs={"slug":team.slug})
+    else:
+        url = "%s?next=%s" % (reverse("auth:login"), urlquote(request.path_info))
+    return {
+        "url": url ,
+        "team": team,
+        "user": user,
+        "button_size": button_size,
+        }
+
+
+@register.inclusion_tag('teams/_leave_button.html')
+def render_team_leave(team, user, request, button_size="huge" ):
+
+    if user.is_authenticated():
+        url = reverse("teams:leave_team", kwargs={"slug":team.slug})
+    else:
+        url = "%s?next=%s" % (reverse("auth:login"), urlquote(request.path_info))
+    return {
+        "url": url ,
+        "team": team,
+        "user": user,
+        "button_size": button_size,
         }

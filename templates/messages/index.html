@@ -158,7 +158,7 @@
               <a href="#" data-modal="msg_modal" data="{{ msg.json_data }}">{{ msg }}</a>
           </td>
           <td class="msg_date">{{ msg.created|timesince }} {% trans 'ago' %}</td>
-          <td class="msg_delete"><a class="red_button small delete" message_id="{{ msg.pk }}">{% trans "Delete" %}</span></td>
+          <td class="msg_delete"><a class="red_button small delete" message_id="{{ msg.pk }}">{% trans "Delete" %}</a></td>
         </tr>
         {% endfor %}
       </tbody>

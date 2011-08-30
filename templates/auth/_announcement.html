@@ -1,5 +1,19 @@
+{% load i18n %}
+
 {% if obj %}
 <div class="note">
-    {{ obj.content|safe }} 
+    {{ obj.content|safe }}
+    <div></div>
+    <a href="#" class="hide-announcement" style="float: right; font-size: 0.8em">{% trans "hide" %}</a>
+    <script type="text/javascript">
+        $('.note .hide-announcement').click(function(){
+            var $this = $(this);
+            $this.parents('.note').hide();
+            var d = new Date()
+            d.setTime(d.getTime() + 60*60*24*365*1000)
+            document.cookie = '{{ cookie_name }}={{ date|urlencode }}; path=/; expires='+d.toUTCString();
+            return false;
+        });
+    </script>
 </div>
 {% endif %}

@@ -634,3 +634,16 @@ def join_team(request, slug):
         messages.success(request, response.get('msg'))
     
     return redirect(team)
+
+@login_required
+def leave_team(request, slug):
+    team = get_object_or_404(Team, slug=slug)
+    response = TeamsApi.leave(team.pk, request.user)
+    
+    if response.get('error'):
+        messages.error(request, response.get('error'))
+        
+    if response.get('msg'):
+        messages.success(request, response.get('msg'))
+    
+    return redirect(team)

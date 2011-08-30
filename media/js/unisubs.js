@@ -403,7 +403,7 @@ unisubs.storage_ = window['localStorage'];
 
 unisubs.supportsLocalStorage = function() {
     if (goog.isDefAndNotNull(unisubs.storage_)) {
-        return !!unisubs.storage_['getItem'];
+        return goog.isDefAndNotNull(unisubs.storage_['getItem']);
     }
     else {
         return false;

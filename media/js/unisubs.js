@@ -402,7 +402,12 @@ unisubs.supportsIFrameMessages = function() {
 unisubs.storage_ = window['localStorage'];
 
 unisubs.supportsLocalStorage = function() {
-    return !!(unisubs.storage_ && unisubs.storage_['getItem']);
+    if (unisubs.storage_) {
+        return !!unisubs.storage_['getItem'];
+    }
+    else {
+        return false;
+    }
 };
 
 unisubs.saveInLocalStorage = function(key, value) {

@@ -174,7 +174,6 @@ unisubs.widget.SubtitleDialogOpener.prototype.showStartDialog =
 };
 
 unisubs.widget.SubtitleDialogOpener.prototype.disallow_ = function() {
-    alert('asking diallow!');
     if (!unisubs.supportsLocalStorage()) {
         alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");
         return true;

@@ -44,9 +44,9 @@ def _make_version_debug_string():
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
-MEDIA_ROOT = settings.MEDIA_ROOT
-def to_media_root(*paths):
-    return os.path.join(settings.MEDIA_ROOT, *paths)
+
+def to_static_root(*paths):
+    return os.path.join(settings.STATIC_ROOT, *paths)
 JS_LIB = os.path.join(settings.PROJECT_ROOT, "media")
 CLOSURE_LIB = os.path.join(JS_LIB, "js", "closure-library")
 FLOWPLAYER_JS = os.path.join(settings.PROJECT_ROOT, "media/flowplayer/flowplayer-3.2.2.min.js")
@@ -115,7 +115,7 @@ def get_cache_base_url():
     return "%s%s/%s" % (settings.STATIC_URL_BASE, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def get_cache_dir():
-    return os.path.join(settings.MEDIA_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
+    return os.path.join(settings.STATIC_ROOT, settings.COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID)
 
 def sorted_ls(path):
     """
@@ -157,7 +157,7 @@ class Command(BaseCommand):
         descriptor.write(_make_version_debug_string())
         
     def compile_css_bundle(self, bundle_name, bundle_type, files):
-        file_list = [os.path.join(settings.MEDIA_ROOT, x) for x in files]
+        file_list = [os.path.join(settings.STATIC_ROOT, x) for x in files]
         for f in file_list:
             open(f).read()
         buffer = [open(f).read() for f in file_list]
@@ -303,8 +303,8 @@ class Command(BaseCommand):
         os.makedirs(temp)
         return temp
 
-    def _copy_media_root_to_temp_dir(self):
-        mr = settings.MEDIA_ROOT
+    def _copy_static_root_to_temp_dir(self):
+        mr = settings.STATIC_ROOT
         for dirname in os.listdir(mr):
             original_path = os.path.join(mr, dirname)
             if os.path.isdir(original_path) and dirname not in SKIP_COPING_ON :
@@ -345,11 +345,11 @@ class Command(BaseCommand):
         with open(file_name, 'w') as f:
             f.write(rendered)
         logging.info("Compiled config to %s" % (file_name))
-        self._output_embed_to_dir(settings.MEDIA_ROOT)
+        self._output_embed_to_dir(settings.STATIC_ROOT)
         self._output_embed_to_dir(
-            settings.MEDIA_ROOT, settings.EMBED_JS_VERSION)
+            settings.STATIC_ROOT, settings.EMBED_JS_VERSION)
         for version in settings.PREVIOUS_EMBED_JS_VERSIONS:
-            self._output_embed_to_dir(settings.MEDIA_ROOT, version)
+            self._output_embed_to_dir(settings.STATIC_ROOT, version)
 
         file_name = os.path.join(JS_LIB, 'js/statwidget/statwidgetconfig.js')
         rendered = render_to_string(
@@ -386,12 +386,12 @@ class Command(BaseCommand):
             shutil.move(os.path.join(self.temp_dir, filename), 
                         os.path.join(cache_dir, filename))
 
-    def _copy_files_with_public_urls_from_cache_dir_to_media_dir(self):
+    def _copy_files_with_public_urls_from_cache_dir_to_static_dir(self):
         cache_dir = get_cache_dir()
         for file in NO_UNIQUE_URL:
             filename = file['name']
             from_path = os.path.join(cache_dir, filename)
-            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
+            to_path =  os.path.join(settings.STATIC_ROOT, filename)
             if os.path.exists(to_path):
                 os.remove(to_path)
             shutil.copy(from_path, to_path)
@@ -421,7 +421,7 @@ class Command(BaseCommand):
         temp_dir: /tmp/static-[commit guid]-[time] This is the working dir
             for the compilation.
         MEDIA_ROOT: regular media root directory for django project
-        cache_dir: MEDIA_ROOT/static-cache/[commit guid] where compiled 
+        cache_dir: STATIC_ROOT/static-cache/[commit guid] where compiled 
             media ends up
         """
         self.temp_dir = self._create_temp_dir()
@@ -434,7 +434,7 @@ class Command(BaseCommand):
         restrict_bundles = bool(args)
 
         os.chdir(settings.PROJECT_ROOT)
-        self._copy_media_root_to_temp_dir() 
+        self._copy_static_root_to_temp_dir() 
         self._compile_conf_and_embed_js()
         self._compile_media_bundles(restrict_bundles, args)
         self._copy_backwards_compability(self.temp_dir)
@@ -443,7 +443,7 @@ class Command(BaseCommand):
             self._remove_cache_dirs_before(1)
 
         self._copy_temp_dir_to_cache_dir()
-        self._copy_files_with_public_urls_from_cache_dir_to_media_dir()
+        self._copy_files_with_public_urls_from_cache_dir_to_static_dir()
 
         if self.test_str_version:
             self.test_string_version()
@@ -458,7 +458,7 @@ class Command(BaseCommand):
             # we only need compiled sutff (widgetizerprimer breaks the stable urls = compiled assumption
             if os.path.basename(filename) not in settings.MEDIA_BUNDLES.keys():
                 continue
-            to_path =  os.path.join(settings.MEDIA_ROOT, filename)
+            to_path =  os.path.join(settings.STATIC_ROOT, filename)
             
             data = open(to_path).read()
             assert(data.endswith(version_str))

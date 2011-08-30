@@ -290,8 +290,6 @@ body#index a:visited {
   left: -6px;
 }
 
-
-
 .featured {
   width: 473px;
   font-size: 12px;
@@ -311,11 +309,6 @@ body#index a:visited {
   border-bottom: 1px solid #cfcfcf;
   line-height: 34px;
   margin-bottom: 6px;
-}
-
-.featured li {
-  margin-bottom: 20px;
-	
 }
 
 .featured .title {
@@ -355,77 +348,12 @@ body#index a:visited {
 #most-popular { float: left; }
 #featured-videos { float: right; }
 
-ul.video_list {
-	margin: 20px 0 0 0;
+#index ul.video_list {
+  margin: 0;
+  padding: 0;
+  color: #747B81;
 }
 
-ul.video_list li {
-	width: 120px;
-	float: left;
-	margin: 0 13px 0 13px;
-	height: 170px;
-}
-
-ul.video_list li a {
-	text-decoration: none !important;
-}
-
-ul.video_list li a span.video_thumb {
-	vertical-align: bottom;
-	display: inline-block;
-	_display: inline;
-	overflow: hidden;
-}
-
-ul.video_list li a span.video_thumb span.clip {
-	position: relative;
-	overflow: hidden;
-	display: block;
-	width: 120px;
-	height: 90px;
-	background: #000;
-}
-
-ul.video_list li a span.video_thumb span.clip img {
-	top: 0;
-	position: absolute;
-	display: block;
-	left: 0;
-	width: 120px;
-	height: 90px;
-}
-
-ul.video_list li a h4 {
-	margin: 0 0 5px 0;
-	font-size: 13px;
-	overflow: hidden;
-	width: 120px;
-}
-
-ul.video_list li a:hover h4 {
-	color: #7f878d;
-}
-
-ul.video_list li span {
-	display: block;
-	font-size: 13px;
-}
-
-ul.video_list li span strong {
-	font-weight: normal;
-}
-
-ul.video_list li span.date {
-	margin: 0 0 5px 0;
-}
-
-ul.video_list li span.views {
-	color: #747b81;
-	font-size: 14px;
-}
-
-ul.video_list li span.date_added {
-	color: #747b81;
-	font-weight: bold;
-	font-size: 12px;
+#index ul.video_list h4 {
+  line-height: 15px;
 }

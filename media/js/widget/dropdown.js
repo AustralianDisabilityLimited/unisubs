@@ -331,6 +331,8 @@ unisubs.widget.DropDown.prototype.onDocClick_ = function(e) {
 unisubs.widget.DropDown.prototype.menuItemClicked_ = function(type, e) {
     e.preventDefault();
 
+    alert('menuItemClicked_');
+
     var s = unisubs.widget.DropDown.Selection;
     if (type == s.CREATE_ACCOUNT)
         unisubs.login();

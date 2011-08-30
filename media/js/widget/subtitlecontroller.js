@@ -129,6 +129,7 @@ unisubs.widget.SubtitleController.prototype.videoAnchorClickedImpl_ = function()
 };
 
 unisubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
+    alert('improveSubtitles_');
     var state  = this.playController_.getSubtitleState();
     this.dialogOpener_.openDialogOrRedirect(
         new unisubs.widget.OpenDialogArgs(

@@ -1,41 +1,31 @@
 {% load i18n teams_tags %}
 <script type="text/javascript">
     jQuery(function($){
-        $('a.join-team').click(function(){
+        $('a.join-team').click(function(e){
             var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
             
             if ( ! IS_AUTHENTICATED){
-                document.location = '{% url auth:login %}?next={{ request.path_info|urlencode }}';
-            }else{            
+                return true;
+            }else{  
+                e.preventDefault();
                 if (confirm('{% trans "Do you really wish to join this team?" %}')){
                     var $this = $(this);
-                    TeamsApi.join($this.attr('team_id'), function(response){
-                        if (response.error){
-                            $.jGrowl.error(response.error);
-                        }else{
-                            $.jGrowl(response.msg);
-                            $this.remove();
-                        }
-                    });
+                    var form = $(this).parents("form").eq(0);
+                    form.submit();
                 };
             };
             return false;
         });
-        $('a.leave-team').click(function(){
+        $('a.leave-team').click(function(e){
+            e.preventDefault();
             if (confirm('{% trans "Do you really wish to leave this team?" %}')){
                 var $this = $(this);
-                TeamsApi.leave($this.attr('team_id'), function(response){
-                    if (response.error){
-                        $.jGrowl.error(response.error);
-                    }else{
-                        $.jGrowl(response.msg);
-                        $this.parents('.team-detail').find('.your-team').remove();
-                        $this.remove();
-                    }
-                });
-            }
-            return false;
+                var form = $(this).parents("form").eq(0);
+                form.submit();
+            };
+    
         });
+
     });
 </script>   
 
@@ -81,13 +71,14 @@
     {% if team|is_team_member:user %}
         <p>
             <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
-            <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a>   
+            {% render_team_leave team user request %}
+            
         </p>
     {% else %}
         {% if team.is_open %}
         <p>
-           <a class="join-team" team_id="{{ team.pk }}" href="{% url teams:join_team team.slug %}">{% trans "Join this team now!" %}</a> 
-        </p>
+          {% render_team_join team user request %}
+          </<p>
         {% endif %}
         {% if user.is_authenticated and team.is_by_application %}
             {% include "teams/_application_form.html" %}

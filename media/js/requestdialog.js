@@ -150,6 +150,11 @@ unisubs.RequestDialog.prototype.responseReceived_ = function(jsonResult) {
     //The data required to create the form
     this.myLanguages_ = jsonResult['my_languages'];
     this.allLanguages_ = jsonResult['all_languages'];
+    // we need to sort on actul lang name, not lang code 
+    // .i.e Spanish (es) should come after Danish (da)
+    goog.array.sort( this.allLanguages_, function(a,b){
+            return goog.array.defaultCompare(a[1], b[1]);
+    });
     //Filter out duplicates from myLanguages list
     goog.array.removeDuplicates(this.myLanguages_);
     this.myLanguages_ = goog.array.filter(

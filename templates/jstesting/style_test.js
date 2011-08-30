@@ -24,46 +24,46 @@ function assertStyleEquals(expected, actual) {
 }
 
 function testSetSize() {
-    mirosubs.style.setSize(testElem, 32, 58);
+    unisubs.style.setSize(testElem, 32, 58);
     assertStyleEquals(
         "width:32px!important;height:58px!important;",
         testElem.style.cssText.replace(/ /gi, ''));
-    mirosubs.style.setWidth(testElem, 33);
+    unisubs.style.setWidth(testElem, 33);
     assertStyleEquals("width:33px!important;height:58px!important;",
                  testElem.style.cssText.replace(/ /gi, ''));
-    mirosubs.style.setHeight(testElem, 59);
+    unisubs.style.setHeight(testElem, 59);
     assertStyleEquals("width:33px!important;height:59px!important;",
                  testElem.style.cssText.replace(/ /gi, ''));
 }
 
 function testSetPosition() {
-    mirosubs.style.setPosition(testElem, new goog.math.Coordinate(32, 58));
+    unisubs.style.setPosition(testElem, new goog.math.Coordinate(32, 58));
     assertStyleEquals("left:32px!important;top:58px!important;",
                  testElem.style.cssText.replace(/ /g, ''));
-    mirosubs.style.setPosition(testElem, null, 59);
+    unisubs.style.setPosition(testElem, null, 59);
     assertStyleEquals("left:32px!important;top:59px!important;",
                  testElem.style.cssText.replace(/ /g, ''));
-    mirosubs.style.setPosition(testElem, 33, null);
+    unisubs.style.setPosition(testElem, 33, null);
     assertStyleEquals("left:33px!important;top:59px!important;",
                  testElem.style.cssText.replace(/ /g, ''));
-    mirosubs.style.setPosition(testElem, new goog.math.Coordinate(34, 60));
+    unisubs.style.setPosition(testElem, new goog.math.Coordinate(34, 60));
     assertStyleEquals("left:34px!important;top:60px!important;",
                  testElem.style.cssText.replace(/ /g, ''));
 }
 
 function testShow() {
-    mirosubs.style.showElement(testElem, false);
+    unisubs.style.showElement(testElem, false);
     assertStyleEquals('display:none!important;',
                  testElem.style.cssText.replace(/ /g, ''));
-    mirosubs.style.showElement(testElem, true);
+    unisubs.style.showElement(testElem, true);
     assertEquals('', testElem.style.cssText);
 }
 
 function testSetVisibility() {
-    mirosubs.style.setVisibility(testElem, false);
+    unisubs.style.setVisibility(testElem, false);
     assertStyleEquals('visibility:hidden!important;',
                  testElem.style.cssText.replace(/ /g, ''));
-    mirosubs.style.setVisibility(testElem, true);
+    unisubs.style.setVisibility(testElem, true);
     assertStyleEquals('visibility:visible!important;',
                  testElem.style.cssText.replace(/ /g, ''));
 }

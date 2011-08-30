@@ -16,28 +16,28 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs');
+goog.provide('unisubs');
 
 /**
  * @define {boolean} REPORT_ANALYTICS is provided so that a build that 
  * excludes analytics reporting. Right now this is useful for Mozilla --
  * see https://bugzilla.mozilla.org/show_bug.cgi?id=669911#c8
  */
-mirosubs.REPORT_ANALYTICS = true;
+unisubs.REPORT_ANALYTICS = true;
 
 /**
  * If a widget is embedded in a different domain, this is set by
- * mirosubs.widget.CrossDomainEmbed. It has two properties: siteURL
- * and mediaURL. It is non-null iff the widget is embedded in a 
+ * unisubs.widget.CrossDomainEmbed. It has two properties: siteURL
+ * and staticURL. It is non-null iff the widget is embedded in a 
  * different domain.
  */
-mirosubs.siteConfig = null;
+unisubs.siteConfig = null;
 
 /**
  * Set when widget gets initial state from server, if user is logged in.
  * @type {string}
  */
-mirosubs.currentUsername = null;
+unisubs.currentUsername = null;
 
 /**
  * URL to which the page should return after widget dialog closes.
@@ -47,7 +47,7 @@ mirosubs.currentUsername = null;
  * to video frame/background css performance problem.
  * @type {?string}
  */
-mirosubs.returnURL = null;
+unisubs.returnURL = null;
 
 /**
  * Current version of embed code. Set when widget gets inital 
@@ -55,7 +55,7 @@ mirosubs.returnURL = null;
  * in Django settings.py file.
  * @type {string}
  */
-mirosubs.embedVersion = null;
+unisubs.embedVersion = null;
 
 /**
  * Set when widget gets initial state from server. All available languages.
@@ -63,14 +63,14 @@ mirosubs.embedVersion = null;
  * language name.
  * @type {Array.<Array>}
  */
-mirosubs.languages = null;
+unisubs.languages = null;
 
 /**
  * editing lock expiration, in seconds. set in initial loading.
  * @type {number}
  * @const
  */
-mirosubs.LOCK_EXPIRATION = 0;
+unisubs.LOCK_EXPIRATION = 0;
 
 /**
  * Set when widget gets initial state from server. All available languages.
@@ -78,55 +78,55 @@ mirosubs.LOCK_EXPIRATION = 0;
  * language name.
  * @type {Array.<Array>}
  */
-mirosubs.metadataLanguages = null;
+unisubs.metadataLanguages = null;
 
-mirosubs.languageMap_ = null;
+unisubs.languageMap_ = null;
 
 /**
  * some languages, like metadata languages, are forked by default.
  *
  */
-mirosubs.isForkedLanguage = function(languageCode) {
+unisubs.isForkedLanguage = function(languageCode) {
     return null != goog.array.find(
-        mirosubs.metadataLanguages,
+        unisubs.metadataLanguages,
         function(lang) { return lang[0] == languageCode; });
 };
 
-mirosubs.languageNameForCode = function(code) {
-    if (mirosubs.languageMap_ == null) {
-        mirosubs.languageMap_ = {};
-        for (var i = 0; i < mirosubs.languages.length; i++)
-            mirosubs.languageMap_[mirosubs.languages[i][0]] = 
-                mirosubs.languages[i][1];
-        for (var i = 0; i < mirosubs.metadataLanguages.length; i++)
-            mirosubs.languageMap_[mirosubs.metadataLanguages[i][0]] =
-                mirosubs.metadataLanguages[i][1];
+unisubs.languageNameForCode = function(code) {
+    if (unisubs.languageMap_ == null) {
+        unisubs.languageMap_ = {};
+        for (var i = 0; i < unisubs.languages.length; i++)
+            unisubs.languageMap_[unisubs.languages[i][0]] = 
+                unisubs.languages[i][1];
+        for (var i = 0; i < unisubs.metadataLanguages.length; i++)
+            unisubs.languageMap_[unisubs.metadataLanguages[i][0]] =
+                unisubs.metadataLanguages[i][1];
     }
-    return mirosubs.languageMap_[code];
+    return unisubs.languageMap_[code];
 };
 
-mirosubs.dateString = function() {
+unisubs.dateString = function() {
     return new Date().toUTCString();
 };
 
 /**
  * Does not include trailing slash.
  */
-mirosubs.siteURL = function() {
-    return mirosubs.siteConfig ? mirosubs.siteConfig['siteURL'] : 
+unisubs.siteURL = function() {
+    return unisubs.siteConfig ? unisubs.siteConfig['siteURL'] : 
         (window.location.protocol + '//' + window.location.host);
 };
 
 /**
  * Includes trailing slash.
  */
-mirosubs.mediaURL = function() {
-    return mirosubs.siteConfig ? 
-        mirosubs.siteConfig['mediaURL'] : window['MEDIA_URL'];
+unisubs.staticURL = function() {
+    return unisubs.siteConfig ? 
+        unisubs.siteConfig['staticURL'] : window['STATIC_URL'];
 };
 
-mirosubs.imageAssetURL = function(imageFileName) {
-    return [mirosubs.mediaURL(), 'images/', imageFileName].join('');
+unisubs.imageAssetURL = function(imageFileName) {
+    return [unisubs.staticURL(), 'images/', imageFileName].join('');
 };
 
 /**
@@ -134,20 +134,20 @@ mirosubs.imageAssetURL = function(imageFileName) {
  * debug window. Note that the window will not open if goog.DEBUG is false 
  * (we set this to false in an option passed to the compiler for production)
  */
-mirosubs.DEBUG = false;
+unisubs.DEBUG = false;
 
 /**
  * Set during loading.
  */
-mirosubs.IS_NULL = false;
+unisubs.IS_NULL = false;
 
-mirosubs.EventType = {
+unisubs.EventType = {
     LOGIN : 'login',
     LOGOUT : 'logout'
 };
 
-mirosubs.userEventTarget = new goog.events.EventTarget();
-mirosubs.loginAttemptInProgress_ = false;
+unisubs.userEventTarget = new goog.events.EventTarget();
+unisubs.loginAttemptInProgress_ = false;
 
 /**
  *
@@ -156,17 +156,17 @@ mirosubs.loginAttemptInProgress_ = false;
  * @param opt_message {String} Optional message to show at the top of the
  *     login dialog.
  */
-mirosubs.login = function(opt_finishFn, opt_message) {
-    if (mirosubs.currentUsername != null) {
+unisubs.login = function(opt_finishFn, opt_message) {
+    if (unisubs.currentUsername != null) {
         if (opt_finishFn)
             opt_finishFn(true);
         return;
     }
-    var loginDialog = new mirosubs.LoginDialog(opt_finishFn, opt_message);
+    var loginDialog = new unisubs.LoginDialog(opt_finishFn, opt_message);
     loginDialog.setVisible(true);
 };
 
-mirosubs.LoginPopupType = {
+unisubs.LoginPopupType = {
     TWITTER: [
         '/widget/twitter_login/',
         'location=0,status=0,width=800,height=400'
@@ -186,15 +186,15 @@ mirosubs.LoginPopupType = {
 };
 
 /**
- * @param {mirosubs.LoginPopupType} loginPopupType
+ * @param {unisubs.LoginPopupType} loginPopupType
  * @param {function(boolean)=} opt_finishFn Will be called with true if
  *     logged in, false otherwise.
  * @param {function()=} opt_errorFn Will be called if post-call to
  *     fetch user info errors out.
  */
-mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn, opt_errorFn) {
-    var loginWin = window.open(mirosubs.siteURL() + loginPopupType[0],
-                               mirosubs.randomString(),
+unisubs.openLoginPopup = function(loginPopupType, opt_finishFn, opt_errorFn) {
+    var loginWin = window.open(unisubs.siteURL() + loginPopupType[0],
+                               unisubs.randomString(),
                                loginPopupType[1]);
     var timer = new goog.Timer(250);
     goog.events.listen(
@@ -202,19 +202,19 @@ mirosubs.openLoginPopup = function(loginPopupType, opt_finishFn, opt_errorFn) {
         function(e) {
             if (loginWin.closed) {
                 timer.dispose();
-                mirosubs.postPossiblyLoggedIn_(opt_finishFn, opt_errorFn);
+                unisubs.postPossiblyLoggedIn_(opt_finishFn, opt_errorFn);
             }
         });
     timer.start();
     return loginWin;
 };
-mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn, opt_errorFn) {
-    mirosubs.Rpc.call(
+unisubs.postPossiblyLoggedIn_ = function(opt_finishFn, opt_errorFn) {
+    unisubs.Rpc.call(
         'get_my_user_info', {},
         function(result) {
-            mirosubs.loginAttemptInProgress_ = false;
+            unisubs.loginAttemptInProgress_ = false;
             if (result['logged_in'])
-                mirosubs.loggedIn(result['username']);
+                unisubs.loggedIn(result['username']);
             if (opt_finishFn)
                 opt_finishFn(result['logged_in']);
         },
@@ -224,30 +224,30 @@ mirosubs.postPossiblyLoggedIn_ = function(opt_finishFn, opt_errorFn) {
         });
 };
 
-mirosubs.loggedIn = function(username) {
-    mirosubs.currentUsername = username;
-    mirosubs.userEventTarget.dispatchEvent(
-        new mirosubs.LoginEvent(mirosubs.currentUsername));
+unisubs.loggedIn = function(username) {
+    unisubs.currentUsername = username;
+    unisubs.userEventTarget.dispatchEvent(
+        new unisubs.LoginEvent(unisubs.currentUsername));
 };
 
-mirosubs.isLoginAttemptInProgress = function() {
-    return mirosubs.loginAttemptInProgress_ ||
-        mirosubs.LoginDialog.isCurrentlyShown();
+unisubs.isLoginAttemptInProgress = function() {
+    return unisubs.loginAttemptInProgress_ ||
+        unisubs.LoginDialog.isCurrentlyShown();
 };
 
-mirosubs.createAccount = function() {
-    mirosubs.loginAttemptInProgress_ = true;
-    mirosubs.openLoginPopup(mirosubs.LoginPopupType.NATIVE);
+unisubs.createAccount = function() {
+    unisubs.loginAttemptInProgress_ = true;
+    unisubs.openLoginPopup(unisubs.LoginPopupType.NATIVE);
 };
 
-mirosubs.logout = function() {
-    mirosubs.Rpc.call('logout', {}, function(result) {
-        mirosubs.currentUsername = null;
-        mirosubs.userEventTarget.dispatchEvent(mirosubs.EventType.LOGOUT);
+unisubs.logout = function() {
+    unisubs.Rpc.call('logout', {}, function(result) {
+        unisubs.currentUsername = null;
+        unisubs.userEventTarget.dispatchEvent(unisubs.EventType.LOGOUT);
     });
 };
 
-mirosubs.formatTime = function(time, opt_excludeMs) {
+unisubs.formatTime = function(time, opt_excludeMs) {
     var intTime = parseInt(time);
 
     var timeString = '';
@@ -273,7 +273,7 @@ mirosubs.formatTime = function(time, opt_excludeMs) {
     return timeString;
 };
 
-mirosubs.randomString = function() {
+unisubs.randomString = function() {
     var sb = [], i;
     for (i = 0; i < 10; i++)
         sb.push((10 + ~~(Math.random() * 26)).toString(36));
@@ -286,16 +286,16 @@ mirosubs.randomString = function() {
  * @param {Element} bottomElem should have display: hidden when 
  *     this is called.
  */
-mirosubs.attachToLowerLeft = function(topElem, bottomElem) {
+unisubs.attachToLowerLeft = function(topElem, bottomElem) {
     // This is a little hacky so that we can position with minimal
     // flicker.
-    mirosubs.style.setVisibility(bottomElem, false);
-    mirosubs.style.showElement(bottomElem, true);
-    mirosubs.repositionToLowerLeft(topElem, bottomElem);
-    mirosubs.style.setVisibility(bottomElem, true);
+    unisubs.style.setVisibility(bottomElem, false);
+    unisubs.style.showElement(bottomElem, true);
+    unisubs.repositionToLowerLeft(topElem, bottomElem);
+    unisubs.style.setVisibility(bottomElem, true);
 };
 
-mirosubs.repositionToLowerLeft = function(anchorElement, movableElement) {
+unisubs.repositionToLowerLeft = function(anchorElement, movableElement) {
     // a lot of this code is from goog.positioning.positionAtAnchor.
     
     // Ignore offset for the BODY element unless its position is non-static.
@@ -346,18 +346,18 @@ mirosubs.repositionToLowerLeft = function(anchorElement, movableElement) {
 /**
  * Checks whether we are embedded in a non-PCF domain.
  */
-mirosubs.isEmbeddedInDifferentDomain = function() {
-    return mirosubs.siteConfig != null;
+unisubs.isEmbeddedInDifferentDomain = function() {
+    return unisubs.siteConfig != null;
 };
 
-mirosubs.isReturnURLInDifferentDomain = function() {
-    if (!mirosubs.returnURL)
+unisubs.isReturnURLInDifferentDomain = function() {
+    if (!unisubs.returnURL)
         return false;
-    var uri = new goog.Uri(mirosubs.returnURL);
+    var uri = new goog.Uri(unisubs.returnURL);
     var myURI = new goog.Uri(window.location);
     if (goog.DEBUG) {
-        mirosubs.logger_.info("mirosubs.returnURL is " + mirosubs.returnURL);
-        mirosubs.logger_.info(
+        unisubs.logger_.info("unisubs.returnURL is " + unisubs.returnURL);
+        unisubs.logger_.info(
             "isReturnURLInDifferentDomain call: comparing " + 
                 uri.getDomain() + " against " + myURI.getDomain());
     }
@@ -366,72 +366,72 @@ mirosubs.isReturnURLInDifferentDomain = function() {
         myURI.getDomain().toLowerCase();
 };
 
-mirosubs.isFromDifferentDomain = function() {
+unisubs.isFromDifferentDomain = function() {
     
-    return mirosubs.isEmbeddedInDifferentDomain() || 
-        mirosubs.isReturnURLInDifferentDomain();
+    return unisubs.isEmbeddedInDifferentDomain() || 
+        unisubs.isReturnURLInDifferentDomain();
 };
 
 /**
  * @constructor
  */
-mirosubs.LoginEvent = function(username) {
-    this.type = mirosubs.EventType.LOGIN;
+unisubs.LoginEvent = function(username) {
+    this.type = unisubs.EventType.LOGIN;
     this.username = username;
 };
 
-mirosubs.getSubtitleHomepageURL = function(videoID) {
-    return [mirosubs.siteURL(), "/videos/", videoID].join('');
+unisubs.getSubtitleHomepageURL = function(videoID) {
+    return [unisubs.siteURL(), "/videos/", videoID].join('');
 };
 
-mirosubs.getVolunteerPageURL = function(){
-    return [mirosubs.siteURL(), "/videos/volunteer/"].join('');
+unisubs.getVolunteerPageURL = function(){
+    return [unisubs.siteURL(), "/videos/volunteer/"].join('');
 }
 
-mirosubs.createLinkButton = function($d, text, opt_className) {
+unisubs.createLinkButton = function($d, text, opt_className) {
     var atts = { 'href': 'javascript:void(0);' };
     if (opt_className)
         atts['className'] = opt_className;
     return $d('a', atts, text);
 };
 
-mirosubs.supportsIFrameMessages = function() {
+unisubs.supportsIFrameMessages = function() {
     return !!window['postMessage'];
 };
 
-mirosubs.storage_ = window['localStorage'];
+unisubs.storage_ = window['localStorage'];
 
-mirosubs.supportsLocalStorage = function() {
-    return !!(mirosubs.storage_ && mirosubs.storage_['getItem']);
+unisubs.supportsLocalStorage = function() {
+    return !!(unisubs.storage_ && unisubs.storage_['getItem']);
 };
 
-mirosubs.saveInLocalStorage = function(key, value) {
+unisubs.saveInLocalStorage = function(key, value) {
     if (goog.DEBUG) {
-        mirosubs.logger_.info(
+        unisubs.logger_.info(
             "Saving local storage, key: " + key + 
                 " and value " + value);
     }
-    mirosubs.storage_['setItem'](key, value);
+    unisubs.storage_['setItem'](key, value);
 };
 
-mirosubs.fetchFromLocalStorage = function(key) {
+unisubs.fetchFromLocalStorage = function(key) {
     if (goog.DEBUG) {
-        mirosubs.logger_.info(
+        unisubs.logger_.info(
             "Fetching local storage, key: " + key + 
                 " and value " + 
-                mirosubs.storage_['getItem'](key));
+                unisubs.storage_['getItem'](key));
     }
-    return mirosubs.storage_['getItem'](key);
+    return unisubs.storage_['getItem'](key);
 };
 
-mirosubs.removeFromLocalStorage = function(key) {
+unisubs.removeFromLocalStorage = function(key) {
     if (goog.DEBUG) {
-        mirosubs.logger_.info("Removing " + key + " from localStorage.");
+        unisubs.logger_.info("Removing " + key + " from localStorage.");
     }
-    mirosubs.storage_['removeItem'](key);
+    unisubs.storage_['removeItem'](key);
 };
 
-mirosubs.addScript = function(src, opt_async, opt_checkFn, opt_callbackFn) {
+unisubs.addScript = function(src, opt_async, opt_checkFn, opt_callbackFn) {
     if (opt_checkFn && opt_callbackFn) {
         var timer = new goog.Timer(250);
         goog.events.listen(
@@ -456,5 +456,5 @@ mirosubs.addScript = function(src, opt_async, opt_checkFn, opt_callbackFn) {
 };
 
 if (goog.DEBUG) {
-    mirosubs.logger_ = goog.debug.Logger.getLogger('mirosubs');
+    unisubs.logger_ = goog.debug.Logger.getLogger('unisubs');
 }

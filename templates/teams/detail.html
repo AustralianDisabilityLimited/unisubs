@@ -15,7 +15,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" %}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
     <script type="text/javascript">
         var GLOBAL_WIDGET_SETTINGS = {{ general_settings|safe }};

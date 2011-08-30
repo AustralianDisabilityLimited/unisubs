@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.LoadingDom');
+goog.provide('unisubs.LoadingDom');
 
 /**
  * @constructor
- * This is a singleton, so use mirosubs.LoadingDom.getInstance() instead.
+ * This is a singleton, so use unisubs.LoadingDom.getInstance() instead.
  */
-mirosubs.LoadingDom = function() {
+unisubs.LoadingDom = function() {
     goog.events.EventTarget.call(this);
     this.isDomLoaded_ = false;
     var that = this;
@@ -43,12 +43,12 @@ mirosubs.LoadingDom = function() {
         window, goog.events.EventType.LOAD,
         this.onDomLoaded_, false, this);
 };
-goog.inherits(mirosubs.LoadingDom, goog.events.EventTarget);
-goog.addSingletonGetter(mirosubs.LoadingDom);
+goog.inherits(unisubs.LoadingDom, goog.events.EventTarget);
+goog.addSingletonGetter(unisubs.LoadingDom);
 
-mirosubs.LoadingDom.DOMLOAD = 'domloaded';
+unisubs.LoadingDom.DOMLOAD = 'domloaded';
 
-mirosubs.LoadingDom.prototype.listenOnIE_ = function() {
+unisubs.LoadingDom.prototype.listenOnIE_ = function() {
     var that = this;
     var EVENT = "onreadystatechange";
     document.attachEvent(EVENT, function() {
@@ -73,13 +73,13 @@ mirosubs.LoadingDom.prototype.listenOnIE_ = function() {
         })();
 };
 
-mirosubs.LoadingDom.prototype.onDomLoaded_ = function() {
+unisubs.LoadingDom.prototype.onDomLoaded_ = function() {
     if (this.isDomLoaded_)
         return;
     this.isDomLoaded_ = true;
-    this.dispatchEvent(mirosubs.LoadingDom.DOMLOAD);
+    this.dispatchEvent(unisubs.LoadingDom.DOMLOAD);
 };
 
-mirosubs.LoadingDom.prototype.isDomLoaded = function() {
+unisubs.LoadingDom.prototype.isDomLoaded = function() {
     return this.isDomLoaded_ || document.readyState == 'complete';
 };

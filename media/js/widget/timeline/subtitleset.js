@@ -16,47 +16,47 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.timeline.SubtitleSet');
+goog.provide('unisubs.timeline.SubtitleSet');
 /**
 * @constructor
-* @param {mirosubs.subtitle.EditableCaptionSet} editableCaptionSet
-* @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
+* @param {unisubs.subtitle.EditableCaptionSet} editableCaptionSet
+* @param {unisubs.video.AbstractVideoPlayer} videoPlayer
 */
-mirosubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
+unisubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
     goog.events.EventTarget.call(this);
     this.eventHandler_ = new goog.events.EventHandler(this);
     this.editableCaptionSet_ = editableCaptionSet;
     this.videoPlayer_ = videoPlayer;
     this.createSubsToDisplay_();
-    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
+    var et = unisubs.subtitle.EditableCaptionSet.EventType;
     this.eventHandler_.
         listen(
             this.editableCaptionSet_,
-            mirosubs.subtitle.EditableCaption.CHANGE,
+            unisubs.subtitle.EditableCaption.CHANGE,
             this.captionChange_).
         listen(
             this.editableCaptionSet_,
             [et.CLEAR_TIMES, et.ADD, et.DELETE],
             this.subsEdited_);
 };
-goog.inherits(mirosubs.timeline.SubtitleSet, goog.events.EventTarget);
+goog.inherits(unisubs.timeline.SubtitleSet, goog.events.EventTarget);
 
-mirosubs.timeline.SubtitleSet.DISPLAY_NEW = 'displaynew';
-mirosubs.timeline.SubtitleSet.CLEAR_TIMES = 'cleartimes';
-mirosubs.timeline.SubtitleSet.REMOVE = 'remove';
+unisubs.timeline.SubtitleSet.DISPLAY_NEW = 'displaynew';
+unisubs.timeline.SubtitleSet.CLEAR_TIMES = 'cleartimes';
+unisubs.timeline.SubtitleSet.REMOVE = 'remove';
 
-mirosubs.timeline.SubtitleSet.prototype.getSubsToDisplay = function() {
+unisubs.timeline.SubtitleSet.prototype.getSubsToDisplay = function() {
     return this.subsToDisplay_;
 };
 
-mirosubs.timeline.SubtitleSet.prototype.createSubsToDisplay_ = function() {
+unisubs.timeline.SubtitleSet.prototype.createSubsToDisplay_ = function() {
     if (this.subsToDisplay_)
         this.disposeSubsToDisplay_();
     var that = this;
     this.subsToDisplay_ = goog.array.map(
         this.editableCaptionSet_.timelineCaptions(),
         function(c) {
-            return new mirosubs.timeline.Subtitle(
+            return new unisubs.timeline.Subtitle(
                 c, that.videoPlayer_);
         });
     var i;
@@ -65,11 +65,11 @@ mirosubs.timeline.SubtitleSet.prototype.createSubsToDisplay_ = function() {
             this.subsToDisplay_[i + 1]);
 };
 
-mirosubs.timeline.SubtitleSet.prototype.subsEdited_ = function(e) {
-    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
+unisubs.timeline.SubtitleSet.prototype.subsEdited_ = function(e) {
+    var et = unisubs.subtitle.EditableCaptionSet.EventType;
     if (e.type == et.CLEAR_TIMES) {
         this.createSubsToDisplay_();
-        this.dispatchEvent(mirosubs.timeline.SubtitleSet.CLEAR_TIMES);
+        this.dispatchEvent(unisubs.timeline.SubtitleSet.CLEAR_TIMES);
     }
     else if (e.type == et.ADD) {
         this.insertCaption_(e.caption);
@@ -79,7 +79,7 @@ mirosubs.timeline.SubtitleSet.prototype.subsEdited_ = function(e) {
     }
 };
 
-mirosubs.timeline.SubtitleSet.prototype.deleteCaption_ = function(caption) {
+unisubs.timeline.SubtitleSet.prototype.deleteCaption_ = function(caption) {
     var subOrder = caption.getSubOrder();
     var index = goog.array.binarySearch(
         this.subsToDisplay_, 42,
@@ -92,12 +92,12 @@ mirosubs.timeline.SubtitleSet.prototype.deleteCaption_ = function(caption) {
         var nextSub = index < this.subsToDisplay_.length - 1 ?
             this.subsToDisplay_[index + 1] : null;
         goog.array.removeAt(this.subsToDisplay_, index);
-        this.dispatchEvent(new mirosubs.timeline.SubtitleSet.RemoveEvent(sub));
+        this.dispatchEvent(new unisubs.timeline.SubtitleSet.RemoveEvent(sub));
         if (sub.getEditableCaption().getStartTime() == -1) {
             // we just removed the last unsynced subtitle.
             var nextCaption = caption.getNextCaption();
             if (nextCaption != null) {
-                nextSub = new mirosubs.timeline.Subtitle(
+                nextSub = new unisubs.timeline.Subtitle(
                     nextCaption, this.videoPlayer_);
                 this.subsToDisplay_.push(nextSub);
                 nextIsNew = true;
@@ -108,18 +108,18 @@ mirosubs.timeline.SubtitleSet.prototype.deleteCaption_ = function(caption) {
         sub.dispose();
         if (nextIsNew)
             this.dispatchEvent(
-                new mirosubs.timeline.SubtitleSet.DisplayNewEvent(nextSub));
+                new unisubs.timeline.SubtitleSet.DisplayNewEvent(nextSub));
     }
 };
 
-mirosubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
+unisubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
     if (!this.isInsertable_(caption))
         return;
-    var newSub = new mirosubs.timeline.Subtitle(
+    var newSub = new unisubs.timeline.Subtitle(
         caption, this.videoPlayer_);
     var index = goog.array.binarySearch(
         this.subsToDisplay_, newSub,
-        mirosubs.timeline.Subtitle.orderCompare);
+        unisubs.timeline.Subtitle.orderCompare);
     var insertionPoint = -index - 1;
     var previousSub = insertionPoint > 0 ?
         this.subsToDisplay_[insertionPoint - 1] : null;
@@ -130,7 +130,7 @@ mirosubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
     if (nextSub != null) {
         if (caption.getStartTime() == -1) {
             goog.array.removeAt(this.subsToDisplay_, insertionPoint);
-            this.dispatchEvent(new mirosubs.timeline.SubtitleSet.RemoveEvent(nextSub));
+            this.dispatchEvent(new unisubs.timeline.SubtitleSet.RemoveEvent(nextSub));
             nextSub.dispose();
         }
         else
@@ -138,19 +138,19 @@ mirosubs.timeline.SubtitleSet.prototype.insertCaption_ = function(caption) {
     }
     goog.array.insertAt(this.subsToDisplay_, newSub, insertionPoint);
     this.dispatchEvent(
-        new mirosubs.timeline.SubtitleSet.DisplayNewEvent(newSub));
+        new unisubs.timeline.SubtitleSet.DisplayNewEvent(newSub));
 };
 
-mirosubs.timeline.SubtitleSet.prototype.isInsertable_ = function(caption) {
+unisubs.timeline.SubtitleSet.prototype.isInsertable_ = function(caption) {
     return caption.getStartTime() != -1 ||
         caption.getPreviousCaption() == null ||
         (caption.getPreviousCaption() != null &&
          caption.getPreviousCaption().getStartTime() != -1);
 };
 
-mirosubs.timeline.SubtitleSet.prototype.captionChange_ = function(e) {
+unisubs.timeline.SubtitleSet.prototype.captionChange_ = function(e) {
     if (e.timesFirstAssigned && e.target.getNextCaption() != null) {
-        var newSub = new mirosubs.timeline.Subtitle(
+        var newSub = new unisubs.timeline.Subtitle(
             e.target.getNextCaption(), this.videoPlayer_);
         var lastSub = null;
         if (this.subsToDisplay_.length > 0)
@@ -159,20 +159,20 @@ mirosubs.timeline.SubtitleSet.prototype.captionChange_ = function(e) {
         if (lastSub != null)
             lastSub.setNextSubtitle(newSub);
         this.dispatchEvent(
-            new mirosubs.timeline.SubtitleSet.DisplayNewEvent(newSub));
+            new unisubs.timeline.SubtitleSet.DisplayNewEvent(newSub));
     }
 };
 
-mirosubs.timeline.SubtitleSet.prototype.getEditableCaptionSet = function() {
+unisubs.timeline.SubtitleSet.prototype.getEditableCaptionSet = function() {
     return this.editableCaptionSet_;
 };
 
-mirosubs.timeline.SubtitleSet.prototype.disposeSubsToDisplay_ = function() {
+unisubs.timeline.SubtitleSet.prototype.disposeSubsToDisplay_ = function() {
     goog.array.forEach(this.subsToDisplay_, function(s) { s.dispose(); });
 };
 
-mirosubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
-    mirosubs.timeline.SubtitleSet.superClass_.disposeInternal.call(this);
+unisubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
+    unisubs.timeline.SubtitleSet.superClass_.disposeInternal.call(this);
     this.eventHandler_.dispose();
     this.disposeSubsToDisplay_();
 };
@@ -181,8 +181,8 @@ mirosubs.timeline.SubtitleSet.prototype.disposeInternal = function() {
 * @constructor
 *
 */
-mirosubs.timeline.SubtitleSet.DisplayNewEvent = function(subtitle) {
-    this.type = mirosubs.timeline.SubtitleSet.DISPLAY_NEW;
+unisubs.timeline.SubtitleSet.DisplayNewEvent = function(subtitle) {
+    this.type = unisubs.timeline.SubtitleSet.DISPLAY_NEW;
     this.subtitle = subtitle;
 };
 
@@ -190,7 +190,7 @@ mirosubs.timeline.SubtitleSet.DisplayNewEvent = function(subtitle) {
 * @constructor
 *
 */
-mirosubs.timeline.SubtitleSet.RemoveEvent = function(subtitle) {
-    this.type = mirosubs.timeline.SubtitleSet.REMOVE;
+unisubs.timeline.SubtitleSet.RemoveEvent = function(subtitle) {
+    this.type = unisubs.timeline.SubtitleSet.REMOVE;
     this.subtitle = subtitle;
 };

@@ -16,12 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SubtitleController');
+goog.provide('unisubs.widget.SubtitleController');
 
 /**
  * @constructor
  */
-mirosubs.widget.SubtitleController = function(
+unisubs.widget.SubtitleController = function(
     videoID, videoURL, playController, videoTab, dropDown) 
 {
     this.videoID_ = videoID;
@@ -31,7 +31,7 @@ mirosubs.widget.SubtitleController = function(
     this.playController_ = playController;
     this.playController_.setSubtitleController(this);
     this.handler_ = new goog.events.EventHandler(this);
-    this.dialogOpener_ = new mirosubs.widget.SubtitleDialogOpener(
+    this.dialogOpener_ = new unisubs.widget.SubtitleDialogOpener(
         videoID, videoURL, this.playController_.getVideoSource(),
         function(loading) {
             if (loading)
@@ -45,17 +45,19 @@ mirosubs.widget.SubtitleController = function(
      * Show a request subtitles button as a nudge.
      * It will get overwritten by the Improve Subtitles button.
      */
-    this.videoTab_.updateNudge(
-        'Request Subtitles',
-        goog.bind(this.openRequestSubtitlesDialog,
-                  this));
-    this.videoTab_.showNudge(true);
+    if (!this.dropDown_.hasSubtitles()) {
+        this.videoTab_.updateNudge(
+            'Request Subtitles',
+            goog.bind(this.openRequestSubtitlesDialog,
+                      this));
+        this.videoTab_.showNudge(true);
+    }
 
     this.handler_.listenOnce(
         this.dialogOpener_,
         goog.ui.Dialog.EventType.AFTER_HIDE,
         this.subtitleDialogClosed_);
-    var s = mirosubs.widget.DropDown.Selection;
+    var s = unisubs.widget.DropDown.Selection;
     this.handler_.
         listen(
             dropDown,
@@ -75,21 +77,21 @@ mirosubs.widget.SubtitleController = function(
         );
 };
 
-mirosubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 
+unisubs.widget.SubtitleController.prototype.videoAnchorClicked_ = 
     function(e) 
 {
     e.preventDefault();
-    mirosubs.Tracker.getInstance().trackPageview('videoTabClicked');
+    unisubs.Tracker.getInstance().trackPageview('videoTabClicked');
     if (!this.dropDown_.hasSubtitles())
         this.openSubtitleDialog();
     else
         this.dropDown_.toggleShow();
 };
 
-mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
+unisubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
     var state  = this.playController_.getSubtitleState();
     this.dialogOpener_.openDialogOrRedirect(
-        new mirosubs.widget.OpenDialogArgs(
+        new unisubs.widget.OpenDialogArgs(
             state.LANGUAGE,
             null,
             state.LANGUAGE_PK,
@@ -99,28 +101,28 @@ mirosubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
 /**
  * Corresponds to "request subtitles" in menu.
  */
-mirosubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
+unisubs.widget.SubtitleController.prototype.requestSubtitles_ = function() {
     this.openRequestSubtitlesDialog();
 };
 
 /**
  * Corresponds to "add new subs" in menu.
  */
-mirosubs.widget.SubtitleController.prototype.openSubtitleDialog = 
+unisubs.widget.SubtitleController.prototype.openSubtitleDialog = 
     function() 
 {
     var state  = this.playController_.getSubtitleState();
     this.openNewLanguageDialog(state);
 };
 
-mirosubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
+unisubs.widget.SubtitleController.prototype.openNewLanguageDialog = 
     function(opt_langState) 
 {
     this.dialogOpener_.showStartDialog(
         this.playController_.getVideoSource().getVideoURL(), opt_langState);
 };
 
-mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
+unisubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e) {
     var dropDownContents = e.target.getDropDownContents();
     this.playController_.dialogClosed();
     this.videoTab_.showContent(
@@ -136,16 +138,16 @@ mirosubs.widget.SubtitleController.prototype.subtitleDialogClosed_ = function(e)
 /**
  * Opens the request subtitles dialog.
  */
-mirosubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog = function()
+unisubs.widget.SubtitleController.prototype.openRequestSubtitlesDialog = function()
 {
-    mirosubs.login();
-    if (mirosubs.isLoginAttemptInProgress()) {
+    unisubs.login();
+    if (unisubs.isLoginAttemptInProgress()) {
         //Logging in
         return;
     }
     else{
         // Create a new request Dialog
-        var dialog = new mirosubs.RequestDialog(this.videoID_);
+        var dialog = new unisubs.RequestDialog(this.videoID_);
         dialog.setVisible(true);
     }
 }

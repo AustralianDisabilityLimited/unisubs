@@ -18,20 +18,20 @@
     </script>
     {% endif %}
     
-    <!--[if IE]><link href="{{ MEDIA_URL }}index/css/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
-    <!--[if IE 6]><script src="{{ MEDIA_URL }}index/js/ie6PngFix.js"></script><![endif]--> 
-    <link href="{{ MEDIA_URL }}index/style.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" /> 
-    <link href="{{ MEDIA_URL }}css/imported/top_user_panel.css" media="all" type="text/css" rel="stylesheet" /> 
-    <link href="{{ MEDIA_URL }}css/imported/buttons.css" media="all" type="text/css" rel="stylesheet" /> 
-    <link href="{{ MEDIA_URL }}css/imported/forms.css" media="all" type="text/css" rel="stylesheet" /> 
-    <link href="{{ MEDIA_URL }}css/imported/feedback.css" media="all" type="text/css" rel="stylesheet" /> 
+    <!--[if IE]><link href="{{ STATIC_URL }}index/css/ie.css" rel="stylesheet" type="text/css" /><![endif]--> 
+    <!--[if IE 6]><script src="{{ STATIC_URL }}index/js/ie6PngFix.js"></script><![endif]--> 
+    <link href="{{ STATIC_URL }}index/style.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ STATIC_URL }}css/unisubs-widget.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ STATIC_URL }}css/imported/top_user_panel.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ STATIC_URL }}css/imported/buttons.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ STATIC_URL }}css/imported/forms.css" media="all" type="text/css" rel="stylesheet" /> 
+    <link href="{{ STATIC_URL }}css/imported/feedback.css" media="all" type="text/css" rel="stylesheet" /> 
     <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.form.js" type="text/javascript"></script>  
-    <script src="{{ MEDIA_URL }}js/jquery.mod.js" type="text/javascript"></script>  
-    <script src="{{ MEDIA_URL }}js/messages.js" type="text/javascript"></script>    
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    <script src="{{ STATIC_URL }}js/jquery.form.js" type="text/javascript"></script>  
+    <script src="{{ STATIC_URL }}js/jquery.mod.js" type="text/javascript"></script>  
+    <script src="{{ STATIC_URL }}js/messages.js" type="text/javascript"></script>    
+    {% include_bundle "unisubs-onsite-compiled" %}
     <script type="text/javascript">
         jQuery(function($){
             $.mod();
@@ -170,7 +170,7 @@
         
         <div class="section_secondary_top_right">
           <h4>{% trans "For every video on a page or site" %}</h4>
-            <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{MEDIA_URL}}js/mirosubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
+            <input type="text" class="input_url"  value="&lt;script type=&quot;text/javascript&quot; src=&quot;{{STATIC_URL}}js/unisubs-widgetizer.js&quot;&gt;&lt;/script&gt;" readonly="readonly"/>
             <span class="indication">{% trans "paste this single line of code into your page header and every video will be subtitle enabled" %}</span>
             
         </div><!-- End: section_secondary_top_right -->
@@ -180,16 +180,16 @@
   <div class="section_secondary_bottom_left">
           <h5>{% trans "Universal Subtitles works with these video sites and formats:" %}</h5>
             <div class="video_site_box">
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_00.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_01.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_02.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_03.jpg" width="91" height="40" alt="utube" />
-            <img src="{{ MEDIA_URL }}index/images/video_site/video_04.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ STATIC_URL }}index/images/video_site/video_00.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ STATIC_URL }}index/images/video_site/video_01.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ STATIC_URL }}index/images/video_site/video_02.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ STATIC_URL }}index/images/video_site/video_03.jpg" width="91" height="40" alt="utube" />
+            <img src="{{ STATIC_URL }}index/images/video_site/video_04.jpg" width="91" height="40" alt="utube" />
       </div>
         </div><!-- End: section_secondary_bottom_left -->
         
         <div class="section_secondary_bottom_right">
-          <img src="{{ MEDIA_URL }}index/images/video2.jpg" width="168" height="157" alt="video2" />
+          <img src="{{ STATIC_URL }}index/images/video2.jpg" width="168" height="157" alt="video2" />
         </div>
     </div><!-- End: section_secondary_bottom -->
 </div><!-- End: section_secondary -->
@@ -289,7 +289,7 @@
 
       <li>
           {% trans 'The code is free and open source' %}
-           (<a href="http://github.com/8planes/mirosubs/">{% trans 'get the source code' %}</a>)
+           (<a href="http://github.com/pculture/unisubs/">{% trans 'get the source code' %}</a>)
       </li>
 
       <li>{% trans "It's built using Javascript and HTML5 instead of proprietary software like Flash" %}</li>

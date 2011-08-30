@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SavedSubtitles');
+goog.provide('unisubs.widget.SavedSubtitles');
 
 /**
  * @constructor
  * @param {!number} sessionPK
- * @param {!mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {!unisubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.widget.SavedSubtitles = function(sessionPK, captionSet) {
+unisubs.widget.SavedSubtitles = function(sessionPK, captionSet) {
     /**
      * @const
      * @type {!number}
@@ -31,14 +31,14 @@ mirosubs.widget.SavedSubtitles = function(sessionPK, captionSet) {
     this.SESSION_PK = sessionPK;
     /**
      * @const
-     * @type {!mirosubs.subtitle.EditableCaptionSet}
+     * @type {!unisubs.subtitle.EditableCaptionSet}
      */
     this.CAPTION_SET = captionSet;
 };
 
-mirosubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
+unisubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
 
-mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
+unisubs.widget.SavedSubtitles.prototype.serialize = function() {
     return goog.json.serialize(
         { sessionPK: this.SESSION_PK,
           title: this.CAPTION_SET.title,
@@ -47,42 +47,42 @@ mirosubs.widget.SavedSubtitles.prototype.serialize = function() {
           captionSet: this.CAPTION_SET.makeJsonSubs() });
 };
 
-mirosubs.widget.SavedSubtitles.deserialize = function(json) {
+unisubs.widget.SavedSubtitles.deserialize = function(json) {
     var obj = goog.json.parse(json);
-    return new mirosubs.widget.SavedSubtitles(
+    return new unisubs.widget.SavedSubtitles(
         obj.sessionPK, 
-        new mirosubs.subtitle.EditableCaptionSet(
+        new unisubs.subtitle.EditableCaptionSet(
             obj.captionSet, obj.isComplete, obj.title, 
             obj.forked));
 };
 
-mirosubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {
-    mirosubs.widget.SavedSubtitles.save_(0, savedSubs);
+unisubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {
+    unisubs.widget.SavedSubtitles.save_(0, savedSubs);
 };
 
-mirosubs.widget.SavedSubtitles.saveLatest = function(savedSubs) {
-    mirosubs.widget.SavedSubtitles.save_(1, savedSubs);
+unisubs.widget.SavedSubtitles.saveLatest = function(savedSubs) {
+    unisubs.widget.SavedSubtitles.save_(1, savedSubs);
 };
 
-mirosubs.widget.SavedSubtitles.fetchInitial = function() {
-    return mirosubs.widget.SavedSubtitles.fetchSaved_(0);
+unisubs.widget.SavedSubtitles.fetchInitial = function() {
+    return unisubs.widget.SavedSubtitles.fetchSaved_(0);
 };
 
-mirosubs.widget.SavedSubtitles.fetchLatest = function() {
-    return mirosubs.widget.SavedSubtitles.fetchSaved_(1);
+unisubs.widget.SavedSubtitles.fetchLatest = function() {
+    return unisubs.widget.SavedSubtitles.fetchSaved_(1);
 };
 
-mirosubs.widget.SavedSubtitles.save_ = function(index, savedSubs) {
-    var key = mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index;
+unisubs.widget.SavedSubtitles.save_ = function(index, savedSubs) {
+    var key = unisubs.widget.SavedSubtitles.STORAGEKEY_ + index;
     var value = savedSubs.serialize();
-    mirosubs.saveInLocalStorage(key, value);
+    unisubs.saveInLocalStorage(key, value);
 };
 
-mirosubs.widget.SavedSubtitles.fetchSaved_ = function(index) {
-    var savedSubsText = mirosubs.fetchFromLocalStorage(
-        mirosubs.widget.SavedSubtitles.STORAGEKEY_ + index);
+unisubs.widget.SavedSubtitles.fetchSaved_ = function(index) {
+    var savedSubsText = unisubs.fetchFromLocalStorage(
+        unisubs.widget.SavedSubtitles.STORAGEKEY_ + index);
     if (savedSubsText)
-        return mirosubs.widget.SavedSubtitles.deserialize(savedSubsText);
+        return unisubs.widget.SavedSubtitles.deserialize(savedSubsText);
     else
         return null;
 };

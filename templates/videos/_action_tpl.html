@@ -19,7 +19,7 @@
 	{{ info|safe }}
     
     <div>
-        <span>{{ item.created|date:"DATETIME_FORMAT" }}</span>
+        <span>{{ item.created|timesince }} {% trans 'ago' %}</span>
     </div>    
 
 </div>

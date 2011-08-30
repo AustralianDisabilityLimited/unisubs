@@ -58,4 +58,13 @@ def write_video_type_js(video):
             return '<script type="text/javascript" src="%s"><script/>' % vt.js_url
     except VideoTypeError:    
         return  
-    
+
+@register.simple_tag
+def title_for_video(video, language=None):
+    if not language:
+        return "%s | Universal Subtitles" % video.title_display()
+    elif  language.is_original:
+        return "%s  with subtitles | Universal Subtitles " % language.get_title_display()
+    else:
+        return "%s  with %s subtitles | Universal Subtitles " % (language.get_title_display() , language.get_language_display())
+        

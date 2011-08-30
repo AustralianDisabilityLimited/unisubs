@@ -8,7 +8,7 @@
   {% endif %}
   <div class="info clearfix">
   	<h4><a href="{{ video.get_absolute_url }}">{{ video }}</a></h4>
-    <p style="margin: 0 0 15px 0;">{{ video.description|striptags|truncatewords:50|linebreaksbr|urlize }}</p>  
+    <p style="margin: 0 0 15px 0;">{{ video.description|striptags|truncatewords:5|linebreaksbr|urlize }}</p>  
     <div class="lang_avail">
       <h2>
           {% blocktrans count video.languages_count as number %}

@@ -21,7 +21,7 @@ def is_locale_independent(path):
     A path is independent if it starts with MEDIA_URL or it is matched by any
     pattern from LOCALE_INDEPENDENT_PATHS.
     """
-    if settings.MEDIA_URL and path.startswith(settings.MEDIA_URL):
+    if settings.MEDIA_URL and path.startswith(settings.MEDIA_URL) or path.startswith(settings.STATIC_URL) :
         return True
     for re in localeurl.settings.LOCALE_INDEPENDENT_PATHS:
         if re.search(path):

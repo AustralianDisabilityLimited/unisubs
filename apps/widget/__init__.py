@@ -25,24 +25,24 @@ import simplejson as json
 LANGUAGES_MAP = dict(LANGUAGES)
 
 def embed_context():
-    return { 'js_file': (full_path('js/mirosubs-offsite-compiled.js') 
+    return { 'js_file': (full_path('js/unisubs-offsite-compiled.js') 
                          if settings.COMPRESS_MEDIA else 
                          full_path(settings.JS_OFFSITE[-1])) }
 
 def full_path(js_file):
-    return "{0}{1}".format(settings.MEDIA_URL, js_file)
+    return "{0}{1}".format(settings.STATIC_URL, js_file)
 
 def add_offsite_js_files(context):
     """ Adds variables necessary for _js_dependencies.html """
     return add_js_files(context, settings.COMPRESS_MEDIA, 
                         settings.JS_OFFSITE, 
-                        'js/mirosubs-offsite-compiled.js')
+                        'js/unisubs-offsite-compiled.js')
 
 def add_onsite_js_files(context):
     """ Adds variables necessary for _js_onsite_dependencies.html """
     return add_js_files(context, settings.COMPRESS_MEDIA, 
                         settings.JS_ONSITE, 
-                        'js/mirosubs-onsite-compiled.js')
+                        'js/unisubs-onsite-compiled.js')
 
 def add_config_based_js_files(context, files, compiled_file_name):
     js_files = []

@@ -16,12 +16,12 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.VideoLanguage');
+goog.provide('unisubs.startdialog.VideoLanguage');
 
 /**
  * @constructor
  */
-mirosubs.startdialog.VideoLanguage = function(json) {
+unisubs.startdialog.VideoLanguage = function(json) {
     this.PK = json['pk'];
     this.LANGUAGE = json['language'];
     this.DEPENDENT = json['dependent'];
@@ -32,12 +32,12 @@ mirosubs.startdialog.VideoLanguage = function(json) {
     this.IN_PROGRESS = json['in_progress'];
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.languageName = function() {
+unisubs.startdialog.VideoLanguage.prototype.languageName = function() {
     return this.LANGUAGE ? 
-        mirosubs.languageNameForCode(this.LANGUAGE) : "Original";
+        unisubs.languageNameForCode(this.LANGUAGE) : "Original";
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
+unisubs.startdialog.VideoLanguage.prototype.toString = function() {
     var name = this.languageName();
 
     if (!this.DEPENDENT && this.SUBTITLE_COUNT > 0)
@@ -47,13 +47,13 @@ mirosubs.startdialog.VideoLanguage.prototype.toString = function() {
     return name + (this.IN_PROGRESS ? " (in progress)" : "");
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.completionStatus = function() {
+unisubs.startdialog.VideoLanguage.prototype.completionStatus = function() {
     return "(" +
         (this.DEPENDENT ? (this.PERCENT_DONE + "%") : 
          (this.SUBTITLE_COUNT + " lines")) + ")";
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
+unisubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
     this.allLangs_ = all;
     if (this.STANDARD_PK)
         this.standardLang_ = goog.array.find(
@@ -63,31 +63,31 @@ mirosubs.startdialog.VideoLanguage.prototype.setAll = function(all) {
 };
 
 /**
- * @returns {?mirosubs.startdialog.VideoLanguage}
+ * @returns {?unisubs.startdialog.VideoLanguage}
  */
-mirosubs.startdialog.VideoLanguage.prototype.getStandardLang = function() {
+unisubs.startdialog.VideoLanguage.prototype.getStandardLang = function() {
     return this.standardLang_;
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.isDependentAndNonempty = function(partial) {
+unisubs.startdialog.VideoLanguage.prototype.isDependentAndNonempty = function(partial) {
     if (partial)
         return this.DEPENDENT && this.PERCENT_DONE > 0 && this.PERCENT_DONE < 100;
     else
         return this.DEPENDENT && this.PERCENT_DONE == 100;
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.isEmpty = function() {
+unisubs.startdialog.VideoLanguage.prototype.isEmpty = function() {
     return this.DEPENDENT && this.PERCENT_DONE == 0;
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.isDependable = function() {
+unisubs.startdialog.VideoLanguage.prototype.isDependable = function() {
     if (this.DEPENDENT)
         return this.getStandardLang() && this.getStandardLang().IS_COMPLETE && this.PERCENT_DONE > 10;
     else
         return this.IS_COMPLETE;
 };
 
-mirosubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
+unisubs.startdialog.VideoLanguage.prototype.canBenefitFromTranslation = 
     function(toTranslateFrom) 
 {
     if (!this.DEPENDENT)

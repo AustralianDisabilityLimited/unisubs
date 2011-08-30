@@ -30,7 +30,7 @@ Compilation / Minification
 settings.py has a MEDIA_BUNDLES dictionary. Each key sets an id (a unique name for the bundle), with the following properties:
 
 - `type`: Can be `css` or `js` for now
-- `files`: a sequence of files to be processed. Files will be processed in the order in which they're are defined on the bundle. They're path should be relative to the MEDIA_URL (i.e. mirosubs/media)
+- `files`: a sequence of files to be processed. Files will be processed in the order in which they're are defined on the bundle. They're path should be relative to the STATIC_URL (i.e. unisubs/media)
 - `closure_deps`: File (inside js) that holds the closure dependencies list.
 - `debug`: If true will include the closure-debug-dependencies.js.
 - `include_flash_deps`: boolean
@@ -66,7 +66,7 @@ When the --verbosity param is set to 2, `compile_media` will output the cmd_stri
 Dir layout
 ===========================
 Inside MEDIA_ROOT media will be compiled to `static-cache/[hash of latest git commit]/.
-i.e. MEDIA_ROOT/static-cache/21a1bbcc/js/mirosubs-onsite-compiled.js
+i.e. MEDIA_ROOT/static-cache/21a1bbcc/js/unisubs-onsite-compiled.js
 
 In this way we use one unique identifier for each revision, in fact, we relly on the one the scm gives us, which has the added benefit of making it easier to troubleshoot revisions and if the links are correct.
 
@@ -77,14 +77,14 @@ Relevant Settings
 =================
 These need to be defined in settings.py:
 
-MEDIA_URL
+STATIC_URL
 ----------
-Since the location of media is no longer static, the MEDIA_URL takes into consideration the new directory layout. Every time a new git version is running and deploy/create_commit_file.py is ran, the MEDIA_URL will change (and) therefore you need to restart the sever/reload app coder for that to take effect. 
+Since the location of media is no longer static, the STATIC_URL takes into consideration the new directory layout. Every time a new git version is running and deploy/create_commit_file.py is ran, the STATIC_URL will change (and) therefore you need to restart the sever/reload app coder for that to take effect. 
 
 
 COMPRESS_YUI_BINARY
 -------------------
-The path, relative to the mirosubs dir where the YUI compressor jar lives( "java -jar ./css-compression/yuicompressor-2.4.6.jar")
+The path, relative to the unisubs dir where the YUI compressor jar lives( "java -jar ./css-compression/yuicompressor-2.4.6.jar")
 
 COMPRESS_MEDIA
 --------------
@@ -95,7 +95,7 @@ COMPRESS_OUTPUT_NAME
 
 The directory that holds the root to the static cache, i.e. where all compiled and version specific media will be copyed to (see dir layout above). Defaults to 'static-cache'.
 
-MEDIA_URL_BASE
+STATIC_URL_BASE
 --------------
 
 This is the media url before appending the commit hash. This is useful in places where you need the media base to an external stable url , for example on the embed and widgetizer (which never change).
@@ -112,7 +112,7 @@ Which is part of the update_static fabric command.
 That command requires the USE_AMAZON set (needs correct values for secret, id and bucket), and it will:
 
 - Move the entire content of MEDIA_ROOT/static-cache/[hash guid] . All of these will have far future expire headers.
-- Copy and create the files that are used externally (in offsite widgets), namely: ["js/mirosubs-widgetizer.js", "js/widgetizer/widgetizerprimer.js"] to MEDIA_ROOT/js/.... These do not have far future expire headers.
+- Copy and create the files that are used externally (in offsite widgets), namely: ["js/unisubs-widgetizer.js", "js/widgetizer/widgetizerprimer.js"] to MEDIA_ROOT/js/.... These do not have far future expire headers.
 
 All files above 1kb will be served with gzip compression (smaller files tend to actually inflate ).
 

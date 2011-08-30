@@ -1,4 +1,5 @@
 {% load i18n %}
+{% comment %}
 <div style="padding: 10px">
     {% blocktrans %}
     A single video is often hosted in different places online and same
@@ -11,10 +12,13 @@
         {% endblocktrans %}    
     {% endif %}
 </div>
+{% endcomment %}
 {% if video.allow_video_urls_edit or perms.videos_videourl_add %}
-<a href="#" class="add-video-url-button green_button small" data-modal="add-video-url">
-    {% trans 'Add new URL' %}
-</a>
+    <div class="actions">
+        <a href="#" class="blue_button small" data-modal="add-video-url">
+            {% trans 'Add new URL' %}
+        </a>
+    </div>
 {% endif %}
 <table cellpadding="0" cellspacing="0" id="video-url-table">
 <thead>

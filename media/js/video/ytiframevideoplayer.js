@@ -16,31 +16,31 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.YTIFrameVideoPlayer');
+goog.provide('unisubs.video.YTIFrameVideoPlayer');
 
 /**
  * @constructor
  */
-mirosubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
     this.player_ = null;
     this.videoSource_ = videoSource;
-    this.playerElemID_ = mirosubs.randomString() + "_ytplayer";
+    this.playerElemID_ = unisubs.randomString() + "_ytplayer";
     this.forDialog_ = !!opt_forDialog;
     this.commands_ = [];
     this.progressTimer_ = new goog.Timer(
-        mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
     this.logger_ = goog.debug.Logger.getLogger(
-        'mirosubs.video.YTIFrameVideoPlayer');
-    goog.mixin(mirosubs.video.YTIFrameVideoPlayer.prototype,
-               mirosubs.video.YoutubeBaseMixin.prototype);
+        'unisubs.video.YTIFrameVideoPlayer');
+    goog.mixin(unisubs.video.YTIFrameVideoPlayer.prototype,
+               unisubs.video.YoutubeBaseMixin.prototype);
 };
-goog.inherits(mirosubs.video.YTIFrameVideoPlayer, mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.video.YTIFrameVideoPlayer, unisubs.video.AbstractVideoPlayer);
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
-    mirosubs.video.YTIFrameVideoPlayer.superClass_.createDom.call(this);
+unisubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
+    unisubs.video.YTIFrameVideoPlayer.superClass_.createDom.call(this);
     this.setPlayerSize_();
     var embedUri = new goog.Uri(
         "http://youtube.com/embed/" + 
@@ -54,11 +54,11 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
           'height': this.playerSize_.height + '', 
           'src': embedUri.toString(),
           'frameborder': '0',
-          'style': mirosubs.style.setSizeInString('', this.playerSize_) });
+          'style': unisubs.style.setSizeInString('', this.playerSize_) });
     this.setElementInternal(this.iframe_);
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
+unisubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     var config = this.videoSource_.getVideoConfig();
     if (!this.forDialog_ && config) {
         for (var prop in config) {
@@ -79,19 +79,19 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     }
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.setPlayerSize_ = function() {
+unisubs.video.YTIFrameVideoPlayer.prototype.setPlayerSize_ = function() {
     var sizeFromConfig = this.videoSource_.sizeFromConfig();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        mirosubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
     this.setDimensionsKnownInternal();
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
-    mirosubs.video.YTIFrameVideoPlayer.superClass_.decorateInternal.call(this, elem);
+unisubs.video.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.video.YTIFrameVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.logger_.info('decorating');
     this.iframe_ = elem;
     if (elem.id) {
@@ -105,8 +105,8 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
     this.setDimensionsKnownInternal();
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
-    mirosubs.video.YTIFrameVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
+    unisubs.video.YTIFrameVideoPlayer.superClass_.enterDocument.call(this);
     var w = window;
     if (w['YT'] && w['YT']['Player'])
         this.makePlayer_();
@@ -120,11 +120,11 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
             oldReady();
             myOnReady();
         };
-        mirosubs.addScript("http://www.youtube.com/player_api");
+        unisubs.addScript("http://www.youtube.com/player_api");
     }
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
+unisubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
     if (goog.DEBUG) {
         this.logger_.info('makePlayer_ called');
     }
@@ -140,7 +140,7 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
         });
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
+unisubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
     this.logger_.info('player ready');
     this.player_ = this.almostPlayer_;
     goog.array.forEach(this.commands_, function(cmd) { cmd(); });
@@ -151,18 +151,18 @@ mirosubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
     this.progressTimer_.start();
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.getVideoElements = function() {
+unisubs.video.YTIFrameVideoPlayer.prototype.getVideoElements = function() {
     return [this.iframe_];
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
-    mirosubs.video.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.video.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.video.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
 };
 
-mirosubs.video.YTIFrameVideoPlayer.prototype.exitDocument = function() {
-    mirosubs.video.YTIFrameVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.video.YTIFrameVideoPlayer.prototype.exitDocument = function() {
+    unisubs.video.YTIFrameVideoPlayer.superClass_.exitDocument.call(this);
     this.progressTimer_.stop();
     this.timeUpdateTimer_.stop();
 };

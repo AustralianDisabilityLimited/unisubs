@@ -16,30 +16,30 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.Youtube');
+goog.provide('unisubs.widgetizer.Youtube');
 
 /**
  * @constructor
  *
  */
-mirosubs.widgetizer.Youtube = function() {
-    mirosubs.widgetizer.VideoPlayerMaker.call(this);
+unisubs.widgetizer.Youtube = function() {
+    unisubs.widgetizer.VideoPlayerMaker.call(this);
     /**
      * @const
      */
-    this.ON_YT_SITE = mirosubs.widgetizer.Youtube.onYTSite();
+    this.ON_YT_SITE = unisubs.widgetizer.Youtube.onYTSite();
 };
-goog.inherits(mirosubs.widgetizer.Youtube,
-              mirosubs.widgetizer.VideoPlayerMaker);
+goog.inherits(unisubs.widgetizer.Youtube,
+              unisubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.Youtube.onYTSite = function() {
+unisubs.widgetizer.Youtube.onYTSite = function() {
     return window.location.hostname.match(/youtube\.com$/) != null;
 };
 
-mirosubs.widgetizer.Youtube.prototype.logger_ =
-    goog.debug.Logger.getLogger('mirosubs.widgetizer.Youtube');
+unisubs.widgetizer.Youtube.prototype.logger_ =
+    goog.debug.Logger.getLogger('unisubs.widgetizer.Youtube');
 
-mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
+unisubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     var elements = this.unwidgetizedElements_();
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
@@ -56,17 +56,17 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoPlayers = function() {
     return videoPlayers;
 };
 
-mirosubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
-    return mirosubs.Flash.findFlashParam(element, 'allowscriptaccess') == 'always' &&
-        mirosubs.Flash.swfURL(element).match(/enablejsapi=1/i) &&
+unisubs.widgetizer.Youtube.prototype.isDecoratable_ = function(element) {
+    return unisubs.Flash.findFlashParam(element, 'allowscriptaccess') == 'always' &&
+        unisubs.Flash.swfURL(element).match(/enablejsapi=1/i) &&
         goog.array.contains(['transparent', 'opaque'], 
-                            mirosubs.Flash.findFlashParam(element, 'wmode'));
+                            unisubs.Flash.findFlashParam(element, 'wmode'));
 };
 
-mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
+unisubs.widgetizer.Youtube.prototype.makeVideoSource_ = 
     function(element, includeConfig) 
 {
-    var url = mirosubs.Flash.swfURL(element);
+    var url = unisubs.Flash.swfURL(element);
     var config = null;
     if (includeConfig) {
         config = {};
@@ -74,10 +74,10 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         var params = uri.getQueryData().getKeys();
         for (var i = 0; i < params.length; i++)
             config[params[i]] = uri.getParameterValue(params[i]);
-        if (mirosubs.Flash.findFlashParam(element, 'width') && 
-            mirosubs.Flash.findFlashParam(element, 'height')) {
-            config['width'] = mirosubs.Flash.findFlashParam(element, 'width');
-            config['height'] = mirosubs.Flash.findFlashParam(element, 'height');
+        if (unisubs.Flash.findFlashParam(element, 'width') && 
+            unisubs.Flash.findFlashParam(element, 'height')) {
+            config['width'] = unisubs.Flash.findFlashParam(element, 'width');
+            config['height'] = unisubs.Flash.findFlashParam(element, 'height');
         }
         else if (element.style.width && element.style.height) {
             config['width'] = parseInt(element.style['width']) + '';
@@ -85,11 +85,11 @@ mirosubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         }
     }
     var youtubePageURL = this.ON_YT_SITE ? window.location.href : url;
-    return mirosubs.video.YoutubeVideoSource.forURL(
+    return unisubs.video.YoutubeVideoSource.forURL(
         youtubePageURL, config);
 };
 
-mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ = 
+unisubs.widgetizer.Youtube.prototype.replaceVideoElement_ = 
     function(player, element) 
 {
     // this might get extracted to superclass as soon as we include 
@@ -105,17 +105,17 @@ mirosubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
         player.render(parent);
 };
 
-mirosubs.widgetizer.Youtube.prototype.isFlashElementAPlayer = function(element) {
-    return mirosubs.video.YoutubeVideoSource.isYoutube(
-        mirosubs.Flash.swfURL(element));
+unisubs.widgetizer.Youtube.prototype.isFlashElementAPlayer = function(element) {
+    return unisubs.video.YoutubeVideoSource.isYoutube(
+        unisubs.Flash.swfURL(element));
 };
 
-mirosubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
+unisubs.widgetizer.Youtube.prototype.unwidgetizedElements_ = function() {
     if (this.ON_YT_SITE) {
         var moviePlayer = goog.dom.getElement('movie_player');
         var elements = moviePlayer ? [moviePlayer] : [];
         return this.filterUnwidgetized(elements);
     }
-    return mirosubs.widgetizer.Youtube.superClass_.
+    return unisubs.widgetizer.Youtube.superClass_.
         unwidgetizedFlashElements.call(this);
 };

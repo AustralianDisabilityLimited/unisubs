@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.OpenDialogArgs');
+goog.provide('unisubs.widget.OpenDialogArgs');
 
 /**
  * @fileoverview 
@@ -27,7 +27,7 @@ goog.provide('mirosubs.widget.OpenDialogArgs');
 /**
  * @constructor
  */
-mirosubs.widget.OpenDialogArgs = function(
+unisubs.widget.OpenDialogArgs = function(
     subLanguageCode, 
     opt_originalLanguageCode, 
     opt_subLanguagePK,
@@ -62,14 +62,14 @@ mirosubs.widget.OpenDialogArgs = function(
     this.BASELANGUAGE_PK = opt_baseLanguagePK;
 };
 
-mirosubs.widget.OpenDialogArgs.prototype.matches = function(other) {
+unisubs.widget.OpenDialogArgs.prototype.matches = function(other) {
     return this.LANGUAGE == other.LANGUAGE &&
         this.ORIGINAL_LANGUAGE == other.ORIGINAL_LANGUAGE &&
         this.SUBLANGUAGE_PK == other.SUBLANGUAGE_PK &&
         this.BASELANGUAGE_PK == other.BASELANGUAGE_PK;
 };
 
-mirosubs.widget.OpenDialogArgs.prototype.toObject = function() {
+unisubs.widget.OpenDialogArgs.prototype.toObject = function() {
     return {
         'l': this.LANGUAGE,
         'o': this.ORIGINAL_LANGUAGE,
@@ -78,8 +78,8 @@ mirosubs.widget.OpenDialogArgs.prototype.toObject = function() {
     };
 };
 
-mirosubs.widget.OpenDialogArgs.fromObject = function(obj) {
-    return new mirosubs.widget.OpenDialogArgs(
+unisubs.widget.OpenDialogArgs.fromObject = function(obj) {
+    return new unisubs.widget.OpenDialogArgs(
         obj['l'], obj['o'], obj['s'], obj['b']);
 };
 

@@ -16,33 +16,33 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.controls.BufferedBar');
+goog.provide('unisubs.controls.BufferedBar');
 /**
 * @constructor
 * @extends goog.ui.Component
 */
-mirosubs.controls.BufferedBar = function(videoPlayer) {
+unisubs.controls.BufferedBar = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.bufferedRangeDivs_ = [];
     this.videoPlayer_ = videoPlayer;
     this.videoDuration_ = 0;
     this.width_ = 0;
 };
-goog.inherits(mirosubs.controls.BufferedBar, goog.ui.Component);
+goog.inherits(unisubs.controls.BufferedBar, goog.ui.Component);
 
-mirosubs.controls.BufferedBar.prototype.createDom = function() {
+unisubs.controls.BufferedBar.prototype.createDom = function() {
     this.setElementInternal(
-	this.getDomHelper().createDom('div', 'mirosubs-buffered-container'));
+	this.getDomHelper().createDom('div', 'unisubs-buffered-container'));
 };
 
-mirosubs.controls.BufferedBar.prototype.enterDocument = function() {
-    mirosubs.controls.BufferedBar.superClass_.enterDocument.call(this);
+unisubs.controls.BufferedBar.prototype.enterDocument = function() {
+    unisubs.controls.BufferedBar.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.videoPlayer_,
-			     mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS,
+			     unisubs.video.AbstractVideoPlayer.EventType.PROGRESS,
 			     this.onVideoProgress_);
 };
 
-mirosubs.controls.BufferedBar.prototype.hasWidth_ = function() {
+unisubs.controls.BufferedBar.prototype.hasWidth_ = function() {
     if (this.width_ == 0) {
         var size = goog.style.getSize(this.getElement());
         this.width_ = size.width;
@@ -52,7 +52,7 @@ mirosubs.controls.BufferedBar.prototype.hasWidth_ = function() {
     return true;
 };
 
-mirosubs.controls.BufferedBar.prototype.hasDuration_ = function() {
+unisubs.controls.BufferedBar.prototype.hasDuration_ = function() {
     if (this.videoDuration_ == 0) {
 	this.videoDuration_ = this.videoPlayer_.getDuration();
 	if (this.videoDuration_ == 0)
@@ -61,7 +61,7 @@ mirosubs.controls.BufferedBar.prototype.hasDuration_ = function() {
     return true;
 };
 
-mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
+unisubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
     if (!this.hasWidth_() || !this.hasDuration_())
         return;
     if (this.bufferedRangeDivs_.length !=
@@ -71,7 +71,7 @@ mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
 	       this.videoPlayer_.getBufferedLength())
 	{
 	    var bufferedDiv = this.getDomHelper().createDom(
-		'div', 'mirosubs-buffered');
+		'div', 'unisubs-buffered');
 	    this.getElement().appendChild(bufferedDiv);
 	    this.bufferedRangeDivs_.push(bufferedDiv);
 	}
@@ -80,13 +80,13 @@ mirosubs.controls.BufferedBar.prototype.onVideoProgress_ = function() {
 	    this.getElement().removeChild(this.bufferedRangeDivs_.pop());
     }
     for (var i = 0; i < this.bufferedRangeDivs_.length; i++) {
-        mirosubs.style.setPosition(
+        unisubs.style.setPosition(
             this.bufferedRangeDivs_[i],
 	    this.width_ *
 	        this.videoPlayer_.getBufferedStart(i) /
 	        this.videoDuration_, 
             null);
-        mirosubs.style.setWidth(
+        unisubs.style.setWidth(
 	    this.bufferedRangeDivs_[i],
 	    this.width_ *
 	        (this.videoPlayer_.getBufferedEnd(i) -

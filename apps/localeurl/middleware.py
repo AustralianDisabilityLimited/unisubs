@@ -17,7 +17,7 @@ class LocaleURLMiddleware(object):
     Middleware that sets the language based on the request path prefix and
     strips that prefix from the path. It will also automatically redirect any
     path without a prefix, unless PREFIX_DEFAULT_LOCALE is set to True.
-    Exceptions are paths beginning with MEDIA_URL or matching any regular
+    Exceptions are paths beginning with STATIC_URL or matching any regular
     expression from LOCALE_INDEPENDENT_PATHS from the project settings.
 
     For example, the path '/en/admin/' will set request.LANGUAGE_CODE to 'en'

@@ -32,7 +32,7 @@ DATABASE_USER = 'INSERT DATABASE USER'
 
 DEFAULT_BUCKET = '' # special note: should be blank for dev.
 HAYSTACK_SOLR_URL = 'http://localhost:38983/solr'
-MEDIA_URL = 'http://dev.universalsubtitles.org/site_media/'
+STATIC_URL = 'http://dev.universalsubtitles.org/site_media/media/'
 PROMOTE_TO_ADMINS = []
 
 # SENTRY_* db settings only used on staging and production.

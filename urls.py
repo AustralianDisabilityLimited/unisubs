@@ -29,7 +29,7 @@ admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUser
 from doorman import feature_is_on
 
 js_info_dict = {
-    'packages': ('mirosubs'),
+    'packages': ('unisubs'),
 }
 
 urlpatterns = patterns(
@@ -80,7 +80,9 @@ urlpatterns = patterns(
     url(r'^services/$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'services.html'}, 'services_page'),
    url(r'^solutions/ngo/$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'solutions/ngo.html'}, 'solutions_page'),    
+        {'template': 'solutions/ngo.html'}, 'solutions_page'),
+    url(r'^streaming-transcript/$', 'django.views.generic.simple.direct_to_template', 
+        {'template': 'streaming-transcript.html'}, 'streaming_transcript_demo'),  
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 

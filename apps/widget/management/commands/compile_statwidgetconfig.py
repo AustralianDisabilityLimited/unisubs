@@ -10,7 +10,7 @@ class Command(BaseCommand):
         media_dir = args[0]
         file_name = join(media_dir, 'js/statwidget/statwidgetconfig.js')
         context = {'current_site': Site.objects.get_current(),
-                   'MEDIA_URL': settings.MEDIA_URL}
+                   'STATIC_URL': settings.STATIC_URL}
         rendered = render_to_string(
             'widget/statwidgetconfig.js', context)
         with open(file_name, 'w') as f:

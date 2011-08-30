@@ -63,29 +63,34 @@ rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
 })
 
+def _get_featured_videos():
+    return SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        .order_by('-featured')
+    
+def _get_popular_videos():
+    return SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).order_by('-week_views')
+
+def _get_latest_videos():
+    return SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).order_by('-created')[:18]
+    
+
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
+    context['popular_videos'] = _get_popular_videos()[:6]
+    context['featured_videos'] = _get_featured_videos()[:6]
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
 def watch_page(request):
-    #Popular videos
-    popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).order_by('-week_views')[:6]
-        
-    #featured videos
-    featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-        .order_by('-featured')[:6]
-    
-    latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).order_by('-created')[:18]
 
     context = {
-        'featured_videos': featured_videos,
-        'popular_videos': popular_videos,
-        'latest_videos': latest_videos,
+        'featured_videos': _get_featured_videos()[:6],
+        'popular_videos': _get_popular_videos()[:6],
+        'latest_videos': _get_latest_videos()[:6],
         'popular_display_views': 'week'
     }
     return render_to_response('videos/watch.html', context,
@@ -143,7 +148,7 @@ def volunteer_category(request, category):
 
 def bug(request):
     from widget.rpc import add_general_settings
-    context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
+    context = widget.add_config_based_js_files({}, settings.JS_API, 'unisubs-api.js')
     context['all_videos'] = Video.objects.count()
     try:
         context['video_url_obj'] = VideoUrl.objects.filter(type=VIDEO_TYPE_YOUTUBE)[:1].get()

@@ -1,7 +1,7 @@
 {% comment %} This has to be included in a onLoad handler ! {% endcomment %}
 {% load i18n teams_tags paginator moderation utils_tags %}
 goog.require("goog.structs.Set");
-goog.require("mirosubs.SimpleWarning");
+goog.require("unisubs.SimpleWarning");
 var ACTION_REJECTED = "rejected";
 var ACTION_APPROVED = "approved";
 var form = $('form.moderation-dashboard');
@@ -66,7 +66,7 @@ function onBatchConfirmed(action, dialog){
 }
 
 function onBatchApproveRequested(){
-    var d = new mirosubs.SimpleWarning(
+    var d = new unisubs.SimpleWarning(
         "Approve all", 
         "You should be super sure", 
         "Yeah, approve all", 
@@ -84,7 +84,7 @@ function onBatchApproveRequested(){
 
 function onBatchRejectRequested(){
     console.log(r);
-    var d = new mirosubs.SimpleWarning(
+    var d = new unisubs.SimpleWarning(
         "Reject all", 
         "You should be super sure", 
         "Yeah, reject", 

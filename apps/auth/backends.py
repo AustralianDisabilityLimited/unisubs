@@ -17,6 +17,8 @@ FACEBOOK_API_SECRET = getattr(settings, 'FACEBOOK_API_SECRET', '')
 FACEBOOK_REST_SERVER = getattr(settings, 'FACEBOOK_REST_SERVER', 'http://api.facebook.com/restserver.php')
 
 class CustomUserBackend(ModelBackend):
+    supports_object_permissions = False
+    supports_anonymous_user = False
     
     def authenticate(self, username=None, password=None):
         try:
@@ -32,7 +34,10 @@ class CustomUserBackend(ModelBackend):
         except User.DoesNotExist:
             return None
 
-class OpenIdBackend:
+class OpenIdBackend(object):
+    supports_object_permissions = False
+    supports_anonymous_user = False
+        
     def authenticate(self, openid_key, request, provider):
         try:
             assoc = UserAssociation.objects.get(openid_key = openid_key)
@@ -108,9 +113,10 @@ class OpenIdBackend:
 from urllib import urlopen
 from django.core.files.base import ContentFile
 
-class TwitterBackend:
-    """TwitterBackend for authentication
-    """
+class TwitterBackend(object):
+    supports_object_permissions = False
+    supports_anonymous_user = False
+        
     def authenticate(self, access_token):
         '''authenticates the token by requesting user information from twitter
         '''
@@ -177,8 +183,10 @@ class TwitterBackend:
             return None
         
 
-class FacebookBackend:
-    
+class FacebookBackend(object):
+    supports_object_permissions = False
+    supports_anonymous_user = False
+        
     def authenticate(self, cookies):
         API_KEY = FACEBOOK_API_KEY
         API_SECRET = FACEBOOK_API_SECRET   

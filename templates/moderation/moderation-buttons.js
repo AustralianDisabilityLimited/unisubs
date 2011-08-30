@@ -5,7 +5,7 @@ var batchURLS = [];
 var rejectionMarkerClass = "reject-version";
 var showsRejectionNotification = false;
 var disabledClass = "disabled";
-goog.require("mirosubs.subtitle.ConfirmRejectiondDialog");
+goog.require("unisubs.subtitle.ConfirmRejectiondDialog");
 
 
 

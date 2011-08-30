@@ -16,39 +16,56 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.UserSettings');
+goog.provide('unisubs.UserSettings');
 
 /**
  * @fileoverview To be expanded in the future.
  */
 
-mirosubs.UserSettings = {};
+unisubs.UserSettings = {};
 
-mirosubs.UserSettings.Settings = {
+unisubs.UserSettings.Settings = {
     SKIP_HOWTO_VIDEO: 'skiphowto',
     VIDEO_SPEED_MODE: 'videospeedmode'
 };
 
-mirosubs.UserSettings.setBooleanValue = function(setting, value) {
+unisubs.UserSettings.setBooleanValue = function(setting, value) {
     if (goog.net.cookies.isEnabled())
         goog.net.cookies.set(setting, value ? "1" : "0", 86400 * 365 * 2);
 };
 
-mirosubs.UserSettings.getBooleanValue = function(setting) {
+unisubs.UserSettings.getBooleanValue = function(setting) {
     if (goog.net.cookies.isEnabled())
         return goog.net.cookies.get(setting) == "1";
     else
         return false;
 };
 
-mirosubs.UserSettings.setStringValue = function(setting, value) {
+unisubs.UserSettings.setStringValue = function(setting, value) {
     if (goog.net.cookies.isEnabled())
         goog.net.cookies.set(setting, value, 86400 * 365 * 2);
 };
 
-mirosubs.UserSettings.getStringValue = function(setting) {
+unisubs.UserSettings.getStringValue = function(setting) {
     if (goog.net.cookies.isEnabled())
         return goog.net.cookies.get(setting);
     else
         return null;
+};
+
+unisubs.UserSettings.setFloatValue = function(setting, value) {
+    if (goog.net.cookies.isEnabled())
+        goog.net.cookies.set(setting, value);
+};
+
+unisubs.UserSettings.getFloatValue = function(setting, ifNanVal) {
+    var val = null;
+    if (goog.net.cookies.isEnabled()){
+        val = parseFloat(goog.net.cookies.get(setting));
+        if (isNaN(val) && goog.isDefAndNotNull(ifNanVal)){
+            val =  ifNanVal;
+        }
+
+    }
+    return val;    
 };

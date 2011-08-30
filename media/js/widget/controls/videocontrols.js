@@ -16,22 +16,22 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.controls.VideoControls');
+goog.provide('unisubs.controls.VideoControls');
 /**
 * @constructor
 * @extends goog.ui.Component
 */
-mirosubs.controls.VideoControls = function(videoPlayer) {
+unisubs.controls.VideoControls = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
 };
-goog.inherits(mirosubs.controls.VideoControls, goog.ui.Component);
+goog.inherits(unisubs.controls.VideoControls, goog.ui.Component);
 
-mirosubs.controls.VideoControls.prototype.createDom = function() {
-    mirosubs.controls.VideoControls.superClass_.createDom.call(this);
-    this.getElement().className = 'mirosubs-videoControls';
-    this.addChild(new mirosubs.controls.PlayPause(this.videoPlayer_), true);
-    this.addChild(new mirosubs.controls.ProgressBar(this.videoPlayer_), true);
-    this.addChild(new mirosubs.controls.TimeSpan(this.videoPlayer_), true);
-    this.addChild(new mirosubs.controls.VolumeControl(this.videoPlayer_), true);
+unisubs.controls.VideoControls.prototype.createDom = function() {
+    unisubs.controls.VideoControls.superClass_.createDom.call(this);
+    this.getElement().className = 'unisubs-videoControls';
+    this.addChild(new unisubs.controls.PlayPause(this.videoPlayer_), true);
+    this.addChild(new unisubs.controls.ProgressBar(this.videoPlayer_), true);
+    this.addChild(new unisubs.controls.TimeSpan(this.videoPlayer_), true);
+    this.addChild(new unisubs.controls.VolumeControl(this.videoPlayer_), true);
 };

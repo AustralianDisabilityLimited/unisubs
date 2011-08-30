@@ -6,13 +6,13 @@
   {{ block.super }}
   {% include_bundle "widget-css"%}
   <style>
-    div.mirosubs-widget {
+    div.unisubs-widget {
         position: relative;    
     }
-    .mirosubs-videoDiv {
+    .unisubs-videoDiv {
         text-align: center;
     }
-    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
+    .unisubs-videoDiv video, .unisubs-videoDiv object, .unisubs-videoDiv embed{
     width: 460px;
     }
     
@@ -26,7 +26,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" %}
 {% endblock %}
 
 {% block main_content %}

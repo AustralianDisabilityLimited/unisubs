@@ -7,8 +7,8 @@
 {% block scripts %}
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>  
-    <script src="{{ MEDIA_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block main_content %}
@@ -109,7 +109,7 @@
     <div class="bd">
         <div class="watch-page-content">
             {% with latest_videos as video_list %}
-                {% include 'videos/_watch_page.html' %}
+                {% include 'videos/_watch_page.html' with showdate="true" %}
             {% endwith %}    
         </div>
     </div><!-- // bd -->

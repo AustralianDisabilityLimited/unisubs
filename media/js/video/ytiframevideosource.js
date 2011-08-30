@@ -16,27 +16,27 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.YTIFrameVideoSource');
+goog.provide('unisubs.video.YTIFrameVideoSource');
 
 /**
  * @constructor
  */
-mirosubs.video.YTIFrameVideoSource = function(youtubeVideoID, opt_videoConfig) {
-    mirosubs.video.YoutubeVideoSource.call(this, youtubeVideoID, opt_videoConfig);
+unisubs.video.YTIFrameVideoSource = function(youtubeVideoID, opt_videoConfig) {
+    unisubs.video.YoutubeVideoSource.call(this, youtubeVideoID, opt_videoConfig);
 };
-goog.inherits(mirosubs.video.YTIFrameVideoSource, mirosubs.video.YoutubeVideoSource);
+goog.inherits(unisubs.video.YTIFrameVideoSource, unisubs.video.YoutubeVideoSource);
 
-mirosubs.video.YTIFrameVideoSource.prototype.createPlayerInternal = function(forDialog) {
-    return new mirosubs.video.YTIFrameVideoPlayer(
-        new mirosubs.video.YTIFrameVideoSource(
+unisubs.video.YTIFrameVideoSource.prototype.createPlayerInternal = function(forDialog) {
+    return new unisubs.video.YTIFrameVideoPlayer(
+        new unisubs.video.YTIFrameVideoSource(
             this.getYoutubeVideoID(), this.getVideoConfig()),
         forDialog);
 };
 
-mirosubs.video.YTIFrameVideoSource.forURL = function(videoURL, opt_videoConfig) {
-    var videoID = mirosubs.video.YoutubeVideoSource.extractVideoID(videoURL);
+unisubs.video.YTIFrameVideoSource.forURL = function(videoURL, opt_videoConfig) {
+    var videoID = unisubs.video.YoutubeVideoSource.extractVideoID(videoURL);
     if (videoID)
-        return new mirosubs.video.YTIFrameVideoSource(
+        return new unisubs.video.YTIFrameVideoSource(
             videoID, opt_videoConfig);
     else
         return null;

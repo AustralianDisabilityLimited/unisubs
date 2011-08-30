@@ -16,15 +16,15 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.testing');
+goog.provide('unisubs.testing');
 
-mirosubs.testing.calls = [];
+unisubs.testing.calls = [];
 
-mirosubs.testing.rpcCallStub = 
+unisubs.testing.rpcCallStub = 
     function(methodName, args, opt_callback, 
              opt_errorCallback, opt_forceDescriptive)
 {
-    mirosubs.testing.calls.push({
+    unisubs.testing.calls.push({
         methodName: methodName,
         args: args,
         callback: opt_callback,

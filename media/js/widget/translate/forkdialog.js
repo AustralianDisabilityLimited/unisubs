@@ -16,22 +16,22 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.translate.ForkDialog');
+goog.provide('unisubs.translate.ForkDialog');
 
 /**
  * @constructor
  * @param {function()} finishedCallback Called iff the user decides to go ahead and fork.
  */
-mirosubs.translate.ForkDialog = function(finishedCallback) {
-    goog.ui.Dialog.call(this, 'mirosubs-forkdialog', true);
+unisubs.translate.ForkDialog = function(finishedCallback) {
+    goog.ui.Dialog.call(this, 'unisubs-forkdialog', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.finishedCallback_ = finishedCallback;
 };
-goog.inherits(mirosubs.translate.ForkDialog, goog.ui.Dialog);
+goog.inherits(unisubs.translate.ForkDialog, goog.ui.Dialog);
 
-mirosubs.translate.ForkDialog.prototype.createDom = function() {
-    mirosubs.translate.ForkDialog.superClass_.createDom.call(this);
+unisubs.translate.ForkDialog.prototype.createDom = function() {
+    unisubs.translate.ForkDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getElement().appendChild(
         $d('div', null,
@@ -47,23 +47,23 @@ mirosubs.translate.ForkDialog.prototype.createDom = function() {
     this.cancelButton_ =
         $d('a',
            {'href':'#',
-            'className': 'mirosubs-green-button mirosubs-big'},
+            'className': 'unisubs-green-button unisubs-big'},
            'Cancel');
     this.okButton_ =
         $d('a',
            {'href':'#',
-            'className': 'mirosubs-green-button mirosubs-big'},
+            'className': 'unisubs-green-button unisubs-big'},
            'Continue');
     this.getElement().appendChild(this.cancelButton_);
     this.getElement().appendChild(this.okButton_);
     var clearDiv = $d('div');
-    mirosubs.style.setProperty(clearDiv, 'clear', 'both');
+    unisubs.style.setProperty(clearDiv, 'clear', 'both');
     clearDiv.innerHTML = "&nbsp;";
     this.getElement().appendChild(clearDiv);
 };
 
-mirosubs.translate.ForkDialog.prototype.enterDocument = function() {
-    mirosubs.translate.ForkDialog.superClass_.enterDocument.call(this);
+unisubs.translate.ForkDialog.prototype.enterDocument = function() {
+    unisubs.translate.ForkDialog.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(this.okButton_,
                'click',
@@ -73,7 +73,7 @@ mirosubs.translate.ForkDialog.prototype.enterDocument = function() {
                this.linkClicked_);
 };
 
-mirosubs.translate.ForkDialog.prototype.linkClicked_ = function(e) {
+unisubs.translate.ForkDialog.prototype.linkClicked_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
     if (e.target == this.okButton_) {

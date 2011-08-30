@@ -16,18 +16,18 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.FinishedPanel');
+goog.provide('unisubs.subtitle.FinishedPanel');
 
 /**
  * 
- * @param {mirosubs.subtitle.ServerModel} serverModel
+ * @param {unisubs.subtitle.ServerModel} serverModel
  */
-mirosubs.subtitle.FinishedPanel = function(serverModel) {
+unisubs.subtitle.FinishedPanel = function(serverModel) {
     goog.ui.Component.call(this);
     this.serverModel_ = serverModel;
 };
-goog.inherits(mirosubs.subtitle.FinishedPanel, goog.ui.Component);
-mirosubs.subtitle.FinishedPanel.prototype.createDom = function() {
+goog.inherits(unisubs.subtitle.FinishedPanel, goog.ui.Component);
+unisubs.subtitle.FinishedPanel.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.embedCodeInput = $d('input', {'type':'text'});
     var embedCode = this.serverModel_.getEmbedCode();
@@ -42,18 +42,18 @@ mirosubs.subtitle.FinishedPanel.prototype.createDom = function() {
                         'use this embed code'].join('')),
                     this.embedCodeInput,
                     flashSpan = $d('span'));
-    flashSpan.innerHTML = mirosubs.Clippy.getHTML(embedCode);
-    this.setElementInternal($d('ul', {'className':'mirosubs-titlesList'},
+    flashSpan.innerHTML = unisubs.Clippy.getHTML(embedCode);
+    this.setElementInternal($d('ul', {'className':'unisubs-titlesList'},
                                helpLi));
 };
-mirosubs.subtitle.FinishedPanel.prototype.enterDocument = function() {
-    mirosubs.subtitle.FinishedPanel.superClass_.enterDocument.call(this);
+unisubs.subtitle.FinishedPanel.prototype.enterDocument = function() {
+    unisubs.subtitle.FinishedPanel.superClass_.enterDocument.call(this);
     var that = this;
     this.getHandler().listen(this.embedCodeInput,
                              ['focus', 'click'],
                              this.focusEmbed);
 };
-mirosubs.subtitle.FinishedPanel.prototype.focusEmbed = function() {
+unisubs.subtitle.FinishedPanel.prototype.focusEmbed = function() {
     var that = this;
     goog.Timer.callOnce(function() {
         that.embedCodeInput.select();

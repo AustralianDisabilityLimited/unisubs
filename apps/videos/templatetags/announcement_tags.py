@@ -23,7 +23,6 @@ register = template.Library()
 
 @register.inclusion_tag('auth/_announcement.html')
 def announcement():
-
     return {
         'obj': Announcement.last()
     }

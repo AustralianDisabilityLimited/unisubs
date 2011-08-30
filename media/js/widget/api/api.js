@@ -16,29 +16,29 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.api');
+goog.provide('unisubs.api');
 
 /**
  * Opens the subtitling dialog for clients which provide their 
  * own server model, e.g. Wikimedia.
  * @param {Object} config Defined in the API documentation.
  */
-mirosubs.api.openDialog = function(config) {
-    mirosubs.siteConfig = mirosubs.Config.siteConfig;
-    if (config['mediaURL'])
-        mirosubs.Config.siteConfig['mediaURL'] = config['mediaURL'];
+unisubs.api.openDialog = function(config) {
+    unisubs.siteConfig = unisubs.Config.siteConfig;
+    if (config['staticURL'])
+        unisubs.Config.siteConfig['staticURL'] = config['staticURL'];
     var subtitles = config['subtitles'];
     var closeListener = config['closeListener'];
     var videoURL = config['videoURL'];
-    var videoSource = new mirosubs.video.Html5VideoSource(
-        videoURL, mirosubs.video.Html5VideoType.OGG);
-    var serverModel = new mirosubs.api.ServerModel(config);
-    var subDialog = new mirosubs.subtitle.Dialog(
+    var videoSource = new unisubs.video.Html5VideoSource(
+        videoURL, unisubs.video.Html5VideoType.OGG);
+    var serverModel = new unisubs.api.ServerModel(config);
+    var subDialog = new unisubs.subtitle.Dialog(
         videoSource, serverModel, 
-        mirosubs.widget.SubtitleState.fromJSONSubs(subtitles), 
+        unisubs.widget.SubtitleState.fromJSONSubs(subtitles), 
         null,
         config['skipFinished']);
-    mirosubs.currentUsername = config['username'];
+    unisubs.currentUsername = config['username'];
     subDialog.setVisible(true);
     goog.events.listenOnce(
         subDialog,
@@ -62,7 +62,7 @@ mirosubs.api.openDialog = function(config) {
  * @param {Object} generalSettings See WidgetController.makeGeneralSettings
  *     for more info.
  */ 
-mirosubs.api.openUnisubsDialogWithSettings = 
+unisubs.api.openUnisubsDialogWithSettings = 
     function(askLanguage, config, generalSettings) 
 {
     if (goog.DEBUG) {
@@ -71,20 +71,20 @@ mirosubs.api.openUnisubsDialogWithSettings =
         debugWindow.init();             
 
 
-        mirosubs.DEBUG = true;
+        unisubs.DEBUG = true;
     }
-    mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
+    unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
-        mirosubs.returnURL = config['returnURL'];
-    mirosubs.IS_NULL = !!config['nullWidget'];
+        unisubs.returnURL = config['returnURL'];
+    unisubs.IS_NULL = !!config['nullWidget'];
     var videoSource = 
-        mirosubs.video.VideoSource.videoSourceForURL(
+        unisubs.video.VideoSource.videoSourceForURL(
             config['effectiveVideoURL']);
-    var opener = new mirosubs.widget.SubtitleDialogOpener(
+    var opener = new unisubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
     if (!askLanguage) {
         opener.openDialog(
-            new mirosubs.widget.OpenDialogArgs(
+            new unisubs.widget.OpenDialogArgs(
                 config['languageCode'], 
                 config['originalLanguageCode'], 
                 config['subLanguagePK'], 
@@ -97,18 +97,18 @@ mirosubs.api.openUnisubsDialogWithSettings =
 /**
  * This is currently used to open the subtitle dialog 
  * from the Team Detail page. Main difference with 
- * mirosubs.api.openUnisubsDialogWithSettings is that 
+ * unisubs.api.openUnisubsDialogWithSettings is that 
  * this one will redirect to onsite_widget page if on FF.
  * @param {string} videoID
  * @param {string} videoURL
  * @param {Object} generalSettings See WidgetController.makeGeneralSettings
  *     for more info
  */
-mirosubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettings) {
-    mirosubs.widget.WidgetController.makeGeneralSettings(generalSettings);
-    var videoSource = mirosubs.video.VideoSource.videoSourceForURL(
+unisubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettings) {
+    unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
+    var videoSource = unisubs.video.VideoSource.videoSourceForURL(
         videoURL);
-    var opener = new mirosubs.widget.SubtitleDialogOpener(
+    var opener = new unisubs.widget.SubtitleDialogOpener(
         videoID, videoURL, videoSource);
     opener.showStartDialog();
 };
@@ -116,14 +116,14 @@ mirosubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettin
 /**
  * For JWPlayer API.
  */
-mirosubs.api.openUnisubsDialog = function(videoURL) {
+unisubs.api.openUnisubsDialog = function(videoURL) {
     // TODO: you might want to be getting an array of videourls back from
     // the server and then choosing the best one for effectiveVideoURL.
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
         'fetch_video_id_and_settings',
         { 'video_url': videoURL },
         function(response) {
-            mirosubs.api.openUnisubsDialogWithSettings(
+            unisubs.api.openUnisubsDialogWithSettings(
                 true,
                 {'videoURL': videoURL,
                  'effectiveVideoURL': videoURL,
@@ -135,44 +135,77 @@ mirosubs.api.openUnisubsDialog = function(videoURL) {
         });
 };
 
-mirosubs.api.loggedIn = function(username) {
-    mirosubs.loggedIn(username);
+unisubs.api.loggedIn = function(username) {
+    unisubs.loggedIn(username);
 };
 
-mirosubs.api.embed = function(elementID, widgetConfig) {
-    mirosubs.siteConfig = mirosubs.Config.siteConfig;
-    var widget = new mirosubs.widget.Widget(widgetConfig);
+unisubs.api.embed = function(elementID, widgetConfig) {
+    unisubs.siteConfig = unisubs.Config.siteConfig;
+    var widget = new unisubs.widget.Widget(widgetConfig);
     widget.decorate(goog.dom.getElement(elementID));
 };
 
 goog.exportSymbol(
+    'unisubs.api.openDialog',
+    unisubs.api.openDialog);
+
+goog.exportSymbol(
+    'unisubs.api.openUnisubsDialogWithSettings',
+    unisubs.api.openUnisubsDialogWithSettings);
+
+goog.exportSymbol(
+    'unisubs.api.openUnisubsDialog',
+    unisubs.api.openUnisubsDialog);
+
+goog.exportSymbol(
+    'unisubs.api.openUnisubsDialogOnsite',
+    unisubs.api.openUnisubsDialogOnsite);
+
+goog.exportSymbol(
+    'unisubs.api.toSRT',
+    unisubs.SRTWriter.toSRT);
+
+goog.exportSymbol(
+    'unisubs.api.loggedIn',
+    unisubs.api.loggedIn);
+goog.exportSymbol(
+    'unisubs.api.embed',
+    unisubs.api.embed);
+        
+// these are here to guarantee backwareds compatibility,
+// should be removed once we are sure partners do not need this
+goog.exportSymbol(
+    'mirosubs.api.embed',
+    unisubs.api.embed);
+
+goog.exportSymbol(
     'mirosubs.api.openDialog',
-    mirosubs.api.openDialog);
+    unisubs.api.openDialog);
 
 goog.exportSymbol(
     'mirosubs.api.openUnisubsDialogWithSettings',
-    mirosubs.api.openUnisubsDialogWithSettings);
+    unisubs.api.openUnisubsDialogWithSettings);
 
 goog.exportSymbol(
     'mirosubs.api.openUnisubsDialog',
-    mirosubs.api.openUnisubsDialog);
+    unisubs.api.openUnisubsDialog);
 
 goog.exportSymbol(
     'mirosubs.api.openUnisubsDialogOnsite',
-    mirosubs.api.openUnisubsDialogOnsite);
+    unisubs.api.openUnisubsDialogOnsite);
 
 goog.exportSymbol(
     'mirosubs.api.toSRT',
-    mirosubs.SRTWriter.toSRT);
+    unisubs.SRTWriter.toSRT);
 
 goog.exportSymbol(
     'mirosubs.api.loggedIn',
-    mirosubs.api.loggedIn);
+    unisubs.api.loggedIn);
 
 goog.exportSymbol(
     'mirosubs.api.embed',
-    mirosubs.api.embed);
+    unisubs.api.embed);
 
-mirosubs.widget.Widget.exportFireKeySequence();
+unisubs.widget.Widget.exportFireKeySequence();
 
 window["UnisubsApiLoaded"] = true;

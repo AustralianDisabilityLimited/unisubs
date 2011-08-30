@@ -2,7 +2,7 @@
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html {% if LANGUAGE_BIDI %}dir="rtl"{% endif %} xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   {% if not current_site.name == 'unisubs' %}
@@ -10,23 +10,56 @@
   {% endif %}
   <script type="text/javascript">
     window.usStartTime = (new Date()).getTime();
-    window.MEDIA_URL = '{{MEDIA_URL}}';
+    window.STATIC_URL = '{{STATIC_URL}}';
   </script>
 {% block css %}{% include_bundle "base" %}{% endblock %}
 
 <!--[if gte IE 8]>
-<link href="{{ MEDIA_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
+<link href="{{ STATIC_URL }}css/ie8.css" media="all" type="text/css" rel="stylesheet" />
 <![endif]-->
 <!--[if IE 8]>
 <style>
 .notIE { display: none !important ; }
 </style>
 <![endif]-->
-<link rel="shortcut icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
-<link rel="icon" type="image/png" href="{{ MEDIA_URL }}images/favicon.png" />
+<link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}images/favicon.png" />
+<link rel="icon" type="image/png" href="{{ STATIC_URL }}images/favicon.png" />
 {% include_bundle "site_base_js" %}
 
+<script type="text/javascript">
+jQuery(function($){
+    /** Django will guard against csrf even on XHR requests, so we need to read
+      the value from the cookie and add the header for it */
+    function addCSRFHeader($){
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
 
+                    return cookieValue;
+                }
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    // Only send the token to relative URLs i.e. locally.
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            }
+        });
+    }
+    window.addCSRFHeader = addCSRFHeader;
+    addCSRFHeader($);                                        
+});
+</script>
 <script type="text/javascript" src="{% url js_i18n_catalog %}"></script>
 <script src="{% url profiles:rpc_api %}" type="text/javascript"></script>  
 
@@ -74,6 +107,10 @@
         });
     });
 </script>
+
+{% block opengraph-head %}
+ <meta property="fb:admins" content="539835590"/>
+{% endblock  %}
 </head>
 <body {% block body_attrs %}{% endblock %}>
   
@@ -118,7 +155,7 @@
   </div><!-- // bar_search -->
   <ul id="bar_menu" class="clearfix">
     <li id="nav_submit"><a href="{% url videos:create %}">{% trans 'Create' %}</a></li>
-    <li><a href="{% url search:index %}?q=%20">{% trans 'Watch' %}</a></li>
+    <li><a href="{% url videos:watch_page %}?q=%20">{% trans 'Watch' %}</a></li>
     {% comment %}
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Contribute' %}</a></li>
     <li><a href="http://blog.universalsubtitles.org">{% trans 'Solutions' %}</a></li>

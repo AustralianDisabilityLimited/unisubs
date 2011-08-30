@@ -8,52 +8,63 @@
 {% endblock %}<!-- // css -->
 
 {% block scripts %}
-{% include_bundle "mirosubs-onsite-compiled" %}
+{% include_bundle "unisubs-onsite-compiled" %}
+<script src="{% url videos:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}<!-- // scripts -->
 
 {% block main_content %}
     
     <div id="home-blurb">
-      <h1>The easiest way to caption and translate any video.</h1>
-      <p>Subtitles make videos more powerful, more global, and more searchable.</p>
+      <h1>{% trans "The easiest way to caption and translate any video." %}</h1>
+      <p>{% trans "Subtitles make videos more powerful, more global, and more searchable." %}</p>
     </div>
     
     
     <div id="home-left">
       <div id="subtitle" class="clearfix">
         <form action="{% url videos:create %}" method="POST">
-          <h2>Subtitle a Video Now</h2>
+          <h2>{% trans "Subtitle a Video Now" %}</h2>
           <input type="text" name="video_url" />
-          <button class="button" type="submit">Subtitle</button>
-          <p>Works with YouTube, Vimeo, Blip.tv, HTML5, and more.</p>
+          <button class="button" type="submit">{% trans "Subtitle" %}</button>
+          <p>{% trans "Works with YouTube, Vimeo, Blip.tv, HTML5, and more." %}</p>
         </form>
         
         <div id="features">
-          <h3>Features</h3>
+          <h3>{% trans "Features" %}</h3>
           <ul>
-            <li>Embed the video anywhere</li>
-            <li>Add subtitles yourself or ask viewers to help.</li>
-            <li><a href="">Full site integration</a></li>
+            <li>{% trans "Embed the video anywhere" %}</li>
+            <li>{% trans "Add subtitles yourself or ask viewers to help." %}</li>
+            <li>{% trans "Full site integration" %}</li>
           </ul>
         </div>
       </div> <!-- end #subtitle -->
       
       <div>
-        <h2>Volunteers Needed</h2>
-        <p>Our deaf and hard of hearing users and non-profits request help for videos that need captions or translations. <a href="#">See the most requested videos.</a></p>
+        <h2>{% trans "Volunteers Needed" %}</h2>
+        <p>
+          {% blocktrans %}
+            Our deaf and hard of hearing users and non-profits request help for videos that need captions or translations. 
+          {% endblocktrans %}
+          <a href="{% url videos:volunteer_category category='requested' %}">{% trans "See the most requested videos." %}</a>
+        </p>
       </div>
       
       <div>
-        <h2>Complete Subtitling Solutions</h2>
-        <p>Increase viewership with transcription, captioning, and translation services, and flexible API and integration options. Improve SEO, reach a global audience, and build a managed volunteer community. <a href="#">See our enterprise services.</a></p>
+        <h2>{% trans "Complete Subtitling Solutions" %}</h2>
+        <p>
+          {% blocktrans %}
+            Increase viewership with transcription, captioning, and translation services, and flexible API and integration options. Improve SEO, reach a global audience, and build a managed volunteer community.
+          {% endblocktrans %}
+          <a href="{% url services_page %}">{% trans "See our enterprise services." %}</a>
+        </p>
       </div>
     </div> <!-- end #home-left -->
     
     <div id="home-right">
        {% block widget_container %}
-            <div id="widget_div" class="mirosubs-widget"></div> 
+            <div id="widget_div" class="unisubs-widget"></div> 
             <script type="text/javascript"> 
-              var widget_widget_div = mirosubs.widget.SameDomainEmbed.embed(
+              var widget_widget_div = unisubs.widget.SameDomainEmbed.embed(
                   document.getElementById('widget_div'), 
                   { 
                       base_state: {},
@@ -73,40 +84,40 @@
     
     <div class="clearfix"></div>
     <div id="benefits" class="clearfix">
-      <a class="button" href="#">5 key benefits</a>
-      <h2>The largest, most powerful captioning and translation platform in the world.</h2>
+      <a class="button" href="{% url services_page %}#benefits">{% trans "6 key benefits" %}</a>
+      <h2>{% trans "The largest, most powerful captioning and translation platform in the world." %}</h2>
     </div> <!-- end #benefits -->
     
     <div id="partners">
       <ul class="clearfix">
         <li>
           <a target="_blank" href="http://mozillalabs.com/chromeless/?p=26">
-          <span style="height: 120px; display: block;"><img src="{{ MEDIA_URL }}images/new_partner_mozilla.png"/></span>
-          <span class="url">Mozilla Example</span>
+          <span style="height: 120px; display: block;"><img src="{{ STATIC_URL }}images/new_partner_mozilla.png"/></span>
+          <span class="url">{% trans "Mozilla Example" %}</span>
             </a>
         </li>
         <li>
           <a target="_blank" href="http://gigaom.com/video/khan-academy-universal-subtitles/">
-          <span style="height: 120px; display: block;"><img src="{{ MEDIA_URL }}images/new_partner_khan.png"/></span>
-          <span class="url">Khan Integration</span>
+          <span style="height: 120px; display: block;"><img src="{{ STATIC_URL }}images/new_partner_khan.png"/></span>
+          <span class="url">{% trans "Khan Integration" %}</span>
           </a>
         </li>
         <li>
           <a target="_blank" href="http://drupal.org/drupal-7.0#video">
-          <span style="height: 120px; display: block;"><img src="{{ MEDIA_URL }}images/new_partner_drupal.png"/></span>
-          <span class="url">Drupal Example</span>
+          <span style="height: 120px; display: block;"><img src="{{ STATIC_URL }}images/new_partner_drupal.png"/></span>
+          <span class="url">{% trans "Drupal Example" %}</span>
           </a>
         </li>
         <li>
           <a target="_blank" href="http://www.universalsubtitles.org/en/teams/al-jazeera/">
-          <span style="height: 120px; display: block;"><img src="{{ MEDIA_URL }}images/new_partner_aj.png"/></span>
-          <span class="url">Al Jazeera Team</span>
+          <span style="height: 120px; display: block;"><img src="{{ STATIC_URL }}images/new_partner_aj.png"/></span>
+          <span class="url">{% trans "Al Jazeera Team" %}</span>
           </a>
         </li>
         <li>
           <a target="_blank" href="http://blog.universalsubtitles.org/translating-state-of-the-union-2011/">
-          <span style="height: 120px; display: block;"><img src="{{ MEDIA_URL }}images/new_partner_pbs.png"/></span>
-          <span class="url">NewsHour Example</span>
+          <span style="height: 120px; display: block;"><img src="{{ STATIC_URL }}images/new_partner_pbs.png"/></span>
+          <span class="url">{% trans "NewsHour Example" %}</span>
           </a>
         </li>
       </ul>
@@ -120,112 +131,30 @@
     {% endcomment %}
     
     <div id="most-popular" class="featured">
-      <a class="more" href="">More Videos</a>
-      <h2>Most Popular Today</h2>
+      <a class="more" href="{% url videos:popular_videos %}">{% trans "More Popular" %}</a>
+      <h2>{% trans "Most Popular Today" %}</h2>
       
       <p class="links">
-        <a href="#">Top this month</a>
-        <a href="#">Top all-time</a>
+        <a href="{% url videos:popular_videos %}#?sort=month">{% trans "Top this month" %}</a>
+        <a href="{% url videos:popular_videos %}#?sort=total">{% trans "Top all-time" %}</a>
       </p>
-       <ul class="video_list clearfix">
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-          <li>
-            <a href="">
-              <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-              <h4>Phasellusquisestsedturpissollicitudin</h4>
-            </a>
-            <span class="views"><strong>35,345,854</strong> Views</span>
-          </li>
-        </ul>
+            {% with popular_videos as video_list %}
+                {% include 'videos/_watch_page.html' %}
+            {% endwith %}    
     </div><!-- // most_popular -->
     
     <div id="featured-videos" class="featured">
-      <a class="more" href="">More Videos</a>
-      <h2>Featured Videos</h2>
+      <a class="more" href="{% url videos:featured_videos %}">{% trans "More Featured" %}</a>
+      <h2>{% trans "Featured Videos" %}</h2>
       <p class="links">
-        <a href="#">Top volunteer needs</a>
-        <a href="#">Translation teams</a>
+        <a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>
+        <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
       </p>
       
-      <ul class="video_list clearfix">
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-          <span class="date_added">10/09/10</span>
-          <span class="date_edited">5/09/12</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-        <li>
-          <a href="">
-            <img src="{{ MEDIA_URL }}images/watch_thumb.png" />
-            <h4>Phasellusquisestsedturpissollicitudin</h4>
-          </a>
-          <span class="views"><strong>35,345,854</strong> Views</span>
-        </li>
-      </ul>
+
+            {% with featured_videos as video_list %}
+                {% include 'videos/_watch_page.html' %}
+            {% endwith %}
     </div><!-- // featured_videos -->
+    {% include "videos/_watch_page.html" %}
 {% endblock %}<!-- // main_content -->

@@ -5,7 +5,7 @@
 {% block body_attrs %}id="demo"{% endblock %}
 
 {% block scripts %}
-{% include_bundle "mirosubs-onsite-compiled" %}
+{% include_bundle "unisubs-onsite-compiled" %}
 
 {% endblock %}
 
@@ -31,13 +31,13 @@
         {% endblocktrans %}
     </p> 
     <div style="text-align: center">
-        <div id="widget_div" class="mirosubs-widget" style="width: 427px; margin: 10px auto"></div>
+        <div id="widget_div" class="unisubs-widget" style="width: 427px; margin: 10px auto"></div>
     </div>
     <script language="JavaScript" type="text/javascript">
-      var videoURL = mirosubs.video.supportsOgg() ? 
+      var videoURL = unisubs.video.supportsOgg() ? 
           "http://videos.mozilla.org/firefox/3.5/switch/switch.ogv" :
           "http://www.youtube.com/watch?v=6APY0_lEHJo";
-      mirosubs.widget.SameDomainEmbed.embed(
+      unisubs.widget.SameDomainEmbed.embed(
           document.getElementById('widget_div'),
           { video_url: videoURL, null_widget: true });
     </script>

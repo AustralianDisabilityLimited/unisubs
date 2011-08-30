@@ -1,6 +1,6 @@
 # Where the Django project is.
 # PROJECT_ROOT is where settings.py exists
-CELERYD_CHDIR="/var/www/universalsubtitles.dev/mirosubs/"
+CELERYD_CHDIR="/var/www/universalsubtitles.dev/unisubs/"
 
 # path to virtual enviroment
 VIRTUALENV="/var/www/universalsubtitles.dev/env/"
@@ -8,9 +8,9 @@ VIRTUALENV="/var/www/universalsubtitles.dev/env/"
 # Name of the projects settings module.
 export DJANGO_SETTINGS_MODULE="settings"
 
-CELERYD="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/mirosubs/manage.py"
-CELERYEV="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/mirosubs/manage.py"
-CELERYBEAT="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/mirosubs/manage.py"
+CELERYD="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/unisubs/manage.py"
+CELERYEV="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/unisubs/manage.py"
+CELERYBEAT="/var/www/universalsubtitles.dev/env/bin/python /var/www/universalsubtitles.dev/unisubs/manage.py"
 
 #celeryd options
 CELERYD_OPTS="celeryd -E -B --concurrency=10 -n worker1.dev --settings=unisubs_settings"

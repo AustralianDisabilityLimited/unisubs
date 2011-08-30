@@ -17,31 +17,31 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 
-goog.provide('mirosubs.testing.TimerStub');
+goog.provide('unisubs.testing.TimerStub');
 
 /**
  * @constructor
  */
-mirosubs.testing.TimerStub = function(interval) {
+unisubs.testing.TimerStub = function(interval) {
     goog.events.EventTarget.call(this);
     this.interval = interval;
     this.started = null;
-    mirosubs.testing.TimerStub.timers.push(this);
+    unisubs.testing.TimerStub.timers.push(this);
 };
-goog.inherits(mirosubs.testing.TimerStub, goog.events.EventTarget);
+goog.inherits(unisubs.testing.TimerStub, goog.events.EventTarget);
 
-mirosubs.testing.TimerStub.timers = [];
+unisubs.testing.TimerStub.timers = [];
 
-mirosubs.testing.TimerStub.prototype.start = function() {
+unisubs.testing.TimerStub.prototype.start = function() {
     this.started = true;
 };
 
-mirosubs.testing.TimerStub.prototype.stop = function() {
+unisubs.testing.TimerStub.prototype.stop = function() {
     this.started = false;
 };
 
-mirosubs.testing.TimerStub.prototype.fireNow = function() {
+unisubs.testing.TimerStub.prototype.fireNow = function() {
     this.dispatchEvent(goog.Timer.TICK);
 };
 
-mirosubs.testing.TimerStub.TICK = 'tick';
+unisubs.testing.TimerStub.TICK = 'tick';

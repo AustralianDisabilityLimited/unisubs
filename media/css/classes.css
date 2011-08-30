@@ -5,7 +5,7 @@ video {
 }
 
 
-.mirosubs-standalone_spinner{
+.unisubs-standalone_spinner{
 height: 110px;
 width: 110px;
 border: 1px solid;
@@ -52,14 +52,6 @@ border: 1px solid;
 .thumbnail_small img{
   border: none !important;
   }
-
-
-.edit-title{
-display: none;
-}
-
-
-
 
 .main-title:hover .edit-title{
 display: inline;
@@ -147,13 +139,13 @@ font-size: 16px;
   }
   
 
-.mirosubs-twitter-share{
+.unisubs-twitter-share{
   background: url("../images/share_icons.png") 0 -37px no-repeat !important;
   text-decoration: underline;
   }
 
 
-.mirosubs-facebook{
+.unisubs-facebook{
   background: url("../images/share_icons.png") 0 0px no-repeat !important;
   text-decoration: underline;
   }
@@ -326,9 +318,23 @@ font-size: 16px;
 
 .action_buttons{ border-top: 1px solid #fff;}
 
+.pod .actions {
+  position: relative;
+  top: -1px;
+  float: left;
+  width: 100%;
+  border-width: 0 0 1px 0;
+  border-color: #00446f;
+  background: #10547F;
+  color: #fff;
+}
+
 .action_buttons .blue_button,
 .action_buttons .green_button,
-.action_buttons .sort_button{
+.action_buttons .sort_button,
+.actions .blue_button,
+.actions .green_button,
+.actions .sort_button {
   margin: 10px; 
   float: right;
   }
@@ -351,7 +357,7 @@ font-size: 16px;
   font-size: 16px;
   border-bottom: 1px solid #bfbe78;
 	padding: 15px;
-	margin: 0 0 10px 0;
+	margin: 0;
 }
 
 .note a {
@@ -459,9 +465,6 @@ background: #e82d2d;
 border: 1px solid #aa1313;
 }
 
-
-
-
 #send_message{
 width: 463px !important; 
 }
@@ -470,42 +473,31 @@ width: 463px !important;
 margin: 0 !important;
 }
 
-
-
 .team_logo{
 margin-bottom: 20px;
 }
-
-
-
-
-
-
-
-
 
 .add_to_team{
 margin-top: 10px;
 }
 
-
-
-
-
 #login .red_button{
 margin-left: 30px;
 }
-
-
-
-
 .left_nav_wrapper .green_button{
 clear: both !important;;
 }
-
 
 .msg_modal_wrap h3{
     padding: 15px;
     border-bottom: 1px solid #ccc;
     margin: 0 0 0px;
+}
+
+.meta h4 {
+  margin-top: 1em;
+}
+
+h2.main-title {
+  padding-bottom: .5em;
 }

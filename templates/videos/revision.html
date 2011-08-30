@@ -7,13 +7,13 @@
   {{ block.super }}
   {% include_bundle "widget-css"%}
   <style>
-    div.mirosubs-widget {
+    div.unisubs-widget {
         position: relative;    
     }
-    .mirosubs-videoDiv {
+    .unisubs-videoDiv {
         text-align: center;
     }
-    .mirosubs-videoDiv video, .mirosubs-videoDiv object, .mirosubs-videoDiv embed{
+    .unisubs-videoDiv video, .unisubs-videoDiv object, .unisubs-videoDiv embed{
     width: 480px;
     }
     span.data {
@@ -46,7 +46,7 @@
             }
             $('.new_edit').click(function() {
                 widget_widget_div.selectMenuItem(
-                    mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                    unisubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
             $('.time_link').click(function() {
@@ -61,7 +61,7 @@
             });          
         });
     </script>
-    {% include_bundle "mirosubs-onsite-compiled" 0 %}
+    {% include_bundle "unisubs-onsite-compiled" 0 %}
     {% switch_feature MODERATION %}
         {% if user_can_moderate %}
            {% include_bundle "js-moderation-dashboard" 0 %}

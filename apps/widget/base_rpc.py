@@ -41,14 +41,6 @@ class BaseRpc:
             'title': title
             }
 
-    def _find_remote_autoplay_language(self, request):
-        language = None
-        if request.user.is_anonymous() or request.user.preferred_language == '':
-            language = translation.get_language_from_request(request)
-        else:
-            language = request.user.preferred_language
-        return language if language != '' else None
-
     def get_my_user_info(self, request):
         if request.user.is_authenticated():
             return { "logged_in" : True,

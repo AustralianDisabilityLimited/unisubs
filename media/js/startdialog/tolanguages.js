@@ -16,15 +16,15 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.ToLanguages');
+goog.provide('unisubs.startdialog.ToLanguages');
 
 /**
  * @constructor
  * @param {Array.<string>} myLanguages Should already have non-recognized and duplicates removed.
- * @param {mirosubs.startdialog.VideoLanguages} videoLanguages
+ * @param {unisubs.startdialog.VideoLanguages} videoLanguages
  * @param {int=} opt_initialLanguageState
  */
-mirosubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_initialLanguageState) {
+unisubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_initialLanguageState) {
     this.myLanguages_ = myLanguages;
     this.videoLanguages_ = videoLanguages;
     this.initialLanguageState_ = opt_initialLanguageState || null;
@@ -32,10 +32,10 @@ mirosubs.startdialog.ToLanguages = function(myLanguages, videoLanguages, opt_ini
     this.keyMap_ = null;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
+unisubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     var toLanguages = [];
     if (this.initialLanguageState_ && this.initialLanguageState_.LANGUAGE_PK){
-        var initLang = new mirosubs.startdialog.ToLanguage(
+        var initLang = new unisubs.startdialog.ToLanguage(
             0, this.videoLanguages_.findForPK(this.initialLanguageState_.LANGUAGE_PK));
         if (initLang.LANGUAGE){
             toLanguages.push(initLang);
@@ -94,25 +94,25 @@ mirosubs.startdialog.ToLanguages.prototype.makeToLanguages_ = function() {
     return toLanguages;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
+unisubs.startdialog.ToLanguages.prototype.getToLanguages = function() {
     if (!this.toLanguages_)
         this.toLanguages_ = this.makeToLanguages_();
     return this.toLanguages_;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
+unisubs.startdialog.ToLanguages.prototype.forLangCode = function(langCode){
     return goog.array.find(this.getToLanguages(), function(o) {
         return o.LANGUAGE == langCode;
     });
 };
 
-mirosubs.startdialog.ToLanguages.prototype.forVideoLanguage = function(videoLanguage) {
+unisubs.startdialog.ToLanguages.prototype.forVideoLanguage = function(videoLanguage) {
     return goog.array.find(this.getToLanguages(), function(tl) {
         return tl.VIDEO_LANGUAGE && tl.VIDEO_LANGUAGE.PK == videoLanguage.PK;
     });
 };
 
-mirosubs.startdialog.ToLanguages.prototype.forKey = function(key) {
+unisubs.startdialog.ToLanguages.prototype.forKey = function(key) {
     if (!this.keyMap_) {
         this.keyMap_ = {};
         goog.array.forEach(
@@ -122,7 +122,7 @@ mirosubs.startdialog.ToLanguages.prototype.forKey = function(key) {
     return this.keyMap_[key];
 };
 
-mirosubs.startdialog.ToLanguages.prototype.addMissingVideoLangs_ = function(toLanguages) {
+unisubs.startdialog.ToLanguages.prototype.addMissingVideoLangs_ = function(toLanguages) {
     var pkSet = new goog.structs.Set(
         goog.array.map(
             goog.array.filter(
@@ -136,24 +136,24 @@ mirosubs.startdialog.ToLanguages.prototype.addMissingVideoLangs_ = function(toLa
     this.videoLanguages_.forEach(
         function(vl) {
             if (!pkSet.contains(vl.PK))
-                toLanguages.push(new mirosubs.startdialog.ToLanguage(11, vl));
+                toLanguages.push(new unisubs.startdialog.ToLanguage(11, vl));
         });
 };
 
-mirosubs.startdialog.ToLanguages.prototype.addMissingLangs_ = function(toLanguages) {
+unisubs.startdialog.ToLanguages.prototype.addMissingLangs_ = function(toLanguages) {
     var langSet = new goog.structs.Set(
         goog.array.map(
             toLanguages,
             function(tl) { return tl.LANGUAGE; }));
     goog.array.forEach(
-        mirosubs.languages,
+        unisubs.languages,
         function(l) {
             if (!langSet.contains(l[0]))
-                toLanguages.push(new mirosubs.startdialog.ToLanguage(11, null, l[0]));
+                toLanguages.push(new unisubs.startdialog.ToLanguage(11, null, l[0]));
         });
 };
 
-mirosubs.startdialog.ToLanguages.prototype.createMyLanguageToLangs_ = function(lang) {
+unisubs.startdialog.ToLanguages.prototype.createMyLanguageToLangs_ = function(lang) {
     var toLangs = [];
     var videoLanguages = this.videoLanguages_.findForLanguage(lang);
     if (!videoLanguages.length)
@@ -168,10 +168,10 @@ mirosubs.startdialog.ToLanguages.prototype.createMyLanguageToLangs_ = function(l
 };
 
 /**
- * @param {?mirosubs.startdialog.VideoLanguage} videoLanguage Can be null.
+ * @param {?unisubs.startdialog.VideoLanguage} videoLanguage Can be null.
  * @param {string} lang language code
  */
-mirosubs.startdialog.ToLanguages.prototype.createMyLanguageToLang_ = function(videoLanguage, lang) {
+unisubs.startdialog.ToLanguages.prototype.createMyLanguageToLang_ = function(videoLanguage, lang) {
     var toLang = null;
     if (toLang = this.createNonEmptyDepToLang_(videoLanguage, true, 1))
         return toLang;
@@ -180,10 +180,10 @@ mirosubs.startdialog.ToLanguages.prototype.createMyLanguageToLang_ = function(vi
     else if (toLang = this.createIncompleteIndToLang_(videoLanguage))
         return toLang;
     else
-        return new mirosubs.startdialog.ToLanguage(10, videoLanguage, lang);
+        return new unisubs.startdialog.ToLanguage(10, videoLanguage, lang);
 };
 
-mirosubs.startdialog.ToLanguages.prototype.createNonEmptyDepToLang_ = 
+unisubs.startdialog.ToLanguages.prototype.createNonEmptyDepToLang_ = 
     function(videoLanguage, partial, ranking) 
 {
     if (videoLanguage && videoLanguage.isDependentAndNonempty(partial)) {
@@ -200,13 +200,13 @@ mirosubs.startdialog.ToLanguages.prototype.createNonEmptyDepToLang_ =
                     }));
         }
         if (fromLanguages.length > 0)
-            return new mirosubs.startdialog.ToLanguage(
+            return new unisubs.startdialog.ToLanguage(
                 ranking, videoLanguage);
     }
     return null;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.createEmptyToLang_ = function(videoLanguage, lang) {
+unisubs.startdialog.ToLanguages.prototype.createEmptyToLang_ = function(videoLanguage, lang) {
     if (!videoLanguage || videoLanguage.isEmpty()) {
         var fromLanguages = [];
         for (var i = 0; i < this.myLanguages_.length; i++) {
@@ -219,14 +219,14 @@ mirosubs.startdialog.ToLanguages.prototype.createEmptyToLang_ = function(videoLa
                     function(l) { return l.isDependable(); }));
         }
         if (fromLanguages.length > 0)
-            return new mirosubs.startdialog.ToLanguage(
+            return new unisubs.startdialog.ToLanguage(
                 2, videoLanguage, lang);
     }
     return null;
 };
 
-mirosubs.startdialog.ToLanguages.prototype.createIncompleteIndToLang_ = function(videoLanguage) {
+unisubs.startdialog.ToLanguages.prototype.createIncompleteIndToLang_ = function(videoLanguage) {
     if (videoLanguage && !videoLanguage.DEPENDENT && !videoLanguage.IS_COMPLETE)
-        return new mirosubs.startdialog.ToLanguage(3, videoLanguage);
+        return new unisubs.startdialog.ToLanguage(3, videoLanguage);
     return null;
 }

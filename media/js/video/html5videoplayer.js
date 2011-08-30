@@ -16,15 +16,15 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.Html5VideoPlayer');
+goog.provide('unisubs.video.Html5VideoPlayer');
 
 /**
  * @constructor
- * @param {mirosubs.video.Html5VideoSource} videoSource
+ * @param {unisubs.video.Html5VideoSource} videoSource
  * @param {boolean} forDialog
  */
-mirosubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
-    mirosubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
+    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
 
     this.videoSource_ = videoSource;
     this.videoElem_ = null;
@@ -37,39 +37,39 @@ mirosubs.video.Html5VideoPlayer = function(videoSource, forDialog) {
 
     this.progressThrottle_ = new goog.Throttle(
         this.videoProgress_,
-        mirosubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL,
+        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL,
         this);
     this.timeUpdateThrottle_ = new goog.Throttle(
         this.sendTimeUpdateInternal,
-        mirosubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
+        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
         this);
     this.playedOnce_ = false;
 };
-goog.inherits(mirosubs.video.Html5VideoPlayer,
-              mirosubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.video.Html5VideoPlayer,
+              unisubs.video.AbstractVideoPlayer);
 
-mirosubs.video.Html5VideoPlayer.logger_ =
+unisubs.video.Html5VideoPlayer.logger_ =
     goog.debug.Logger.getLogger('Html5VideoPlayer');
 
 /**
  * @override
  */
-mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
+unisubs.video.Html5VideoPlayer.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    if (mirosubs.video.supportsVideoType(
+    if (unisubs.video.supportsVideoType(
         this.videoSource_.getVideoType())) {
         this.videoElem_ = this.createVideoElement_($d);
         this.setElementInternal(this.videoElem_);
         if (this.forDialog_)
-            mirosubs.style.setSize(
+            unisubs.style.setSize(
                 this.videoElem_,
-                mirosubs.video.AbstractVideoPlayer.DIALOG_SIZE);
+                unisubs.video.AbstractVideoPlayer.DIALOG_SIZE);
     }
     else {
         var el = $d('div');
         this.setElementInternal(el);
-        mirosubs.style.setSize(el, 400, 300);
-        mirosubs.style.setProperty(el, 'line-height', '300px');
+        unisubs.style.setSize(el, 400, 300);
+        unisubs.style.setProperty(el, 'line-height', '300px');
         el.innerHTML = 
             "Sorry, your browser can't play HTML5/" + 
             this.videoSource_.getVideoType() + " video. " +
@@ -81,15 +81,15 @@ mirosubs.video.Html5VideoPlayer.prototype.createDom = function() {
  * @override
  * @param {Element} element Video element to decorate.
  */
-mirosubs.video.Html5VideoPlayer.prototype.decorateInternal = function(element) {
-    mirosubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(
+unisubs.video.Html5VideoPlayer.prototype.decorateInternal = function(element) {
+    unisubs.video.Html5VideoPlayer.superClass_.decorateInternal.call(
         this, element);
     if (element.nodeName != 'VIDEO')
         throw Error(goog.ui.Component.Error.DECORATE_INVALID);
     this.videoElem_ = element;
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ = 
+unisubs.video.Html5VideoPlayer.prototype.createVideoElement_ = 
     function($d) 
 {
     var params = { 'autobuffer': 'true' };
@@ -107,8 +107,8 @@ mirosubs.video.Html5VideoPlayer.prototype.createVideoElement_ =
     return $d('video', params,
               $d('source', {'src': this.videoSource_.getVideoURL()}));
 };
-mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
-    mirosubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
+unisubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
+    unisubs.video.Html5VideoPlayer.superClass_.enterDocument.call(this);
     if (!this.videoElem_)
         return;
     this.getHandler().
@@ -128,32 +128,32 @@ mirosubs.video.Html5VideoPlayer.prototype.enterDocument = function() {
 };
 
 
-mirosubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
+unisubs.video.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
     if (this.playToClick_ && !this.playedOnce_) {
         e.preventDefault();
         this.play();
     }
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
+unisubs.video.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
     if (this.playedOnce_)
         this.timeUpdateThrottle_.fire();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
-    mirosubs.style.setSize(this.videoElem_, width, height);
+unisubs.video.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
+    unisubs.style.setSize(this.videoElem_, width, height);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
+unisubs.video.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
     this.playedOnce_ = true;
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PLAY);
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PLAY);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoPaused_ = function(event) {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PAUSE);
+unisubs.video.Html5VideoPlayer.prototype.videoPaused_ = function(event) {
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PAUSE);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoProgressListener_ =
+unisubs.video.Html5VideoPlayer.prototype.videoProgressListener_ =
     function(event)
 {
     if (event.getBrowserEvent()['loaded'] && event.getBrowserEvent()['total']) {
@@ -165,31 +165,31 @@ mirosubs.video.Html5VideoPlayer.prototype.videoProgressListener_ =
     this.progressThrottle_.fire();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoProgress_ = function() {
-    this.dispatchEvent(mirosubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+unisubs.video.Html5VideoPlayer.prototype.videoProgress_ = function() {
+    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PROGRESS);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getVolume = function() {
+unisubs.video.Html5VideoPlayer.prototype.getVolume = function() {
     return this.videoElem_['volume'];
 };
-mirosubs.video.Html5VideoPlayer.prototype.setVolume = function(volume) {
+unisubs.video.Html5VideoPlayer.prototype.setVolume = function(volume) {
     this.videoElem_['volume'] = volume;
-    mirosubs.video.Html5VideoPlayer.superClass_.setVolume.call(this, volume);
+    unisubs.video.Html5VideoPlayer.superClass_.setVolume.call(this, volume);
     
 };
-mirosubs.video.Html5VideoPlayer.prototype.getBufferedLength = function() {
+unisubs.video.Html5VideoPlayer.prototype.getBufferedLength = function() {
     if (this.videoElem_['buffered'])
         return this.videoElem_['buffered']['length'];
     else
         return this.videoTotal_ == 0 ? 0 : 1;
 };
-mirosubs.video.Html5VideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.video.Html5VideoPlayer.prototype.getBufferedStart = function(index) {
     if (this.videoElem_['buffered'])
         return this.videoElem_['buffered']['start'](index);
     else
         return 0;
 };
-mirosubs.video.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.video.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
     if (this.videoElem_['buffered'])
         return this.videoElem_['buffered']['end'](index);
     else if (this.videoTotal_ != 0 && this.getDuration() != 0)
@@ -197,52 +197,52 @@ mirosubs.video.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
     else
         return 0;
 };
-mirosubs.video.Html5VideoPlayer.prototype.getDuration = function() {
+unisubs.video.Html5VideoPlayer.prototype.getDuration = function() {
     var duration = this.videoElem_['duration'];
     return isNaN(duration) ? 0 : duration;
 };
-mirosubs.video.Html5VideoPlayer.prototype.isPausedInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.isPausedInternal = function() {
     return this.videoElem_['paused'];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.videoEndedInternal = function() {
     return this.videoElem_['ended'];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.isPlayingInternal = function() {
     var readyState = this.getReadyState_();
-    var RS = mirosubs.video.Html5VideoPlayer.ReadyState_;
+    var RS = unisubs.video.Html5VideoPlayer.ReadyState_;
     return (readyState == RS.HAVE_FUTURE_DATA ||
             readyState == RS.HAVE_ENOUGH_DATA) &&
            !this.isPaused() && !this.videoEnded();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.playInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.playInternal = function() {
     this.videoElem_['play']();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.pauseInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.pauseInternal = function() {
     this.videoElem_['pause']();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: replace this with an actual URL
     this.videoElem_['src'] = 'http://holmeswilson.org/tinyblank.ogv';
     return true;
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.video.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     this.videoElem_['src'] = this.videoSource_.getVideoURL();
     this.setLoadingStopped(false);
     this.setPlayheadTime(playheadTime);
     this.pause();
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
+unisubs.video.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.videoElem_["currentTime"];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
+unisubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
     try{
         this.videoElem_["currentTime"] = playheadTime;
     }catch(e){
@@ -251,20 +251,20 @@ mirosubs.video.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTim
     
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
+unisubs.video.Html5VideoPlayer.prototype.getVideoSize = function() {
     return goog.style.getSize(this.videoElem_);
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getVideoElements = function() {
+unisubs.video.Html5VideoPlayer.prototype.getVideoElements = function() {
     return [this.videoElem_];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.getReadyState_ = function() {
+unisubs.video.Html5VideoPlayer.prototype.getReadyState_ = function() {
     return this.videoElem_["readyState"];
 };
 
-mirosubs.video.Html5VideoPlayer.prototype.disposeInternal = function() {
-    mirosubs.video.Html5VideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.video.Html5VideoPlayer.prototype.disposeInternal = function() {
+    unisubs.video.Html5VideoPlayer.superClass_.disposeInternal.call(this);
     this.progressThrottle_.dispose();
     this.timeUpdateThrottle_.dispose();
 };
@@ -273,7 +273,7 @@ mirosubs.video.Html5VideoPlayer.prototype.disposeInternal = function() {
  * See http://www.w3.org/TR/html5/video.html#dom-media-have_nothing
  * @enum
  */
-mirosubs.video.Html5VideoPlayer.ReadyState_ = {
+unisubs.video.Html5VideoPlayer.ReadyState_ = {
     HAVE_NOTHING  : 0,
     HAVE_METADATA : 1,
     HAVE_CURRENT_DATA : 2,

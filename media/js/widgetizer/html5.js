@@ -16,19 +16,19 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.HTML5');
+goog.provide('unisubs.widgetizer.HTML5');
 
 /**
  * @constructor
  *
  */
-mirosubs.widgetizer.HTML5 = function() {
-    mirosubs.widgetizer.VideoPlayerMaker.call(this);
+unisubs.widgetizer.HTML5 = function() {
+    unisubs.widgetizer.VideoPlayerMaker.call(this);
 };
-goog.inherits(mirosubs.widgetizer.HTML5, 
-              mirosubs.widgetizer.VideoPlayerMaker);
+goog.inherits(unisubs.widgetizer.HTML5, 
+              unisubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
+unisubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
     var videoElements = this.unwidgetizedVideos_();
     var videoPlayers = [];
     for (var i = 0; i < videoElements.length; i++) {
@@ -42,12 +42,12 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
     return videoPlayers;
 };
 
-mirosubs.widgetizer.HTML5.prototype.unwidgetizedVideos_ = function() {
+unisubs.widgetizer.HTML5.prototype.unwidgetizedVideos_ = function() {
     return this.filterUnwidgetized(
         document.getElementsByTagName('video'));
 };
 
-mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ = 
+unisubs.widgetizer.HTML5.prototype.makeVideoSource_ = 
     function(videoElement) 
 {
     var sources = [];
@@ -59,7 +59,7 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ =
             sources.push(this.makeVideoSourceForURL_(sourceElements[i].src));
     }
     for (var i = 0; i < sources.length; i++)
-        if (mirosubs.video.supportsVideoType(sources[i].getVideoType())) {
+        if (unisubs.video.supportsVideoType(sources[i].getVideoType())) {
             var alternateSources = [];
             for (var j = 0; j < sources.length; j++)
                 if (j != i)
@@ -70,9 +70,9 @@ mirosubs.widgetizer.HTML5.prototype.makeVideoSource_ =
     return null;
 };
 
-mirosubs.widgetizer.HTML5.prototype.makeVideoSourceForURL_ = function(urlString) {
+unisubs.widgetizer.HTML5.prototype.makeVideoSourceForURL_ = function(urlString) {
     var uri = new goog.Uri(urlString);
     if (!uri.hasDomain())
         uri = new goog.Uri(window.location).resolve(uri);
-    return mirosubs.video.Html5VideoSource.forURL(uri.toString());
+    return unisubs.video.Html5VideoSource.forURL(uri.toString());
 };

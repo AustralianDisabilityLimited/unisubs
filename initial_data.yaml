@@ -1,44 +1,44 @@
 - model: sites.site
   pk: 1
   fields:
-    domain: mirosubs.com
-    name: mirosubs
+    domain: unisubs.com
+    name: unisubs
 
 - model: sites.site
   pk: 2
   fields:
-    domain: mirosubs.pybrew.com
-    name: mirosubs-staging
+    domain: unisubs.pybrew.com
+    name: unisubs-staging
 
 - model: sites.site
   pk: 3
   fields:
     domain: dev0.pybrew.com:8002
-    name: mirosubs-rz
+    name: unisubs-rz
 
 - model: sites.site
   pk: 4
   fields:
-    domain: mirosubs.example.com:8000
-    name: mirosubs-dev
+    domain: unisubs.example.com:8000
+    name: unisubs-dev
 
 - model: sites.site
   pk: 5
   fields:
     domain: 192.168.225.131:8002
-    name: mirosubs-rz-local
+    name: unisubs-rz-local
 
 - model: sites.site
   pk: 6
   fields:
-    domain: mirosubsdev.8planes.com
-    name: mirosubs-dev-8planes
+    domain: unisubsdev.8planes.com
+    name: unisubs-dev-8planes
 
 - model: sites.site
   pk: 7
   fields:
-    domain: mirosubsstaging.8planes.com
-    name: mirosubs-staging-8planes
+    domain: unisubsstaging.8planes.com
+    name: unisubs-staging-8planes
 
 - model: sites.site
   pk: 8

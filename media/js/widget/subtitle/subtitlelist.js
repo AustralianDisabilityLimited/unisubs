@@ -16,14 +16,14 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.SubtitleList');
+goog.provide('unisubs.subtitle.SubtitleList');
  /**
  * @constructor
  * @extends goog.ui.Component
  *
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
+unisubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
                                           displayTimes, opt_showBeginMessage) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
@@ -31,7 +31,7 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
     this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
     /**
-     * A map of captionID to mirosubs.subtitle.SubtitleWidget
+     * A map of captionID to unisubs.subtitle.SubtitleWidget
      */
     this.subtitleMap_ = {};
     this.currentlyEditing_ = false;
@@ -39,22 +39,22 @@ mirosubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
     this.showingBeginMessage_ = false;
     /**
      * The last subtitle displayed.
-     * @type {?mirosubs.subtitle.SubtitleWidget}
+     * @type {?unisubs.subtitle.SubtitleWidget}
      */
     this.lastSub_ = null;
     this.lastSubMouseHandler_ = new goog.events.EventHandler(this);
 };
-goog.inherits(mirosubs.subtitle.SubtitleList, goog.ui.Component);
-mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
+goog.inherits(unisubs.subtitle.SubtitleList, goog.ui.Component);
+unisubs.subtitle.SubtitleList.prototype.createDom = function() {
     var dh = this.getDomHelper();
     var $d = goog.bind(dh.createDom, dh);
     var $t = goog.bind(dh.createTextNode, dh);
-    this.setElementInternal($d('ul', 'mirosubs-titlesList'));
+    this.setElementInternal($d('ul', 'unisubs-titlesList'));
     if (this.captionSet_.count() == 0 && this.showBeginMessage_) {
         this.showingBeginMessage_ = true;
-        goog.dom.classes.add(this.getElement(), 'mirosubs-beginTab');
+        goog.dom.classes.add(this.getElement(), 'unisubs-beginTab');
         this.getElement().appendChild(
-            $d('li', 'mirosubs-beginTabLi',
+            $d('li', 'unisubs-beginTabLi',
                $t('To begin, press TAB to play'),
                $d('br'),
                $t('and start typing!')));
@@ -67,16 +67,16 @@ mirosubs.subtitle.SubtitleList.prototype.createDom = function() {
         this.setLastSub_();
     }
 };
-mirosubs.subtitle.SubtitleList.prototype.addAddButton_ = function() {
-    this.addSubtitleButton_ = new mirosubs.subtitle.AddSubtitleWidget();
+unisubs.subtitle.SubtitleList.prototype.addAddButton_ = function() {
+    this.addSubtitleButton_ = new unisubs.subtitle.AddSubtitleWidget();
     this.addChild(this.addSubtitleButton_, true);
     this.addSubtitleButton_.showLink(false);
     if (this.isInDocument())
         this.listenForAdd_();
 };
-mirosubs.subtitle.SubtitleList.prototype.listenForAdd_ = function() {
+unisubs.subtitle.SubtitleList.prototype.listenForAdd_ = function() {
     this.getHandler().listen(this.addSubtitleButton_,
-                             mirosubs.subtitle.AddSubtitleWidget.ADD,
+                             unisubs.subtitle.AddSubtitleWidget.ADD,
                              this.addSubtitleClicked_);
     var et = goog.events.EventType;
     this.getHandler().
@@ -87,9 +87,9 @@ mirosubs.subtitle.SubtitleList.prototype.listenForAdd_ = function() {
                et.MOUSEOUT,
                this.onAddSubMouseout_);
 };
-mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
-    mirosubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
-    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
+unisubs.subtitle.SubtitleList.prototype.enterDocument = function() {
+    unisubs.subtitle.SubtitleList.superClass_.enterDocument.call(this);
+    var et = unisubs.subtitle.EditableCaptionSet.EventType;
     this.getHandler().
         listen(
             this.captionSet_,
@@ -110,24 +110,24 @@ mirosubs.subtitle.SubtitleList.prototype.enterDocument = function() {
     if (this.addSubtitleButton_)
         this.listenForAdd_();
 };
-mirosubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
+unisubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
     while (this.getChildCount() > 1)
         this.removeChildAt(0, true);
 };
-mirosubs.subtitle.SubtitleList.prototype.captionDeleted_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.captionDeleted_ = function(e) {
     var widget = this.subtitleMap_[e.caption.getCaptionID()];
     delete this.subtitleMap_[e.caption.getCaptionID()];
     this.removeChild(widget, true);
 };
-mirosubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.captionTimesCleared_ = function(e) {
     var subtitleWidgets = goog.object.getValues(this.subtitleMap_);
     goog.array.forEach(subtitleWidgets, function(w) { w.clearTimes(); });
 };
-mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
+unisubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
     function(editableCaption)
 {
-    return new mirosubs.subtitle.SubtitleWidget(
+    return new unisubs.subtitle.SubtitleWidget(
         editableCaption,
         this.captionSet_,
         goog.bind(this.setCurrentlyEditing_, this),
@@ -135,15 +135,15 @@ mirosubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
 };
 /**
  *
- * @param {mirosubs.subtitle.EditableCaption} subtitle
+ * @param {unisubs.subtitle.EditableCaption} subtitle
  *
  */
-mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
+unisubs.subtitle.SubtitleList.prototype.addSubtitle =
     function(subtitle, opt_scrollDown, opt_dontSetLastSub)
 {
     if (this.showingBeginMessage_) {
         goog.dom.removeChildren(this.getElement());
-        goog.dom.classes.remove(this.getElement(), 'mirosubs-beginTab');
+        goog.dom.classes.remove(this.getElement(), 'unisubs-beginTab');
         this.showingBeginMessage_ = false;
         this.addAddButton_();
     }
@@ -155,7 +155,7 @@ mirosubs.subtitle.SubtitleList.prototype.addSubtitle =
     if (!opt_dontSetLastSub)
         this.setLastSub_();
 };
-mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
     var addedCaption = e.caption;
     var subtitleWidget = this.createNewSubWidget_(addedCaption);
     var nextCaption = addedCaption.getNextCaption();
@@ -170,7 +170,7 @@ mirosubs.subtitle.SubtitleList.prototype.captionInserted_ = function(e) {
     this.subtitleMap_[addedCaption.getCaptionID()] = subtitleWidget;
     subtitleWidget.switchToEditMode();
 };
-mirosubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
+unisubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
     var subWidget = null;
     if (this.getChildCount() > 1)
         subWidget = this.getChildAt(this.getChildCount() - 2);
@@ -188,14 +188,14 @@ mirosubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
                    this.onAddSubMouseout_);
     }
 };
-mirosubs.subtitle.SubtitleList.prototype.onAddSubMouseover_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.onAddSubMouseover_ = function(e) {
     this.addSubtitleButton_.showLink(true);
 };
-mirosubs.subtitle.SubtitleList.prototype.onAddSubMouseout_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.onAddSubMouseout_ = function(e) {
     if (this.isAddSubMouseout_(e.relatedTarget))
         this.addSubtitleButton_.showLink(false);
 };
-mirosubs.subtitle.SubtitleList.prototype.isAddSubMouseout_ = function(relatedTarget) {
+unisubs.subtitle.SubtitleList.prototype.isAddSubMouseout_ = function(relatedTarget) {
     if (!relatedTarget)
         return false;
     return ((this.lastSub_ == null ||
@@ -204,10 +204,10 @@ mirosubs.subtitle.SubtitleList.prototype.isAddSubMouseout_ = function(relatedTar
             !goog.dom.contains(this.addSubtitleButton_.getElement(),
                                relatedTarget));
 };
-mirosubs.subtitle.SubtitleList.prototype.addSubtitleClicked_ = function(e) {
+unisubs.subtitle.SubtitleList.prototype.addSubtitleClicked_ = function(e) {
     this.captionSet_.addNewCaption(true);
 };
-mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
+unisubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
     if (this.currentActiveSubtitle_ != null) {
         this.currentActiveSubtitle_.setActive(false);
         this.currentActiveSubtitle_ = null;
@@ -216,10 +216,10 @@ mirosubs.subtitle.SubtitleList.prototype.clearActiveWidget = function() {
 /**
  * @param {boolean} taller
  */
-mirosubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
+unisubs.subtitle.SubtitleList.prototype.setTaller = function(taller) {
     goog.dom.classes.enable(this.getElement(), 'taller', taller);
 };
-mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
+unisubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
     if (!this.subtitleMap_[captionID])
         return;
     this.scrollToCaption(captionID);
@@ -228,17 +228,17 @@ mirosubs.subtitle.SubtitleList.prototype.setActiveWidget = function(captionID) {
     subtitleWidget.setActive(true);
     this.currentActiveSubtitle_ = subtitleWidget;
 };
-mirosubs.subtitle.SubtitleList.prototype.getActiveWidget = function() {
+unisubs.subtitle.SubtitleList.prototype.getActiveWidget = function() {
     return this.currentActiveSubtitle_;
 };
-mirosubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
+unisubs.subtitle.SubtitleList.prototype.scrollToCaption = function(captionID) {
     var subtitleWidget = this.subtitleMap_[captionID];
     if (subtitleWidget)
         goog.style.scrollIntoContainerView(
             subtitleWidget.getElement(),
             this.getElement(), true);
 };
-mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
+unisubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
     function(editing, timeChanged, subtitleWidget)
 {
     this.currentlyEditing_ = editing;
@@ -252,7 +252,7 @@ mirosubs.subtitle.SubtitleList.prototype.setCurrentlyEditing_ =
         }
     }
 };
-mirosubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
+unisubs.subtitle.SubtitleList.prototype.isCurrentlyEditing = function() {
     return this.currentlyEditing_;
 };
 

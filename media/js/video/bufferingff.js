@@ -16,9 +16,9 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.BufferingFF');
+goog.provide('unisubs.video.BufferingFF');
 
-mirosubs.video.BufferingFF = function(videoElem) {
+unisubs.video.BufferingFF = function(videoElem) {
     this.videoElem_ = videoElem;
     this.videoElem_
 };

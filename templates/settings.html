@@ -3,7 +3,9 @@
 {% load i18n %}
 
 {% block main_content %}
-<div class="settings_nav">
+
+{% comment %}
+<div class="grid_3 settings_nav">
   <ul>
     <li {% if my_videos %}class="active"{% endif %}><a href="{% url profiles:my_profile %}">{% trans "My Videos" %}</a></li>
     {% if user.teams.exists %}
@@ -35,9 +37,14 @@
   {% endwith %}
   </ul>
 </div>
+{% endcomment %}
 
-<div class="settings_main">
+<div class="grid_9 pod settings_main alpha">
   {% block settings_content %}{% endblock %}
   {{ block.super }}
+</div>
+
+<div class="grid_3 omega meta">
+  {% block sidebar_content %}{% endblock %}
 </div>
 {% endblock %}

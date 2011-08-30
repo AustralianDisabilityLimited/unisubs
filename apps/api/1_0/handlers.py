@@ -25,7 +25,7 @@ from piston.utils import rc
 from piston.utils import decorator, FormValidationError
 from api import validate
 from django.contrib.sites.models import Site
-from forms import GetVideoForm, AddSubtitlesForm, UpdateSubtitlesForm
+from .forms import GetVideoForm, AddSubtitlesForm, UpdateSubtitlesForm
 from django.utils import simplejson as json
 from widget.srt_subs import GenerateSubtitlesHandler
 from django.http import HttpResponse
@@ -208,7 +208,7 @@ class UpdateSubtitleHandler(BaseHandler):
         <b>format</b>: format of subtitles(srt, ass, ssa, ttml, sbv)
         <b>subtitles</b>: subtitles(max size 256kB. Can be less, not tested with big content)
         
-        <em>curl -i -X PUT "http://mirosubs.example.com:8000/api/1.0/subtitles/languages/update/?username=xxx&password=xxx" -d "language_id=24980" -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atestme -some'</em>
+        <em>curl -i -X PUT "http://unisubs.example.com:8000/api/1.0/subtitles/languages/update/?username=xxx&password=xxx" -d "language_id=24980" -d 'format=srt' -d 'subtitles=1%0A00:00:01,46 --> 00:00:03,05%0Atestme -some'</em>
 
         """
         ds = request.REQUEST

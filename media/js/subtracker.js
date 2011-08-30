@@ -17,27 +17,27 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
- * @fileoverview a wrapper around mirosubs.Tracker for tracking changes
+ * @fileoverview a wrapper around unisubs.Tracker for tracking changes
  *     to subtitles specifically.
  */
 
-goog.provide('mirosubs.SubTracker');
+goog.provide('unisubs.SubTracker');
 
 /**
  * @constructor
  */
-mirosubs.SubTracker = function() {
+unisubs.SubTracker = function() {
     /**
      * @type {?boolean}
      */
     this.translating_ = null;
 };
-goog.addSingletonGetter(mirosubs.SubTracker);
+goog.addSingletonGetter(unisubs.SubTracker);
 
 /**
  * @param {boolean} translating
  */
-mirosubs.SubTracker.prototype.start = function(translating) {
+unisubs.SubTracker.prototype.start = function(translating) {
     this.translating_ = translating;
     this.edited_ = {};
     this.added_ = {};
@@ -45,7 +45,7 @@ mirosubs.SubTracker.prototype.start = function(translating) {
     this.numAdded_ = 0;
 };
 
-mirosubs.SubTracker.prototype.addIfNotPresent_ = function(id, obj) {
+unisubs.SubTracker.prototype.addIfNotPresent_ = function(id, obj) {
     id = id + '';
     if (!goog.object.containsKey(obj, id)) {
         obj[id] = true;
@@ -55,21 +55,21 @@ mirosubs.SubTracker.prototype.addIfNotPresent_ = function(id, obj) {
         return false;
 };
 
-mirosubs.SubTracker.prototype.trackAdd = function(subtitleID) {
+unisubs.SubTracker.prototype.trackAdd = function(subtitleID) {
     if (this.addIfNotPresent_(subtitleID, this.added_)) {
         this.numAdded_++;
         if (this.numAdded_ == 1 || (this.numAdded_ % 5) == 0)
-            mirosubs.Tracker.getInstance().trackPageview(
+            unisubs.Tracker.getInstance().trackPageview(
                 this.translating_ ? "Translates_a_line" : 
                     "Creates_a_subtitle");
     }
 };
 
-mirosubs.SubTracker.prototype.trackEdit = function(subtitleID) {
+unisubs.SubTracker.prototype.trackEdit = function(subtitleID) {
     if (this.addIfNotPresent_(subtitleID, this.edited_)) {
         this.numEdited_++;
         if (this.numEdited_ == 1 || (this.numEdited_ % 5) == 0)
-            mirosubs.Tracker.getInstance().trackPageview(
+            unisubs.Tracker.getInstance().trackPageview(
                 this.translating_ ? "Edits_a_line_of_translation" : 
                     "Edits_a_subtitle");
     }

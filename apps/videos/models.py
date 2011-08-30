@@ -216,7 +216,7 @@ class Video(models.Model):
         if self.thumbnail.startswith('http://'):
             return self.thumbnail
         
-        return settings.MEDIA_URL+self.thumbnail
+        return settings.STATIC_URL+self.thumbnail
         
     def is_html5(self):
         try:
@@ -602,7 +602,7 @@ class SubtitleLanguage(models.Model):
             return self.is_complete
 
     def get_widget_url(self):
-        # duplicates mirosubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_
+        # duplicates unisubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_
         video = self.video
         video_url = video.get_video_url()
         config = {

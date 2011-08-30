@@ -313,7 +313,7 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
-        self.save_finished(
+        return self.save_finished(
             request.user, session, subtitles, new_title, completed, forked)
 
     def save_finished(self, user, session, subtitles, new_title=None, completed=None, forked=False):

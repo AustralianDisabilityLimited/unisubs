@@ -197,3 +197,7 @@ p.notice {
   margin-bottom: 2em;
   font-size: .95em;
 }
+
+.team-detail p {
+  margin-bottom: 10px;
+}

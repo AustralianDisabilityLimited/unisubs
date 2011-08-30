@@ -9,6 +9,7 @@
 
 {% block scripts %}
 {% include_bundle "unisubs-onsite-compiled" %}
+<script src="{% url videos:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}<!-- // scripts -->
 
 {% block main_content %}

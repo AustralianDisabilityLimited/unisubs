@@ -115,6 +115,13 @@ unisubs.widget.SubtitleDialogOpener.prototype.startEditing_ =
         });
 };
 
+unisubs.widget.SubtitleDialogOpener.prototype.resumeEditing = function() { 
+    var resumeEditingRecord = unisubs.widget.ResumeEditingRecord.fetch();
+    this.resumeEditing_(
+        resumeEditingRecord.getSavedSubtitles(),
+        resumeEditingRecord.getOpenDialogArgs());
+};
+
 unisubs.widget.SubtitleDialogOpener.prototype.resumeEditing_ = 
     function(savedSubtitles,
              openDialogArgs,

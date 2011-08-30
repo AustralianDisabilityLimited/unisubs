@@ -59,6 +59,7 @@ urlpatterns = patterns(
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
+    url(r'^onsite_widget_resume/$', 'widget.views.onsite_widget_resume', name='onsite_widget_resume'),
     (r'^widget/', include('widget.urls', namespace='widget', app_name='widget')),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),

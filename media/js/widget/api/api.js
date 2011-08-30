@@ -95,6 +95,28 @@ unisubs.api.openUnisubsDialogWithSettings =
 };
 
 /**
+ * Used for opening sub dialog at /onsite_widget_resume/.
+ */
+unisubs.api.openUnisubsDialogForResume = function(config, generalSettings) {
+    if (goog.DEBUG) {
+        var debugWindow = new goog.debug.FancyWindow('main');
+        debugWindow.setEnabled(true);
+        debugWindow.init();             
+
+
+        unisubs.DEBUG = true;
+    }
+    unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
+    if (config['returnURL'])
+        unisubs.returnURL = config['returnURL'];
+    var videoSource = unisubs.video.VideoSource.videoSourceForURL(
+        config['effectiveVideoURL']);
+    var opener = new unisubs.widget.SubtitleDialogOpener(
+        config['videoID'], config['videoURL'], videoSource);
+    opener.resumeEditing();
+};
+
+/**
  * This is currently used to open the subtitle dialog 
  * from the Team Detail page. Main difference with 
  * unisubs.api.openUnisubsDialogWithSettings is that 
@@ -152,6 +174,10 @@ goog.exportSymbol(
 goog.exportSymbol(
     'unisubs.api.openUnisubsDialogWithSettings',
     unisubs.api.openUnisubsDialogWithSettings);
+
+goog.exportSymbol(
+    'unisubs.api.openUnisubsDialogForResume',
+    unisubs.api.openUnisubsDialogForResume);
 
 goog.exportSymbol(
     'unisubs.api.openUnisubsDialog',

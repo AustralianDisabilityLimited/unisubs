@@ -82,6 +82,43 @@ unisubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
 {
     e.preventDefault();
     unisubs.Tracker.getInstance().trackPageview('videoTabClicked');
+    var resumeEditingRecord = unisubs.widget.ResumeEditingRecord.fetch();
+    var that = this;
+    if (resumeEditingRecord &&
+        resumeEditingRecord.getVideoID() == this.videoID_) {
+        var resumeDialog = new unisubs.ResumeDialog(
+            resumeEditingRecord,
+            function(resume) {
+                if (resume) {
+                    that.openWidgetResume_();
+                    
+                }
+                else {
+                    that.videoAnchorClickedImpl_();
+                }
+            });
+        resumeDialog.setVisible(true);
+    }
+    else {
+        this.videoAnchorClickedImpl_();
+    }
+};
+
+unisubs.widget.SubtitleController.prototype.openWidgetResume_ = function() {
+    var config = {
+        'videoID': this.videoID_,
+        'videoURL': this.videoURL_,
+        'effectiveVideoURL': this.playController_.getVideoSource().getVideoURL(),
+        'returnURL': window.location.href
+    };
+    var uri = new goog.Uri(unisubs.siteURL() + '/onsite_widget_resume/');
+    uri.setParameterValue(
+        'config',
+        goog.json.serialize(config));
+    window.location.assign(uri.toString());
+};
+
+unisubs.widget.SubtitleController.prototype.videoAnchorClickedImpl_ = function() {
     if (!this.dropDown_.hasSubtitles())
         this.openSubtitleDialog();
     else

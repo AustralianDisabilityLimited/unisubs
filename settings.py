@@ -223,6 +223,8 @@ JS_CORE = \
      'js/widget/subtitledialogopener.js',
      'js/widget/opendialogargs.js',
      'js/widget/dropdown.js',
+     'js/widget/resumeeditingrecord.js',
+     'js/widget/resumedialog.js',
      'js/widget/play/manager.js',
      'js/widget/widgetcontroller.js',
      'js/widget/widget.js'
@@ -232,7 +234,6 @@ JS_DIALOG = \
     ['js/subtracker.js',
      'js/srtwriter.js',
      'js/widget/unsavedwarning.js',
-     'js/widget/resumeeditingrecord.js',
      'js/widget/droplockdialog.js',
      'js/finishfaildialog/dialog.js',
      'js/finishfaildialog/errorpanel.js',

@@ -99,6 +99,30 @@ def onsite_widget(request):
                               context,
                               context_instance=RequestContext(request))
 
+def onsite_widget_resume(request):
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_API, 'unisubs-api.js')
+    config = request.GET.get('config', '{}')
+
+    try:
+        config = json.loads(config)
+    except (ValueError, KeyError):
+        raise Http404
+
+    video_id = config.get('videoID')
+    if not video_id:
+        raise Http404
+
+    video = get_object_or_404(models.Video, video_id=video_id)
+
+    context['widget_params'] = json.dumps(config)
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    context['general_settings'] = json.dumps(general_settings)
+    return render_to_response('widget/onsite_widget_resume.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def widget_demo(request):
     context = {}
     context['js_use_compiled'] = settings.COMPRESS_MEDIA

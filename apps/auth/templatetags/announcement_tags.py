@@ -21,8 +21,14 @@ from auth.models import Announcement
 
 register = template.Library()
 
-@register.inclusion_tag('auth/_announcement.html')
-def announcement():
+@register.inclusion_tag('auth/_announcement.html', takes_context=True)
+def announcement(context):
+    try:
+        hidden_id = int(context['request'].COOKIES.get(Announcement.cookie_name))
+    except (TypeError, ValueError):
+        hidden_id = None
+        
     return {
-        'obj': Announcement.last()
+        'obj': Announcement.last(hidden_id),
+        'cookie_name': Announcement.cookie_name
     }

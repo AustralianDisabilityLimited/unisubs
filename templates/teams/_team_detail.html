@@ -31,10 +31,8 @@
 
 <div class="team-detail">
     {% if team|is_team_member:user %}
-        <p>
-            {% render_team_leave team user request %}
-        </p>
-        <p>
+        {% render_team_leave team user request %}
+        <p style="clear: both; padding-top: 10px;">
             <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
         </p>
     {% else %}

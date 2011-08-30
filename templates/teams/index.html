@@ -97,20 +97,9 @@
             </a>
             <div class="info">
                 <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} <span class="your-team">({% trans 'your team' %})</span>{% endif %}</a></h4>
-                {% if team|is_team_member:user %}
-                    {% if team|is_team_manager:user %}
-                        <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
-                    {% endif %}
-                    {% if team.member_count > 1 %}
-
-                    {% render_team_leave team user request %}
-                    {% endif %}
-                {% else %}
-                    {% if team.is_open %}{% render_team_join team user request "small" %}<br/>{% endif %}
-                {% endif %}      
-                <span>
+                <span class="count">
                     {% blocktrans with team.member_count as count %}
-                    Team with {{ count }} Members
+                    {{ count }} Members
                     {% endblocktrans %}
                 </span>
                 {% if team.description %}
@@ -118,15 +107,27 @@
                     {{ team.description|urlize }}
                 </p>
                 {% endif %}
-                {% if user.is_staff and perms.teams.change_team %}
-                <p style="float: none;">
-                    {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
+                <div class="buttons-container">
+                    {% if user.is_staff and perms.teams.change_team %}
+                        {% if team.highlight %}
+                            <a href="{% url teams:unhighlight team.slug %}" class="blue_button small">{% trans 'Un-highlight this team' %}</a>
+                        {% else %}
+                            <a href="{% url teams:highlight team.slug %}" class="blue_button small">{% trans 'Highlight this team' %}</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if team|is_team_member:user and team|is_team_manager:user%}
+                        <a href="{{ team.get_edit_url }}" class="blue_button small">{% trans 'Edit' %}</a>
+                    {% endif %}
+                    {% if team|is_team_member:user %}
+                        {% if team.member_count > 1 %}
+                            {% render_team_leave team user request %}
+                        {% endif %}
                     {% else %}
-                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
-                    {% endif %}                    
-                </p>
-                {% endif %}         
+                        {% if team.is_open %}
+                            {% render_team_join team user request "small" %}
+                        {% endif %}
+                    {% endif %}  
+                </div>
             </div>         
         </li>
         {% endfor %}
@@ -143,40 +144,42 @@
     </p>
     <p class="notice">Want to create your own captioning and translation team? Contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>
     <br />
-    <h3>{% trans 'Highlighted Teams' %}</h3>
-    <ul class="small_list">
-        {% for team in highlighted_qs %}
-        <li>
-            <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
-                {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
-            </a>
-            <div class="info">
-                <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
-                <span>
-                    {% blocktrans with team.member_count as count %}
-                    Team with {{ count }} Members
-                    {% endblocktrans %}                    
-                </span>
-                
-                {% if team.description %}
-                <p>
-                    {{ team.description }}
-                </p>              
-                {% endif %}
-                
-                {% if user.is_staff and perms.teams.change_team %}
-                    <div>
-                    {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
-                    {% else %}
-                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
+    {% if highlighted_qs %}
+        <h3>{% trans 'Highlighted Teams' %}</h3>
+        <ul class="small_list">
+            {% for team in highlighted_qs %}
+            <li>
+                <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
+                    {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
+                </a>
+                <div class="info">
+                    <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
+                    <span>
+                        {% blocktrans with team.member_count as count %}
+                        Team with {{ count }} Members
+                        {% endblocktrans %}                    
+                    </span>
+                    
+                    {% if team.description %}
+                    <p>
+                        {{ team.description }}
+                    </p>              
                     {% endif %}
-                    </div>
-                {% endif %}                
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+                    
+                    {% if user.is_staff and perms.teams.change_team %}
+                        <div>
+                        {% if team.highlight %}
+                            <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
+                        {% else %}
+                            <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
+                        {% endif %}
+                        </div>
+                    {% endif %}                
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     {% if user.is_superuser and user.is_active %}
     <a href="{% url teams:create %}" class="green_button big start_team">
         <span>{% trans 'Start a Team' %}</span>

@@ -1,7 +1,6 @@
 
 .start_team {
-  float: right !important;
-  margin: 16px 0 0 !important;
+  margin: 0 0 30px !important;
 }
 
 .team_meta {
@@ -200,4 +199,8 @@ p.notice {
 
 .team-detail p {
   margin-bottom: 10px;
+}
+
+#teams .big_list li span.count {
+  display: block;
 }

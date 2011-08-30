@@ -942,6 +942,10 @@ margin-left: 4px;
 margin-bottom: 10px;
 }
 
-.team-video-buttons-container a {
+.team-video-buttons-container a, .buttons-container a {
   margin-right: 5px !important;
+}
+
+.buttons-container form {
+  float: left;
 }

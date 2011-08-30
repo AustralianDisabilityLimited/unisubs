@@ -144,6 +144,10 @@ form ul li span.checkbox_hint {
 	clear: both;
 }
 
+.content li form {
+  clear: none;
+}
+
 form p {
   clear: both;
   font-size: 11px;

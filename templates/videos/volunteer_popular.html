@@ -2,7 +2,10 @@
 
 {% load i18n search_tags %}
 
+{% comment %}
+temporarily commented: see https://www.pivotaltracker.com/story/show/17619883
 {% block heading %}<a href="{% url videos:volunteer_page %}">{% trans "Contribute Subtitles" %}</a>{% endblock %}
+{% endcomment %}
 
 {% block pagination_script %}
      $('.ajax-pagination').ajaxPaginator({

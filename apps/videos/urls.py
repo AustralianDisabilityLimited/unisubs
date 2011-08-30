@@ -26,8 +26,9 @@ urlpatterns = patterns(
     url(r'^watch/$', 'watch_page', name='watch_page'),
     url(r'^watch/featured/$', 'featured_videos', name='featured_videos'),
     url(r'^watch/latest/$', 'latest_videos', name='latest_videos'),
-    url(r'^watch/popular/$', 'popular_videos', name='popular_videos'),    
-    url(r'^volunteer/$', 'volunteer_page', name='volunteer_page'),
+    url(r'^watch/popular/$', 'popular_videos', name='popular_videos'),
+# temporarily commented: see https://www.pivotaltracker.com/story/show/17619883
+#    url(r'^volunteer/$', 'volunteer_page', name='volunteer_page'),
     url(r'^volunteer/(?P<category>\w+)/$', 'volunteer_category', name='volunteer_category'),
     url(r'^test_celery/$', 'test_celery'),
     url(r'^test_celery_exception/$', 'test_celery_exception'),

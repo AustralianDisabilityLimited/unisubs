@@ -56,50 +56,6 @@ class TeamsApiClass(object):
             return Msg(_(u'Application sent success. Wait for answer from team.'))
         else:
             return Error(_(u'You can\'t join this team by application.'))
-        
-    def leave(self, team_id, user):
-        if not user.is_authenticated():
-            return Error(_('You should be authenticated.'))
-            
-        try:
-            if not team_id:
-                raise Team.DoesNotExist            
-            team = Team.objects.get(pk=team_id)
-        except Team.DoesNotExist:
-            return Error(_('Team does not exist'))
-            
-        try:
-            tm = TeamMember.objects.get(team=team, user=user)
-            if team.members.exclude(pk=tm.pk).exists():
-                tm.delete()
-                return Msg(_(u'You have left this team.'), is_open=team.is_open())
-            else:
-                return Error(_(u'You are last member of this team.'))
-        except TeamMember.DoesNotExist:
-            return Error(_(u'You have left this team.'))
-    
-    def join(self, team_id, user):
-        if not user.is_authenticated():
-            return Error(_('You should be authenticated.'))
-            
-        try:
-            if not team_id:
-                raise Team.DoesNotExist            
-            team = Team.objects.get(pk=team_id)
-        except Team.DoesNotExist:
-            return Error(_('Team does not exist'))
-        
-        try:
-            TeamMember.objects.get(team=team, user=user)
-            return Error(_(u'You are already a member of this team.'))
-        except TeamMember.DoesNotExist:
-            pass
-        
-        if not team.is_open():
-            return Error(_(u'This team is not open.'))
-        else:
-            TeamMember(team=team, user=user).save()
-            return Msg(_(u'You are now a member of this team.'))
 
 TeamsApi = TeamsApiClass()
 

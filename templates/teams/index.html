@@ -10,40 +10,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        jQuery(function($){
-            var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
-             
-            $('.join-team', $('ul.big_list')).live('click', function(e){
-
-                var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
-            
-                if ( ! IS_AUTHENTICATED){
-                    return true;
-                }else{  
-                    e.preventDefault();
-                    if (confirm('{% trans "Do you really wish to join this team?" %}')){
-                        var $this = $(this);
-                        var form = $(this).parents("form").eq(0);
-                        form.submit();
-                    };
-                };
-                return false;
-
-            });
-            $('.leave-team', $('ul.big_list')).live('click', function(e){
-                e.preventDefault();
-        
-                if (confirm('{% trans "Do you really wish to leave this team?" %}')){
-                    var $this = $(this);
-                    var form = $(this).parents("form").eq(0);
-                    form.submit();
-                };
-                return false;
-            });            
-        });
-    </script>    
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}
 
 {% block main_content %}
@@ -129,12 +96,10 @@
                         <a href="{{ team.get_edit_url }}" class="blue_button small">{% trans 'Edit' %}</a>
                     {% endif %}
                     {% if team|is_team_member:user %}
-                        {% if team.member_count > 1 %}
-                            {% render_team_leave team user request %}
-                        {% endif %}
+                        {% render_team_leave team %}
                     {% else %}
                         {% if team.is_open %}
-                            {% render_team_join team user request "small" %}
+                            {% render_team_join team "small" %}
                         {% endif %}
                     {% endif %}  
                 </div>

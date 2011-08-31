@@ -1,5 +1,2 @@
 {% load i18n %}
-	<form method="POST" id="leave-team-{{team.pk}}" action="{{url}}">
-	  {% csrf_token %}
-	  <a class="leave-team red_button small"  href="#">{% trans "Leave this team" %}</a>
-	</form>
+<a class="leave-team red_button small" onclick="return confirm('{% trans "Do you really wish to leave this team?" %}')" href="{% url teams:leave_team team.slug %}">{% trans "Leave this team" %}</a>

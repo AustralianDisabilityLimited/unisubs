@@ -178,31 +178,15 @@ def team_video_in_progress_list(team_video_search_record):
     return  {
         'languages': langs
         }
-@register.inclusion_tag('teams/_join_button.html')
-def render_team_join(team, user, request, button_size="huge"):
+    
+@register.inclusion_tag('teams/_join_button.html', takes_context=True)
+def render_team_join(context, team, button_size="huge"):
+    context['team'] = team
+    context['button_size'] = button_size
+    return context
 
-    if user.is_authenticated():
-        url = reverse("teams:join_team", kwargs={"slug":team.slug})
-    else:
-        url = "%s?next=%s" % (reverse("auth:login"), urlquote(request.path_info))
-    return {
-        "url": url ,
-        "team": team,
-        "user": user,
-        "button_size": button_size,
-        }
-
-
-@register.inclusion_tag('teams/_leave_button.html')
-def render_team_leave(team, user, request, button_size="huge" ):
-
-    if user.is_authenticated():
-        url = reverse("teams:leave_team", kwargs={"slug":team.slug})
-    else:
-        url = "%s?next=%s" % (reverse("auth:login"), urlquote(request.path_info))
-    return {
-        "url": url ,
-        "team": team,
-        "user": user,
-        "button_size": button_size,
-        }
+@register.inclusion_tag('teams/_leave_button.html', takes_context=True)
+def render_team_leave(context, team, button_size="huge"):
+    context['team'] = team
+    context['button_size'] = button_size
+    return context

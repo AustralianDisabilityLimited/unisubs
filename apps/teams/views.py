@@ -625,25 +625,36 @@ def highlight(request, slug, highlight=True):
 @login_required
 def join_team(request, slug):
     team = get_object_or_404(Team, slug=slug)
-    response = TeamsApi.join(team.pk, request.user)
+    user = request.user
     
-    if response.get('error'):
-        messages.error(request, response.get('error'))
-        
-    if response.get('msg'):
-        messages.success(request, response.get('msg'))
+    try:
+        TeamMember.objects.get(team=team, user=user)
+        messages.error(request, _(u'You are already a member of this team.'))
+    except TeamMember.DoesNotExist:
+        if not team.is_open():
+            messages.error(request, _(u'This team is not open.'))
+        else:
+            TeamMember(team=team, user=user).save()
+            messages.success(request, _(u'You are now a member of this team.'))
     
     return redirect(team)
 
 @login_required
 def leave_team(request, slug):
     team = get_object_or_404(Team, slug=slug)
-    response = TeamsApi.leave(team.pk, request.user)
+    user = request.user
     
-    if response.get('error'):
-        messages.error(request, response.get('error'))
+    try:
+        tm = TeamMember.objects.get(team=team, user=user)
         
-    if response.get('msg'):
-        messages.success(request, response.get('msg'))
+        if not team.members.exclude(pk=tm.pk).exists():
+            messages.error(request, _(u'You are last member of this team.'))
+        elif not team.members.filter(role=TeamMember.ROLE_MANAGER).exclude(pk=tm.pk).exists():
+            messages.error(request, _(u'You are last manager of this team.'))
+        else:
+            tm.delete()
+            messages.success(request, _(u'You have left this team.'))
+    except TeamMember.DoesNotExist:
+        messages.error(request, _(u'You are not member of this team.'))
     
-    return redirect(team)
+    return redirect(request.META.get('HTTP_REFERER') or team)

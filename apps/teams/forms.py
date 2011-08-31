@@ -88,7 +88,7 @@ class EditTeamVideoForm(forms.ModelForm):
                         pass
                     else:
                         if is_ours:
-                             is_moderated = True
+                            is_moderated = True
                         self.fields['is_moderated'] = forms.BooleanField(
                             label=_("Moderate subtitles"),
                             initial=is_moderated,
@@ -145,8 +145,6 @@ class EditTeamVideoForm(forms.ModelForm):
                         raise
                         self._errors["should_moderate"] = [e]
 
-    
-
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 
         help_text=_("Enter the URL of any compatible video or any video on our site. You can also browse the site and use the 'Add Video to Team' menu."))
@@ -160,7 +158,6 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
                                  required=False,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
-    
     
     class Meta:
         model = TeamVideo

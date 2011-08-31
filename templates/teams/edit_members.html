@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script> 
     <script src="{% url messages:rpc_api %}" type="text/javascript"></script> 
     <script type="text/javascript">
         jQuery(function($){
@@ -51,27 +52,19 @@
                 return false;
             });
 
-            function onRoleChangerSelected(e){
-        
-               var url = $(this).data("url");
-               var role = $(this).val();
-               $.ajax({
-                url:url,
-                dataType: 'json',
-                type: "POST",
-                data:{'role':role},        
-                success: function(response){
-                    var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
-                    jQuery['jGrowl'](message, {'life': 10000});    
-        
-                },
-                error: function(response){
-                    var message = response.data.msg || "An error ocurred, we're working on getting this fixes asap.";
-                    jQuery['jGrowl'](message, {'life': 10000});    
-                }
-              });
-            }
-            $(".role-changer").change(onRoleChangerSelected);
+            $(".role-changer").change(function(){
+                $this = $(this);
+                TeamsApi.promote_user($this.attr('team_id'), $this.attr('member_id'), $this.val(),
+                    function(response){
+                        if (response.error){
+                            $this.val($this.attr('role'));
+                            jQuery.jGrowl.error(response.error);
+                        }else{
+                            $this.attr('role', $this.val());
+                            jQuery.jGrowl(response.msg);
+                        }
+                    });
+            });
         });
     </script>
 {% endblock %}
@@ -114,9 +107,9 @@
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
                         {% if team|is_team_manager:user and not member.user == user %}
-                            <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
-
-                            |
+                            <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">
+                                {% trans 'Remove from Team' %}
+                            </a> |
                         {% endif %}
                         {% if not member.user == user and member.user.email %}
                             {% send_message_form member.user 'True' %}
@@ -124,18 +117,15 @@
                     </div>
                 </td>
                 <td>
-                  {% if not member.user == user %}
-                  <select name="role" class="role-changer" data-url="{% url teams:promote_member user_pk=member.user.pk,slug=team.slug %}">
-                    {% for choice in role_choices %}
-                    <option {% ifequal choice.0  member.role %}selected="selected" {% endifequal %} value="{{choice.0}}">{{choice.1}}</option>
-                    {% endfor %}
-                  </select>
-                  {% else %}
-                  {% trans member.role %}
-                  {% endif %}
-
-
-
+                    {% if team|is_team_manager:user and not member.user == user %}
+                        <select name="role" role="member.role" class="role-changer" member_id="{{ member.pk }}" team_id="{{ team.pk }}">
+                            {% for choice in role_choices %}
+                                <option {% ifequal choice.0  member.role %}selected="selected" {% endifequal %} value="{{choice.0}}">{{choice.1}}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        {% trans member.role %}
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

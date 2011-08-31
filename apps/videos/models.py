@@ -1190,7 +1190,6 @@ class ActionRenderer(object):
     def render_ADD_TRANSLATION(self, item):
         kwargs = self._base_kwargs(item)
         
-        
         if item.user:
             msg = _(u'started <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')
         else:
@@ -1201,8 +1200,12 @@ class ActionRenderer(object):
     def render_ADD_VERSION(self, item):
         kwargs = self._base_kwargs(item)
         
-        kwargs['language'] = item.language.language_display()
-        kwargs['language_url'] = item.language.get_absolute_url()
+        if item.language:
+            kwargs['language'] = item.language.language_display()
+            kwargs['language_url'] = item.language.get_absolute_url()
+        else:
+            kwargs['language'] = ''
+            kwargs['language_url'] = ''
         
         if item.user:
             msg = _(u'edited <a href="%(language_url)s">%(language)s subtitles</a> for <a href="%(video_url)s">%(video_name)s</a>')

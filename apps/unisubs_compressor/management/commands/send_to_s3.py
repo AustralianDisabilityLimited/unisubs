@@ -149,8 +149,8 @@ class Command(BaseCommand):
         Walks the media directory and syncs files to S3
         """
         bucket, key = self.open_s3()
-#        os.path.walk(self.DIRECTORY, self.upload_s3,
-#            (bucket, key, self.AWS_BUCKET_NAME, self.DIRECTORY))
+        os.path.walk(self.DIRECTORY, self.upload_s3,
+            (bucket, key, self.AWS_BUCKET_NAME, self.DIRECTORY))
          
         old_prefix = self.prefix
         self.prefix = ""

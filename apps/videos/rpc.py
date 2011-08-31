@@ -122,7 +122,7 @@ class VideosApiClass(object):
         
         sort_field = sort_types.get(sort, 'week_views')
         
-        sqs = VideoIndex.get_popular_videos('-%s' % sort_field)[:VideoIndex.IN_ROW]
+        sqs = VideoIndex.get_popular_videos('-%s' % sort_field)
         
         return render_page(page, sqs, request=request, display_views=sort)
 
@@ -238,8 +238,7 @@ class VideosApiClass(object):
             display_views = 'week'
             sort_field = 'week_views'            
 
-        popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-%s' % sort_field)[:VideoIndex.IN_ROW]
+        popular_videos = VideoIndex.get_popular_videos('-%s' % sort_field)[:VideoIndex.IN_ROW]
 
         context = {
             'display_views': display_views,

@@ -59,7 +59,7 @@ def add_no_cache(headers, verbose=False):
     headers['Cache-Control'] = 'no-cache'
     headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
             time.mktime((datetime.datetime.now() +
-                         datetime.timedelta(years=-30)).timetuple())))
+                         datetime.timedelta(days=-30*365)).timetuple())))
     if verbose:
         print "\texpires: %s" % (headers['Expires'])
         print "\tcache-control: %s" % (headers['Cache-Control'])

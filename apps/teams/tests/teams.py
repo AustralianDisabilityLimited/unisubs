@@ -273,7 +273,6 @@ class TeamsTest(TestCase):
         self.user = User.objects.get(username=self.auth["username"])
         reset_solr()
 
-
     def _add_team_video(self, team, language, video_url):
         mail.outbox = []
         data = {
@@ -772,21 +771,6 @@ class TeamsTest(TestCase):
 
         tm,c = TeamMember.objects.get_or_create(user=self.user, team=team)
         tm.promote_to_manager()
-        
-        
-        self.assertFalse(team.is_manager(user2))
-        url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
-        response = self.client.get(url)
-        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
-
-        team = refresh_obj(team)
-        self.assertTrue(team.is_manager(user2))
-        
-        url = reverse("teams:promote_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
-        response = self.client.post(url, {"role":TeamMember.ROLE_MEMBER})
-        self.assertRedirects(response, reverse("teams:edit_members", kwargs={"slug": team.slug}))
-        
-        self.assertFalse(team.is_manager(user2))
         
         url = reverse("teams:remove_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.post(url)

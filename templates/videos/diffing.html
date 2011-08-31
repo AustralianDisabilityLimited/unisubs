@@ -115,7 +115,7 @@
             {% blocktrans with second_version.version_no as version_no and second_version.user as user %}
             Revision #{{ version_no }} by {{ user }}
             {% endblocktrans %}
-            <span class="small">{{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
+            <span class="small">{{ second_version.datetime_started|timesince }} {% trans "ago" %}</span>
         </h3>
       
         <div class="clear">&nbsp;</div>
@@ -170,7 +170,7 @@
             {% blocktrans with first_version.version_no as version_no and first_version.user as user %}
             Revision #{{ version_no }} by {{ user }}
             {% endblocktrans %}            
-             <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
+             <span class="small">{{ first_version.datetime_started|timesince }} {% trans "ago" %}</span>
         </h3>
    
         

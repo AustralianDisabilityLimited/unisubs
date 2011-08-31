@@ -148,14 +148,28 @@ class Command(BaseCommand):
         """
         Walks the media directory and syncs files to S3
         """
-        from django.conf import settings
         bucket, key = self.open_s3()
-        os.path.walk(self.DIRECTORY, self.upload_s3,
-            (bucket, key, self.AWS_BUCKET_NAME, self.DIRECTORY))
+#        os.path.walk(self.DIRECTORY, self.upload_s3,
+#            (bucket, key, self.AWS_BUCKET_NAME, self.DIRECTORY))
          
         old_prefix = self.prefix
         self.prefix = ""
+
+        self.sync_no_unique_url_items(bucket, key)
+
+        self.prefix = old_prefix
+
+    def sync_no_unique_url_items(self, bucket, key):
+        from django.conf import settings
         outside_dir = os.path.dirname(self.DIRECTORY)
+
+        def upload_no_unique_url_item(file_name):
+            fname = os.path.basename(file_name)
+            base_dir = os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))
+            full_path = os.path.join(settings.STATIC_ROOT, file_name)
+            self.upload_one(
+                bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, file_name,
+                add_no_cache if item['no-cache'] else None)
 
         # these are not to be prefixed by commit, e.g. outside systems link to them
         no_unique_url_items = NO_UNIQUE_URL
@@ -163,13 +177,11 @@ class Command(BaseCommand):
         no_unique_url_items += ({ "name": "embed.js", "no-cache": True },)
         for item in no_unique_url_items:
             file_name = item['name']
-            fname = os.path.basename(file_name)
-            base_dir =os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))
-            full_path = os.path.join(settings.STATIC_ROOT, file_name)
-            self.upload_one(
-                bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, file_name,
-                add_no_cache if item['no-cache'] else None)
-        self.prefix = old_prefix
+            upload_no_unique_url_item(file_name)
+            # for backwards compatibility with old mirosubs names
+            mirosubs_filename = re.sub(r'unisubs\-', 'mirosubs-', file_name)
+            if file_name != mirosubs_filename:
+                upload_no_unique_url_item(mirosubs_filename)
 
     def compress_string(self, s):
         """Gzip a given string."""

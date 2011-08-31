@@ -17,6 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 import sys, os, shutil, subprocess, logging, time
+import re
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -90,21 +91,6 @@ NO_UNIQUE_URL = (
         "name": "js/widgetizer/widgetizerprimer.js",
         "no-cache": False
     }
-)
-
-#: as we've kept those URIs as public, we need to duplicate those files
-#: keeping the old mirosubs-js
-    
-KEEP_BACKWARDS_MIROSUBS = (
-    ("js/unisubs-offsite-compiled.js", "js/mirosubs-offsite-compiled.js"),
-    ("js/unisubs-onsite-compiled.js", "js/mirosubs-onsite-compiled.js"),
-    ("js/unisubs-widgetizer.js", "js/mirosubs-widgetizer.js"),
-    ("js/unisubs-widgetizer-sumo.js", "js/mirosubs-widgetizer-sumo.js"),
-    ("js/unisubs-widgetizer-debug.js", "js/mirosubs-widgetizer-debug.js"),
-    ("js/unisubs-extension.js", "js/mirosubs-extension.js"),
-    ("js/unisubs-statwidget.js", "js/mirosubs-statwidget.js"),
-    ("js/unisubs-api.js", "js/mirosubs-api.js"),
-    ("js/unisubs.js", "js/mirosubs.js"),
 )
 
 def call_command(command):
@@ -398,24 +384,20 @@ class Command(BaseCommand):
                 os.remove(to_path)
             shutil.copy(from_path, to_path)
 
-    def _copy_backwards_compability(self, from_dir):
-        """
-        In the old days, the project was called mirosubs, we therefore announced
-        public urls such as js/mirosubs-api.js . Since we've changed all of it to
-        be called unisubs, we broke those names.
+    def _make_mirosubs_copies_of_files_with_public_urls(self):
+        # for backwards compatibilty with old mirosubs names
+        for file in NO_UNIQUE_URL:
+            filename = file['name']
+            mirosubs_filename = re.sub(
+                r'unisubs\-', 'mirosubs-',
+                filename)
+            if filename != mirosubs_filename:
+                from_path = os.path.join(settings.STATIC_ROOT, filename)
+                to_path = os.path.join(settings.STATIC_ROOT, mirosubs_filename)
+                print("For backwards compatibility, copying from {0} to {1}".format(
+                        from_path, to_path))
+                shutil.copy(from_path, to_path)
 
-        We are duplicating those files (since s3 won't allow us to do redirects)
-        for a grace period until we get our partners to swtich to the new files.
-
-        For example, we should copy
-        js/unisubs-api.js -> js/mirosubs-api.js 
-        """
-        for src,target in KEEP_BACKWARDS_MIROSUBS:
-            shutil.copy(
-                os.path.join(from_dir, src),
-                os.path.join(from_dir, target),
-                )
-            
     def handle(self, *args, **options):
         """
         There are three directories involved here:
@@ -439,13 +421,13 @@ class Command(BaseCommand):
         self._copy_static_root_to_temp_dir() 
         self._compile_conf_and_embed_js()
         self._compile_media_bundles(restrict_bundles, args)
-        self._copy_backwards_compability(self.temp_dir)
             
         if not self.keeps_previous:
             self._remove_cache_dirs_before(1)
 
         self._copy_temp_dir_to_cache_dir()
         self._copy_files_with_public_urls_from_cache_dir_to_static_dir()
+        self._make_mirosubs_copies_of_files_with_public_urls()
 
         if self.test_str_version:
             self.test_string_version()

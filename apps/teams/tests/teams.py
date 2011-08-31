@@ -854,22 +854,10 @@ class TestJqueryRpc(TestCase):
         if isinstance(response, Error):
             self.fail(response)
         
-        self.assertTrue(self.team.is_member(self.user))
+        self.assertTrue(self.team.is_member(self.user))        
         #---------------------------------------
-        response = self.rpc.leave(self.team.pk, self.user)
+        self.team.members.filter(user=self.user).delete()
         
-        if not isinstance(response, Error):
-            self.fail('You are the only member of team')
-        
-        other_user = User.objects.exclude(pk=self.user)[:1].get()
-        self.rpc.join(self.team.pk, other_user)    
-        
-        response = self.rpc.leave(self.team.pk, self.user)
-        if isinstance(response, Error):
-            self.fail(response)
-                    
-        self.assertFalse(self.team.is_member(self.user))           
-        #---------------------------------------
         self.team.membership_policy = Team.APPLICATION
         self.team.save()
         
@@ -881,20 +869,7 @@ class TestJqueryRpc(TestCase):
         
         self.assertFalse(self.team.is_member(self.user))
         self.assertTrue(Application.objects.filter(user=self.user, team=self.team).exists())
-        #---------------------------------------
-        
-    def test_join(self):
-        self.team.membership_policy = Team.OPEN
-        self.team.save()
-        
-        self.assertFalse(self.team.is_member(self.user))
-        
-        response = self.rpc.join(self.team.pk, self.user)
-        
-        if isinstance(response, Error):
-            self.fail(response)
-        
-        self.assertTrue(self.team.is_member(self.user))            
+        #---------------------------------------         
 
 class TeamsDetailQueryTest(TestCase):
     

@@ -232,21 +232,6 @@ class Command(BaseCommand):
             if self.prefix:
                 file_key = '%s/%s' % (self.prefix, file_key)
                            
-                           
-            # Check if file on S3 is older than local file, if so, upload
-            if not self.do_force:
-                s3_key = bucket.get_key(file_key)
-                if s3_key:
-                    s3_datetime = datetime.datetime(*time.strptime(
-                        s3_key.last_modified, '%a, %d %b %Y %H:%M:%S %Z')[0:6])
-                    local_datetime = datetime.datetime.utcfromtimestamp(
-                        os.stat(filename).st_mtime)
-                    if local_datetime < s3_datetime:
-                        self.skip_count += 1
-                        if self.verbosity > 1:
-                            print "File %s hasn't been modified since last " \
-                                "being uploaded" % (file_key)
-                        continue
             cache_strategy = None
             if self.do_expires:
                 cache_strategy = add_far_future_expires

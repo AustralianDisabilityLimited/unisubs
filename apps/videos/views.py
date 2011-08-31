@@ -54,7 +54,7 @@ from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
-from videos.search_indexes import VideoSearchResult
+from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
 
 from apps.teams.moderation import user_can_moderate, get_pending_count
@@ -63,34 +63,20 @@ rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
 })
 
-def _get_featured_videos():
-    return SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-        .order_by('-featured')
-    
-def _get_popular_videos():
-    return SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).order_by('-week_views')
-
-def _get_latest_videos():
-    return SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).order_by('-created')[:18]
-    
-
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
-    context['popular_videos'] = _get_popular_videos()[:6]
-    context['featured_videos'] = _get_featured_videos()[:6]
+    context['popular_videos'] = VideoIndex.get_popular_videos()[:VideoIndex.IN_ROW]
+    context['featured_videos'] = VideoIndex.get_featured_videos()[:VideoIndex.IN_ROW]
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
 def watch_page(request):
 
     context = {
-        'featured_videos': _get_featured_videos()[:6],
-        'popular_videos': _get_popular_videos()[:6],
-        'latest_videos': _get_latest_videos()[:6],
+        'featured_videos': VideoIndex.get_featured_videos()[:VideoIndex.IN_ROW],
+        'popular_videos': VideoIndex.get_popular_videos()[:VideoIndex.IN_ROW],
+        'latest_videos': VideoIndex.get_latest_videos()[:VideoIndex.IN_ROW*3],
         'popular_display_views': 'week'
     }
     return render_to_response('videos/watch.html', context,

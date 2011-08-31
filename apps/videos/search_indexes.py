@@ -5,6 +5,9 @@ from models import Video, SubtitleLanguage
 from comments.models import Comment
 from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
+from django.conf import settings
+from haystack.query import SearchQuerySet
+import datetime
 
 #SUFFIX = u'+++++'
 SUFFIX = u''
@@ -93,6 +96,8 @@ class VideoIndex(CelerySearchIndex):
     year_views = IntegerField()
     total_views = IntegerField(model_attr='widget_views_count')
     
+    IN_ROW = getattr(settings, 'VIDEO_IN_ROW', 6)
+    
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         
@@ -112,7 +117,7 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['year_views'] = obj.views['year']
         self.prepared_data['today_views'] = obj.views['today']
         return self.prepared_data
-
+    
     def _setup_save(self, model):
         pass
     
@@ -122,6 +127,22 @@ class VideoIndex(CelerySearchIndex):
     def index_queryset(self):
         return self.model.objects.order_by('-id')
     
+    @classmethod
+    def get_featured_videos(cls):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
+    
+    @classmethod
+    def get_popular_videos(cls, sort='-week_views'):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).order_by(sort)
+    
+    @classmethod
+    def get_latest_videos(cls):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).order_by('-created')
+
 class VideoSearchResult(SearchResult):
     title_for_url = Video.__dict__['title_for_url']
     get_absolute_url = Video.__dict__['_get_absolute_url']

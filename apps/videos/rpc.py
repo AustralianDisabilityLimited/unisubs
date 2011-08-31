@@ -31,15 +31,14 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
 from haystack.query import SearchQuerySet
-from videos.search_indexes import VideoSearchResult
+from videos.search_indexes import VideoSearchResult, VideoIndex
 from utils.celery_search_index import update_search_index
 from utils.multi_query_set import MultiQuerySet
 from videos.tasks import send_change_title_email
 from django.template.defaultfilters import slugify
 import datetime
 
-VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
-VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
+VIDEOS_ON_PAGE = VideoIndex.IN_ROW*5
 
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
@@ -100,9 +99,7 @@ class VideosApiClass(object):
     
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-            .order_by('-featured')
+        sqs = VideoIndex.get_featured_videos()
         
         return render_page(page, sqs, request=request)    
 
@@ -125,8 +122,7 @@ class VideosApiClass(object):
         
         sort_field = sort_types.get(sort, 'week_views')
         
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-%s' % sort_field)
+        sqs = VideoIndex.get_popular_videos('-%s' % sort_field)[:VideoIndex.IN_ROW]
         
         return render_page(page, sqs, request=request, display_views=sort)
 
@@ -145,7 +141,6 @@ class VideosApiClass(object):
             .models(Video).filter(video_language_exact__in=user_langs) \
             .filter_or(languages_exact__in=user_langs) \
             .order_by('-requests_count')
-
 
         # Rest of the videos, which most probably would not be much useful
         # for the volunteer
@@ -244,7 +239,7 @@ class VideosApiClass(object):
             sort_field = 'week_views'            
 
         popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-%s' % sort_field)[:5]
+            .models(Video).order_by('-%s' % sort_field)[:VideoIndex.IN_ROW]
 
         context = {
             'display_views': display_views,

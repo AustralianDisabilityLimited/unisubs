@@ -263,7 +263,7 @@ class Command(BaseCommand):
             key.name = file_key
             key.set_contents_from_string(filedata, headers, replace=True)
             key.make_public()
-        except boto.s3.connection.S3CreateError, e:
+        except boto.s3.connection.BotoClientError, e:
             print "Failed: %s" % e
         except Exception, e:
             print e

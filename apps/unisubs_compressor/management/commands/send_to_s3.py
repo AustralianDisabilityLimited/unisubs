@@ -163,8 +163,9 @@ class Command(BaseCommand):
             fname = os.path.basename(file_name)
             base_dir =os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))
             full_path = os.path.join(settings.STATIC_ROOT, file_name)
-            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item,
-                            add_no_cache if item['no-cache'] else None)
+            self.upload_one(
+                bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, file_name,
+                add_no_cache if item['no-cache'] else None)
         self.prefix = old_prefix
 
     def compress_string(self, s):
@@ -237,7 +238,8 @@ class Command(BaseCommand):
             self.upload_one(bucket, key, bucket_name, root_dir, filename, file_key, cache_strategy)                    
 
 
-    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key, cache_strategy=None):
+    def upload_one(self, bucket, key, bucket_name, root_dir, filename, 
+                   file_key, cache_strategy=None):
         if self.verbosity > 0:
             print "Uploading %s..." % (file_key)
         headers = {}

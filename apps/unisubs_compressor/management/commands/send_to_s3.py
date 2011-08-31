@@ -2,7 +2,7 @@
 Sync Media to S3
 ================
 
-Django command that scans all files in your settings.MEDIA_ROOT + settings.COMPRESS_OUTPUT_DIRNAME + [git commit]  folder and uploads them to S3 with the same directory structure.
+Django command that scans all files in your settings.STATIC_ROOT + settings.COMPRESS_OUTPUT_DIRNAME + [git commit]  folder and uploads them to S3 with the same directory structure.
 
 This command also does the following 
 * gzip compress any CSS and Javascript files it finds and adds the appropriate
@@ -18,7 +18,7 @@ AWS_SECRET_ACCESS_KEY = ''
 AWS_BUCKET_NAME = ''
 
 For example it wil sync anything in
-MEDIA_ROOT/static-cache/0234dsd/*
+STATIC_ROOT/static-cache/0234dsd/*
 
 
 """
@@ -97,7 +97,7 @@ class Command(BaseCommand):
             help="Skip the file mtime check to force upload of all files.")
     )
 
-    help = 'Syncs the complete MEDIA_ROOT structure and files to S3 into the given bucket name.'
+    help = 'Syncs the complete STATIC_ROOT structure and files to S3 into the given bucket name.'
     args = 'bucket_name'
 
     can_import_settings = True
@@ -106,11 +106,11 @@ class Command(BaseCommand):
         from django.conf import settings
 
 
-        if not hasattr(settings, 'MEDIA_ROOT'):
-            raise CommandError('MEDIA_ROOT must be set in your settings.')
+        if not hasattr(settings, 'STATIC_ROOT'):
+            raise CommandError('STATIC_ROOT must be set in your settings.')
         else:
-            if not settings.MEDIA_ROOT:
-                raise CommandError('MEDIA_ROOT must be set in your settings.')
+            if not settings.STATIC_ROOT:
+                raise CommandError('STATIC_ROOT must be set in your settings.')
         self.DIRECTORY = get_cache_dir()
         # Check for AWS keys in settings
         if not hasattr(settings, 'AWS_ACCESS_KEY_ID') or \
@@ -136,7 +136,7 @@ class Command(BaseCommand):
         self.do_expires = options.get('expires')
         self.do_force = options.get('force')
 
-        # Now call the syncing method to walk the MEDIA_ROOT directory and
+        # Now call the syncing method to walk the STATIC_ROOT directory and
         # upload all files found.
         self.sync_s3()
 
@@ -161,8 +161,8 @@ class Command(BaseCommand):
         for item in NO_UNIQUE_URL:
             file_name = item['name']
             fname = os.path.basename(file_name)
-            base_dir =os.path.join(settings.MEDIA_ROOT, os.path.dirname(file_name))
-            full_path = os.path.join(settings.MEDIA_ROOT, file_name)
+            base_dir =os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))
+            full_path = os.path.join(settings.STATIC_ROOT, file_name)
             self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item,
                             add_no_cache if item['no-cache'] else None)
         self.prefix = old_prefix
@@ -196,7 +196,7 @@ class Command(BaseCommand):
         if root_dir == dirname:
             return # We're in the root media folder
 
-        # Later we assume the MEDIA_ROOT ends with a trailing slash
+        # Later we assume the STATIC_ROOT ends with a trailing slash
         # TODO: Check if we should check os.path.sep for Windows
         if not root_dir.endswith('/'):
             root_dir = root_dir + '/'

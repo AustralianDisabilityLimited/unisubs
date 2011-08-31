@@ -1,4 +1,5 @@
 {% load i18n moderation doorman %}
+<a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
 <ul class="inline_tabs">
     <li {% if active == "settings" %} class="active"{% endif %}>
         <a href="{{ team.get_edit_url }}">{% trans 'Settings' %}</a>

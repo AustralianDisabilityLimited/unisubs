@@ -36,7 +36,6 @@
 {% block settings_content %}
   <div class="hd">
     <h2>{{ team.name }}</h2>
-    <a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
     {% with "settings" as active %}
         {% include 'teams/_edit_top_navigation.html' %}
     {% endwith %}

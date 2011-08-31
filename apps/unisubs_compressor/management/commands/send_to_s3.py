@@ -56,13 +56,15 @@ def add_far_future_expires(headers, verbose=False):
         print "\tcache-control: %s" % (headers['Cache-Control'])
 
 def add_no_cache(headers, verbose=False):
-    headers['Cache-Control'] = 'no-cache'
+    headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+    headers['Pragma'] = 'no-cache'
     headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
             time.mktime((datetime.datetime.now() +
                          datetime.timedelta(days=-30*365)).timetuple())))
     if verbose:
         print "\texpires: %s" % (headers['Expires'])
         print "\tcache-control: %s" % (headers['Cache-Control'])
+        print "\tPragma: %s" % (headers['Pragma'])
 
 class Command(BaseCommand):
 

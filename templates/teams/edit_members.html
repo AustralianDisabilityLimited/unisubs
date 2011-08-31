@@ -71,16 +71,7 @@
                 }
               });
             }
-        
-            function wrapRoleChangingSelects(els){
-               $(els).each(function(i, o){
-                   $(o).change(onRoleChangerSelected);
-               })
-
-
-            }
-           wrapRoleChangingSelects($(".role-changer"));
-        
+            $(".role-changer").change(onRoleChangerSelected);
         });
     </script>
 {% endblock %}

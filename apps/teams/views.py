@@ -96,7 +96,7 @@ def index(request, my_teams=False):
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
     
-    highlighted_ids = list(Team.objects.filter(highlight=True).values_list('id', flat=True))
+    highlighted_ids = list(Team.objects.filter(highlight=True, is_visible=True).values_list('id', flat=True))
     random.shuffle(highlighted_ids)
     highlighted_qs = Team.objects.filter(pk__in=highlighted_ids[:HIGHTLIGHTED_TEAMS_ON_PAGE]) \
         .annotate(_member_count=Count('users__pk'))

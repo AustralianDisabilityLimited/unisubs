@@ -62,6 +62,8 @@ SKIP_COPING_ON = DIRS_TO_COMPILE + [
      ]
 
 NO_UNIQUE_URL = (
+# TODO: Figure out if you can uncomment this, then possibly remove
+# special case for it in send_to_s3
 #    {
 #        "name": "embed.js",
 #        "no-cache": True 

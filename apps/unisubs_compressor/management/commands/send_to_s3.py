@@ -158,7 +158,10 @@ class Command(BaseCommand):
         outside_dir = os.path.dirname(self.DIRECTORY)
 
         # these are not to be prefixed by commit, e.g. outside systems link to them
-        for item in NO_UNIQUE_URL:
+        no_unique_url_items = NO_UNIQUE_URL
+        # embed.js is a special case :(
+        no_unique_url_items += ({ "name": "embed.js", "no-cache": True },)
+        for item in no_unique_url_items:
             file_name = item['name']
             fname = os.path.basename(file_name)
             base_dir =os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))

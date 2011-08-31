@@ -20,7 +20,7 @@ from utils.redis_utils import default_connection, RedisKey
 from statistic.pre_day_statistic import BasePerDayStatistic, UpdatingLogger
 from statistic.models import SubtitleFetchCounters, VideoViewCounter, WidgetViewCounter
 from django.db.models import F
-from django.db import models
+from django.db import models, IntegrityError
 import time
 
 class VideoViewStatistic(BasePerDayStatistic):
@@ -167,7 +167,11 @@ class SubtitleFetchStatistic(BasePerDayStatistic):
             'video': video,
             'language': lang
         }
-        obj, created = self.model.objects.get_or_create(**fields)
+        try:
+            obj, created = self.model.objects.get_or_create(**fields)
+        except IntegrityError:
+            #Strange error in get_or_create. This should fix it.
+            obj = self.model.objects.get(**fields)
         return obj
 
     def get_query_set(self, date, video, sl=None):

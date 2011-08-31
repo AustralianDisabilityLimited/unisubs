@@ -216,7 +216,7 @@ def _git_pull():
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
     _clear_permissions('.')
 
-def _reload_app_server():
+def _reload_app_server(dir=None):
     """
     Reloading the app server will both make sure we have a
     valid commit guid (by running the create_commit_file)
@@ -226,6 +226,9 @@ def _reload_app_server():
     with cd('{0}/unisubs'.format(env.web_dir)):
         run('python deploy/create_commit_file.py')
         run('touch deploy/unisubs.wsgi')
+
+def reload_app_servers():
+    _execute_on_all_hosts(_reload_app_server)
     
 def add_disabled():
     for host in env.web_hosts:

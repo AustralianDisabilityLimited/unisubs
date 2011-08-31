@@ -289,9 +289,11 @@ unisubs.RequestDialog.prototype.requestCallback_ = function(jsonResult) {
                            this.getDomHelper());
         goog.dom.removeChildren(this.contentDiv_);
         this.confirmDiv_ = $d('p', null, this.SUBMISSION_CONFIRM_);
-        this.volunteerDiv_ = $d('p', null, 'Want to pitch in yourself? Visit our ',
-                                $d('a', {"href": unisubs.siteURL() + '/volunteer/requested/' },
-                                   "requests page"), '!');
+        this.volunteerDiv_ = 
+            $d('p', null, 'Want to pitch in yourself? Visit our ',
+               $d('a', {"href": unisubs.siteURL() + 
+                        '/videos/volunteer/requested/' },
+                  "requests page"), '!');
 
         this.contentDiv_.appendChild(this.confirmDiv_);
         this.contentDiv_.appendChild(this.volunteerDiv_);

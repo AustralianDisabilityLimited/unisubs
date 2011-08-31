@@ -96,7 +96,17 @@
                 {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100"/>{% endif %}
             </a>
             <div class="info">
-                <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} <span class="your-team">({% trans 'your team' %})</span>{% endif %}</a></h4>
+                <h4>
+                    <a href="{{ team.get_absolute_url }}">
+                        {{ team }}
+                        {% if team|is_team_member:user %} 
+                            <span class="your-team">({% trans 'your team' %})</span>
+                        {% endif %}
+                        {% if not team.is_visible %}
+                            <span class="your-team">({% trans 'private' %})</span>
+                        {% endif %}
+                    </a>
+                </h4>
                 <span class="count">
                     {% blocktrans with team.member_count as count %}
                     {{ count }} Members

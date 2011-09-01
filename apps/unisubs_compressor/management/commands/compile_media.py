@@ -382,7 +382,7 @@ class Command(BaseCommand):
             to_path =  os.path.join(settings.STATIC_ROOT, filename)
             if os.path.exists(to_path):
                 os.remove(to_path)
-            shutil.copy(from_path, to_path)
+            shutil.copyfile(from_path, to_path)
 
     def _make_mirosubs_copies_of_files_with_public_urls(self):
         # for backwards compatibilty with old mirosubs names
@@ -396,7 +396,7 @@ class Command(BaseCommand):
                 to_path = os.path.join(settings.STATIC_ROOT, mirosubs_filename)
                 print("For backwards compatibility, copying from {0} to {1}".format(
                         from_path, to_path))
-                shutil.copy(from_path, to_path)
+                shutil.copyfile(from_path, to_path)
 
     def handle(self, *args, **options):
         """

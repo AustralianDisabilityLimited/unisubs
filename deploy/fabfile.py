@@ -208,6 +208,7 @@ def clear_permissions():
     for host in env.web_hosts:
         env.host_string = host
         _clear_permissions('{0}/unisubs'.format(env.web_dir))
+    
 
 def _git_pull():
     run('git checkout --force')

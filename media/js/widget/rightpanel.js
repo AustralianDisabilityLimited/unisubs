@@ -61,7 +61,8 @@ unisubs.RightPanel.EventType = {
     RESTART : 'restart',
     DONE : 'done',
     BACK : 'back',
-    GOTOSTEP : 'gotostep'
+    GOTOSTEP : 'gotostep',
+    SAVEANDEXIT: 'saveandexit'
 };
 unisubs.RightPanel.prototype.createDom = function() {
     unisubs.RightPanel.superClass_.createDom.call(this);
@@ -229,7 +230,7 @@ unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
         stepsDiv.appendChild(restartAnchor);
     }
 
-    this.downloadLink_ = this.getDomHelper().createDom(
+    this.downloadLink_ = $d(
         'a', {'href':'#', 'className':'unisubs-download-subs'}, 
         'Download subtitles');
     goog.style.showElement(this.downloadLink_, false);
@@ -237,9 +238,17 @@ unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.getHandler().listen(
         this.downloadLink_, 'click', this.downloadClicked_);
 
-    stepsDiv.appendChild(this.doneAnchor_);
+    var saveAndExitAnchor = $d(
+        'div', 'unisubs-saveandexit',
+        $d('span', null, 'Need to stop and come back later? '),
+        $d('a', {'href': '#'},
+           $d('span', null, 'Save and Exit')));
+    goog.dom.append(stepsDiv, this.doneAnchor_, saveAndExitAnchor);
+    this.getHandler().listen(
+        saveAndExitAnchor, goog.events.EventType.CLICK,
+        this.saveAndExitClicked_);
 
-    el.appendChild(stepsDiv);
+    goog.dom.append(el, stepsDiv);
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
@@ -260,16 +269,20 @@ unisubs.RightPanel.prototype.legendKeyMouseup_ = function(keyCode, modifiers, ev
     }
 };
 unisubs.RightPanel.prototype.backClickedInternal = function(event) {
-    this.dispatchEvent(unisubs.RightPanel.EventType.BACK);
     event.preventDefault();
+    this.dispatchEvent(unisubs.RightPanel.EventType.BACK);
 };
 unisubs.RightPanel.prototype.restartClicked_ = function(event) {
-    this.dispatchEvent(unisubs.RightPanel.EventType.RESTART);
     event.preventDefault();
+    this.dispatchEvent(unisubs.RightPanel.EventType.RESTART);
 };
 unisubs.RightPanel.prototype.doneClicked_ = function(event) {
-    this.dispatchEvent(unisubs.RightPanel.EventType.DONE);
     event.preventDefault();
+    this.dispatchEvent(unisubs.RightPanel.EventType.DONE);
+};
+unisubs.RightPanel.prototype.saveAndExitClicked_ = function(e) {
+    e.preventDefault();
+    this.dispatchEvent(unisubs.RightPanel.EventType.SAVEANDEXIT);
 };
 unisubs.RightPanel.prototype.getDoneAnchor = function() {
     return this.doneAnchor_;

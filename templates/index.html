@@ -45,7 +45,7 @@
           {% blocktrans %}
             Our deaf and hard of hearing users and non-profits request help for videos that need captions or translations. 
           {% endblocktrans %}
-          <a href="{% url videos:volunteer_category category='requested' %}">{% trans "See the most requested videos." %}</a>
+          {% comment %}<a href="{% url videos:volunteer_category category='requested' %}">{% trans "See the most requested videos." %}</a>{% endcomment %}
         </p>
       </div>
       
@@ -147,7 +147,7 @@
       <a class="more" href="{% url videos:featured_videos %}">{% trans "More Featured" %}</a>
       <h2>{% trans "Featured Videos" %}</h2>
       <p class="links">
-        <a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>
+        {% comment %}<a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>{% endcomment %}
         <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
       </p>
       

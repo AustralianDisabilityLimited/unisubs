@@ -43,12 +43,13 @@
             $('#edit-title-dialog .save-title').click(function(){
                 var title = $('#edit-title-dialog .title-input').val();
                 if (title) {
-                    $('.title-container').html(title);
+                    $('.title-container').html(title).hide().fadeIn();
                     VideosApi.change_title_video(VIDEO_ID, title, function(response){
                         if (response.error) {
                             $.jGrowl.error(response.error);
                         } else {
                             $('.title-container').html(title);
+                            document.title = title + " | Universal Subtitles";
                         }                        
                     });
                     $('#edit-title-dialog').modClose();
@@ -165,7 +166,7 @@
         </div>
         <div class="grid_9 omega pod">
             <div class="hd">
-                <h2>{{ video }}</h2>
+                <h2 class="title-container">{{ video }}</h2>
                 {% if user.is_authenticated %}
                     {% if not video.title or video.is_html5 or user.is_superuser %}
                         <a class="heading_button edit-title" href="#" data-modal="edit-title-dialog">{% trans 'Edit title' %}</a>

@@ -11,7 +11,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "unisubs-onsite-compiled" 0 %}
+    {% include_bundle "unisubs-onsite-compiled" %}
     {% if user_can_moderate %}
        {% include_bundle "js-moderation-dashboard" 0 %}
     {% endif %}

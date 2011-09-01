@@ -346,12 +346,13 @@ class Announcement(models.Model):
             try:
                 qs = cls.objects.filter(created__lte=datetime.today()) \
                     .filter(hidden=False)
-                if hidden_date:
-                    qs = qs.filter(created__gt=hidden_date)
                 last = qs[0:1].get()
             except cls.DoesNotExist:
                 last = None
             cache.set(cls.cache_key, last, 60*60)
-
+        
+        if hidden_date and last and last.created < hidden_date:
+            return None
+        
         return last    
         

@@ -7,6 +7,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.contrib.admin import widgets
+from datetime import datetime
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'^\w+$',
@@ -37,6 +38,15 @@ class AnnouncementAdmin(admin.ModelAdmin):
     }
     list_display = ('content', 'created', 'visible')
     actions = ['make_hidden']
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(AnnouncementAdmin, self).get_form(request, obj=None, **kwargs)
+        
+        default_help_text = form.base_fields['created'].help_text
+        now = datetime.now()
+        form.base_fields['created'].help_text = default_help_text+\
+            u'</br>Current server time is %s. Value is saved without timezone converting.' % now.strftime('%m/%d/%Y %H:%M:%S')
+        return form
     
     def visible(self, obj):
         return not obj.hidden

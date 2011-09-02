@@ -34,13 +34,12 @@ unisubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
  * Widget calls this when show_widget rpc call returns.
  */
 unisubs.widget.WidgetController.prototype.initializeState = function(result) {
-//    try {
+    try {
         this.initializeStateImpl_(result);
-/*    }
+    }
     catch (e) {
         this.videoTab_.showError();
     }
-*/
 };
 
 unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result) {

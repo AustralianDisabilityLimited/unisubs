@@ -66,7 +66,7 @@ rpc_router = RpcRouter('videos:rpc_router', {
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
-    context['popular_videos'] = VideoIndex.get_popular_videos()[:VideoIndex.IN_ROW]
+    context['popular_videos'] = VideoIndex.get_popular_videos("-today_views")[:VideoIndex.IN_ROW]
     context['featured_videos'] = VideoIndex.get_featured_videos()[:VideoIndex.IN_ROW]
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))

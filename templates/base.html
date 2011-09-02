@@ -1,4 +1,4 @@
-{% load feedback thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor %}
+{% load  thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -115,7 +115,7 @@ jQuery(function($){
 <body {% block body_attrs %}{% endblock %}>
   
 {% block feedback-button %}
-  <a href="#" class="feedback_tab" data-modal="feedback_container">{% trans "Feedback" %}</a>
+  <a href="https://universalsubtitles.tenderapp.com/" class="feedback_tab" >{% trans "Feedback" %}</a>
 {% endblock %}
 
 {% comment %}
@@ -208,9 +208,7 @@ jQuery(function($){
   </div><!-- // float_right -->
 </div><!-- // footer -->
 
- {% block feedback_form %}
-        {% feedback_form %}
-      {% endblock %}
+
 
 <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 {% block bottom_scripts %}{% endblock %}

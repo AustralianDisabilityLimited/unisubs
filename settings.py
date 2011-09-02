@@ -225,6 +225,7 @@ JS_CORE = \
      'js/widget/dropdown.js',
      'js/widget/resumeeditingrecord.js',
      'js/widget/resumedialog.js',
+     'js/widget/subtitle/savedsubtitles.js',
      'js/widget/play/manager.js',
      'js/widget/widgetcontroller.js',
      'js/widget/widget.js'
@@ -257,7 +258,6 @@ JS_DIALOG = \
      'js/widget/subtitle/editrightpanel.js',
      'js/widget/subtitle/bottomfinishedpanel.js',
      'js/widget/subtitle/logger.js',
-     'js/widget/subtitle/savedsubtitles.js',
      'js/widget/timeline/timerow.js',
      'js/widget/timeline/timerowul.js',
      'js/widget/timeline/timelinesub.js',

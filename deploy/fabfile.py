@@ -270,6 +270,7 @@ def update_web():
     bounce_memcached()
     test_services()
     for host in env.web_hosts:
+        env.host_string = host
         _reload_app_server()
 
 def bounce_memcached():

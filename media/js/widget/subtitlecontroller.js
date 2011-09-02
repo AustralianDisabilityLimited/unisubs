@@ -88,6 +88,7 @@ unisubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
     }
     var that = this;
     if (resumeEditingRecord &&
+        resumeEditingRecord.getSavedSubtitles() && 
         resumeEditingRecord.getVideoID() == this.videoID_) {
         var resumeDialog = new unisubs.ResumeDialog(
             resumeEditingRecord,

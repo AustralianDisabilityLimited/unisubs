@@ -718,3 +718,8 @@ def video_debug(request, video_id):
             'lang_info': lang_info,
             "cache": cache
     }, context_instance=RequestContext(request))
+
+def reset_metadata(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    video_changed_tasks.delay(video.id)
+    return HttpResponse('ok')

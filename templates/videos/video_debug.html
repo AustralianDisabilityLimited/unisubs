@@ -4,10 +4,28 @@
 
 {% load escapejs paginator widget comments i18n subtitles_tags teams_tags %}
 
+{% block scripts %}
+<script type="text/javascript">
+jQuery(function($) {
+    $('#reset_metadata').click(function(e) {
+         e.preventDefault();
+         $('#loading').show();
+         $.ajax({
+                    url: '{% url videos:reset_metadata video.video_id  %}',
+                    success: function() { 
+                        $('#loading').hide(); 
+                        alert("Task queued. It might take about 30 seconds to complete.");
+                    }
+                })
+    });
+});
+</script>
+{% endblock %}
 
 {% block main_content %}
 
 <h1>{{video.title_display}}</h1>
+<a href="javascript:void(0)" id="reset_metadata">Reset metadata for this video</a> <span id="loading" style="display: none">loading</span><br/>
 <b>view_count:</b> {{video.view_count}}<br/>
 <b>writelock_owner_id:</b> {{video.writelock_owner_id}}<br/>
 <b>writelock_session_key:</b> {{video.writelock_session_key}}<br/>

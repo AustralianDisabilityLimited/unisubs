@@ -40,20 +40,20 @@ unisubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
 
 unisubs.widget.SavedSubtitles.prototype.serialize = function() {
     return goog.json.serialize(
-        { sessionPK: this.SESSION_PK,
-          title: this.CAPTION_SET.title,
-          isComplete: this.CAPTION_SET.completed,
-          forked: this.CAPTION_SET.wasForkedDuringEdits(),
-          captionSet: this.CAPTION_SET.makeJsonSubs() });
+        { 'sessionPK': this.SESSION_PK,
+          'title': this.CAPTION_SET.title,
+          'isComplete': this.CAPTION_SET.completed,
+          'forked': this.CAPTION_SET.wasForkedDuringEdits(),
+          'captionSet': this.CAPTION_SET.makeJsonSubs() });
 };
 
 unisubs.widget.SavedSubtitles.deserialize = function(json) {
     var obj = goog.json.parse(json);
     return new unisubs.widget.SavedSubtitles(
-        obj.sessionPK, 
+        obj['sessionPK'], 
         new unisubs.subtitle.EditableCaptionSet(
-            obj.captionSet, obj.isComplete, obj.title, 
-            obj.forked));
+            obj['captionSet'], obj['isComplete'], obj['title'], 
+            obj['forked']));
 };
 
 unisubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {

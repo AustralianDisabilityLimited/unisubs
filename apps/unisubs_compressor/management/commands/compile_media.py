@@ -89,7 +89,7 @@ NO_UNIQUE_URL = (
         "no-cache": False,
     }, {
         "name": "js/widgetizer/widgetizerprimer.js",
-        "no-cache": False
+        "no-cache": True
     }
 )
 

@@ -26,7 +26,7 @@ from apps.auth.models import CustomUser as User
 from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, YoutubeSubtitleParser, TxtSubtitleParser
 from django.core.urlresolvers import reverse
 from django.core import mail
-from videos.forms import SubtitlesUploadForm
+from videos.forms import SubtitlesUploadForm, VideoForm
 from videos.tasks import video_changed_tasks
 from apps.videos import metadata_manager
 from apps.widget import video_cache
@@ -1849,7 +1849,15 @@ class TestModelsSaving(TestCase):
             self.assertTrue(x.sub_order > 0)
         
         
-
+class TestVideoForm(TestCase):
+    def setUp(self):
+        self.youtube_urls = ("http://youtu.be/HaAVZ2yXDBo", "http://www.youtube.com/watch?v=HaAVZ2yXDBo")
+        
+    def test_youtbe_urls(self):
+        for url in self.youtube_urls:
+            form = VideoForm(data={"video_url":url})
+            self.assertTrue(form.is_valid())
+            
 from videos.feed_parser import FeedParser
 
 class TestFeedParser(TestCase):

@@ -88,8 +88,8 @@ unisubs.widget.SubtitleController.prototype.videoAnchorClicked_ =
         resumeEditingRecord = unisubs.widget.ResumeEditingRecord.fetch();
     }
     var that = this;
-    if (resumeEditingRecord &&
-        resumeEditingRecord.getSavedSubtitles() && 
+    if (goog.isDefAndNotNull(resumeEditingRecord) &&
+        goog.isDefAndNotNull(resumeEditingRecord.getSavedSubtitles()) && 
         resumeEditingRecord.getVideoID() == this.videoID_) {
         var resumeDialog = new unisubs.ResumeDialog(
             resumeEditingRecord,

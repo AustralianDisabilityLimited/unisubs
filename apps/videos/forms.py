@@ -327,7 +327,10 @@ class VideoForm(forms.Form):
         self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
     def clean_video_url(self):
-        video_url = self.cleaned_data['video_url']
+        # do not get cleaned data!
+        # we need to revert to cannonical url before delegating
+        # to django's verify_exist
+        video_url = self.data['video_url']
         
         if video_url:
             try:
@@ -346,7 +349,12 @@ class VideoForm(forms.Form):
                              
             else:
                 self._video_type = video_type
-            
+                # we need to use the cannonical url as the user provided might need
+                # redirection (i.e. youtu.be/fdaf/), and django's validator will
+                # choke on redirection (urllib2 for python2.6), see https://unisubs.sifterapp.com/projects/12298/issues/427646/comments
+                video_url = video_type.video_url(video_type)
+                # now run the default validator (django's)
+                self.fields["video_url"].validate(video_url)
         return video_url
     
     def save(self):

@@ -39,7 +39,8 @@ from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
 from utils.forms import StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
-from utils.forms import ReCaptchaField
+from utils.forms import ReCaptchaField, url_exists
+
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
 KB_SIZELIMIT = 512
@@ -105,6 +106,12 @@ class CreateVideoUrlForm(forms.ModelForm):
         
         try:
             video_type = video_type_registrar.video_type_for_url(url)
+
+            video_url = video_type.video_url(video_type)
+
+            if not url_exists(video_url) :
+                 raise forms.ValidationError(_(u'This URL appears to be a broken link.'))
+
         except VideoTypeError, e:
             raise forms.ValidationError(e)
         
@@ -317,7 +324,8 @@ class UserTestResultForm(forms.ModelForm):
         return obj
 
 class VideoForm(forms.Form):
-    video_url = forms.URLField(verify_exists=True)
+    # url validation is whithin the clean method
+    video_url = forms.URLField(verify_exists=False)
     
     def __init__(self, user=None, *args, **kwargs):
         if user and not user.is_authenticated():
@@ -327,10 +335,8 @@ class VideoForm(forms.Form):
         self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
     def clean_video_url(self):
-        # do not get cleaned data!
-        # we need to revert to cannonical url before delegating
-        # to django's verify_exist
-        video_url = self.data['video_url']
+
+        video_url = self.cleaned_data['video_url']
         
         if video_url:
             try:
@@ -353,8 +359,10 @@ class VideoForm(forms.Form):
                 # redirection (i.e. youtu.be/fdaf/), and django's validator will
                 # choke on redirection (urllib2 for python2.6), see https://unisubs.sifterapp.com/projects/12298/issues/427646/comments
                 video_url = video_type.video_url(video_type)
-                # now run the default validator (django's)
-                self.fields["video_url"].validate(video_url)
+
+                if not url_exists(video_url) :
+                    raise forms.ValidationError(_(u'This URL appears to be a broken link.'))
+
         return video_url
     
     def save(self):

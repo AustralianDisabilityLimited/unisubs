@@ -1851,12 +1851,30 @@ class TestModelsSaving(TestCase):
         
 class TestVideoForm(TestCase):
     def setUp(self):
+        self.vimeo_urls = ("http://vimeo.com/17853047",)
         self.youtube_urls = ("http://youtu.be/HaAVZ2yXDBo", "http://www.youtube.com/watch?v=HaAVZ2yXDBo")
+        self.html5_urls = ("http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4",)
+        self.daily_motion_urls = ("http://www.dailymotion.com/video/xb0hsu_qu-est-ce-que-l-apache-software-fou_tech",)
         
-    def test_youtbe_urls(self):
+    def test_youtube_urls(self):
         for url in self.youtube_urls:
             form = VideoForm(data={"video_url":url})
             self.assertTrue(form.is_valid())
+
+    def test_vimeo_urls(self):
+        for url in self.vimeo_urls:
+            form = VideoForm(data={"video_url":url})
+            self.assertTrue(form.is_valid())        
+
+    def test_html5_urls(self):
+        for url in self.html5_urls:
+            form = VideoForm(data={"video_url":url})
+            self.assertTrue(form.is_valid())
+
+    def test_dailymotion_urls(self):
+        for url in self.daily_motion_urls:
+            form = VideoForm(data={"video_url":url})
+            self.assertTrue(form.is_valid())            
             
 from videos.feed_parser import FeedParser
 

@@ -20,10 +20,12 @@ media/js/mirosubs-widgetizer*.js
 media/js/mirosubs-extension.js
 media/js/mirosubs-statwidget.js
 media/js/mirosubs-api*.js
+media/js/mirosubs-streamer.js
 media/js/unisubs-widgetizer*.js
 media/js/unisubs-extension.js
 media/js/unisubs-statwidget.js
 media/js/unisubs-api*.js
+media/js/unisubs-streamer.js
 media/js/js-base-dependencies.js
 media/js/js-moderation-dashboard.js
 media/js/js-onsite-dialog.js

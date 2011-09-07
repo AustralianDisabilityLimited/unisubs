@@ -706,10 +706,6 @@ MEDIA_BUNDLES = {
             "render_bootloader": True
         }
      },
-    "unisubs-extension":{
-        "type": "js",
-        "files": ["js/config.js" ] + JS_EXTENSION,
-     },
     "unisubs-statwidget":{
         "type": "js",
         "closure_deps": "js/closure-stat-dependencies.js",

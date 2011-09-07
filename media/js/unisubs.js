@@ -25,6 +25,9 @@ goog.provide('unisubs');
  */
 unisubs.REPORT_ANALYTICS = true;
 
+/**
+ * @define {boolean}
+ */
 unisubs.STREAMER = false;
 
 unisubs.usingStreamer = function() {

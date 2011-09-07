@@ -39,3 +39,7 @@ unisubs.streamer.StreamSub.SUBRE_ = /usub\-(\w+)\-(\w+)/;
 unisubs.streamer.StreamSub.prototype.display = function(displayed) {
     goog.dom.classes.enable(this.span_, 'unisubs-sub-current', displayed);
 };
+
+unisubs.streamer.StreamSub.prototype.getSpan = function() {
+    return this.span_;
+};

@@ -19,6 +19,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from videos import models
+from django.conf import settings
 
 def youtubedemo(request):
     v, created = models.Video.get_or_create_for_url(
@@ -26,6 +27,7 @@ def youtubedemo(request):
     subs = v.subtitles()
     return render_to_response(
         'streamer/youtubedemo.html',
-        { 'videoid': v.video_id,
+        { 'js_use_compiled': settings.COMPRESS_MEDIA,
+          'videoid': v.video_id,
           'subs': subs },
         context_instance=RequestContext(request))

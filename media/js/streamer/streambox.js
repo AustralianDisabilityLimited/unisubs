@@ -27,6 +27,9 @@ unisubs.streamer.StreamBox = function() {
 };
 
 unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
+    this.elem_ = elem;
+    this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
+        'div', 'unisubs-transcript', elem)[0];
     var subSpans = goog.dom.getElementsByTagNameAndClass(
         'span', 'unisubs-sub', elem);
     var subs = goog.array.map(
@@ -55,5 +58,6 @@ unisubs.streamer.StreamBox.prototype.displaySub = function(subtitleID) {
 };
 
 unisubs.streamer.StreamBox.prototype.scrollIntoView_ = function(streamSub) {
-    
+    goog.style.scrollIntoContainerView(
+        streamSub.getSpan(), this.transcriptElem_, true);
 };

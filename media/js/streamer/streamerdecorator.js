@@ -26,7 +26,9 @@ goog.provide('unisubs.streamer.StreamerDecorator');
 unisubs.streamer.StreamerDecorator = function(videoPlayer) {
     var streamBox = new unisubs.streamer.StreamBox();
     var videoElem = videoPlayer.getElement();
-    var captionBoxElem = goog.dom.getNextElementSibling(videoElem);
+    // TODO: walk dom to get this in the future in case there's more than one per page.
+    var captionBoxElem = goog.dom.getElementsByTagNameAndClass(
+        'div', 'unisubs-substreamer')[0];
     streamBox.decorate(captionBoxElem);
     this.controller_ = new unisubs.streamer.StreamerController(
         videoPlayer, streamBox);

@@ -41,5 +41,5 @@ unisubs.streamer.StreamerController.prototype.initializeState = function(result)
 
 unisubs.streamer.StreamerController.prototype.captionReached_ = function(event) {
     var c = event.caption;
-    this.streamBox_.displaySub(c.getCaptionID());
+    this.streamBox_.displaySub(c ? c.getCaptionID() : null);
 };

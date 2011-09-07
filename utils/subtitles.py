@@ -169,7 +169,7 @@ class YoutubeXMLParser(SubtitleParser):
         output = {}
         output['start_time'] = float(item.get('start'))
         output['end_time'] = output['start_time'] + float(item.get('dur'))
-        output['subtitle_text'] = unescape_html(item.text)
+        output['subtitle_text'] = item.text and unescape_html(item.text) or u''
         return output
         
 class YoutubeSubtitleParser(SubtitleParser):

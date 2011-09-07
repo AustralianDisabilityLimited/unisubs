@@ -37,10 +37,16 @@ unisubs.widget.SavedSubtitles = function(sessionPK, captionSet) {
 };
 
 unisubs.widget.SavedSubtitles.STORAGEKEY_ = '_unisubs_work';
+unisubs.widget.SavedSubtitles.VERSION_ = 1;
 
 unisubs.widget.SavedSubtitles.prototype.serialize = function() {
+    // Important note: if you ever change these serialized fields, also
+    // change unisubs.widget.SavedSubtitles.VERSION_.
+    // That way new releases won't break saved subs in users' 
+    // browsers -- it will simply invalidate them.
     return goog.json.serialize(
-        { 'sessionPK': this.SESSION_PK,
+        { 'version': unisubs.widget.SavedSubtitles.VERSION_,
+          'sessionPK': this.SESSION_PK,
           'title': this.CAPTION_SET.title,
           'isComplete': this.CAPTION_SET.completed,
           'forked': this.CAPTION_SET.wasForkedDuringEdits(),
@@ -49,11 +55,17 @@ unisubs.widget.SavedSubtitles.prototype.serialize = function() {
 
 unisubs.widget.SavedSubtitles.deserialize = function(json) {
     var obj = goog.json.parse(json);
-    return new unisubs.widget.SavedSubtitles(
-        obj['sessionPK'], 
-        new unisubs.subtitle.EditableCaptionSet(
-            obj['captionSet'], obj['isComplete'], obj['title'], 
-            obj['forked']));
+    if (goog.isDefAndNotNull(obj['version']) &&
+        obj['version'] == unisubs.widget.SavedSubtitles.VERSION_) {
+        return new unisubs.widget.SavedSubtitles(
+            obj['sessionPK'], 
+            new unisubs.subtitle.EditableCaptionSet(
+                obj['captionSet'], obj['isComplete'], obj['title'], 
+                obj['forked']));
+    }
+    else {
+        return null;
+    }
 };
 
 unisubs.widget.SavedSubtitles.saveInitial = function(savedSubs) {

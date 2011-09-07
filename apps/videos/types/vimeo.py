@@ -48,7 +48,7 @@ class VimeoVideoType(VideoType):
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://vimeo.com/%s' % obj.videoid
+        return 'http://vimeo.com/%s' % obj.video_id
     
     @classmethod
     def matches_video_url(cls, url):

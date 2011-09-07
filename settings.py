@@ -306,8 +306,13 @@ JS_WIDGETIZER_CORE.extend([
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
 
-JS_STREAMER = list(JS_WIDGETIZER)
-JS_STREAMER.append('js/streamer/streamerdecorator.js')
+JS_STREAMER = list(JS_WIDGETIZER_CORE)
+JS_STREAMER.extend([
+        'js/streamer/streamerdecorator.js', 
+        'js/streamer/streamercontroller.js', 
+        'js/streamer/streambox.js', 
+        'js/streamer/streamsub.js', 
+        'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
 JS_EXTENSION.append('js/widgetizer/extension.js')

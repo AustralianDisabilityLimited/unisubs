@@ -23,7 +23,7 @@ goog.provide('unisubs.streamer.StreamSub');
  */
 unisubs.streamer.StreamSub = function(span) {
     this.span_ = span;
-    var match = unisubs.streamer.StreamSub.SUBRE_.match(span.id);
+    var match = unisubs.streamer.StreamSub.SUBRE_.exec(span.id);
     /**
      * @const
      */
@@ -36,3 +36,6 @@ unisubs.streamer.StreamSub = function(span) {
 
 unisubs.streamer.StreamSub.SUBRE_ = /usub\-(\w+)\-(\w+)/;
 
+unisubs.streamer.StreamSub.prototype.display = function(displayed) {
+    goog.dom.classes.enable(this.span_, 'unisubs-sub-current', displayed);
+};

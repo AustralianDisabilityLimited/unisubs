@@ -37,6 +37,10 @@ unisubs.widget.WidgetDecorator = function(videoPlayer) {
             this.videoPlayer_,
             unisubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
             this.videoDimensionsKnown_);
+    this.controller_ = new unisubs.widget.WidgetController(
+        this.videoPlayer_.getVideoSource().getVideoURL(),
+        this.videoPlayer_,
+        this.videoTab_);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': unisubs.isFromDifferentDomain()
@@ -45,10 +49,6 @@ unisubs.widget.WidgetDecorator = function(videoPlayer) {
         unisubs.video.Html5VideoSource)
         args['additional_video_urls'] = 
             this.videoPlayer_.getVideoSource().getAlternateURLs();
-    this.controller_ = new unisubs.widget.WidgetController(
-        this.videoPlayer_.getVideoSource().getVideoURL(),
-        this.videoPlayer_,
-        this.videoTab_);
     unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.controller_.initializeState, 

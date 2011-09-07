@@ -27,6 +27,15 @@ unisubs.REPORT_ANALYTICS = true;
 
 unisubs.STREAMER = false;
 
+unisubs.usingStreamer = function() {
+    if (goog.DEBUG) {
+        return !!window.UNISUBS_STREAMER;
+    }
+    else {
+        return unisubs.STREAMER;
+    }
+};
+
 /**
  * If a widget is embedded in a different domain, this is set by
  * unisubs.widget.CrossDomainEmbed. It has two properties: siteURL

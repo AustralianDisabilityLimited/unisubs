@@ -31,7 +31,7 @@ unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
         'span', 'unisubs-sub', elem);
     var subs = goog.array.map(
         subSpans, function(s) { 
-            return unisubs.streamer.StreamSub(s); 
+            return new unisubs.streamer.StreamSub(s); 
         });
     this.subMap_ = new goog.structs.Map();
     goog.array.forEach(subs, function(s) { 

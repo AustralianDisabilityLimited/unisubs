@@ -24,7 +24,19 @@ goog.provide('unisubs.streamer.StreamerDecorator');
  * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
  */
 unisubs.streamer.StreamerDecorator = function(videoPlayer) {
-    
+    var streamBox = new unisubs.streamer.StreamBox();
+    var videoElem = videoPlayer.getElement();
+    var captionBoxElem = goog.dom.getNextElementSibling(videoElem);
+    streamBox.decorate(captionBoxElem);
+    this.controller_ = new unisubs.streamer.StreamerController(
+        videoPlayer, streamBox);
+    var args = {
+        'video_url': videoPlayer.getVideoSource().getVideoURL(),
+        'is_remote': unisubs.isFromDifferentDomain()
+    };
+    unisubs.Rpc.call(
+        'show_widget', args,
+        goog.bind(this.controller_.initializeState, this.controller_));
 };
 
 /**

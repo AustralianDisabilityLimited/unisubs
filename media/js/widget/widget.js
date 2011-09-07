@@ -65,7 +65,6 @@ unisubs.widget.Widget.prototype.createDom = function() {
  */
 unisubs.widget.Widget.widgetsCreated_ = [];
 
-
 /* Gets all widgets created on this page.
  * @return {Array} All widgets created on this page.
  * The array is cloned, so end user code can loop, filter and otherwise 

@@ -88,7 +88,7 @@ unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
                           ' new video players on the page');
     }
     for (var i = 0; i < videoPlayers.length; i++) {
-        if (unisubs.STREAMER) {
+        if (unisubs.usingStreamer()) {
             unisubs.streamer.StreamerDecorator.decorate(videoPlayers[i]);
         }
         else {

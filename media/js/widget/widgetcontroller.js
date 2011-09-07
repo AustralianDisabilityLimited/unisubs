@@ -46,7 +46,7 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
     unisubs.widget.WidgetController.makeGeneralSettings(result);
 
     var videoID = result['video_id'];
-     
+
     if (videoID){
         this.videoTab_.createShareButton(
             new goog.Uri(unisubs.getSubtitleHomepageURL(videoID)), false);

@@ -28,6 +28,7 @@ unisubs.widget.ResumeEditingRecord = function(videoID, sessionPK, openDialogArgs
 };
 
 unisubs.widget.ResumeEditingRecord.STORAGE_KEY_ = "_unisubs_editing";
+unisubs.widget.ResumeEditingRecord.VERSION_ = 1;
 
 unisubs.widget.ResumeEditingRecord.prototype.getVideoID = function() {
     return this.videoID_;
@@ -43,9 +44,14 @@ unisubs.widget.ResumeEditingRecord.prototype.matches = function(videoID, openDia
 };
 
 unisubs.widget.ResumeEditingRecord.prototype.save = function() {
+    // Important note: if you ever change these serialized fields, also
+    // change unisubs.widget.ResumeEditingRecord.VERSION_.
+    // That way new releases won't break saved subs in users' 
+    // browsers -- it will simply invalidate them.
     unisubs.saveInLocalStorage(
         unisubs.widget.ResumeEditingRecord.STORAGE_KEY_,
         goog.json.serialize({
+            'version': unisubs.widget.ResumeEditingRecord.VERSION_,
             'videoID': this.videoID_,
             'sessionPK': this.sessionPK_,
             'openDialogArgs': this.openDialogArgs_.toObject()
@@ -74,12 +80,19 @@ unisubs.widget.ResumeEditingRecord.fetch = function() {
         unisubs.widget.ResumeEditingRecord.STORAGE_KEY_);
     if (jsonText) {
         var obj = goog.json.parse(jsonText);
-        return new unisubs.widget.ResumeEditingRecord(
-            obj['videoID'],
-            obj['sessionPK'], 
-            unisubs.widget.OpenDialogArgs.fromObject(
-                obj['openDialogArgs']));
+        if (goog.isDefAndNotNull(obj['version']) &&
+            obj['version'] == unisubs.widget.ResumeEditingRecord.VERSION_) {
+            return new unisubs.widget.ResumeEditingRecord(
+                obj['videoID'],
+                obj['sessionPK'], 
+                unisubs.widget.OpenDialogArgs.fromObject(
+                    obj['openDialogArgs']));
+        }
+        else {
+            return null;
+        }
     }
-    else
+    else {
         return null;
+    }
 };

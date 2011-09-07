@@ -113,7 +113,7 @@ jQuery(function($){
 {% endblock  %}
 </head>
 <body {% block body_attrs %}{% endblock %}>
-  
+{% csrf_token %}
 {% block feedback-button %}
   <a href="https://universalsubtitles.tenderapp.com/" class="feedback_tab" target="_blank">{% trans "Feedback" %}</a>
 {% endblock %}

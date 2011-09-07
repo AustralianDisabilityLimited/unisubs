@@ -138,6 +138,10 @@ class YoutubeVideoType(VideoType):
 
     @classmethod    
     def video_url(cls, obj):
+        """
+        This method can be called with wither a VideoType object or
+        an actual VideoURL object, therefore the if statement
+        """
         if obj.videoid:
             return 'http://www.youtube.com/watch?v=%s' % obj.videoid
         else:

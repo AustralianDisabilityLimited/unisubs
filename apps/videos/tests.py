@@ -1855,26 +1855,35 @@ class TestVideoForm(TestCase):
         self.youtube_urls = ("http://youtu.be/HaAVZ2yXDBo", "http://www.youtube.com/watch?v=HaAVZ2yXDBo")
         self.html5_urls = ("http://blip.tv/file/get/Miropcf-AboutUniversalSubtitles715.mp4",)
         self.daily_motion_urls = ("http://www.dailymotion.com/video/xb0hsu_qu-est-ce-que-l-apache-software-fou_tech",)
-        
-    def test_youtube_urls(self):
-        for url in self.youtube_urls:
+
+    def _test_urls(self, urls):
+        for url in urls:
             form = VideoForm(data={"video_url":url})
             self.assertTrue(form.is_valid())
+            video = form.save()
+            video_type = video_type_registrar.video_type_for_url(url)
+            # double check we never confuse video_id with video.id with videoid, sigh
+            model_url = video.get_video_url()
+            if hasattr(video_type, "videoid"):
+                self.assertTrue(video_type.videoid  in model_url)
+            # check the pk is never on any of the urls parts
+            for part in model_url.split("/"):
+                self.assertTrue(str(video.pk)  != part)
+            self.assertTrue(video.video_id  not in model_url)
+            
+            self.assertTrue(Video.objects.filter(videourl__url=model_url).exists())
+
+    def test_youtube_urls(self):        
+        self._test_urls(self.youtube_urls)
 
     def test_vimeo_urls(self):
-        for url in self.vimeo_urls:
-            form = VideoForm(data={"video_url":url})
-            self.assertTrue(form.is_valid())        
+        self._test_urls(self.vimeo_urls)
 
     def test_html5_urls(self):
-        for url in self.html5_urls:
-            form = VideoForm(data={"video_url":url})
-            self.assertTrue(form.is_valid())
+        self._test_urls(self.html5_urls)
 
     def test_dailymotion_urls(self):
-        for url in self.daily_motion_urls:
-            form = VideoForm(data={"video_url":url})
-            self.assertTrue(form.is_valid())            
+        self._test_urls(self.daily_motion_urls)
             
 from videos.feed_parser import FeedParser
 

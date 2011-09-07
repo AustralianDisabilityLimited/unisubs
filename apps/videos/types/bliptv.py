@@ -28,7 +28,7 @@ class BlipTvVideoType(VideoType):
     
     def __init__(self, url):
         self.url = url
-        self.file_id = self._get_file_id(url)
+        self.videoid  = self.file_id = self._get_file_id(url)
         self.shortmem = blip.get_shortmem(url)
     
     @property

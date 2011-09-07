@@ -33,7 +33,7 @@ class VimeoVideoType(VideoType):
     
     def __init__(self, url):
         self.url = url
-        self.id = self._get_vimeo_id(url)
+        self.videoid = self._get_vimeo_id(url)
         try:
             self.shortmem = vimeo.get_shortmem(url)
         except VidscraperError, e:
@@ -41,21 +41,28 @@ class VimeoVideoType(VideoType):
         
     @property
     def video_id(self):
-        return self.id
+        return self.videoid
     
     def convert_to_video_url(self):
-        return 'http://vimeo.com/%s' % self.id
+        return 'http://vimeo.com/%s' % self.videoid
 
     @classmethod    
     def video_url(cls, obj):
-        return 'http://vimeo.com/%s' % obj.video_id
+        """
+        This method can be called with wither a VideoType object or
+        an actual VideoURL object, therefore the if statement
+        """
+        if obj.videoid:
+            return 'http://vimeo.com/%s' % obj.videoid
+        else:
+            return obj.url
     
     @classmethod
     def matches_video_url(cls, url):
         return bool(vimeo.VIMEO_REGEX.match(url))
 
     def create_kwars(self):
-        return { 'videoid': self.id }
+        return { 'videoid': self.videoid }
     
     def set_values(self, video_obj):
         if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:

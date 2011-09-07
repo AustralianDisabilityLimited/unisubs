@@ -28,7 +28,7 @@ unisubs.streamer.StreamBox = function() {
 
 unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
     var subSpans = goog.dom.getElementsByTagNameAndClass(
-        'span', 'USsub', elem);
+        'span', 'unisubs-sub', elem);
     var subs = goog.array.map(
         subSpans, function(s) { 
             return unisubs.streamer.StreamSub(s); 

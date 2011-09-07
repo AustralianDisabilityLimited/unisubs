@@ -87,8 +87,14 @@ unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
         this.logger_.info('found ' + videoPlayers.length + 
                           ' new video players on the page');
     }
-    for (var i = 0; i < videoPlayers.length; i++)
-        unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
+    for (var i = 0; i < videoPlayers.length; i++) {
+        if (unisubs.STREAMER) {
+            unisubs.streamer.StreamerDecorator.decorate(videoPlayers[i]);
+        }
+        else {
+            unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
+        }
+    }
 };
 
 unisubs.Widgetizer.prototype.addHeadCss = function() {

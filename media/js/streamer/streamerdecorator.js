@@ -16,23 +16,22 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.streamer.StreamSub');
+goog.provide('unisubs.streamer.StreamerDecorator');
 
 /**
+ * @private
  * @constructor
+ * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
  */
-unisubs.streamer.StreamSub = function(span) {
-    this.span_ = span;
-    var match = unisubs.streamer.StreamSub.SUBRE_.match(span.id);
-    /**
-     * @const
-     */
-    this.VIDEO_ID = match[1];
-    /**
-     * @const
-     */
-    this.SUBTITLE_ID = match[2];
+unisubs.streamer.StreamerDecorator = function(videoPlayer) {
+    
 };
 
-unisubs.streamer.StreamSub.SUBRE_ = /usub\-(\w+)\-(\w+)/;
-
+/**
+ *
+ * @param {unisubs.video.AbstractVideoPlayer} videoPlayer should already
+ *     be attached to page.
+ */
+unisubs.streamer.StreamerDecorator.decorate = function(videoPlayer) {
+    return new unisubs.streamer.StreamerDecorator(videoPlayer);
+};

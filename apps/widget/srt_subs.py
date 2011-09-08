@@ -137,6 +137,8 @@ class MGSubtitles(BaseSubtitles):
 
         return u''.join(output)
 
+GenerateSubtitlesHandler.register(MGSubtitles)
+
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
 

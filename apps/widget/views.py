@@ -219,15 +219,13 @@ def download_subtitles(request, handler=SSASubtitles):
     
     video = get_object_or_404(models.Video, video_id=video_id)
     
-    subtitles = []
     if not lang_id:
         # if no language is passed, assume it's the original one
-        language  = video.subtitle_language()
+        language = video.subtitle_language()
     else:    
         try:
             language = video.subtitlelanguage_set.get(pk=lang_id)
         except ObjectDoesNotExist:
-
             raise Http404
     
     version = language and language.version()

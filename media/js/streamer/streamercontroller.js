@@ -18,7 +18,9 @@
 
 goog.provide('unisubs.streamer.StreamerController');
 
-
+/**
+ * @constructor
+ */
 unisubs.streamer.StreamerController = function(videoPlayer, streamBox) {
     this.videoPlayer_ = videoPlayer;
     this.streamBox_ = streamBox;

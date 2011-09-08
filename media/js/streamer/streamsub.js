@@ -23,6 +23,7 @@ goog.provide('unisubs.streamer.StreamSub');
  */
 unisubs.streamer.StreamSub = function(span) {
     this.span_ = span;
+    this.html_ = span.innerHTML;
     var match = unisubs.streamer.StreamSub.SUBRE_.exec(span.id);
     /**
      * @const
@@ -42,4 +43,8 @@ unisubs.streamer.StreamSub.prototype.display = function(displayed) {
 
 unisubs.streamer.StreamSub.prototype.getSpan = function() {
     return this.span_;
+};
+
+unisubs.streamer.StreamSub.prototype.reset = function() {
+    this.span_.innerHTML = this.html_;
 };

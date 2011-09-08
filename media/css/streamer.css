@@ -90,3 +90,7 @@
 .unisubs-transcript .unisubs-search {
    background-color: #f66;
 }
+
+.unisubs-transcript .highlighted {
+   background-color: #fcc;
+}

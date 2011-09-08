@@ -22,9 +22,11 @@ goog.provide('unisubs.streamer.StreamBox');
  * @constructor
  */
 unisubs.streamer.StreamBox = function() {
+    goog.events.EventTarget.call(this);
     this.subMap_ = null;
     this.displayedSub_ = null;
 };
+goog.inherits(unisubs.streamer.StreamBox, goog.events.EventTarget);
 
 unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
     this.elem_ = elem;
@@ -45,6 +47,7 @@ unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
         });
     this.subMap_ = new goog.structs.Map();
     goog.array.forEach(this.subs_, function(s) { 
+        s.setParentEventTarget(this);
         this.subMap_.set(s.SUBTITLE_ID, s); 
     }, this);
 };

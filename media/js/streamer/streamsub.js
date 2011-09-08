@@ -22,6 +22,7 @@ goog.provide('unisubs.streamer.StreamSub');
  * @constructor
  */
 unisubs.streamer.StreamSub = function(span) {
+    goog.events.EventTarget.call(this);
     this.span_ = span;
     this.html_ = span.innerHTML;
     var match = unisubs.streamer.StreamSub.SUBRE_.exec(span.id);
@@ -33,8 +34,24 @@ unisubs.streamer.StreamSub = function(span) {
      * @const
      */
     this.SUBTITLE_ID = match[2];
+    goog.events.listen(
+        this.span_,
+        goog.events.EventType.MOUSEOVER,
+        goog.bind(this.mouseover_, this));
+    goog.events.listen(
+        this.span_,
+        goog.events.EventType.MOUSEOUT,
+        goog.bind(this.mouseout_, this));
+    goog.events.listen(
+        this.span_,
+        goog.events.EventType.CLICK,
+        goog.bind(this.click_, this));
 };
+goog.inherits(unisubs.streamer.StreamSub, goog.events.EventTarget);
 
+unisubs.streamer.StreamSub.SUB_CLICKED = 'subclicked';
+
+unisubs.streamer.StreamSub.highlighted_ = null;
 unisubs.streamer.StreamSub.SUBRE_ = /usub\-(\w+)\-(\w+)/;
 
 unisubs.streamer.StreamSub.prototype.display = function(displayed) {
@@ -47,4 +64,33 @@ unisubs.streamer.StreamSub.prototype.getSpan = function() {
 
 unisubs.streamer.StreamSub.prototype.reset = function() {
     this.span_.innerHTML = this.html_;
+};
+
+unisubs.streamer.StreamSub.prototype.mouseover_ = function(e) {
+    if (goog.dom.contains(this.span_, e.target) &&
+        !goog.dom.contains(this.span_, e.relatedTarget)) {
+        if (unisubs.streamer.StreamSub.highlighted_ && 
+            this != unisubs.streamer.StreamSub.highlighted_) {
+            goog.dom.classes.remove(
+                unisubs.streamer.StreamSub.highlighted_.getSpan(),
+                'highlighted');
+            unisubs.streamer.StreamSub.highlighted_ = null;
+        }
+        unisubs.streamer.StreamSub.highlighted_ = this;
+        goog.dom.classes.add(this.getSpan(), 'highlighted');
+    }
+};
+
+unisubs.streamer.StreamSub.prototype.mouseout_ = function(e) {
+    if (goog.dom.contains(this.span_, e.target) &&
+        e.relatedTarget &&
+        !goog.dom.contains(this.span_, e.relatedTarget) &&
+        this == unisubs.streamer.StreamSub.highlighted_) {
+        goog.dom.classes.remove(this.getSpan(), 'highlighted');
+        unisubs.streamer.StreamSub.highlighted_ = null;
+    }
+};
+
+unisubs.streamer.StreamSub.prototype.click_ = function(e) {
+    this.dispatchEvent(unisubs.streamer.StreamSub.SUB_CLICKED);
 };

@@ -89,7 +89,7 @@ def unisubs(username):
                                         'pcf-us-cluster2.pculture.org:2191'],
                 s3_bucket             = 's3.www.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles',
-                static_dir            = 'static/production',
+                static_dir            = '/var/static/production',
                 name                  =  None,
                 memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
                 admin_dir             = '/usr/local/universalsubtitles',

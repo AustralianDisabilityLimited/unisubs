@@ -462,6 +462,7 @@ INSTALLED_APPS = (
     'unisubs_compressor',
     'subrequests',
     'doorman',
+    'icanhaz',
     'unisubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 

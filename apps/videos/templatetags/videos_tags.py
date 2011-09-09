@@ -68,3 +68,32 @@ def title_for_video(video, language=None):
     else:
         return "%s  with %s subtitles | Universal Subtitles " % (language.get_title_display() , language.get_language_display())
         
+from django.template.defaulttags import URLNode
+class VideoURLNode(URLNode):
+    def render(self, video, request):
+        if self.asvar:  
+            context[self.asvar]= urlparse.urljoin(domain, context[self.asvar])  
+            return ''  
+        else:  
+            return urlparse.urljoin(domain, path)
+        path = super(AbsoluteURLNode, self).render(context)
+        
+        return urlparse.urljoin(domain, path)
+
+def video_url(parser, token, node_cls=VideoURLNode):
+    """
+    Does the logic to decide if a video must have a secret url passed into it or not.
+    If video must be acceceed thourgh private url, the 40chars hash are inserted instead
+    of the video_id.
+    """
+    bits = token.split_contents()
+    print "token", token
+    print "bits", bits
+    node_instance = url(parser, token)
+    return node_cls(view_name=node_instance.view_name,
+        args=node_instance.args,
+        kwargs=node_instance.kwargs,
+        asvar=node_instance.asvar)
+video_url = register.tag(video_url)
+
+

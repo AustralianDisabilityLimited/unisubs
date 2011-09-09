@@ -16,11 +16,14 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+import re
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
+from django.core.exceptions import SuspiciousOperation
+from django.utils.functional import  wraps
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion,  \
     VideoUrl, AlreadyEditingException
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
@@ -56,7 +59,7 @@ from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
-
+from icanhaz.models import VideoVisibilityPolicy
 from apps.teams.moderation import user_can_moderate, get_pending_count
 
 rpc_router = RpcRouter('videos:rpc_router', {
@@ -190,7 +193,51 @@ def create_from_feed(request):
 
 create_from_feed.csrf_exempt = True
 
-def video(request, video_id, video_url=None, title=None):
+
+
+SHA1_RE = re.compile('^[a-f0-9]{40}$')
+def _get_video_from_code(func):
+    def wrapper(request, video_id, *args, **kwargs):
+        # check if this is a a sha1 hash
+        if SHA1_RE.search(video_id):
+            # secret, find the url for this
+            video = VideoVisibilityPolicy.objects.video_for_user(video_id)
+            if not video:
+                raise SuspiciousOperation("You cannot see this video")
+        else:
+            video = get_object_or_404(Video, video_id=video_id)
+        return func(request, video, *args, **kwargs)
+    return wraps(func)(wrapper)
+
+def _get_video_revision(func):
+    def auth_video_id(request, video_id):
+        video = VideoVisibilityPolicy.objects.video_for_user(
+            request.user,
+            video_id)
+        if not video:
+            raise SuspiciousOperation("You cannot see this video")
+        return video
+    
+    def wrapper(request, video_id=None,pk=None, *args, **kwargs):
+        version = get_object_or_404(SubtitleVersion, pk=pk)
+
+        if video_id:
+            # check if this is a a sha1 hash
+            if SHA1_RE.search(video_id):
+                # secret, check for authorization
+                video = auth_video_id(request, video_id)
+            else:
+                video = get_object_or_404(Video, video_id=version.video.video_id)
+        else:
+            # no video, old legacy format for public urls, see if
+            # user can access
+            video = auth_video_id(request, version.video.video_id)
+            
+        return func(request, version, *args, **kwargs)
+    return wraps(func)(wrapper)
+
+@_get_video_revision
+def video(request, video, video_url=None, title=None):
     video = get_object_or_404(Video, video_id=video_id)
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
@@ -226,6 +273,7 @@ def video(request, video_id, video_url=None, title=None):
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
+
 def video_list(request):
     qs = Video.objects.filter(is_subtitled=True)
     ordering = request.GET.get('o')
@@ -244,6 +292,7 @@ def video_list(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
+@_get_video_revision
 def actions_list(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     qs = Action.objects.filter(video=video)
@@ -359,14 +408,14 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def legacy_history(request ,video_id, lang=None):
+@_get_video_from_code
+def legacy_history(request ,video, lang=None):
     """
     In the old days we allowed only one translation per video.
     Therefore video urls looked like /vfjdh2/en/
     Now that this constraint is removed we need to redirect old urls
     to the new view, that needs 
     """
-    video = get_object_or_404(Video, video_id=video_id)
     try:
         language = video.subtitle_language(lang)
         if language is None:
@@ -379,9 +428,9 @@ def legacy_history(request ,video_id, lang=None):
             'lang_id': language.pk,
             'lang': language.language,
             }))
-    
-def history(request, video_id, lang=None, lang_id=None):
-    video = get_object_or_404(Video, video_id=video_id)
+
+@_get_video_from_code
+def history(request, video, lang=None, lang_id=None):
     video.update_view_counter()
 
     context = widget.add_onsite_js_files({})
@@ -463,8 +512,9 @@ def _widget_params(request, video, version_no=None, language=None, video_url=Non
 
     return base_widget_params(request, params)
 
-def revision(request, pk):
-    version = get_object_or_404(SubtitleVersion, pk=pk)
+@_get_video_revision
+def revision(request,  version):
+ 
     context = widget.add_onsite_js_files({})
     context['video'] = version.video
     context['version'] = version
@@ -482,8 +532,9 @@ def revision(request, pk):
                               context_instance=RequestContext(request))     
     
 @login_required
-def rollback(request, pk):
-    version = get_object_or_404(SubtitleVersion, pk=pk)
+@_get_video_revision
+def rollback(request, version):
+
     is_writelocked = version.language.is_writelocked
     if is_writelocked:
         messages.error(request, u'Can not rollback now, because someone is editing subtitles.')
@@ -496,11 +547,13 @@ def rollback(request, pk):
         return redirect(version.language.get_absolute_url()+'#revisions')
     return redirect(version)
 
-def diffing(request, first_pk, second_pk):
-    first_version = get_object_or_404(SubtitleVersion, pk=first_pk)
+@_get_video_revision
+def diffing(request, first_version, second_pk):
     language = first_version.language
     second_version = get_object_or_404(SubtitleVersion, pk=second_pk, language=language)
-    
+    if first_version.version != second_version.video:
+        # this is either a bad bug, or someone evil
+        raise "Revisions for diff videos"
     video = first_version.language.video
     if second_version.datetime_started > first_version.datetime_started:
         first_version, second_version = second_version, first_version
@@ -723,3 +776,4 @@ def reset_metadata(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video_changed_tasks.delay(video.id)
     return HttpResponse('ok')
+

@@ -190,6 +190,11 @@ class Team(models.Model):
         if not user.is_authenticated():
             return False
         return self.can_add_video(user)
+
+    def can_see_video(self, user, team_video=None):
+        if not user.is_authenticated():
+            return False
+        return self.is_member(user)
     
     def can_add_video(self, user):
         if not user.is_authenticated():

@@ -404,26 +404,26 @@ def test_services():
 def test_memcached():
     print '=== TEST MEMCACHED ==='
     alphanum = string.letters+string.digits
-    host_set = set(env.web_hosts)
+    host_set = set([(h, env.web_dir,) for h in env.web_hosts])
+    if env.admin_dir:
+        host_set.add((ADMIN_HOST, env.admin_dir,))
     for host in host_set:
         random_string = ''.join(
             [alphanum[random.randint(0, len(alphanum)-1)] 
              for i in xrange(12)])
-        env.host_string = host
-        with cd(os.path.join(env.web_dir, 'unisubs')):
-            run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
-                env.web_dir,
+        env.host_string = host[0]
+        with cd(os.path.join(host[1], 'unisubs')):
+            run('../env/bin/python manage.py set_memcached {0} --settings=unisubs_settings'.format(
                 random_string))
         other_hosts = host_set - set([host])
         for other_host in other_hosts:
-            env.host_string = host
+            env.host_string = other_host[0]
             output = ''
-            with cd(os.path.join(env.web_dir, 'unisubs')):
-                output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
-                    env.web_dir))
+            with cd(os.path.join(other_host[1], 'unisubs')):
+                output = run('../env/bin/python manage.py get_memcached --settings=unisubs_settings')
             if output.find(random_string) == -1:
                 raise Exception('Machines {0} and {1} are using different memcached instances'.format(
-                        host, other_host))
+                        host[0], other_host[0]))
 
 def generate_docs():
     env.host_string = DEV_HOST

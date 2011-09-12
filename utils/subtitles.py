@@ -288,7 +288,47 @@ class TtmlSubtitleParser(SubtitleParser):
     def _result_iter(self):
         for item in self.nodes:
             yield self._get_data(item)
+
+class DfxpSubtitleParser(SubtitleParser):
+    
+    def __init__(self, subtitles):
+        try:
+            dom = parseString(subtitles.encode('utf8'))
+            self.nodes = dom.getElementsByTagName('body')[0].getElementsByTagName('p')
+        except (ExpatError, IndexError):
+            raise SubtitleParserError('Incorrect format of TTML subtitles')
         
+    def __len__(self):
+        return len(self.nodes)
+    
+    def __nonzero__(self):
+        return bool(len(self.nodes))
+    
+    def _get_time(self, t):
+        try:
+            hour, min, sec = t.split(':')
+            
+            start = int(hour)*60*60 + int(min)*60 + float(sec)
+            if start > MAX_SUB_TIME:
+                return -1
+        except ValueError:
+            return -1
+        
+        return start
+        
+    def _get_data(self, node):
+        output = {
+            'subtitle_text': unescape_html(strip_tags(node.toxml()))
+        }        
+        output['start_time'] = self._get_time(node.getAttribute('begin'))
+        output['end_time'] = self._get_time(node.getAttribute('end'))
+        
+        return output
+        
+    def _result_iter(self):
+        for item in self.nodes:
+            yield self._get_data(item)
+
 class SrtSubtitleParser(SubtitleParser):
     _clean_pattern = re.compile(r'\{.*?\}', re.DOTALL)
     

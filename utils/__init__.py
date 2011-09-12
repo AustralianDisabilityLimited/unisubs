@@ -37,7 +37,8 @@ from django.conf import settings
 import re
 import htmllib
 from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, YoutubeSubtitleParser, \
-    TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser, YoutubeXMLParser
+    TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser, YoutubeXMLParser, \
+    DfxpSubtitleParser
 import traceback, sys
 from django.contrib.auth.decorators import user_passes_test
 import inspect

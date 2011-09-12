@@ -1,6 +1,7 @@
 #services {
   position: relative;
   width: 770px;
+  min-height: 850px;
 }
 
 #services h1 {

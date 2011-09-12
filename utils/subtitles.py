@@ -162,13 +162,20 @@ class YoutubeXMLParser(SubtitleParser):
         return bool(self.subtitles)
     
     def _result_iter(self):
-        for item in self.subtitles:
-            yield self._get_data(item)
+        for i, item in enumerate(self.subtitles):
+            try:
+                yield self._get_data(item, self.subtitles[i+1])
+            except IndexError:
+                yield self._get_data(item)
 
-    def _get_data(self, item):
+    def _get_data(self, item, next_item=None):
         output = {}
         output['start_time'] = float(item.get('start'))
-        output['end_time'] = output['start_time'] + float(item.get('dur'))
+        if next_item is not None:
+            output['end_time'] = float(next_item.get('start'))
+        else:
+            output['end_time'] = -1
+
         output['subtitle_text'] = item.text and unescape_html(item.text) or u''
         return output
         

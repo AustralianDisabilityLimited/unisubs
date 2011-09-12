@@ -445,7 +445,7 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 invalid_feed = True
                 
             if invalid_feed:
-                    raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
+                raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 

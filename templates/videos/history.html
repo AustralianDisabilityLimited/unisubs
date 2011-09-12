@@ -209,10 +209,12 @@
             <div id="languages-tab">
                 <div class="hd">
                     <h2>
-                        {% if language.is_original and not language.language %}
-                            {% trans 'Original Language' %}
-                        {% else %}
-                            {{ language.get_language_display }}
+                        {{ language.get_language_display }}
+                        {% if language.is_original %}
+                            ({% trans 'original' %})
+                        {% endif %}
+                        {% if language.is_dependent %}
+                            ({% trans 'translated from' %} {{ language.standard_language }})
                         {% endif %}
                     </h2> 
                     <ul class="inline_tabs">

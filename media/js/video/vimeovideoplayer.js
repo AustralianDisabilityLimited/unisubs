@@ -157,7 +157,7 @@ unisubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
 };
 unisubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
-        this.player_['api_setVolume'](volume);
+        this.player_['api_setVolume'](volume * 100);
     }
     else
         this.commands_.push(goog.bind(this.setVolume, this, volume));
@@ -213,7 +213,6 @@ unisubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) 
         return;
 
     this.player_ = goog.dom.$(this.playerElemID_);
-    this.setVolume(0.5);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(cmd) { cmd(); });
     this.commands_ = [];

@@ -433,11 +433,18 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 if len(self.video_types) >= self.VIDEOS_LIMIT:
                     self.video_limit_routreach = True
                     break  
-
-            if feed_parser.feed.version:
+            
+            invalid_feed = False
+            
+            if hasattr(feed_parser, 'version') and feed_parser.feed.version:
                 try:
                     self.feed_urls.append((url, entry and entry['link']))
                 except KeyError:
+                    invalid_feed = True
+            else:
+                invalid_feed = True
+                
+            if invalid_feed:
                     raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 
         except FeedParserError, e:

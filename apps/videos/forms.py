@@ -436,14 +436,14 @@ class AddFromFeedForm(forms.Form, AjaxForm):
             
             invalid_feed = False
             
-            if hasattr(feed_parser, 'version') and feed_parser.feed.version:
+            if hasattr(feed_parser.feed, 'version') and feed_parser.feed.version:
                 try:
                     self.feed_urls.append((url, entry and entry['link']))
                 except KeyError:
                     invalid_feed = True
             else:
                 invalid_feed = True
-                
+
             if invalid_feed:
                 raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 

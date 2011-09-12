@@ -21,6 +21,10 @@ body#watch h1 {
     text-shadow: 0 1px 0 #FFF;
 }
 
+body#watch #main_bar h1 {
+    margin: 0;
+}
+
 body#watch h1 a {
     text-decoration: none;
 }

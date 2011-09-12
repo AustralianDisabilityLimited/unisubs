@@ -6,7 +6,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/swfobject.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL_BASE }}js/closure-library/closure/goog/base.js"></script>
     <script>
-      goog.require('goog.Timer');
       goog.require('goog.debug.Logger');
       goog.require('goog.debug.DivConsole');
     </script>
@@ -15,8 +14,8 @@
 <div id="videodiv">
 </div>
 <div>
-  <input type="text" id="seconds" value="0"/>
-  <a href="#" onclick="seek(); return false;">seek</a>
+  <input type="text" id="volume" value="0"/>
+  <a href="#" onclick="setVolume(); return false;">set volume</a>
 </div>
  <!-- Event log. -->
  <fieldset class="goog-debug-panel">
@@ -33,17 +32,7 @@
 
   function vimeo_player_loaded(apiID) {
       logger.info('ready with api id ' + apiID);
-  console.log('what');
       var player = goog.dom.getElement('videodiv');
-  console.log('yes');
-      var timer = new goog.Timer(100);
-  console.log('timer');
-      goog.events.listen(timer, goog.Timer.TICK,
-          function() {
-              logger.info('current time: ' + player.api_getCurrentTime());
-          });
-     console.log(timer);
-     timer.start();
   }
 
   var params = {
@@ -56,11 +45,11 @@
   swfURL = 'http://vimeo.com/moogaloop.swf?js_api=1&width=480&height=360&clip_id=673565&js_swf_id=myswfid';
   swfobject.embedSWF(swfURL, 'videodiv', 480, 360, "8", null, null, params, atts);
 
-  function seek() {
-      var seconds = parseInt(goog.dom.$('seconds').value);
-      logger.info('seeking to ' + seconds);
+  function setVolume() {
+      var volume = parseFloat(goog.dom.getElement('volume').value);
+      logger.info('setting to ' + volume);
       var player = goog.dom.$('videodiv');
-      player.api_seekTo(seconds);
+      player.api_setVolume(volume);
   }
 
 </script>

@@ -16,51 +16,51 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.JWVideoPlayer');
+goog.provide('unisubs.player.JWVideoPlayer');
 
 /**
  * @constructor
- * @param {unisubs.video.YoutubeVideoSource} videoSource
+ * @param {unisubs.player.YoutubeVideoSource} videoSource
  */
-unisubs.video.JWVideoPlayer = function(videoSource) {
-    unisubs.video.FlashVideoPlayer.call(this, videoSource);
-    this.logger_ = goog.debug.Logger.getLogger('unisubs.video.JWPlayer');
+unisubs.player.JWVideoPlayer = function(videoSource) {
+    unisubs.player.FlashVideoPlayer.call(this, videoSource);
+    this.logger_ = goog.debug.Logger.getLogger('unisubs.player.JWPlayer');
     this.stateListener_ = 'jwevent' + unisubs.randomString();
     this.timeListener_ = 'jwtime' + unisubs.randomString();
     this.playheadTime_ = 0;
-    unisubs.video.JWVideoPlayer.players_.push(this);
+    unisubs.player.JWVideoPlayer.players_.push(this);
 };
-goog.inherits(unisubs.video.JWVideoPlayer, 
-              unisubs.video.FlashVideoPlayer);
+goog.inherits(unisubs.player.JWVideoPlayer, 
+              unisubs.player.FlashVideoPlayer);
 
-unisubs.video.JWVideoPlayer.players_ = [];
-unisubs.video.JWVideoPlayer.playerReadyCalled_ = false;
+unisubs.player.JWVideoPlayer.players_ = [];
+unisubs.player.JWVideoPlayer.playerReadyCalled_ = false;
 
-unisubs.video.JWVideoPlayer.prototype.onJWPlayerReady_ = function(elem) {
+unisubs.player.JWVideoPlayer.prototype.onJWPlayerReady_ = function(elem) {
     if (goog.DEBUG) {
         this.logger_.info('player ready');
     }
     this.tryDecoratingAll();
 };
 
-unisubs.video.JWVideoPlayer.prototype.decorateInternal = function(elem) {
-    unisubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
+unisubs.player.JWVideoPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.player.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.playerSize_ = goog.style.getSize(this.getElement());
     this.setDimensionsKnownInternal();
     if (goog.DEBUG) {
         this.logger_.info(
             "playerReadyCalled_: " +
-                unisubs.video.JWVideoPlayer.playerReadyCalled_);
+                unisubs.player.JWVideoPlayer.playerReadyCalled_);
     }
-    if (unisubs.video.JWVideoPlayer.playerReadyCalled_)
+    if (unisubs.player.JWVideoPlayer.playerReadyCalled_)
         this.onJWPlayerReady_();
 };
 
-unisubs.video.JWVideoPlayer.prototype.isFlashElementReady = function(elem) {
+unisubs.player.JWVideoPlayer.prototype.isFlashElementReady = function(elem) {
     return elem['addModelListener'];
 };
 
-unisubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) {
+unisubs.player.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) {
     this.player_ = element;
     this.playerSize_ = goog.style.getSize(this.player_);
     this.setDimensionsKnownInternal();
@@ -69,16 +69,16 @@ unisubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) 
     this.player_['addModelListener']('STATE', this.stateListener_);
     this.player_['addModelListener']('TIME', this.timeListener_);
 };
-unisubs.video.JWVideoPlayer.prototype.getVideoSize = function() {
+unisubs.player.JWVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
-unisubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
+unisubs.player.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
     var newState = data['newstate'];
     if (goog.DEBUG) {
         this.logger_.info('statechanged: ' + newState);
     }
-    var et = unisubs.video.AbstractVideoPlayer.EventType;
-    var s = unisubs.video.JWVideoPlayer.State_;
+    var et = unisubs.player.AbstractVideoPlayer.EventType;
+    var s = unisubs.player.JWVideoPlayer.State_;
     if (newState == s.PLAYING) {
         this.dispatchEvent(et.PLAY);
     } else if (newState == s.PAUSED) {
@@ -87,63 +87,63 @@ unisubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
         this.dispatchEndedEvent();
     }
 };
-unisubs.video.JWVideoPlayer.prototype.playerTimeChanged_ = function(data) {
+unisubs.player.JWVideoPlayer.prototype.playerTimeChanged_ = function(data) {
     this.playheadTime_ = data['position'];
     if (!this.duration_)
         this.duration_ = data['duration'];    
     this.dispatchEvent(
-        unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+        unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
-unisubs.video.JWVideoPlayer.prototype.exitDocument = function() {
-    unisubs.video.JWVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.player.JWVideoPlayer.prototype.exitDocument = function() {
+    unisubs.player.JWVideoPlayer.superClass_.exitDocument.call(this);
     this.player_['removeModelListener']('STATE', this.stateListener_);
     this.player_['removeModelListener']('TIME', this.timeListener_);
 };
-unisubs.video.JWVideoPlayer.prototype.getDuration = function() {
+unisubs.player.JWVideoPlayer.prototype.getDuration = function() {
     return this.duration_;
 };
-unisubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.isPausedInternal = function() {
     // TODO: write me
 };
-unisubs.video.JWVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.videoEndedInternal = function() {
     // TODO: write me
 };
-unisubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.isPausedInternal = function() {
     // TODO: write me
 };
-unisubs.video.JWVideoPlayer.prototype.playInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.playInternal = function() {
     this.sendEvent_('play', ['true']);
 };
-unisubs.video.JWVideoPlayer.prototype.pauseInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.pauseInternal = function() {
     this.sendEvent_('play', ['false']);
 };
-unisubs.video.JWVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: implement this for real.
     this.pause();
     if (goog.DEBUG) {
         this.logger_.info('stopLoadingInternal called');
     }
 };
-unisubs.video.JWVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.player.JWVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     // TODO: implement this for real at some point.
     if (goog.DEBUG) {
         this.logger_.info('resumeLoadingInternal called');
     }
 };
-unisubs.video.JWVideoPlayer.prototype.getPlayheadTime = function() {
+unisubs.player.JWVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime_;
 };
-unisubs.video.JWVideoPlayer.prototype.needsIFrame = function() {
+unisubs.player.JWVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
-unisubs.video.JWVideoPlayer.prototype.getVideoElement = function() {
+unisubs.player.JWVideoPlayer.prototype.getVideoElement = function() {
     return this.player_;
 };
-unisubs.video.JWVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.player.JWVideoPlayer.prototype.isPlayingInternal = function() {
     return this.player_['getConfig']()['state'] == 
-        unisubs.video.JWVideoPlayer.State_.PLAYING;
+        unisubs.player.JWVideoPlayer.State_.PLAYING;
 };
-unisubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
+unisubs.player.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     // TODO: prob check to see if this.player_ exists yet; if not, queue the
     // command.
     if (goog.DEBUG) {
@@ -154,14 +154,14 @@ unisubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     this.player_['sendEvent'].apply(this.player_, goog.array.concat(event, args));
 };
 
-unisubs.video.JWVideoPlayer.State_ = {
+unisubs.player.JWVideoPlayer.State_ = {
     PLAYING: 'PLAYING',
     PAUSED: 'PAUSED',
     COMPLETED: 'COMPLETED'
 };
 
-unisubs.video.JWVideoPlayer.logger_ = 
-    goog.debug.Logger.getLogger('unisubs.video.JWVideoPlayerStatic');
+unisubs.player.JWVideoPlayer.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.player.JWVideoPlayerStatic');
 
 (function() {
     var jwReady = "playerReady";
@@ -173,14 +173,14 @@ unisubs.video.JWVideoPlayer.logger_ =
         catch (e) {
             // don't care
         }
-        unisubs.video.JWVideoPlayer.playerReadyCalled_ = true;
+        unisubs.player.JWVideoPlayer.playerReadyCalled_ = true;
         if (goog.DEBUG) {
-            unisubs.video.JWVideoPlayer.logger_.info(
+            unisubs.player.JWVideoPlayer.logger_.info(
                 "Number of players: " + 
-                    unisubs.video.JWVideoPlayer.players_.length);
+                    unisubs.player.JWVideoPlayer.players_.length);
         }
         goog.array.forEach(
-            unisubs.video.JWVideoPlayer.players_, 
+            unisubs.player.JWVideoPlayer.players_, 
             function(p) { p.onJWPlayerReady_(); });
     };
 })();

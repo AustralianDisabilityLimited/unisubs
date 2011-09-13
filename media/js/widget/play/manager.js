@@ -38,7 +38,7 @@ unisubs.play.Manager = function(videoPlayer, baseState, captions) {
                unisubs.CaptionManager.CAPTIONS_FINISHED,
                this.finished_).
         listen(this.videoPlayer_,
-               unisubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+               unisubs.player.AbstractVideoPlayer.EventType.PLAY_ENDED,
                this.finished_);
     this.finished_ = false;
 };

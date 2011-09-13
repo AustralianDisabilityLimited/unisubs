@@ -45,7 +45,7 @@ goog.inherits(unisubs.widget.VideoTab, goog.ui.Component);
 
 unisubs.widget.VideoTab.prototype.createDom = function() {
     unisubs.widget.VideoTab.superClass_.createDom.call(this);
-    this.getElement().className = 'unisubs-videoTab unisubs-videoTab-' + 
+    this.getElement().className = 'unisubs.playerTab unisubs.playerTab-' + 
         (this.forAnchoring_ ? 'anchoring' : 'static');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.imageElem_ = $d('img', {'alt': 'small logo'});

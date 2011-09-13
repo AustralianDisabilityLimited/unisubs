@@ -25,7 +25,7 @@ goog.provide('unisubs.testing.StubVideoPlayer');
  */
 
 unisubs.testing.StubVideoPlayer = function() {
-    unisubs.video.AbstractVideoPlayer.call(this);
+    unisubs.player.AbstractVideoPlayer.call(this);
     /**
      * Can be set to artificial values for the purpose of unit 
      * testing components.
@@ -34,7 +34,7 @@ unisubs.testing.StubVideoPlayer = function() {
     this.playing = false;
 };
 goog.inherits(unisubs.testing.StubVideoPlayer, 
-              unisubs.video.AbstractVideoPlayer);
+              unisubs.player.AbstractVideoPlayer);
 
 unisubs.testing.StubVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime;
@@ -54,5 +54,5 @@ unisubs.testing.StubVideoPlayer.prototype.playWithNoUpdateEvents =
     // do nothing!
 };
 unisubs.testing.StubVideoPlayer.prototype.dispatchTimeUpdate = function() {
-    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };

@@ -16,13 +16,13 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.FlashVideoPlayer');
+goog.provide('unisubs.player.FlashVideoPlayer');
 
 /**
  * @constructor
  */
-unisubs.video.FlashVideoPlayer = function(videoSource) {
-    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.player.FlashVideoPlayer = function(videoSource) {
+    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
     this.embed_ = null;
     this.object_ = null;
     this.decorateTimer_ = null;
@@ -30,11 +30,11 @@ unisubs.video.FlashVideoPlayer = function(videoSource) {
     this.decorated_ = false;
     this.successfullyDecorated_ = false;
 };
-goog.inherits(unisubs.video.FlashVideoPlayer,
-              unisubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.player.FlashVideoPlayer,
+              unisubs.player.AbstractVideoPlayer);
 
-unisubs.video.FlashVideoPlayer.prototype.logger_ = 
-    goog.debug.Logger.getLogger('unisubs.video.FlashVideoPlayer');
+unisubs.player.FlashVideoPlayer.prototype.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.player.FlashVideoPlayer');
 
 /**
  * @override
@@ -42,7 +42,7 @@ unisubs.video.FlashVideoPlayer.prototype.logger_ =
  *     for youtube, enablejsapi=1. For any video player, wmode must be set.
  *
  */
-unisubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
+unisubs.player.FlashVideoPlayer.prototype.decorateInternal = function(element) {
     this.decorated_ = true;
     var embedSize = new goog.math.Size(0, 0), 
         objectSize = new goog.math.Size(0, 0);
@@ -57,7 +57,7 @@ unisubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
     }
     var elementToUse = objectSize.height > embedSize.height ? 
         this.object_ : this.embed_;
-    unisubs.video.FlashVideoPlayer.superClass_.decorateInternal.call(
+    unisubs.player.FlashVideoPlayer.superClass_.decorateInternal.call(
         this, elementToUse);
 };
 
@@ -66,7 +66,7 @@ unisubs.video.FlashVideoPlayer.prototype.decorateInternal = function(element) {
  * Clients can call this several times for the same player without it decorating
  * twice.
  */
-unisubs.video.FlashVideoPlayer.prototype.tryDecoratingAll = function(e) {
+unisubs.player.FlashVideoPlayer.prototype.tryDecoratingAll = function(e) {
     if (!this.decorated_ || this.successfullyDecorated_)
         return;
     if (!this.tryDecorating_(this.object_))
@@ -79,11 +79,11 @@ unisubs.video.FlashVideoPlayer.prototype.tryDecoratingAll = function(e) {
     }
 };
 
-unisubs.video.FlashVideoPlayer.prototype.isFlashElementReady = goog.abstractMethod;
+unisubs.player.FlashVideoPlayer.prototype.isFlashElementReady = goog.abstractMethod;
 
-unisubs.video.FlashVideoPlayer.prototype.setFlashPlayerElement = goog.abstractMethod;
+unisubs.player.FlashVideoPlayer.prototype.setFlashPlayerElement = goog.abstractMethod;
 
-unisubs.video.FlashVideoPlayer.prototype.tryDecorating_ = function(element) {
+unisubs.player.FlashVideoPlayer.prototype.tryDecorating_ = function(element) {
     if (!goog.isDefAndNotNull(element)) {
         return false;
     }
@@ -96,12 +96,12 @@ unisubs.video.FlashVideoPlayer.prototype.tryDecorating_ = function(element) {
     }
 };
 
-unisubs.video.FlashVideoPlayer.prototype.logExternalInterfaceError_ = function() {
+unisubs.player.FlashVideoPlayer.prototype.logExternalInterfaceError_ = function() {
     unisubs.Rpc.call(
         'log_youtube_ei_failure', { 'page_url': window.location.href });
 };
 
-unisubs.video.FlashVideoPlayer.prototype.findElements_ = function(element) {
+unisubs.player.FlashVideoPlayer.prototype.findElements_ = function(element) {
     var object = null, embed = null;
     if (element.nodeName == "EMBED") {
         embed = element;
@@ -117,13 +117,13 @@ unisubs.video.FlashVideoPlayer.prototype.findElements_ = function(element) {
     return [object, embed];
 };
 
-unisubs.video.FlashVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
+unisubs.player.FlashVideoPlayer.prototype.getVideoElement = goog.abstractMethod;
 
-unisubs.video.FlashVideoPlayer.prototype.isDecorated = function() {
+unisubs.player.FlashVideoPlayer.prototype.isDecorated = function() {
     return this.decorated_;
 };
 
-unisubs.video.FlashVideoPlayer.prototype.getVideoElements = function() {
+unisubs.player.FlashVideoPlayer.prototype.getVideoElements = function() {
     var objectAndEmbed = null;
     if (this.decorated_) {
         objectAndEmbed = [this.object_, this.embed_];

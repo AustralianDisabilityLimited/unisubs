@@ -22,7 +22,7 @@ goog.provide('unisubs.subtitle.SyncPanel');
  * @constructor
  * @param {unisubs.subtitle.EditableCaptionSet} subtitles The subtitles
  *     for the video, so far.
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  * @param {unisubs.CaptionManager} Caption manager, already containing subtitles
  *     with start_time set.
  */

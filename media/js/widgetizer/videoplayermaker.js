@@ -51,7 +51,7 @@ unisubs.widgetizer.VideoPlayerMaker.prototype.filterUnwidgetized =
  */
 unisubs.widgetizer.VideoPlayerMaker.prototype.isUnwidgetized = function(element) {
     return !goog.array.find(
-        unisubs.video.AbstractVideoPlayer.players,
+        unisubs.player.AbstractVideoPlayer.players,
         function(p) { return p.videoElementsContain(element); });
 };
 

@@ -29,7 +29,7 @@ goog.inherits(unisubs.controls.VideoControls, goog.ui.Component);
 
 unisubs.controls.VideoControls.prototype.createDom = function() {
     unisubs.controls.VideoControls.superClass_.createDom.call(this);
-    this.getElement().className = 'unisubs-videoControls';
+    this.getElement().className = 'unisubs.playerControls';
     this.addChild(new unisubs.controls.PlayPause(this.videoPlayer_), true);
     this.addChild(new unisubs.controls.ProgressBar(this.videoPlayer_), true);
     this.addChild(new unisubs.controls.TimeSpan(this.videoPlayer_), true);

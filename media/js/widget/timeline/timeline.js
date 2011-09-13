@@ -61,7 +61,7 @@ unisubs.timeline.Timeline.prototype.enterDocument = function() {
     this.getHandler().
         listen(
             this.videoPlayer_,
-            unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+            unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE,
             this.videoTimeUpdate_).
         listen(
             this.timelineInner_,

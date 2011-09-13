@@ -23,7 +23,7 @@ goog.provide('unisubs.widget.SubtitleDialogOpener');
  * @param {string} videoID
  * @param {string} videoURL This is used for creating the embed code 
  *     that appears in the widget.
- * @param {unisubs.video.VideoSource} videoSource
+ * @param {unisubs.player.VideoSource} videoSource
  * @param {function(boolean)=} opt_loadingFn
  * @param {function()=} opt_subOpenFn
  */

@@ -28,6 +28,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from auth.models import CustomUser as User
 from videos.models import Video, Action, SubtitleLanguage, ALL_LANGUAGES
+from messages.models import Message
 
 class SubtitleRequestManager(models.Manager):
     '''
@@ -87,6 +88,7 @@ class SubtitleRequest(models.Model):
     action = models.ForeignKey(Action, blank=True, null=True)
     track = models.BooleanField(_('follow related activities'), default=True)
     description = models.TextField(_('description of the request'), blank=True)
+    
     objects = SubtitleRequestManager()
 
     def __unicode__(self):
@@ -107,7 +109,6 @@ class SubtitleRequest(models.Model):
         )
 
         if related_requests:
-
             if created:
                 # Adds followers to languages which have pending requests and
                 # were not already existing.
@@ -116,9 +117,24 @@ class SubtitleRequest(models.Model):
                     instance.followers.add(user)
 
             elif instance.is_complete:
+                # This handler can be executed a lot of times, so filter already done requests
+                # to prevent spaming
+                to_send_notification = related_requests.filter(done=False)
+                
                 # Marks request as completed according to subtitle status.
                 related_requests.update(done=True)
-
+                
+                for request in to_send_notification:
+                    request.send_complete_message()
+    
+    def send_complete_message(self):
+        msg = Message()
+        msg.user = self.yser
+        msg.subject = u'Your request was completed'
+        msg.object = self
+        msg.save()
+        return msg
+    
 models.signals.post_save.connect(Action.create_subrequest_handler,
                                  SubtitleRequest)
 

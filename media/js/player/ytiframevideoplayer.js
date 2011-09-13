@@ -16,31 +16,31 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.YTIFrameVideoPlayer');
+goog.provide('unisubs.player.YTIFrameVideoPlayer');
 
 /**
  * @constructor
  */
-unisubs.video.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
-    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.player.YTIFrameVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
     this.player_ = null;
     this.videoSource_ = videoSource;
     this.playerElemID_ = unisubs.randomString() + "_ytplayer";
     this.forDialog_ = !!opt_forDialog;
     this.commands_ = [];
     this.progressTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
     this.logger_ = goog.debug.Logger.getLogger(
-        'unisubs.video.YTIFrameVideoPlayer');
-    goog.mixin(unisubs.video.YTIFrameVideoPlayer.prototype,
-               unisubs.video.YoutubeBaseMixin.prototype);
+        'unisubs.player.YTIFrameVideoPlayer');
+    goog.mixin(unisubs.player.YTIFrameVideoPlayer.prototype,
+               unisubs.player.YoutubeBaseMixin.prototype);
 };
-goog.inherits(unisubs.video.YTIFrameVideoPlayer, unisubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.player.YTIFrameVideoPlayer, unisubs.player.AbstractVideoPlayer);
 
-unisubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
-    unisubs.video.YTIFrameVideoPlayer.superClass_.createDom.call(this);
+unisubs.player.YTIFrameVideoPlayer.prototype.createDom = function() {
+    unisubs.player.YTIFrameVideoPlayer.superClass_.createDom.call(this);
     this.setPlayerSize_();
     var embedUri = new goog.Uri(
         "http://youtube.com/embed/" + 
@@ -58,7 +58,7 @@ unisubs.video.YTIFrameVideoPlayer.prototype.createDom = function() {
     this.setElementInternal(this.iframe_);
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
+unisubs.player.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     var config = this.videoSource_.getVideoConfig();
     if (!this.forDialog_ && config) {
         for (var prop in config) {
@@ -79,19 +79,19 @@ unisubs.video.YTIFrameVideoPlayer.prototype.addQueryString_ = function(uri) {
     }
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.setPlayerSize_ = function() {
+unisubs.player.YTIFrameVideoPlayer.prototype.setPlayerSize_ = function() {
     var sizeFromConfig = this.videoSource_.sizeFromConfig();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
     this.setDimensionsKnownInternal();
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
-    unisubs.video.YTIFrameVideoPlayer.superClass_.decorateInternal.call(this, elem);
+unisubs.player.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.player.YTIFrameVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.logger_.info('decorating');
     this.iframe_ = elem;
     if (elem.id) {
@@ -105,8 +105,8 @@ unisubs.video.YTIFrameVideoPlayer.prototype.decorateInternal = function(elem) {
     this.setDimensionsKnownInternal();
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
-    unisubs.video.YTIFrameVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.player.YTIFrameVideoPlayer.prototype.enterDocument = function() {
+    unisubs.player.YTIFrameVideoPlayer.superClass_.enterDocument.call(this);
     var w = window;
     if (w['YT'] && w['YT']['Player'])
         this.makePlayer_();
@@ -124,7 +124,7 @@ unisubs.video.YTIFrameVideoPlayer.prototype.enterDocument = function() {
     }
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
+unisubs.player.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
     if (goog.DEBUG) {
         this.logger_.info('makePlayer_ called');
     }
@@ -140,7 +140,7 @@ unisubs.video.YTIFrameVideoPlayer.prototype.makePlayer_ = function() {
         });
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
+unisubs.player.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
     this.logger_.info('player ready');
     this.player_ = this.almostPlayer_;
     goog.array.forEach(this.commands_, function(cmd) { cmd(); });
@@ -151,18 +151,18 @@ unisubs.video.YTIFrameVideoPlayer.prototype.playerReady_ = function(e) {
     this.progressTimer_.start();
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.getVideoElements = function() {
+unisubs.player.YTIFrameVideoPlayer.prototype.getVideoElements = function() {
     return [this.iframe_];
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
-    unisubs.video.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.player.YTIFrameVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.player.YTIFrameVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
 };
 
-unisubs.video.YTIFrameVideoPlayer.prototype.exitDocument = function() {
-    unisubs.video.YTIFrameVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.player.YTIFrameVideoPlayer.prototype.exitDocument = function() {
+    unisubs.player.YTIFrameVideoPlayer.superClass_.exitDocument.call(this);
     this.progressTimer_.stop();
     this.timeUpdateTimer_.stop();
 };

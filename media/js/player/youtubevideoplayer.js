@@ -16,15 +16,15 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.YoutubeVideoPlayer');
+goog.provide('unisubs.player.YoutubeVideoPlayer');
 
 /**
  * @constructor
- * @param {unisubs.video.YoutubeVideoSource} videoSource
+ * @param {unisubs.player.YoutubeVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
-unisubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
-    unisubs.video.FlashVideoPlayer.call(this, videoSource);
+unisubs.player.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.player.FlashVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.playerAPIID_ = [videoSource.getUUID(),
                          '' + new Date().getTime()].join('');
@@ -32,7 +32,7 @@ unisubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
     this.eventFunction_ = 'event' + videoSource.getUUID();
     this.forDialog_ = !!opt_forDialog;
 
-    unisubs.video.YoutubeVideoPlayer.players_.push(this);
+    unisubs.player.YoutubeVideoPlayer.players_.push(this);
 
     this.playerSize_ = null;
     this.player_ = null;
@@ -42,40 +42,40 @@ unisubs.video.YoutubeVideoPlayer = function(videoSource, opt_forDialog) {
     this.commands_ = [];
     this.swfEmbedded_ = false;
     this.progressTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
-    goog.mixin(unisubs.video.YoutubeVideoPlayer.prototype,
-               unisubs.video.YoutubeBaseMixin.prototype);
+        unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+    goog.mixin(unisubs.player.YoutubeVideoPlayer.prototype,
+               unisubs.player.YoutubeBaseMixin.prototype);
 };
-goog.inherits(unisubs.video.YoutubeVideoPlayer, unisubs.video.FlashVideoPlayer);
+goog.inherits(unisubs.player.YoutubeVideoPlayer, unisubs.player.FlashVideoPlayer);
 
-unisubs.video.YoutubeVideoPlayer.players_ = [];
-unisubs.video.YoutubeVideoPlayer.readyAPIIDs_ = new goog.structs.Set();
+unisubs.player.YoutubeVideoPlayer.players_ = [];
+unisubs.player.YoutubeVideoPlayer.readyAPIIDs_ = new goog.structs.Set();
 
-unisubs.video.YoutubeVideoPlayer.prototype.logger_ = 
-    goog.debug.Logger.getLogger('unisubs.video.YoutubeVideoPlayer');
+unisubs.player.YoutubeVideoPlayer.prototype.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.player.YoutubeVideoPlayer');
 
 /**
  * @override
  */
-unisubs.video.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem) {
+unisubs.player.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem) {
     return elem['playVideo'];
 };
 
-unisubs.video.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains = function(apiID) {
+unisubs.player.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains = function(apiID) {
     // this is activated if a widgetizer user has inserted the widgetizerprimer
     // into the HEAD of their document.
     var arr = window['unisubs_readyAPIIDs'];
     return arr && goog.array.contains(arr, apiID);
 };
 
-unisubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
-    unisubs.video.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
+unisubs.player.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.player.YoutubeVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.swfEmbedded_ = true;
     var apiidMatch = /playerapiid=([^&]+)/.exec(unisubs.Flash.swfURL(elem));
     this.playerAPIID_ = apiidMatch ? apiidMatch[1] : '';
-    if (unisubs.video.YoutubeVideoPlayer.readyAPIIDs_.contains(this.playerAPIID_) ||
+    if (unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.contains(this.playerAPIID_) ||
         this.windowReadyAPIIDsContains(this.playerAPIID_))
         this.onYouTubePlayerReady_(this.playerAPIID_);
     this.playerSize_ = goog.style.getSize(this.getElement());
@@ -89,27 +89,27 @@ unisubs.video.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
 /**
  * @override
  */
-unisubs.video.YoutubeVideoPlayer.prototype.setFlashPlayerElement = function(elem) {
+unisubs.player.YoutubeVideoPlayer.prototype.setFlashPlayerElement = function(elem) {
     this.player_ = elem;
     window[this.eventFunction_] = goog.bind(this.playerStateChange_, this);
     this.player_.addEventListener(
         'onStateChange', this.eventFunction_);
 };
 
-unisubs.video.YoutubeVideoPlayer.prototype.createDom = function() {
-    unisubs.video.YoutubeVideoPlayer.superClass_.createDom.call(this);
+unisubs.player.YoutubeVideoPlayer.prototype.createDom = function() {
+    unisubs.player.YoutubeVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.videoSource_.sizeFromConfig();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
     this.setDimensionsKnownInternal();
 };
 
-unisubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
-    unisubs.video.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.player.YoutubeVideoPlayer.prototype.enterDocument = function() {
+    unisubs.player.YoutubeVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoSpan = this.getDomHelper().createDom('span');
@@ -140,7 +140,7 @@ unisubs.video.YoutubeVideoPlayer.prototype.enterDocument = function() {
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
     this.progressTimer_.start();
 };
-unisubs.video.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
+unisubs.player.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
     var config = this.videoSource_.getVideoConfig();
     if (!this.forDialog_ && config) {
         for (var prop in config)
@@ -153,12 +153,12 @@ unisubs.video.YoutubeVideoPlayer.prototype.addQueryString_ = function(uri) {
     if (this.forDialog_)
         uri.setParameterValue('disablekb', '1');
 };
-unisubs.video.YoutubeVideoPlayer.prototype.exitDocument = function() {
-    unisubs.video.YoutubeVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.player.YoutubeVideoPlayer.prototype.exitDocument = function() {
+    unisubs.player.YoutubeVideoPlayer.superClass_.exitDocument.call(this);
     this.progressTimer_.stop();
     this.timeUpdateTimer_.stop();
 };
-unisubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
+unisubs.player.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
     function(playerAPIID)
 {
     if (goog.DEBUG) {
@@ -188,22 +188,22 @@ unisubs.video.YoutubeVideoPlayer.prototype.onYouTubePlayerReady_ =
         this.tryDecoratingAll();
     }
 };
-unisubs.video.YoutubeVideoPlayer.prototype.needsIFrame = function() {
+unisubs.player.YoutubeVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
-unisubs.video.YoutubeVideoPlayer.prototype.disposeInternal = function() {
-    unisubs.video.YoutubeVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.player.YoutubeVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.player.YoutubeVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
 };
-unisubs.video.YoutubeVideoPlayer.prototype.getVideoElement = function() {
+unisubs.player.YoutubeVideoPlayer.prototype.getVideoElement = function() {
     return goog.dom.getElement(this.playerElemID_);
 };
 /**
  * http://code.google.com/apis/youtube/js_api_reference.html#getPlayerState
  * @enum
  */
-unisubs.video.YoutubeVideoPlayer.State_ = {
+unisubs.player.YoutubeVideoPlayer.State_ = {
     UNSTARTED: -1,
     ENDED: 0,
     PLAYING: 1,
@@ -212,19 +212,19 @@ unisubs.video.YoutubeVideoPlayer.State_ = {
     VIDEO_CUED: 5
 };
 
-unisubs.video.YoutubeVideoPlayer.logger_ = 
-    goog.debug.Logger.getLogger('unisubs.video.YoutubeVideoPlayerStatic');
+unisubs.player.YoutubeVideoPlayer.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.player.YoutubeVideoPlayerStatic');
 
 (function() {
     var ytReady = "onYouTubePlayerReady";
     var oldReady = window[ytReady] || goog.nullFunction;
     window[ytReady] = function(apiID) {
         if (goog.DEBUG) {
-            unisubs.video.YoutubeVideoPlayer.logger_.info(
+            unisubs.player.YoutubeVideoPlayer.logger_.info(
                 'onYouTubePlayerReady for ' + apiID);
-            unisubs.video.YoutubeVideoPlayer.logger_.info(
+            unisubs.player.YoutubeVideoPlayer.logger_.info(
                 'players_ length is ' + 
-                    unisubs.video.YoutubeVideoPlayer.players_.length);
+                    unisubs.player.YoutubeVideoPlayer.players_.length);
         }
         try {
             oldReady(apiID);
@@ -234,9 +234,9 @@ unisubs.video.YoutubeVideoPlayer.logger_ =
         }
         if (apiID == 'undefined' || !goog.isDefAndNotNull(apiID))
             apiID = '';
-        unisubs.video.YoutubeVideoPlayer.readyAPIIDs_.add(apiID);
+        unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.add(apiID);
         goog.array.forEach(
-            unisubs.video.YoutubeVideoPlayer.players_,
+            unisubs.player.YoutubeVideoPlayer.players_,
             function(p) { p.onYouTubePlayerReady_(apiID); });
     };
 })();

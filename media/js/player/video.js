@@ -16,49 +16,49 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video');
+goog.provide('unisubs.player');
 
-unisubs.video.Html5VideoType = {
+unisubs.player.Html5VideoType = {
     H264: 'H264',
     OGG: 'Ogg',
     WEBM: 'WebM'
 };
 
-unisubs.video.supportsVideo = function() {
+unisubs.player.supportsVideo = function() {
     return !!goog.dom.createElement('video')['canPlayType'];
 };
 
-unisubs.video.supportsVideoType = function(html5VideoType) {
-    var vt = unisubs.video.Html5VideoType;
+unisubs.player.supportsVideoType = function(html5VideoType) {
+    var vt = unisubs.player.Html5VideoType;
     switch (html5VideoType) {
     case vt.H264:
-        return unisubs.video.supportsH264();
+        return unisubs.player.supportsH264();
     case vt.OGG:
-        return unisubs.video.supportsOgg();
+        return unisubs.player.supportsOgg();
     case vt.WEBM:
-        return unisubs.video.supportsWebM();
+        return unisubs.player.supportsWebM();
     default:
         throw "unknown type";
     }
 };
 
-unisubs.video.supports_ = function(playType) {
+unisubs.player.supports_ = function(playType) {
     var video = document.createElement('video');
     return !!(video['canPlayType'] &&
               video['canPlayType'](playType).replace(/no/, ''));
 };
 
-unisubs.video.supportsH264 = function() {
-    return unisubs.video.supports_(
+unisubs.player.supportsH264 = function() {
+    return unisubs.player.supports_(
         'video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
 };
 
-unisubs.video.supportsOgg = function() {
-    return unisubs.video.supports_(
+unisubs.player.supportsOgg = function() {
+    return unisubs.player.supports_(
         'video/ogg; codecs="theora, vorbis"');
 };
 
-unisubs.video.supportsWebM = function() {
-    return unisubs.video.supports_(
+unisubs.player.supportsWebM = function() {
+    return unisubs.player.supports_(
         'video/webm; codecs="vp8, vorbis"');
 };

@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.CaptionView');
+goog.provide('unisubs.player.CaptionView');
 
 /**
  * * @constructor
  * @param needsIFrame {bool} If an iframe is needed
  * @param isDraggable {bool=} If the caption can be dragged by the user
  */
-unisubs.video.CaptionView = function( needsIFrame, isDraggable) {
+unisubs.player.CaptionView = function( needsIFrame, isDraggable) {
     goog.ui.Component.call(this);
 
     /*
@@ -53,22 +53,22 @@ unisubs.video.CaptionView = function( needsIFrame, isDraggable) {
     this.userHasDragged_ = false;
 };
 
-goog.inherits(unisubs.video.CaptionView, goog.ui.Component);
+goog.inherits(unisubs.player.CaptionView, goog.ui.Component);
 
 /*
  * @conts {int} 
  */
-unisubs.video.CaptionView.VERTICAL_MARGIN = 40;
+unisubs.player.CaptionView.VERTICAL_MARGIN = 40;
 
 /*
  * @cont {int}
  */
-unisubs.video.CaptionView.HORIZONTAL_MARGIN = 10;
+unisubs.player.CaptionView.HORIZONTAL_MARGIN = 10;
 
 /*
  * @const {int}
  */
-unisubs.video.CaptionView.MAXIMUM_WIDTH = 400;
+unisubs.player.CaptionView.MAXIMUM_WIDTH = 400;
 
 /*
  * @param boundingBox {goog.math.Rect} The rectangle to which
@@ -78,15 +78,15 @@ unisubs.video.CaptionView.MAXIMUM_WIDTH = 400;
  * BOTTOM_CENTER if not provided.
  * @return The same bounding box or null if box is empty
  */
-unisubs.video.CaptionView.prototype.setUpPositioning = 
+unisubs.player.CaptionView.prototype.setUpPositioning = 
     function ( boundingBox, anchor){
     if (!boundingBox){
         return null;
     }
     this.boundingBox_ = boundingBox;
-    this.captionWidth_ = Math.min(unisubs.video.CaptionView.MAXIMUM_WIDTH, 
+    this.captionWidth_ = Math.min(unisubs.player.CaptionView.MAXIMUM_WIDTH, 
         this.boundingBox_.width - 
-          (unisubs.video.CaptionView.HORIZONTAL_MARGIN * 2));
+          (unisubs.player.CaptionView.HORIZONTAL_MARGIN * 2));
     this.captionLeft_ =  this.boundingBox_.left + 
             ((  this.boundingBox_.width - this.captionWidth_) / 2);
     this.anchor_ = anchor || "BOTTOM_CENTER";
@@ -97,7 +97,7 @@ unisubs.video.CaptionView.prototype.setUpPositioning =
 /*
  * @param The html text to show, or null for blank caption
  */
-unisubs.video.CaptionView.prototype.setCaptionText = function(text) {
+unisubs.player.CaptionView.prototype.setCaptionText = function(text) {
     if (text == null || text == "") {
         this.setVisibility(false);
     }
@@ -109,7 +109,7 @@ unisubs.video.CaptionView.prototype.setCaptionText = function(text) {
     }
 };
 
-unisubs.video.CaptionView.prototype.createDom  = function (){
+unisubs.player.CaptionView.prototype.createDom  = function (){
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     var el = $d('span', 'unisubs-captionSpan');
     this.setElementInternal(el);
@@ -131,8 +131,8 @@ unisubs.video.CaptionView.prototype.createDom  = function (){
     
 };
 
-unisubs.video.CaptionView.prototype.enterDocument = function() {
-    unisubs.video.CaptionView.superClass_.enterDocument.call(this);
+unisubs.player.CaptionView.prototype.enterDocument = function() {
+    unisubs.player.CaptionView.superClass_.enterDocument.call(this);
     if (this.isDraggable_){
         this.getHandler().
             listen(
@@ -149,19 +149,19 @@ unisubs.video.CaptionView.prototype.enterDocument = function() {
 /* 
  * @param e {fx.DragEvent} The dragging event.
  */
-unisubs.video.CaptionView.prototype.startDrag = function(e){
+unisubs.player.CaptionView.prototype.startDrag = function(e){
     this.userHasDragged_ = true;
 };
 /* 
  * @param e {fx.DragEvent} The dragging event.
  */
-unisubs.video.CaptionView.prototype.onDrag = function(e){
+unisubs.player.CaptionView.prototype.onDrag = function(e){
     unisubs.style.setPosition(this.getElement(), 
                                this.dragger_.deltaX ,
                                this.dragger_.deltaY);
 };
 
-unisubs.video.CaptionView.prototype.redrawInternal = function(){
+unisubs.player.CaptionView.prototype.redrawInternal = function(){
     if (this.userHasDragged_) return;
 
     var captionSize = goog.style.getSize(this.getElement());
@@ -170,7 +170,7 @@ unisubs.video.CaptionView.prototype.redrawInternal = function(){
         return;
     }
     var newTop = (this.boundingBox_.top + this.boundingBox_.height - captionSize.height ) - 
-        unisubs.video.CaptionView.VERTICAL_MARGIN;
+        unisubs.player.CaptionView.VERTICAL_MARGIN;
     unisubs.style.setPosition(this.getElement(), this.captionLeft_, newTop);
     if (this.needsIFrame_ && this.captionBgElem_) {
         goog.style.setPosition(this.captionBgElem_, newLeft, newTop);
@@ -183,16 +183,16 @@ unisubs.video.CaptionView.prototype.redrawInternal = function(){
 /* 
  * @param {bool} If it will be made visible.
  */
-unisubs.video.CaptionView.prototype.setVisibility = function(show){
+unisubs.player.CaptionView.prototype.setVisibility = function(show){
     if(this.captionBgElem_){
         unisubs.style.setVisibility(this.captionBgElem_, show);   
     }
     unisubs.style.setVisibility(this.getElement(), show);
 };
 
-unisubs.video.CaptionView.prototype.dispose = function() {
+unisubs.player.CaptionView.prototype.dispose = function() {
   if (!this.isDisposed()) {
-    unisubs.video.CaptionView.superClass_.dispose.call(this);
+    unisubs.player.CaptionView.superClass_.dispose.call(this);
     this.dragger_ && this.dragger_.dispose();
   }
 };

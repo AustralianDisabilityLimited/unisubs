@@ -43,7 +43,7 @@ unisubs.controls.ProgressBar.prototype.createDom = function() {
 
 unisubs.controls.ProgressBar.prototype.enterDocument = function() {
     unisubs.controls.ProgressBar.superClass_.enterDocument.call(this);
-    var et = unisubs.video.AbstractVideoPlayer.EventType;
+    var et = unisubs.player.AbstractVideoPlayer.EventType;
     this.getHandler().
         listen(
             this.videoPlayer_, et.TIMEUPDATE, this.videoTimeUpdate_).

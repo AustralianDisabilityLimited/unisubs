@@ -43,7 +43,7 @@ unisubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
     var videoPlayers = [];
     for (var i = 0; i < elements.length; i++) {
         var videoSource = this.makeVideoSource_(elements[i]);
-        var videoPlayer = new unisubs.video.JWVideoPlayer(videoSource);
+        var videoPlayer = new unisubs.player.JWVideoPlayer(videoSource);
         videoPlayers.push(videoPlayer);
         videoPlayer.decorate(elements[i]);
     }
@@ -52,7 +52,7 @@ unisubs.widgetizer.JWPlayer.prototype.makeVideoPlayers = function() {
 
 unisubs.widgetizer.JWPlayer.prototype.makeVideoSource_ = function(elem) {
     var matches = /file=([^&]+)/.exec(unisubs.Flash.flashVars(elem));
-    return unisubs.video.YoutubeVideoSource.forURL(matches[1]);
+    return unisubs.player.YoutubeVideoSource.forURL(matches[1]);
 };
 
 unisubs.widgetizer.JWPlayer.prototype.unwidgetizedElements_ = function() {

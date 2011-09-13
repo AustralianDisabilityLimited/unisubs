@@ -21,22 +21,22 @@
  *     particularly for completing subtitling work.
  */
 
-goog.provide('unisubs.video.ControlledVideoPlayer');
+goog.provide('unisubs.player.ControlledVideoPlayer');
 
 /**
  *
  * @constructor
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
-unisubs.video.ControlledVideoPlayer = function(videoPlayer) {
+unisubs.player.ControlledVideoPlayer = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.controls_ = null;
 };
-goog.inherits(unisubs.video.ControlledVideoPlayer, goog.ui.Component);
+goog.inherits(unisubs.player.ControlledVideoPlayer, goog.ui.Component);
 
-unisubs.video.ControlledVideoPlayer.prototype.createDom = function() {
-    unisubs.video.ControlledVideoPlayer.superClass_.createDom.call(this);
+unisubs.player.ControlledVideoPlayer.prototype.createDom = function() {
+    unisubs.player.ControlledVideoPlayer.superClass_.createDom.call(this);
     this.addChild(this.videoPlayer_, true);
     if ( this.videoPlayer_.isChromeless()){
         this.controls_ = new unisubs.controls.VideoControls(this.videoPlayer_);
@@ -47,6 +47,6 @@ unisubs.video.ControlledVideoPlayer.prototype.createDom = function() {
     }
 };
 
-unisubs.video.ControlledVideoPlayer.prototype.getPlayer = function() {
+unisubs.player.ControlledVideoPlayer.prototype.getPlayer = function() {
     return this.videoPlayer_;
 };

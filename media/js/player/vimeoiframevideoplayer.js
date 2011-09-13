@@ -16,21 +16,21 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.VimeoIFrameVideoPlayer');
+goog.provide('unisubs.player.VimeoIFrameVideoPlayer');
 
 /**
  * @constructor
- * @param {unisubs.video.VimeoIFrameVideoSource} videoSource
+ * @param {unisubs.player.VimeoIFrameVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
-unisubs.video.VimeoIFrameVideoPlayer = function(videoSource, opt_forDialog) {
+unisubs.player.VimeoIFrameVideoPlayer = function(videoSource, opt_forDialog) {
     
 
 };
-goog.inherits(unisubs.video.VimeoIFrameVideoPlayer, unisubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.player.VimeoIFrameVideoPlayer, unisubs.player.AbstractVideoPlayer);
 
-unisubs.video.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
-    unisubs.video.VimeoIFrameVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.player.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
+    unisubs.player.VimeoIFrameVideoPlayer.superClass_.enterDocument.call(this);
     var checkFn = function() {
         return !!goog.global['Froogaloop'];
     };
@@ -45,7 +45,7 @@ unisubs.video.VimeoIFrameVideoPlayer.prototype.enterDocument = function() {
     }
 };
 
-unisubs.video.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
+unisubs.player.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
     if (goog.DEBUG) {
         this.logger_.info('makePlayer_ called');
     }
@@ -54,6 +54,6 @@ unisubs.video.VimeoIFrameVideoPlayer.prototype.makePlayer_ = function() {
         'ready', goog.bind(this.playerReady_, this));
 };
 
-unisubs.video.VimeoIFrameVideoPlayer.prototype.playerReady_ = function() {
+unisubs.player.VimeoIFrameVideoPlayer.prototype.playerReady_ = function() {
     
 };

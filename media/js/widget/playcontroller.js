@@ -112,10 +112,10 @@ unisubs.widget.PlayController.prototype.setUpSubs_ =
                unisubs.CaptionManager.CAPTIONS_FINISHED,
                this.finished_).
         listen(this.videoPlayer_,
-               unisubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+               unisubs.player.AbstractVideoPlayer.EventType.PLAY_ENDED,
                this.finished_).
         listen(this.videoPlayer_,
-               unisubs.video.AbstractVideoPlayer.EventType.PLAY,
+               unisubs.player.AbstractVideoPlayer.EventType.PLAY,
                this.trackPlay_);
     if (this.videoPlayer_.isPlaying())
         this.trackPlay_();

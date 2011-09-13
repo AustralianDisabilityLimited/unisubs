@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.FlvVideoPlayer');
+goog.provide('unisubs.player.FlvVideoPlayer');
 
 /**
  * @constructor
  */
-unisubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
-    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.player.FlvVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
 
     this.forDialog_ = !!opt_forDialog;
     this.videoSource_ = videoSource;
@@ -35,26 +35,26 @@ unisubs.video.FlvVideoPlayer = function(videoSource, opt_forDialog) {
      */
     this.commands_ = [];
     this.progressTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.PROGRESS_INTERVAL);
     this.timeUpdateTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
-goog.inherits(unisubs.video.FlvVideoPlayer,
-              unisubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.player.FlvVideoPlayer,
+              unisubs.player.AbstractVideoPlayer);
 
-unisubs.video.FlvVideoPlayer.prototype.createDom = function() {
-    unisubs.video.FlvVideoPlayer.superClass_.createDom.call(this);
+unisubs.player.FlvVideoPlayer.prototype.createDom = function() {
+    unisubs.player.FlvVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
-    unisubs.video.FlvVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
+    unisubs.player.FlvVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoDiv = this.getDomHelper().createDom('div');
@@ -87,7 +87,7 @@ unisubs.video.FlvVideoPlayer.prototype.enterDocument = function() {
     this.progressTimer_.start();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
+unisubs.player.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
     var plugins;
     if (this.forDialog_)
         plugins = { 'controls' : null };
@@ -105,7 +105,7 @@ unisubs.video.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
         playerConfig['plugins'] = plugins;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
+unisubs.player.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
     var config = this.videoSource_.getVideoConfig();
     if (config && config['width'] && config['height'])
         return new goog.math.Size(
@@ -114,13 +114,13 @@ unisubs.video.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
         return null;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.exitDocument = function() {
-    unisubs.video.FlvVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.player.FlvVideoPlayer.prototype.exitDocument = function() {
+    unisubs.player.FlvVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
     this.progressTimer_.stop();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
+unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
         this.playerSize_)
@@ -142,55 +142,55 @@ unisubs.video.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     });
 };
 
-unisubs.video.FlvVideoPlayer.prototype.progressTick_ = function(e) {
+unisubs.player.FlvVideoPlayer.prototype.progressTick_ = function(e) {
     if (this.getDuration() > 0) {
         this.refreshStatus_();
         if (this.status_['bufferEnd'] >= this.getDuration() - 0.10)
             this.progressTimer_.stop();
-        this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+        this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PROGRESS);
     }
 };
 
-unisubs.video.FlvVideoPlayer.prototype.refreshStatus_ = function() {
+unisubs.player.FlvVideoPlayer.prototype.refreshStatus_ = function() {
     this.status_ = this.player_['getStatus']();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
+unisubs.player.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.sendTimeUpdateInternal();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.onPlay_ = function() {
-    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PLAY);
+unisubs.player.FlvVideoPlayer.prototype.onPlay_ = function() {
+    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PLAY);
     this.timeUpdateTimer_.start();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.onPause_ = function() {
-    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PAUSE);
+unisubs.player.FlvVideoPlayer.prototype.onPause_ = function() {
+    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PAUSE);
     this.timeUpdateTimer_.stop();
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getClip_ = function() {
+unisubs.player.FlvVideoPlayer.prototype.getClip_ = function() {
     return this.player_['getClip'](0);
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getBufferedLength = function() {
+unisubs.player.FlvVideoPlayer.prototype.getBufferedLength = function() {
     return this.getDuration() > 0 ? 1 : 0;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.player.FlvVideoPlayer.prototype.getBufferedStart = function(index) {
     if (!this.status_)
         this.refreshStatus_();
     return this.status_['bufferStart'];
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.player.FlvVideoPlayer.prototype.getBufferedEnd = function(index) {
     if (!this.status_)
         this.refreshStatus_();
     return this.status_['bufferEnd'];
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getDuration = function() {
+unisubs.player.FlvVideoPlayer.prototype.getDuration = function() {
     if (!this.duration_) {
         this.duration_ = this.swfLoaded_ ? this.getClip_()['fullDuration'] : 0;
         if (isNaN(this.duration_))
@@ -199,30 +199,30 @@ unisubs.video.FlvVideoPlayer.prototype.getDuration = function() {
     return this.duration_;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getVolume = function() {
+unisubs.player.FlvVideoPlayer.prototype.getVolume = function() {
     return this.swfLoaded_ ? (this.player_['getVolume']() / 100) : 0;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.setVolume = function(vol) {
+unisubs.player.FlvVideoPlayer.prototype.setVolume = function(vol) {
     if (this.swfLoaded_)
         this.player_['setVolume'](vol * 100);
     else
         this.commands_.push(goog.bind(this.setVolume_, this, vol));
 };
 
-unisubs.video.FlvVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.isPausedInternal = function() {
     return this.swfLoaded_ ? this.player_['isPaused']() : false;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.videoEndedInternal = function() {
     return this.swfLoaded_ ? (this.player_['getState']() == 5) : false;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.isPlayingInternal = function() {
     return this.swfLoaded_ ? this.player_['isPlaying']() : false;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.playInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.playInternal = function() {
     if (this.swfLoaded_) {
         if (!this.isPlaying())
             this.player_['play']();
@@ -231,14 +231,14 @@ unisubs.video.FlvVideoPlayer.prototype.playInternal = function() {
         this.commands_.push(goog.bind(this.playInternal, this));
 };
 
-unisubs.video.FlvVideoPlayer.prototype.pauseInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.pauseInternal = function() {
     if (this.swfLoaded_)
         this.player_['pause']();
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-unisubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
     if (this.swfLoaded_) {
         this.player_['stopBuffering']();
 	this.setLoadingStopped(true);
@@ -250,7 +250,7 @@ unisubs.video.FlvVideoPlayer.prototype.stopLoadingInternal = function() {
     }
 };
 
-unisubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.player.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     if (this.swfLoaded_) {
         this.player_['startBuffering']();
 	this.setLoadingStopped(false);
@@ -259,11 +259,11 @@ unisubs.video.FlvVideoPlayer.prototype.resumeLoadingInternal = function(playhead
         this.commands_.push(goog.bind(this.resumeLoadingInternal, this, playheadTime));
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
+unisubs.player.FlvVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['getTime']() : 0;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpdateEvent) {
+unisubs.player.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpdateEvent) {
     if (this.swfLoaded_) {
         this.player_['seek'](time);
         if (!skipsUpdateEvent)this.sendTimeUpdateInternal();
@@ -272,16 +272,16 @@ unisubs.video.FlvVideoPlayer.prototype.setPlayheadTime = function(time, skipsUpd
         this.commands_.push(goog.bind(this.setPlayheadTime, this, time));
 };
 
-unisubs.video.FlvVideoPlayer.prototype.needsIFrame = function() {
+unisubs.player.FlvVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.getVideoSize = function() {
+unisubs.player.FlvVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
 
-unisubs.video.FlvVideoPlayer.prototype.disposeInternal = function() {
-    unisubs.video.FlvVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.player.FlvVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.player.FlvVideoPlayer.superClass_.disposeInternal.call(this);
     this.progressTimer_.dispose();
     this.timeUpdateTimer_.dispose();
 };

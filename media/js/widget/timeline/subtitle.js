@@ -21,7 +21,7 @@ goog.provide('unisubs.timeline.Subtitle');
 /**
 * @constructor
 * @param {unisubs.subtitle.EditableCaption} editableCaption
-* @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+* @param {unisubs.player.AbstractVideoPlayer} videoPlayer
 */
 unisubs.timeline.Subtitle = function(editableCaption, videoPlayer) {
     goog.events.EventTarget.call(this);
@@ -74,7 +74,7 @@ unisubs.timeline.Subtitle.prototype.updateTimes_ = function() {
             this.videoEventHandler_ = new goog.events.EventHandler(this);
             this.videoEventHandler_.listen(
                 this.videoPlayer_,
-                unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+                unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE,
                 this.videoTimeUpdate_);
         }
         if (this.editableCaption_.hasStartTimeOnly()) {

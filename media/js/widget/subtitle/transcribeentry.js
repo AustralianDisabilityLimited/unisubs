@@ -68,7 +68,7 @@ unisubs.subtitle.TranscribeEntry.prototype.enterDocument = function() {
                goog.Timer.TICK,
                this.playStopTimerTick_).
         listen(this.videoPlayer_,
-               unisubs.video.AbstractVideoPlayer.EventType.PLAY,
+               unisubs.player.AbstractVideoPlayer.EventType.PLAY,
               this.startPlaying_);
 };
 unisubs.subtitle.TranscribeEntry.prototype.startPlaying_ = function() {

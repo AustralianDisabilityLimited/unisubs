@@ -44,7 +44,7 @@ unisubs.controls.TimeSpan.prototype.enterDocument = function() {
     // performance.
     this.getHandler().listen(
         this.videoPlayer_,
-        unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+        unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE,
         this.videoTimeUpdate_);
 };
 unisubs.controls.TimeSpan.prototype.videoTimeUpdate_ = function() {

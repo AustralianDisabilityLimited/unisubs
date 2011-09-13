@@ -85,7 +85,7 @@ unisubs.widgetizer.Youtube.prototype.makeVideoSource_ =
         }
     }
     var youtubePageURL = this.ON_YT_SITE ? window.location.href : url;
-    return unisubs.video.YoutubeVideoSource.forURL(
+    return unisubs.player.YoutubeVideoSource.forURL(
         youtubePageURL, config);
 };
 
@@ -106,7 +106,7 @@ unisubs.widgetizer.Youtube.prototype.replaceVideoElement_ =
 };
 
 unisubs.widgetizer.Youtube.prototype.isFlashElementAPlayer = function(element) {
-    return unisubs.video.YoutubeVideoSource.isYoutube(
+    return unisubs.player.YoutubeVideoSource.isYoutube(
         unisubs.Flash.swfURL(element));
 };
 

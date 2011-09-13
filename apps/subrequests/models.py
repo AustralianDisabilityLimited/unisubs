@@ -120,16 +120,16 @@ class SubtitleRequest(models.Model):
                 # This handler can be executed a lot of times, so filter already done requests
                 # to prevent spaming
                 to_send_notification = related_requests.filter(done=False)
-                
+
+                for request in to_send_notification:
+                    request.send_complete_message()       
+
                 # Marks request as completed according to subtitle status.
                 related_requests.update(done=True)
-                
-                for request in to_send_notification:
-                    request.send_complete_message()
     
     def send_complete_message(self):
         msg = Message()
-        msg.user = self.yser
+        msg.user = self.user
         msg.subject = u'Your request was completed'
         msg.object = self
         msg.save()

@@ -24,11 +24,17 @@ goog.provide('unisubs.player.FlvVideoPlayer');
 unisubs.player.FlvVideoPlayer = function(videoSource, opt_forDialog) {
     unisubs.player.AbstractVideoPlayer.call(this, videoSource);
 
+    /**
+     * @protected
+     */
     this.forDialog_ = !!opt_forDialog;
     this.videoSource_ = videoSource;
     this.swfEmbedded_ = false;
     this.swfLoaded_ = false;
-    this.playerSize_ = null;
+    /**
+     * @protected
+     */
+    this.playerSize = null;
     this.player_ = null;
     /**
      * 
@@ -46,9 +52,9 @@ unisubs.player.FlvVideoPlayer.prototype.createDom = function() {
     unisubs.player.FlvVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
-        this.playerSize_ = sizeFromConfig;
+        this.playerSize = sizeFromConfig;
     else
-        this.playerSize_ = this.forDialog_ ?
+        this.playerSize = this.forDialog_ ?
         unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
         unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
 };
@@ -63,8 +69,8 @@ unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
         this.setDimensionsKnownInternal();
         var flashEmbedParams = {
             'src': unisubs.staticURL() + 'flowplayer/flowplayer-3.2.2.swf',
-            'width': this.playerSize_.width + '',
-            'height': this.playerSize_.height + '',
+            'width': this.playerSize.width + '',
+            'height': this.playerSize.height + '',
             'wmode': 'opaque'
         };
         var that = this;
@@ -123,7 +129,7 @@ unisubs.player.FlvVideoPlayer.prototype.exitDocument = function() {
 unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
-        this.playerSize_)
+        this.playerSize)
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];
@@ -277,7 +283,7 @@ unisubs.player.FlvVideoPlayer.prototype.needsIFrame = function() {
 };
 
 unisubs.player.FlvVideoPlayer.prototype.getVideoSize = function() {
-    return this.playerSize_;
+    return this.playerSize;
 };
 
 unisubs.player.FlvVideoPlayer.prototype.disposeInternal = function() {

@@ -209,10 +209,12 @@
             <div id="languages-tab">
                 <div class="hd">
                     <h2>
-                        {% if language.is_original and not language.language %}
-                            {% trans 'Original Language' %}
-                        {% else %}
-                            {{ language.get_language_display }}
+                        {{ language.get_language_display }}
+                        {% if language.is_original %}
+                            ({% trans 'original' %})
+                        {% endif %}
+                        {% if language.is_dependent %}
+                            ({% trans 'translated from' %} {{ language.standard_language }})
                         {% endif %}
                     </h2> 
                     <ul class="inline_tabs">
@@ -268,6 +270,9 @@
                                 <li>
                                     <a href="{% url widget:download_sbv %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_pk={{ language.pk }}{% endif %}">SBV</a>
                                 </li>
+                                <li>
+                                    <a href="{% url widget:download_dxfp %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_pk={{ language.pk }}{% endif %}">DXFP</a>
+                                </li>                                
                             </ul>
                         </div>
                         {% endif %}

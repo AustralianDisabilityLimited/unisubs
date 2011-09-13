@@ -20,7 +20,7 @@ goog.provide('unisubs.player.BlipTVPlaceholder');
 
 /** 
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} pageURL
  */
 unisubs.player.BlipTVPlaceholder = function(pageURL) {

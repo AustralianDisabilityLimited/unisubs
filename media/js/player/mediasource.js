@@ -21,45 +21,45 @@
  *
  */
 
-goog.provide('unisubs.player.VideoSource');
+goog.provide('unisubs.player.MediaSource');
 
 /**
  *
  * @interface
  */
-unisubs.player.VideoSource = function() {};
+unisubs.player.MediaSource = function() {};
 
 /**
  * Creates a player for the page, not the widget.
  * @return {unisubs.player.AbstractVideoPlayer} 
  */
-unisubs.player.VideoSource.prototype.createPlayer = function() {};
+unisubs.player.MediaSource.prototype.createPlayer = function() {};
 /**
  * Creates a player for the widget.
  * @return {unisubs.player.ControlledVideoPlayer}
  */
-unisubs.player.VideoSource.prototype.createControlledPlayer = function() {};
+unisubs.player.MediaSource.prototype.createControlledPlayer = function() {};
 
 /**
  * @return {string}
  */
-unisubs.player.VideoSource.prototype.getVideoURL = function() {};
+unisubs.player.MediaSource.prototype.getVideoURL = function() {};
 
 /**
  *
  * @param {Array} videoSpecs This is an array in which each element is either 
  *   a string (for a url) or an object with properties "url" and "config".
- * @return {?unisubs.player.VideoSource} video source, or null if none found.
+ * @return {?unisubs.player.MediaSource} video source, or null if none found.
  */
-unisubs.player.VideoSource.bestVideoSource = function(videoSpecs) {
+unisubs.player.MediaSource.bestVideoSource = function(videoSpecs) {
     var videoSources = goog.array.map(videoSpecs, function(spec) {
-        return unisubs.player.VideoSource.videoSourceForSpec_(spec);
+        return unisubs.player.MediaSource.videoSourceForSpec_(spec);
     });
     var vt = unisubs.player.Html5VideoType;
     var preferenceOrdering = [vt.OGG, vt.WEBM, vt.H264];
     for (var i = 0; i < preferenceOrdering.length; i++) {
         if (unisubs.player.supportsVideoType(preferenceOrdering[i])) {
-            var videoSource = unisubs.player.VideoSource.html5VideoSource_(
+            var videoSource = unisubs.player.MediaSource.html5VideoSource_(
                 videoSources, preferenceOrdering[i]);
             if (videoSource != null)
                 return videoSource;
@@ -72,23 +72,23 @@ unisubs.player.VideoSource.bestVideoSource = function(videoSpecs) {
     if (videoSource != null)
         return videoSource;
     // if we got this far, first return mp4 for player fallback. then return anything.
-    var videoSource = unisubs.player.VideoSource.html5VideoSource_(
+    var videoSource = unisubs.player.MediaSource.html5VideoSource_(
         videoSources, vt.H264);
     if (videoSource != null)
         return videoSource;
     return videoSources.length > 0 ? videoSources[0] : null;
 };
 
-unisubs.player.VideoSource.videoSourceForSpec_ = function(videoSpec) {
+unisubs.player.MediaSource.videoSourceForSpec_ = function(videoSpec) {
     if (goog.isString(videoSpec))
-        return unisubs.player.VideoSource.videoSourceForURL(
+        return unisubs.player.MediaSource.videoSourceForURL(
             videoSpec);
     else
-        return unisubs.player.VideoSource.videoSourceForURL(
+        return unisubs.player.MediaSource.videoSourceForURL(
             videoSpec['url'], videoSpec['config']);
 };
 
-unisubs.player.VideoSource.html5VideoSource_ = function(videoSources, videoType) {
+unisubs.player.MediaSource.html5VideoSource_ = function(videoSources, videoType) {
     return goog.array.find(
         videoSources, 
         function(v) { 
@@ -102,7 +102,7 @@ unisubs.player.VideoSource.html5VideoSource_ = function(videoSources, videoType)
  * for more info.
  *
  */
-unisubs.player.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
+unisubs.player.MediaSource.videoSourceForURL = function(videoURL, opt_videoConfig) {
     var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
     if (unisubs.player.YoutubeVideoSource.isYoutube(videoURL)) {
         var videoSource = null;
@@ -152,6 +152,6 @@ unisubs.player.VideoSource.videoSourceForURL = function(videoURL, opt_videoConfi
 /**
  * @deprecated Use unisubs.player.YoutubeVideoSource.isYoutube
  */
-unisubs.player.VideoSource.isYoutube = function(videoURL) {
+unisubs.player.MediaSource.isYoutube = function(videoURL) {
     return unisubs.player.YoutubeVideoSource.isYoutube(videoURL);
 };

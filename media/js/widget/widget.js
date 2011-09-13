@@ -121,11 +121,11 @@ unisubs.widget.Widget.prototype.findVideoSource_ = function() {
         if (this.videoConfig_)
             mainVideoSpec = { 'url': this.videoURL_, 
                               'config': this.videoConfig_ };
-        return unisubs.player.VideoSource.bestVideoSource(
+        return unisubs.player.MediaSource.bestVideoSource(
             goog.array.concat(mainVideoSpec, this.alternateVideoURLs_));
     }
     else
-        return unisubs.player.VideoSource.videoSourceForURL(
+        return unisubs.player.MediaSource.videoSourceForURL(
             this.videoURL_, this.videoConfig_);
 };
 
@@ -205,7 +205,7 @@ unisubs.widget.Widget.prototype.initializeState_ = function(result) {
     }
     if (!this.isVideoSourceImmediatelyUsable_()) {
         goog.dom.removeNode(this.videoPlaceholder_);
-        var videoSource = unisubs.player.VideoSource.bestVideoSource(
+        var videoSource = unisubs.player.MediaSource.bestVideoSource(
             result['video_urls']);
         if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
             this.videoConfig_)

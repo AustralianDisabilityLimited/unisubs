@@ -78,7 +78,7 @@ unisubs.api.openUnisubsDialogWithSettings =
         unisubs.returnURL = config['returnURL'];
     unisubs.IS_NULL = !!config['nullWidget'];
     var videoSource = 
-        unisubs.player.VideoSource.videoSourceForURL(
+        unisubs.player.MediaSource.videoSourceForURL(
             config['effectiveVideoURL']);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
@@ -109,7 +109,7 @@ unisubs.api.openUnisubsDialogForResume = function(config, generalSettings) {
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         unisubs.returnURL = config['returnURL'];
-    var videoSource = unisubs.player.VideoSource.videoSourceForURL(
+    var videoSource = unisubs.player.MediaSource.videoSourceForURL(
         config['effectiveVideoURL']);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
@@ -128,7 +128,7 @@ unisubs.api.openUnisubsDialogForResume = function(config, generalSettings) {
  */
 unisubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettings) {
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
-    var videoSource = unisubs.player.VideoSource.videoSourceForURL(
+    var videoSource = unisubs.player.MediaSource.videoSourceForURL(
         videoURL);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         videoID, videoURL, videoSource);

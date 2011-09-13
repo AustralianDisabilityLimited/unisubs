@@ -20,7 +20,7 @@ goog.provide('unisubs.player.YoutubeVideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} youtubeVideoID Youtube video id
  * @param {Object.<string, *>=} opt_videoConfig Params to use for 
  *     youtube query string, plus optional 'width' and 'height' 

@@ -19,7 +19,7 @@
 goog.provide('unisubs.player.BrightcoveVideoSource');
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} playerID Brightcove player id
  * @param {string} playerKey Brightcove player key
  * @param {string} videoID Brightcove video id* 

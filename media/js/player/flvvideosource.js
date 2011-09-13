@@ -20,7 +20,7 @@ goog.provide('unisubs.player.FlvVideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} flvURL
  * @param {Object=} opt_videoConfig Plugins to use for FlowPlayer 
  *     (see http://flowplayer.org/documentation/configuration/plugins.html)

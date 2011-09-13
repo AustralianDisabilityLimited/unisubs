@@ -20,7 +20,7 @@ goog.provide('unisubs.player.VimeoVideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} videoID Vimeo video id (unrelated to unisubs.player id)
  * @param {string} videoURL URL of Vimeo page
  * @param {Object.<string, *>=} opt_videoConfig Params to use for moogaloop player.

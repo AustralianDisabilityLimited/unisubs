@@ -20,7 +20,7 @@ goog.provide('unisubs.player.DailymotionVideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  */
 unisubs.player.DailymotionVideoSource = function(videoID, videoURL) {
     this.videoID_ = videoID;

@@ -20,7 +20,7 @@ goog.provide('unisubs.player.Html5VideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.player.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} videoURL
  * @param {unisubs.player.Html5VideoType} videoType
  * @param {Object.<string, string>=} opt_videoConfig Attributes to use for 

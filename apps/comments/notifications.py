@@ -58,6 +58,7 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
             "body": comment.content,
             "language":language,
             "is_rejection":is_rejection,
+            "STATIC_URL": settings.STATIC_URL,
             })
     if language:
         language_url = universal_url("videos:translation_history", kwargs={
@@ -96,5 +97,6 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
                 "domain":domain,
                 "version": version,
                 "body": comment.content,
+                "STATIC_URL": settings.STATIC_URL,
             }, not settings.DEBUG)
 

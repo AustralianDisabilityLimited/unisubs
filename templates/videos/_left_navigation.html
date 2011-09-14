@@ -16,7 +16,6 @@
                  <span class="done_indicator"></span>
                  {{ item.get_language_display }}
                  <span class="done_percentage">({% complete_indicator item %})</span>
-                {% switch_feature MODERATION %}<span class="moderation_pending_cound" title="Video has pending moderation">({{item.pending_moderation_count}})</span>{% endswitch_feature %}
              </a>
          </li>
       {% endfor %} 

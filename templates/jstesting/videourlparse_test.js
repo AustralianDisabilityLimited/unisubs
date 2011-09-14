@@ -16,7 +16,7 @@ function testYoutubeFormats() {
     ];
     for (i in test_cases) {
         var test_case = test_cases[i];
-        var vs = unisubs.player.VideoSource.videoSourceForURL(test_case[0]);
+        var vs = unisubs.player.MediaSource.videoSourceForURL(test_case[0]);
         assertEquals(test_case[1], vs.getYoutubeVideoID());
     }
 }
@@ -33,13 +33,13 @@ function testYTIFrameFormat() {
 }
 
 function testBlipFlv() {
-    var vs = unisubs.player.VideoSource.videoSourceForURL(
+    var vs = unisubs.player.MediaSource.videoSourceForURL(
         'http://blip.tv/file/get/Coldguy-SpineBreakersLiveAWizardOfEarthsea210.FLV');
     assertTrue(vs instanceof unisubs.player.FlvVideoSource);
 }
 
 function assertForHtml5Video_(startURL, endURL, videoType) {
-    var vs = unisubs.player.VideoSource.videoSourceForURL(startURL);
+    var vs = unisubs.player.MediaSource.videoSourceForURL(startURL);
     assertTrue(vs instanceof unisubs.player.Html5VideoSource);
     assertEquals(endURL, vs.getVideoURL());
     assertEquals(videoType, vs.getVideoType());
@@ -97,7 +97,7 @@ function testBrightcoveVideoSource(){
           '955357260001', 'AQ~~,AAAA3ijeRPk~,jc2SmUL6QMyqTwfTFhUbWr3dg6Oi980j&domain']];
     for (i in test_cases) {
         var test_case = test_cases[i];
-        var vs = unisubs.player.VideoSource.videoSourceForURL(test_case[0]);
+        var vs = unisubs.player.MediaSource.videoSourceForURL(test_case[0]);
         assertEquals(test_case[1], vs.getPlayerID());
 
     }

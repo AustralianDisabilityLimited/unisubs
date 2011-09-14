@@ -50,7 +50,7 @@ unisubs.player.Html5VideoPlayer.prototype.createDom = function() {
         unisubs.style.setProperty(el, 'line-height', '300px');
         el.innerHTML = 
             "Sorry, your browser can't play HTML5/" + 
-            this.videoSource_.getVideoType() + " video. " +
+            this.mediaSource.getVideoType() + " video. " +
             "<a href='http://getfirefox.com'>Get Firefox</a>.";       
     }
 };
@@ -71,7 +71,7 @@ unisubs.player.Html5VideoPlayer.prototype.createVideoElement_ =
         params['controls'] = 'true';
     }
     return $d('video', params,
-              $d('source', {'src': this.videoSource_.getVideoURL()}));
+              $d('source', {'src': this.mediaSource.getVideoURL()}));
 };
 
 

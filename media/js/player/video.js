@@ -43,7 +43,7 @@ unisubs.player.supportsVideoType = function(html5VideoType) {
 };
 
 unisubs.player.supports_ = function(playType) {
-    var video = document.createElement('video');
+    var video = goog.dom.createElement('video');
     return !!(video['canPlayType'] &&
               video['canPlayType'](playType).replace(/no/, ''));
 };

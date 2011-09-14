@@ -139,6 +139,9 @@ unisubs.player.MediaSource.videoSourceForURL = function(videoURL, opt_videoConfi
     else if (unisubs.player.BrightcoveVideoSource.isBrightcove(videoURL)) {
         return unisubs.player.BrightcoveVideoSource.forURL(videoURL);
     }
+    else if (unisubs.player.MP3Source.isMP3URL(videoURL)) {
+        return unisubs.player.MP3Source.forURL(videoURL);
+    }
     else {
         var videoSource = 
             unisubs.player.Html5VideoSource.forURL(videoURL, opt_videoConfig);

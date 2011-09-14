@@ -27,6 +27,6 @@ goog.inherits(unisubs.player.FlashAudioPlayer, unisubs.player.FlvVideoPlayer);
 unisubs.player.FlashAudioPlayer.prototype.createDom = function() {
     unisubs.player.FlashAudioPlayer.superClass_.createDom.call(this);
     this.playerSize = this.forDialog_ ? 
-        (new goog.math.Size(480, 150)) : 
-        unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        (new goog.math.Size(480, 150));
 };

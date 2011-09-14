@@ -1,13 +1,15 @@
 #from django.utils import unittest
+from django.test import TestCase
+from django.core.urlresolvers import reverse
+
 from teams.models import Team, TeamMember
 from auth.models import CustomUser as User
 from videos.models import Video
 from apps.icanhaz.models import VideoVisibilityPolicy
 
-from django.test import TestCase
 
 
-class BusinessLogic(TestCase):
+class BasicDataTest(TestCase):
     fixtures = [  "staging_users.json", "staging_videos.json", "staging_teams.json"]
 
     def setUp(self):
@@ -17,6 +19,9 @@ class BusinessLogic(TestCase):
         self.user2 = User.objects.all()[1]
         self.superuser2, x = User.objects.get_or_create(username='superuser2', is_superuser=True)
         self.regular_user = User.objects.filter(is_superuser=False)[0]
+        for user in User.objects.all():
+            user.set_password(user.username)
+            user.save()
         self.team1 = Team(name='test11', slug='test11')
         self.team1.save()
         self.team1_member = TeamMember(team=self.team1, user=self.user1)
@@ -27,6 +32,8 @@ class BusinessLogic(TestCase):
         self.team2_member.save()
         self.video = Video.objects.all()[0]
 
+class BusinessLogic(BasicDataTest):
+    
     def test_has_owner(self):
         self.assertFalse(VideoVisibilityPolicy.objects.video_has_owner(self.video))
         policy = VideoVisibilityPolicy.objects.create_for_video(
@@ -80,7 +87,7 @@ class BusinessLogic(TestCase):
         self.assertTrue(VideoVisibilityPolicy.objects.user_can_see( self.regular_user, self.video))
         policy = VideoVisibilityPolicy.objects.create_for_video(
             self.video,
-            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
             self.superuser,
         )
         # super users should always be able to see them
@@ -90,32 +97,139 @@ class BusinessLogic(TestCase):
         policy.delete()
         policy = VideoVisibilityPolicy.objects.create_for_video(
             self.video,
-            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
             self.team1,
         )
         self.assertFalse(VideoVisibilityPolicy.objects.user_can_see( self.team2_member.user, self.video))
         self.assertTrue(VideoVisibilityPolicy.objects.user_can_see( self.team1_member.user, self.video))
 
-    def test_id_for_video(self):
-        pass
-       
-class ViewTest(TestCase):
 
-    
-    def test_public_video_still_public(self):
-        pass
+    def test_secret_key_for_video(self):
+        self.assertTrue(VideoVisibilityPolicy.objects.user_can_see( self.regular_user, self.video))
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY,
+            self.superuser,
+        )
+        # super users should always be able to see them
+        self.assertTrue(VideoVisibilityPolicy.objects.user_can_see(self.superuser2, self.video ))
+        # regular users not 
+        self.assertFalse(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video))
+        self.assertFalse(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video), "bad=lkey")
+        self.assertTrue(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video, policy.site_secret_key))
         
-    def test_public_video_secret_redirects(self):
-        pass
 
-    def test_private_video_available_thourh_secret(self):
-        pass
+       
+class ViewTest(BasicDataTest):
 
-    def test_private_video_owner_only_available_throughh_secret(self):
-        pass
 
-    def test_private_video_owner_only_hidden_to_world(self):
-        pass            
+    def test_private_video_closes_public_url(self):
+        video_url = reverse("videos:history",
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        # moderate the video th
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY,
+            self.superuser,
+        )
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_private_video_with_secret_url_for_owner(self):
+        video_url = reverse("videos:history",
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        # moderate the video th
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY,
+            self.regular_user,
+        )
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 403)
+        self.client.login(username=self.regular_user.username, password=self.regular_user.username )
+        # login in as owner should give us access
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+
+        video_url_secret = reverse("videos:history",
+                            kwargs={'video_id':self.video.policy.site_secret_key})
+
+        # owner should also see the secret url
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 200)
+
+        # other users should see the secret url as well
+        self.client.logout()
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 200)
+        
+        
+
+    def test_private_video_with_secret_url_for_teams(self):
+        video_url = reverse("videos:history",
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        # moderate the video for team
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY,
+            self.team1,
+        )
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 403)
+        self.client.login(username=self.team1_member.user.username, password=self.team1_member.user.username )
+        # 
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+
+        video_url_secret = reverse("videos:history",
+                            kwargs={'video_id':self.video.policy.site_secret_key})
+
+        # owner should also see the secret url
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 200)
+
+        # other users should see the secret url as well
+        self.client.logout()
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 200)
+
+    def test_private_video_without_secret_url_for_teams(self):
+        video_url = reverse("videos:history",
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        # moderate the video for team
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
+            self.team1,
+        )
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 403)
+        self.client.login(username=self.team1_member.user.username, password=self.team1_member.user.username )
+        # 
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+
+        video_url_secret = reverse("videos:history",
+                            kwargs={'video_id':self.video.policy.site_secret_key})
+
+        # owner should also see the secret url
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 200)
+
+        # other users should not see the secret url
+        self.client.logout()
+        response = self.client.get(video_url_secret)
+        self.assertEqual(response.status_code, 403)        
+        
+        
                 
 class WidgetTest(TestCase):
 

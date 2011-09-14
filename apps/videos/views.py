@@ -197,15 +197,27 @@ create_from_feed.csrf_exempt = True
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 def _get_video_from_code(func):
+    def raise_forbidden(request, video):
+        return HttpResponseForbidden("You cannot see this video")
+    
     def wrapper(request, video_id, *args, **kwargs):
+        #import pdb;pdb.set_trace()
         # check if this is a a sha1 hash
         if SHA1_RE.search(video_id):
             # secret, find the url for this
-            video = VideoVisibilityPolicy.objects.video_for_user(video_id)
+            video = VideoVisibilityPolicy.objects.video_for_user(
+                request.user,
+                video_id)
             if not video:
-                raise SuspiciousOperation("You cannot see this video")
+                return raise_forbidden(request, video)
         else:
-            video = get_object_or_404(Video, video_id=video_id)
+            video =  VideoVisibilityPolicy.objects.video_for_user(
+            request.user,
+            video_id)
+            if not video:
+                return raise_forbidden(request, video_id)
+
+    
         return func(request, video, *args, **kwargs)
     return wraps(func)(wrapper)
 

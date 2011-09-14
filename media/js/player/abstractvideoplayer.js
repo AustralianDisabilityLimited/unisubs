@@ -85,7 +85,7 @@ unisubs.player.AbstractVideoPlayer.DIALOG_SIZE = new goog.math.Size(400, 300);
 
 unisubs.player.AbstractVideoPlayer.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createElement('span'));
-    goog.dom.classes.add(this.getElement(), 'unisubs.playerplayer');
+    goog.dom.classes.add(this.getElement(), 'unisubs-videoplayer');
 };
 
 unisubs.player.AbstractVideoPlayer.prototype.getPlayheadFn = function() {

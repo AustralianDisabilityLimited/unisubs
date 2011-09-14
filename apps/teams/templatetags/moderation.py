@@ -295,4 +295,12 @@ def render_approve_all_button(video, user):
         "label": _("Approve all"),
         }
 
-
+# on teams.templatetags.moderation
+@register.simple_tag
+def shows_moderation_title( user, video):
+    if video is None:
+        return False
+    team = version.video.moderated_by        
+    if team and _user_can_moderate(video,  user):
+        return _("Moderation")
+    return ""

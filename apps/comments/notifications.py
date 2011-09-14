@@ -95,5 +95,6 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
                 "language_url":language_url,
                 "domain":domain,
                 "version": version,
+                "body": comment.content,
             }, not settings.DEBUG)
 

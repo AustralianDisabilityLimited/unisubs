@@ -146,7 +146,7 @@ unisubs.widget.Widget.prototype.addVideoLoadingPlaceholder_ =
     function(el) 
 {
     this.videoPlaceholder_ = this.getDomHelper().createDom(
-        'div', 'unisubs.playerLoading', 'Loading...');
+        'div', 'unisubs-videoLoading', 'Loading...');
     goog.dom.appendChild(el, this.videoPlaceholder_);
 };
 
@@ -168,7 +168,7 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     this.addChild(videoTabContainer, true);
     videoTabContainer.addChild(this.videoTab_, true);
     videoTabContainer.getElement().className = 
-        'unisubs.playerTab-container';
+        'unisubs-videoTab-container';
     this.videoTab_.showLoading();
     var args = {
         'video_url': this.videoURL_,

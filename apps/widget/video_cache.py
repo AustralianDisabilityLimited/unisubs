@@ -121,6 +121,10 @@ def _subtitle_language_pk_key(video_id, language_code):
 def _video_is_moderated_key(video_id):
     return 'widget_video_is_moderated_{0}'.format(video_id)
 
+def _video_visibility_policy_key(video_id):
+    return 'widget_video_is_moderated_visibility_key_{0}'.format(video_id)
+
+
 def pk_for_default_language(video_id, language_code):
     cache_key = _subtitle_language_pk_key(video_id, language_code)
     value = cache.get(cache_key)
@@ -230,6 +234,20 @@ def get_is_moderated(video_id):
         from videos.models import Video
         video = Video.objects.get(video_id=video_id)
         value = video.is_moderated
+        cache.set(cache_key, value, TIMEOUT)
+    return value
+
+def get_visibility_policies(video_id):
+    from icanhaz.models import VideoVisibilityPolicy
+    cache_key = _video_visibility_policy_key(video_id)
+    value = cache.get(cache_key)
+    if value is  None:
+        from videos.models import Video
+        video = Video.objects.get(video_id=video_id)
+        value = {
+          "site"  : VideoVisibilityPolicy.objects.site_policy_for_video(video),
+          "widget": VideoVisibilityPolicy.objects.widget_policy_for_video(video),
+        }
         cache.set(cache_key, value, TIMEOUT)
     return value
     

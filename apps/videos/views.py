@@ -214,6 +214,7 @@ def _get_video_from_code(func):
             video =  VideoVisibilityPolicy.objects.video_for_user(
             request.user,
             video_id)
+            
             if not video:
                 return raise_forbidden(request, video_id)
 

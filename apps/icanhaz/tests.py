@@ -18,10 +18,8 @@ class BasicDataTest(TestCase):
         self.user1 = User.objects.all()[0]
         self.user2 = User.objects.all()[1]
         self.superuser2, x = User.objects.get_or_create(username='superuser2', is_superuser=True)
-        self.regular_user = User.objects.filter(is_superuser=False)[0]
-        for user in User.objects.all():
-            user.set_password(user.username)
-            user.save()
+        self.regular_user = User.objects.filter(is_active=True,is_superuser=False).exclude(pk__in=[x.pk for x in [self.user1, self.user2]])[0]
+
         self.team1 = Team(name='test11', slug='test11')
         self.team1.save()
         self.team1_member = TeamMember(team=self.team1, user=self.user1)
@@ -31,6 +29,10 @@ class BasicDataTest(TestCase):
         self.team2_member = TeamMember(team=self.team2, user=self.user2)
         self.team2_member.save()
         self.video = Video.objects.all()[0]
+
+        for user in User.objects.all():
+            user.set_password(user.username)
+            user.save()
 
 class BusinessLogic(BasicDataTest):
     
@@ -91,6 +93,7 @@ class BusinessLogic(BasicDataTest):
             self.superuser,
         )
         # super users should always be able to see them
+        print self.superuser2.is_superuser
         self.assertTrue(VideoVisibilityPolicy.objects.user_can_see(self.superuser2, self.video ))
         # regular users not 
         self.assertFalse(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video))
@@ -119,6 +122,37 @@ class BusinessLogic(BasicDataTest):
         self.assertTrue(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video, policy.site_secret_key))
         
 
+    def test_can_create_for_video(self):
+        self.assertTrue(
+            VideoVisibilityPolicy.objects.can_create_for_video(self.video, self.regular_user))
+        # check with a user policy
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.regular_user,
+        )
+        video = refresh(self.video)
+        self.assertFalse(
+            VideoVisibilityPolicy.objects.can_create_for_video(video, self.team1_member.user))
+        self.assertFalse(
+            VideoVisibilityPolicy.objects.can_create_for_video(video, self.team1))
+        policy.delete()
+        video = refresh(self.video)
+        # check with a team policy
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.team1,
+        )
+        video = refresh(self.video)
+        self.assertFalse(
+            VideoVisibilityPolicy.objects.can_create_for_video(video, self.regular_user))
+        self.assertFalse(
+            VideoVisibilityPolicy.objects.can_create_for_video(video, self.team2))
+        
+        
+        
+        
        
 class ViewTest(BasicDataTest):
 
@@ -146,11 +180,12 @@ class ViewTest(BasicDataTest):
         policy = VideoVisibilityPolicy.objects.create_for_video(
             self.video,
             VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY,
-            self.regular_user,
-        )
+            self.regular_user)
         response = self.client.get(video_url)
         self.assertEqual(response.status_code, 403)
-        self.client.login(username=self.regular_user.username, password=self.regular_user.username )
+        self.assertTrue(self.client.login(
+                username=self.regular_user.username,
+                password=self.regular_user.username ))
         # login in as owner should give us access
         response = self.client.get(video_url)
         self.assertEqual(response.status_code, 200)
@@ -244,3 +279,6 @@ class WidgetTest(TestCase):
 
     def test_on_private_on_referral(self):
         pass
+
+def refresh(obj):
+    return obj.__class__.objects.get(pk=obj.pk)

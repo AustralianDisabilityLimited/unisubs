@@ -153,7 +153,8 @@ def send_change_title_email(video_id, user_id, old_title, new_title):
             'editor': user,
             'old_title': old_title,
             'hash': obj.hash_for_video(video.video_id),
-            'new_title': new_title
+            'new_title': new_title,
+            "STATIC_URL": settings.STATIC_URL,
         }
         send_templated_email(obj.email, subject, 
                              'videos/email_title_changed.html',
@@ -228,7 +229,8 @@ def _send_letter_translation_start(translation_version):
             'user': user,
             'language': language,
             'video': video,
-            'hash': user.hash_for_video(video.video_id)
+            'hash': user.hash_for_video(video.video_id),
+            "STATIC_URL": settings.STATIC_URL,
         }
         subject = 'New %s translation by %s of "%s"' % \
             (language.language_display(), translation_version.user.__unicode__(), video.__unicode__())
@@ -300,7 +302,8 @@ def _send_letter_caption(caption_version):
         'captions': captions,
         'video_url': video.get_absolute_url(),
         'language_url': language.get_absolute_url(),
-        'user_url': caption_version.user and caption_version.user.get_absolute_url()
+        'user_url': caption_version.user and caption_version.user.get_absolute_url(),
+        "STATIC_URL": settings.STATIC_URL,
     }
 
     subject = u'New edits to "%s" by %s on Universal Subtitles' % (language.video, caption_version.user)

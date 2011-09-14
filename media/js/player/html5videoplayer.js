@@ -24,32 +24,10 @@ goog.provide('unisubs.player.Html5VideoPlayer');
  * @param {boolean} forDialog
  */
 unisubs.player.Html5VideoPlayer = function(videoSource, forDialog) {
-    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
-
-    this.videoSource_ = videoSource;
-    this.videoElem_ = null;
-
-    // only used in FF, since they don't support W3 buffered spec yet.
-    this.videoLoaded_ = 0;
-    this.videoTotal_ = 0;
-    this.forDialog_ = forDialog;
-    this.playToClick_ = false;
-
-    this.progressThrottle_ = new goog.Throttle(
-        this.videoProgress_,
-        unisubs.player.AbstractVideoPlayer.PROGRESS_INTERVAL,
-        this);
-    this.timeUpdateThrottle_ = new goog.Throttle(
-        this.sendTimeUpdateInternal,
-        unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL,
-        this);
-    this.playedOnce_ = false;
+    unisubs.player.Html5MediaPlayer.call(this, videoSource, forDialog);
 };
 goog.inherits(unisubs.player.Html5VideoPlayer,
-              unisubs.player.AbstractVideoPlayer);
-
-unisubs.player.Html5VideoPlayer.logger_ =
-    goog.debug.Logger.getLogger('Html5VideoPlayer');
+              unisubs.player.Html5MediaPlayer);
 
 /**
  * @override
@@ -57,12 +35,12 @@ unisubs.player.Html5VideoPlayer.logger_ =
 unisubs.player.Html5VideoPlayer.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     if (unisubs.player.supportsVideoType(
-        this.videoSource_.getVideoType())) {
-        this.videoElem_ = this.createVideoElement_($d);
-        this.setElementInternal(this.videoElem_);
-        if (this.forDialog_)
+        this.mediaSource.getVideoType())) {
+        this.mediaElem = this.createVideoElement_($d);
+        this.setElementInternal(this.mediaElem);
+        if (this.forDialog)
             unisubs.style.setSize(
-                this.videoElem_,
+                this.mediaElem,
                 unisubs.player.AbstractVideoPlayer.DIALOG_SIZE);
     }
     else {
@@ -77,25 +55,13 @@ unisubs.player.Html5VideoPlayer.prototype.createDom = function() {
     }
 };
 
-/**
- * @override
- * @param {Element} element Video element to decorate.
- */
-unisubs.player.Html5VideoPlayer.prototype.decorateInternal = function(element) {
-    unisubs.player.Html5VideoPlayer.superClass_.decorateInternal.call(
-        this, element);
-    if (element.nodeName != 'VIDEO')
-        throw Error(goog.ui.Component.Error.DECORATE_INVALID);
-    this.videoElem_ = element;
-};
-
 unisubs.player.Html5VideoPlayer.prototype.createVideoElement_ = 
     function($d) 
 {
     var params = { 'autobuffer': 'true' };
-    if (!this.forDialog_) {
-        if (this.videoSource_.getVideoConfig()) {
-            var config = this.videoSource_.getVideoConfig();
+    if (!this.forDialog) {
+        if (this.mediaSource.getVideoConfig()) {
+            var config = this.mediaSource.getVideoConfig();
             if (config['play_to_click']) {
                 this.playToClick_ = true;
                 goog.object.remove(config, 'play_to_click');
@@ -107,176 +73,32 @@ unisubs.player.Html5VideoPlayer.prototype.createVideoElement_ =
     return $d('video', params,
               $d('source', {'src': this.videoSource_.getVideoURL()}));
 };
-unisubs.player.Html5VideoPlayer.prototype.enterDocument = function() {
-    unisubs.player.Html5VideoPlayer.superClass_.enterDocument.call(this);
-    if (!this.videoElem_)
-        return;
-    this.getHandler().
-        listen(this.videoElem_, 'play', this.videoPlaying_).
-        listen(this.videoElem_, 'pause', this.videoPaused_).
-        listen(this.videoElem_, 'progress', this.videoProgressListener_).
-        listen(this.videoElem_, 'loadedmetadata', this.setDimensionsKnownInternal).
-        listen(this.videoElem_, 'timeupdate', this.sendTimeUpdate_).
-        listen(this.videoElem_, 'ended', this.dispatchEndedEvent).
-        listenOnce(this.videoElem_, 'click', this.playerClicked_);
-    if (this.videoElem_['readyState'] >= this.videoElem_['HAVE_METADATA']){
-        
-        this.setDimensionsKnownInternal();
-    }
-    this.restorePreviousVolume_();
-    
+
+
+/**
+ * @override
+ * @param {Element} element Video element to decorate.
+ */
+unisubs.player.Html5VideoPlayer.prototype.decorateInternal = function(element) {
+    unisubs.player.Html5VideoPlayer.superClass_.decorateInternal.call(
+        this, element);
+    if (element.nodeName != 'VIDEO')
+        throw Error(goog.ui.Component.Error.DECORATE_INVALID);
+    this.mediaElem = element;
 };
 
-
-unisubs.player.Html5VideoPlayer.prototype.playerClicked_ = function(e) {
+unisubs.player.Html5VideoPlayer.prototype.playerClickedInternal = function(e) {
     if (this.playToClick_ && !this.playedOnce_) {
         e.preventDefault();
         this.play();
     }
 };
 
-unisubs.player.Html5VideoPlayer.prototype.sendTimeUpdate_ = function() {
-    if (this.playedOnce_)
-        this.timeUpdateThrottle_.fire();
-};
-
-unisubs.player.Html5VideoPlayer.prototype.setVideoSize = function(width, height) {
-    unisubs.style.setSize(this.videoElem_, width, height);
-};
-
-unisubs.player.Html5VideoPlayer.prototype.videoPlaying_ = function(event) {
-    this.playedOnce_ = true;
-    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PLAY);
-};
-
-unisubs.player.Html5VideoPlayer.prototype.videoPaused_ = function(event) {
-    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PAUSE);
-};
-
-unisubs.player.Html5VideoPlayer.prototype.videoProgressListener_ =
-    function(event)
-{
-    if (event.getBrowserEvent()['loaded'] && event.getBrowserEvent()['total']) {
-        this.videoLoaded_ = event.getBrowserEvent()['loaded'];
-        this.videoTotal_ = event.getBrowserEvent()['total'];
-        if (this.videoTotal_ == -1)
-            this.videoTotal_ = this.videoLoaded_;
-    }
-    this.progressThrottle_.fire();
-};
-
-unisubs.player.Html5VideoPlayer.prototype.videoProgress_ = function() {
-    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PROGRESS);
-};
-
-unisubs.player.Html5VideoPlayer.prototype.getVolume = function() {
-    return this.videoElem_['volume'];
-};
-unisubs.player.Html5VideoPlayer.prototype.setVolume = function(volume) {
-    this.videoElem_['volume'] = volume;
-    unisubs.player.Html5VideoPlayer.superClass_.setVolume.call(this, volume);
-    
-};
-unisubs.player.Html5VideoPlayer.prototype.getBufferedLength = function() {
-    if (this.videoElem_['buffered'])
-        return this.videoElem_['buffered']['length'];
-    else
-        return this.videoTotal_ == 0 ? 0 : 1;
-};
-unisubs.player.Html5VideoPlayer.prototype.getBufferedStart = function(index) {
-    if (this.videoElem_['buffered'])
-        return this.videoElem_['buffered']['start'](index);
-    else
-        return 0;
-};
-unisubs.player.Html5VideoPlayer.prototype.getBufferedEnd = function(index) {
-    if (this.videoElem_['buffered'])
-        return this.videoElem_['buffered']['end'](index);
-    else if (this.videoTotal_ != 0 && this.getDuration() != 0)
-        return this.getDuration() * this.videoLoaded_ / this.videoTotal_;
-    else
-        return 0;
-};
-unisubs.player.Html5VideoPlayer.prototype.getDuration = function() {
-    var duration = this.videoElem_['duration'];
-    return isNaN(duration) ? 0 : duration;
-};
-unisubs.player.Html5VideoPlayer.prototype.isPausedInternal = function() {
-    return this.videoElem_['paused'];
-};
-
-unisubs.player.Html5VideoPlayer.prototype.videoEndedInternal = function() {
-    return this.videoElem_['ended'];
-};
-
-unisubs.player.Html5VideoPlayer.prototype.isPlayingInternal = function() {
-    var readyState = this.getReadyState_();
-    var RS = unisubs.player.Html5VideoPlayer.ReadyState_;
-    return (readyState == RS.HAVE_FUTURE_DATA ||
-            readyState == RS.HAVE_ENOUGH_DATA) &&
-           !this.isPaused() && !this.videoEnded();
-};
-
-unisubs.player.Html5VideoPlayer.prototype.playInternal = function() {
-    this.videoElem_['play']();
-};
-
-unisubs.player.Html5VideoPlayer.prototype.pauseInternal = function() {
-    this.videoElem_['pause']();
-};
-
 unisubs.player.Html5VideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: replace this with an actual URL
-    this.videoElem_['src'] = 'http://holmeswilson.org/tinyblank.ogv';
+    this.mediaElem['src'] = 'http://holmeswilson.org/tinyblank.ogv';
     return true;
 };
-
-unisubs.player.Html5VideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
-    this.videoElem_['src'] = this.videoSource_.getVideoURL();
-    this.setLoadingStopped(false);
-    this.setPlayheadTime(playheadTime);
-    this.pause();
-};
-
-unisubs.player.Html5VideoPlayer.prototype.getPlayheadTimeInternal = function() {
-    return this.videoElem_["currentTime"];
-};
-
-unisubs.player.Html5VideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
-    try{
-        this.videoElem_["currentTime"] = playheadTime;
-    }catch(e){
-        // this migth fail if we have not loaded metadata yet
-    }
-    
-};
-
 unisubs.player.Html5VideoPlayer.prototype.getVideoSize = function() {
-    return goog.style.getSize(this.videoElem_);
-};
-
-unisubs.player.Html5VideoPlayer.prototype.getVideoElements = function() {
-    return [this.videoElem_];
-};
-
-unisubs.player.Html5VideoPlayer.prototype.getReadyState_ = function() {
-    return this.videoElem_["readyState"];
-};
-
-unisubs.player.Html5VideoPlayer.prototype.disposeInternal = function() {
-    unisubs.player.Html5VideoPlayer.superClass_.disposeInternal.call(this);
-    this.progressThrottle_.dispose();
-    this.timeUpdateThrottle_.dispose();
-};
-
-/**
- * See http://www.w3.org/TR/html5/video.html#dom-media-have_nothing
- * @enum
- */
-unisubs.player.Html5VideoPlayer.ReadyState_ = {
-    HAVE_NOTHING  : 0,
-    HAVE_METADATA : 1,
-    HAVE_CURRENT_DATA : 2,
-    HAVE_FUTURE_DATA : 3,
-    HAVE_ENOUGH_DATA : 4
+    return goog.style.getSize(this.mediaElem);
 };

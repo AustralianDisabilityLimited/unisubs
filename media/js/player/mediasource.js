@@ -17,7 +17,7 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
- * @fileoverview An interface for a video source
+ * @fileoverview An interface for a media source
  *
  */
 

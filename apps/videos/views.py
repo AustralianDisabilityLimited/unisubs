@@ -57,6 +57,8 @@ from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
 
+from doorman import feature_is_on
+
 from apps.teams.moderation import user_can_moderate, get_pending_count
 
 rpc_router = RpcRouter('videos:rpc_router', {
@@ -425,11 +427,14 @@ def history(request, video_id, lang=None, lang_id=None):
         original.pending_moderation_count =  get_pending_count(video.subtitle_language())
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
         .filter(had_version=True).select_related('video'))
-    context["user_can_moderate"] = user_can_moderate(video, request.user)
-    if context["user_can_moderate"]:
-        # FIXME: use  amore efficient count
-        for l in translations:
-            l.pending_moderation_count = get_pending_count(l)
+
+    context["user_can_moderate"] = False
+    if feature_is_on("MODERATION"):
+        context["user_can_moderate"] = user_can_moderate(video, request.user)
+        if context["user_can_moderate"]:
+                # FIXME: use  amore efficient count
+            for l in translations:
+                l.pending_moderation_count = get_pending_count(l)
         
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
@@ -472,7 +477,10 @@ def revision(request, pk):
     context['prev_version'] = version.prev_version()
     language = version.language
     context['language'] = language
-    context["user_can_moderate"] = user_can_moderate(version.video, request.user)
+
+    context["user_can_moderate"] = False
+    if feature_is_on("MODERATION"):
+        context["user_can_moderate"] = user_can_moderate(video, request.user)
     context['widget_params'] = _widget_params(request, \
             language.video, version.version_no, language)
     context['latest_version'] = language.latest_version()

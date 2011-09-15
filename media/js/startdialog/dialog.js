@@ -75,13 +75,13 @@ unisubs.startdialog.Dialog.prototype.setVisible = function(visible) {
 
 
 unisubs.startdialog.Dialog.prototype.makeDropdown_ = 
-    function($d, contents) 
+    function($d, contents, opt_className) 
 {
 var options = [];
     for (var i = 0; i < contents.length; i++){
          options.push($d('option', {'value': contents[i][0]}, contents[i][1]));
     }
-    return $d('select', null, options);
+    return $d('select', (opt_className || null), options);
 };
 
 unisubs.startdialog.Dialog.prototype.responseReceived_ = function(jsonResult) {
@@ -128,7 +128,7 @@ unisubs.startdialog.Dialog.prototype.setFromContents_ = function() {
         var $d = goog.bind(this.getDomHelper().createDom,
                            this.getDomHelper());
         this.fromLanguageDropdown_ = this.makeDropdown_(
-            $d, fromLanguageContents);
+            $d, fromLanguageContents, "from-language");
         goog.dom.removeChildren(this.fromContainer_);
         this.fromContainer_.appendChild(this.fromLanguageDropdown_);
         this.getHandler().listen(
@@ -147,7 +147,8 @@ unisubs.startdialog.Dialog.prototype.addToLanguageSection_ = function($d) {
         function(l) {
             return [l.KEY, l.toString(), l.LANGUAGE];
         });
-    this.toLanguageDropdown_ = this.makeDropdown_($d, toLanguageContents);
+    this.toLanguageDropdown_ = this.makeDropdown_(
+        $d, toLanguageContents, "to-language");
     this.toLanguageDropdown_.value = this.model_.getSelectedLanguage().KEY;
     this.contentDiv_.appendChild(
         $d('p', null, 
@@ -168,7 +169,7 @@ unisubs.startdialog.Dialog.prototype.addFromLanguageSection_ = function($d) {
 unisubs.startdialog.Dialog.prototype.addOriginalLanguageSection_ = function($d) {
     if (this.model_.originalLanguageShown()) {
         this.originalLangDropdown_ = this.makeDropdown_(
-            $d, unisubs.languages);
+            $d, unisubs.languages, "original-language");
         this.originalLangDropdown_.value = 'en';
         this.model_.selectOriginalLanguage('en');
         this.contentDiv_.appendChild(

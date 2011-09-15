@@ -29,7 +29,8 @@ def send_new_message_notification(message_id):
         
     context = {
         "message": message,
-        "domain":  Site.objects.get_current().domain
+        "domain":  Site.objects.get_current().domain,
+        "STATIC_URL": settings.STATIC_URL,
     }
 
     send_templated_email(to, subject, "messages/email/message_received.html", context)

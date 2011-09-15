@@ -182,7 +182,8 @@
                 {% include 'videos/_left_navigation.html' %}
             </ul>
 
-             <h3>{% trans "Moderation" %}</h3>
+            {% if shows_moderation_title %}
+              <h3>{% trans "Moderation" %}</h3>
               <ul class="left_nav" id="moderation-menu">
                 {% switch_feature MODERATION %}
                     <li>{% render_approve_all_button video user %}</li>
@@ -190,6 +191,7 @@
                 <li>{% team_add_video_select %}</li>
                 <li>{% render_belongs_to_team_list video %}</li>
               </ul>
+            {% endif %}
 
             {% if user.is_staff and perms.videos.edit_video %}
               <h3>{% trans "Admin" %}</h3>
@@ -271,7 +273,7 @@
                                     <a href="{% url widget:download_sbv %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_pk={{ language.pk }}{% endif %}">SBV</a>
                                 </li>
                                 <li>
-                                    <a href="{% url widget:download_dxfp %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_pk={{ language.pk }}{% endif %}">DXFP</a>
+                                    <a href="{% url widget:download_dxfp %}?video_id={{ video.video_id }}{% if not language.is_original %}&lang_pk={{ language.pk }}{% endif %}">DFXP</a>
                                 </li>                                
                             </ul>
                         </div>

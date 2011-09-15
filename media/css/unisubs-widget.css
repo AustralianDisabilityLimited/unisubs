@@ -3304,6 +3304,7 @@ color: #42bce9 !important;
 .unisubs-dropdown .unisubs-requestSubtitles{
 /*background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;*/
 color: #42bce9 !important;
+display:none !important;
 }
 
 .unisubs-dropdown .unisubs-improveSubtitles{

@@ -202,6 +202,7 @@ unisubs.widget.DropDown.prototype.createActionLinks_ = function($d) {
     this.improveSubtitlesLink_ =
         $d('li', 'unisubs-improveSubtitles',
            $d('a', {'href': '#'}, 'Improve These Subtitles'));
+    // this is hidden throught the css on unisubs-widget.css
     this.requestSubtitlesLink_ =
         $d('li', 'unisubs-requestSubtitles',
            $d('a', {'href': '#'}, 'Request Subtitles'));

@@ -46,11 +46,14 @@ unisubs.widget.SubtitleController = function(
      * It will get overwritten by the Improve Subtitles button.
      */
     if (!this.dropDown_.hasSubtitles()) {
+        /*
         this.videoTab_.updateNudge(
             'Request Subtitles',
             goog.bind(this.openRequestSubtitlesDialog,
                       this));
+        
         this.videoTab_.showNudge(true);
+         */
     }
 
     this.handler_.listenOnce(

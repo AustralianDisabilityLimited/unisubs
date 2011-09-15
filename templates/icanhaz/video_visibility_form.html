@@ -1,14 +1,14 @@
 {% if message %}
-<span class="{% if not success %}error{%else%}success{%endif%} message">{{message}}</span>
+<span class="{% if not success %}error{%else%}success{%endif%} message">{{message}}{{form.errors}}</span>
 {% endif %}
-<form method="POST" action="{% url icanhaz:get-visibility-form video_id=video.video_id %}">
+<form method="POST" action="{% url icanhaz:get-visibility-form video_id=video.video_id %}" class="video-vis">
 {% csrf_token %}
 <div class="left-col">
   <h3>Settings for the video edit page</h3>
   <label>Who can see/edit this video</label>
        {{form.site_visibility_policy }}
       {{form.site_visibility_policy.error }}
-  <label>Who can change this settins</label>
+  <br/><label>Who can change this settins</label>
        {{form.owner}}
        {{form.owner.error}}
   {% if secret_url %}<span>The secret url for this video is <a href="{% url videos:history video_id=secret_url %}">{{secret_url}}</span>{% endif %}

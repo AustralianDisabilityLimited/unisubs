@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
+from django.conf import settings
 from django import template
 
 register = template.Library()
@@ -100,12 +101,12 @@ video_url = register.tag(video_url)
 @register.inclusion_tag("videos/_visibility_control_button.html")
 def render_visibility_button(video, user):
     # FIXME put the actual criteria for users who can control visibility
-    print user, "fdlsjfah"
     if user.is_superuser is False:
         return {}
     return {
         "user"  : user,
         "video": video,
+        "STATIC_URL": settings.STATIC_URL
         
      }
 

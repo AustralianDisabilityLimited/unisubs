@@ -16,6 +16,7 @@ from apps.videos.models import Video
 from icanhaz.models import VideoVisibilityPolicy
 from icanhaz.forms import VideoVisibilityForm
 
+
 @login_required
 def get_visibility_form(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
@@ -24,10 +25,11 @@ def get_visibility_form(request, video_id):
     message = ""
     success = False
     site_secret_key = None
+    print request.POST, request.method
     if request.method == "POST":
         form = VideoVisibilityForm(
-            user=request.user,
-            video=video,
+            request.user,
+            video,
             data=request.POST)
         if form.is_valid():
             policy = VideoVisibilityPolicy.objects.update_policy(
@@ -43,11 +45,13 @@ def get_visibility_form(request, video_id):
             message = _("Please correct the errors bellow!")
     else:
         if video.policy:
-            data = model_to_dict(video.policy)
-        form = VideoVisibilityForm(
-            data=data,
-            user=request.user,
-            video=video)
+            form = VideoVisibilityForm(request.user, video, data=model_to_dict(video.policy))
+        else:    
+
+            form = VideoVisibilityForm(request.user, video)
+
+        
+            
     return render_to_response("icanhaz/video_visibility_form.html", {
             "video":video,
             "form":form,

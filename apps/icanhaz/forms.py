@@ -12,12 +12,11 @@ class VideoVisibilityForm(forms.Form):
 
     widget_visibility_policy = forms.ChoiceField(
             choices=VideoVisibilityPolicy.WIDGET_VISIBILITY_POLICIES)
-    #owner = forms.ChoiceField(choices=None)
     
 
-    def __init__(self,  *args, **kwargs):
-        self.user = kwargs.pop("user")
-        self.video = kwargs.pop("video")
+    def __init__(self, user, video,  *args, **kwargs):
+        self.user = user
+        self.video = video
         super(VideoVisibilityForm, self).__init__(*args, **kwargs)
         self.fields["owner"].choices = (("user-%s" % self.user.pk, _("Only me"),), ) 
         [("team-%s" % x.pk, "Team %s" % x.name) for  x in self.user.managed_teams()]
@@ -40,4 +39,6 @@ class VideoVisibilityForm(forms.Form):
     def is_valid(self, *args, **kwargs):
         if not VideoVisibilityPolicy.objects.can_create_for_video(self.video, self.user):
             raise SuspiciousOperation(_("This user cannot change those settings"))
-        return super(VideoVisibilityForm, self).is_valid(*args, **kwargs)
+        valid =  super(VideoVisibilityForm, self).is_valid(*args, **kwargs)
+        print "is valid", valid, self.is_bound, self.errors
+        return valid

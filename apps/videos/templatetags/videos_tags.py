@@ -97,3 +97,17 @@ def video_url(parser, token, node_cls=VideoURLNode):
 video_url = register.tag(video_url)
 
 
+@register.inclusion_tag("videos/_visibility_control_button.html")
+def render_visibility_button(video, user):
+    # FIXME put the actual criteria for users who can control visibility
+    print user, "fdlsjfah"
+    if user.is_superuser is False:
+        return {}
+    return {
+        "user"  : user,
+        "video": video,
+        
+     }
+
+
+    

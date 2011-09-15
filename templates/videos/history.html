@@ -245,6 +245,9 @@
                         {% render_approval_toolbar user last_version %}
                         {% endswitch_feature %}
                         <a id="edit_subtitles_button" href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a>
+                        {% if user %}
+                            {% render_visibility_button video user %}
+                        {% endif %}
                         {% if last_version.subtitles %}
                         <div class="sort_button">
                             <div class='arrow'>
@@ -364,6 +367,8 @@
                                     <td> {% if item.note %}{{ item.note }}{% else %}&nbsp;{% endif %}</td>
                                     <td> {{ item.time_change_display }}</td>
                                     <td class="{% if not user_can_moderate %}last{% endif %}"> {{ item.text_change_display }}</td>
+
+
                                     {% switch_feature MODERATION %}
                                     
                                     {% if user_can_moderate %}
@@ -398,6 +403,7 @@
             {% if user_can_moderate %}
                 {% include 'moderation/moderation-buttons.js' %}
             {% endif %}
+
             $('#edit_subtitles_button').click( function(e) {
                 if (!(localStorage && localStorage.getItem)) {
                     alert("Sorry, you'll need to upgrade your browser to use the subtitling dialog.");

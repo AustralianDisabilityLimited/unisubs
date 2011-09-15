@@ -249,9 +249,8 @@ def _get_video_revision(func):
         return func(request, version, *args, **kwargs)
     return wraps(func)(wrapper)
 
-@_get_video_revision
+@_get_video_from_code
 def video(request, video, video_url=None, title=None):
-    video = get_object_or_404(Video, video_id=video_id)
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     

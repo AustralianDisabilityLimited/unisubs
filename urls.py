@@ -41,6 +41,7 @@ urlpatterns = patterns(
     (r'^sentry/', include('sentry.web.urls')),
     (r'^comments/', include('comments.urls', namespace='comments')),
     (r'^messages/', include('messages.urls', namespace='messages')),
+    (r'^icanhaz/', include('icanhaz.urls', namespace="icanhaz")),
     url(r'^rosetta/', include('rosetta.urls')),
     (r'^pcf-targetter/', include('targetter.urls', namespace='targetter')),
     url(r'^logout/', 'django.contrib.auth.views.logout', name='logout'),

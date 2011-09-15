@@ -72,16 +72,15 @@ class VideoVisibilityManager(models.Manager):
                 return policy.owner.can_see_video(user, video)
             
     def can_create_for_video(self, video, user):
+        if hasattr(video, "pk") is False:
+            video = Video.objects.get(pk=video)
         if not video.policy:
-            return True
-        
+           return True
         elif video.policy.owner == user or hasattr(user, "is_superuser") and user.is_superuser:
-
             return True
         elif video.policy.belongs_to_team and hasattr(user, "is_authenticated"):
             return video.policy.owner.can_see_video(user, video)
 
-        
     def create_for_video(self, video, site_policy, owner, widget_policy=None):
         if widget_policy is None:
             widget_policy = VideoVisibilityPolicy.WIDGET_DEFAULT_POLICY
@@ -96,19 +95,20 @@ class VideoVisibilityManager(models.Manager):
             widget_visibility_policy=widget_policy)
         v.save()
         return v
-    
 
     def update_policy(self, video, site_policy, widget_policy, owner):
-        if not can_create_for_video(self, video, policy, owner):
+        if not self.can_create_for_video( video,  owner):
             raise SuspiciousOperation("no create@")
         full_policy = video.policy
         if not full_policy:
             # we are creating one,
-            full_policy = self.create_for_video(video, site_policy, owner, widget_visibility_policy)
+            full_policy = self.create_for_video(video, site_policy, owner, widget_policy)
         else:
-            full_policy.site_visibility_policy = site_policy.site_policy
+            full_policy.site_visibility_policy = site_policy
             full_policy.widget_visibility_policy = widget_policy
+            full_policy.owner = owner
             full_policy.save()
+        return full_policy    
         
     # we change owners
     def video_has_owner(self, video):
@@ -202,4 +202,3 @@ class VideoVisibilityPolicy(models.Model):
     
     def __unicode__(self):
         return "Policy for %s - %s " % (self.video, self.site_visibility_policy, )
-    

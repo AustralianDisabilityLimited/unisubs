@@ -89,14 +89,16 @@ def notify_comment_by_email(comment,  version=None,  moderator=None, is_rejectio
         send_templated_email_async.delay(
             user.email,
             subject,
-            "comments/email/comment-notification.html", {
+            "comments/email/comment-notification.html", 
+            {
                 "video": video,
-                "user": user,
+                "commenter": unicode(comment.user),
+                "commenter_url": comment.user.get_absolute_url(),
                 "version_url":version_url,
                 "language_url":language_url,
                 "domain":domain,
                 "version": version,
                 "body": comment.content,
                 "STATIC_URL": settings.STATIC_URL,
-            }, not settings.DEBUG)
-
+            }, 
+            fail_silently=not settings.DEBUG)

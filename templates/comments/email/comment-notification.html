@@ -5,7 +5,7 @@
     <div style="font-size: 12px;">
 
 
-      <p>Your video just received a new comment. <a href="http://{{ domain }}{{ user.get_absolute_url }}">{{ user }}</a> commented on "{{video.title_display}}."</p>
+      <p>Your video just received a new comment. <a href="http://{{ domain }}{{ commenter_url }}">{{ commenter }}</a> commented on "{{video.title_display}}."</p>
 
       {% if is_rejection  %}
             <p>A version of <a href="{{language_url}}">version.language.language</a> subtitles, <a href="{{version_url}}">version.version_no</a>, was declined.</p>

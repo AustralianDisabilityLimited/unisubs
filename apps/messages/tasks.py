@@ -4,6 +4,7 @@ from messages.models import Message
 from django.contrib.sites.models import Site
 from sentry.client.models import client
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.conf import settings
 
 @task()
 def send_new_message_notification(message_id):
@@ -15,7 +16,7 @@ def send_new_message_notification(message_id):
         return
     
     user = message.user
-    
+
     if not user.email or not user.is_active or not user.changes_notification:
         return
 

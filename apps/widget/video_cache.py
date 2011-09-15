@@ -28,7 +28,11 @@ from settings import ALL_LANGUAGES
 
 TIMEOUT = 60 * 60 * 24 * 5 # 5 days
 
-def get_video_id(video_url):
+def get_video_id(video_url, public_only=False):
+    """
+    Returns the cache video_id for this video
+    If public only is
+    """
     cache_key = _video_id_key(video_url)
     value = cache.get(cache_key)
     if bool(value):
@@ -44,6 +48,10 @@ def get_video_id(video_url):
             return None
         
         video_id = video.video_id
+        if public_only and not VideoVisibilityPolicy.objects.can_show_widget(video, referer):
+            # what is the best way to proceed here, return and set the value to False
+            return None
+        
         cache.set(cache_key, video_id, TIMEOUT)
         return video_id
 
@@ -122,7 +130,7 @@ def _video_is_moderated_key(video_id):
     return 'widget_video_is_moderated_{0}'.format(video_id)
 
 def _video_visibility_policy_key(video_id):
-    return 'widget_video_is_moderated_visibility_key_{0}'.format(video_id)
+    return 'widget_video_is_moderated_visibility_key _{0}'.format(video_id)
 
 
 def pk_for_default_language(video_id, language_code):
@@ -243,7 +251,10 @@ def get_visibility_policies(video_id):
     value = cache.get(cache_key)
     if value is  None:
         from videos.models import Video
-        video = Video.objects.get(video_id=video_id)
+        try:
+            video = Video.objects.get(video_id=video_id)
+        except Video.DoesNotExist:
+            return {}
         value = {
           "site"  : VideoVisibilityPolicy.objects.site_policy_for_video(video),
           "widget": VideoVisibilityPolicy.objects.widget_policy_for_video(video),

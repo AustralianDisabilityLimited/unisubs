@@ -1,15 +1,15 @@
-import datetime, time, random
+import datetime, time, random, urlparse
 
+from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.utils.hashcompat import sha_constructor
-from django.conf import settings
 
+from auth.models import CustomUser as User
 from teams.models import Team
 from videos.models import Video
-from auth.models import CustomUser as User
 from widget.video_cache import invalidate_video_id
 
 def _debug(func):
@@ -22,9 +22,7 @@ def _debug(func):
 
 class VideoVisibilityManager(models.Manager):
 
-
     def video_for_user(self, user, video_identifier):
-
         """
         Return a video if the passed user has the right to view it.
 
@@ -36,7 +34,6 @@ class VideoVisibilityManager(models.Manager):
         secret_key = None
         if not isinstance(video_identifier, Video):
             try:
-
                 policy = VideoVisibilityPolicy.objects.get(site_secret_key=video_identifier)
                 secret_key = video_identifier
                 video = policy.video
@@ -49,6 +46,15 @@ class VideoVisibilityManager(models.Manager):
             return video
         return None
 
+    def user_is_owner(self, video, policy, user):
+        if not user or not policy:
+            return None
+        if policy.owner == user or (hasattr(user, "is_superuser") and user.is_superuser):
+            return True
+        if policy.belongs_to_team:
+            return policy.owner.can_see_video(user, video)
+        return False
+            
     def user_can_see(self, user, video, secret_key=None):
         """
         Determines if a user can see the given video.
@@ -66,11 +72,31 @@ class VideoVisibilityManager(models.Manager):
             if policy.site_visibility_policy == VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_WITH_KEY and \
                     policy.site_secret_key == secret_key:
                 return True
+            return self.user_is_owner(video, policy, user)
             if policy.owner == user or (hasattr(user, "is_superuser") and user.is_superuser):
                 return True
             if policy.belongs_to_team:
                 return policy.owner.can_see_video(user, video)
-            
+
+    def can_show_widget(self, video_identifier, referer=None, user=None):
+        if hasattr(video_identifier, "pk") is False:
+            video = Video.objects.get(video_id=video_identifier)
+        else:
+            video = video_identifier
+        if not video.policy:
+           return True
+        visibility = video.policy.widget_visibility_policy
+
+        if visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC:
+            return True
+        elif self.user_is_owner(video, video.policy, user):
+            return True
+        elif visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN:
+            return False
+        elif visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_WHITELISTED:
+            domain = urlparse.urlparse(referer).netloc
+            return  domain in video.policy.embed_allowed_domains
+        
     def can_create_for_video(self, video, user):
         if hasattr(video, "pk") is False:
             video = Video.objects.get(pk=video)
@@ -124,10 +150,10 @@ class VideoVisibilityManager(models.Manager):
         return video.video_id
 
     def site_policy_for_video(self, video):
-        return (video.policy and video.policy.site_visibility_policy) or VideoVisibilityPolicy.objects.SITE_DEFAULT_POLICY
+        return (video.policy and video.policy.site_visibility_policy) or VideoVisibilityPolicy.SITE_DEFAULT_POLICY
 
     def widget_policy_for_video(self, video):
-        return (video.policy and video.policy.widget_visibility_policy) or VideoVisibilityPolicy.objects.WIDGET_DEFAULT_POLICY
+        return (video.policy and video.policy.widget_visibility_policy) or VideoVisibilityPolicy.WIDGET_DEFAULT_POLICY
 
 class VideoVisibilityPolicy(models.Model):
     video = models.OneToOneField(Video, unique=True, related_name="_policy")
@@ -169,7 +195,8 @@ class VideoVisibilityPolicy(models.Model):
     widget_visibility_policy = models.CharField(choices=WIDGET_VISIBILITY_POLICIES,
                                          default=WIDGET_VISIBILITY_PUBLIC,
                                          max_length=32)
-
+    # denormalized list of dmain names separated by comas, #TODO: write a validator for this
+    embed_allowed_domains = models.TextField(blank=True, null=True)
     objects = VideoVisibilityManager()
 
     def save(self, skips_timestamp=False, *args, **kwargs):

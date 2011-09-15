@@ -156,7 +156,9 @@
         {% widget widget_params %}
     </div>
     <div class="right_column">
+      {% if shows_widget_sharing %}
         {% include '_sharing_widget.html' %}
+      {% endif %}
     </div>
     
     <!-- Start Transcript -->

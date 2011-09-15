@@ -33,6 +33,7 @@ from django.utils.translation import ugettext as _
 from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
+from icanhaz.models import VideoVisibilityPolicy
 from django.utils import translation
 
 from utils import send_templated_email
@@ -81,11 +82,18 @@ class Rpc(BaseRpc):
         return { 'response': 'ok' }
 
     def show_widget(self, request, video_url, is_remote, base_state=None, additional_video_urls=None):
-        video_id = video_cache.get_video_id(video_url)
-
-        if video_id is None: # for example, private youtube video.
+        public_only = False
+        
+        video_id = video_cache.get_video_id(video_url) 
+        if video_id is None: # for example, private youtube video or private widgets
             return None
-
+        visibility_policy = video_cache.get_visibility_policies(video_id)
+        if visibility_policy['widget'] != VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC:
+            if not VideoVisibilityPolicy.objects.can_show_widget(
+                video_id,
+                referer=request.META.get('referer'),
+                user=request.user):
+                return None
         try:    
             video_urls = video_cache.get_video_urls(video_id)
         except models.Video.DoesNotExist:

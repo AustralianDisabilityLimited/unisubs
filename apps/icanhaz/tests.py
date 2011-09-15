@@ -1,4 +1,6 @@
 #from django.utils import unittest
+import json
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
@@ -152,7 +154,24 @@ class BusinessLogic(BasicDataTest):
         
         
         
-        
+class WidgetBusinessLogicTest(BasicDataTest):
+    def test_no_policy_widget_ok(self):
+        pass
+
+    def test_public_policy_ok(self):
+        pass
+
+    def test_embed_forbid(self):
+        # for owner
+        # for super user
+        pass
+
+    def test_with_hidden_secret(self):
+        pass
+
+    def test_from_referral(self):
+        # not implemented yet
+        pass
        
 class ViewTest(BasicDataTest):
 
@@ -262,23 +281,103 @@ class ViewTest(BasicDataTest):
         # other users should not see the secret url
         self.client.logout()
         response = self.client.get(video_url_secret)
-        self.assertEqual(response.status_code, 403)        
-        
-        
+        self.assertEqual(response.status_code, 403)
+
+    def test_widget_sharing_not_available_when_widget_hidden(self):
+        video_url = reverse("videos:history",                            
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['shows_widget_sharing'])
+
+
+        video_url = reverse("videos:video",                            
+                            kwargs={'video_id':self.video.video_id})
                 
-class WidgetTest(TestCase):
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['shows_widget_sharing'])
 
+        
+        # moderate the video for team
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN
+        )
+
+        video_url = reverse("videos:history",                            
+                            kwargs={'video_id':self.video.video_id})
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['shows_widget_sharing'])
+
+
+        video_url = reverse("videos:video",                            
+                            kwargs={'video_id':self.video.video_id})
+                
+        response = self.client.get(video_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['shows_widget_sharing'], True)
+                
+class WidgetTest(BasicDataTest):
+
+    def test_videos_without_policy(self):
+        logic = VideoVisibilityPolicy.objects
+        self.assertTrue(logic.can_show_widget(self.video))
+        
     def test_public_widget(self):
-        pass
+        logic = VideoVisibilityPolicy.objects
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC,
+        )
+        self.assertTrue(logic.can_show_widget(self.video, None))
+        self.assertTrue(logic.can_show_widget(self.video, "google.com"))
+        policy.delete()
 
-    def test_private_widget_not_on_video_url(self):
-        pass
+    def test_private_widget_hidden(self):
+        logic = VideoVisibilityPolicy.objects
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        self.assertFalse(logic.can_show_widget(self.video, None))
+        self.assertFalse(logic.can_show_widget(self.video, None))
+        self.assertFalse(logic.can_show_widget(self.video, "google.com"))
 
-    def test_private_widget_on_video_id(self):
-        pass
 
     def test_on_private_on_referral(self):
-        pass
+        logic = VideoVisibilityPolicy.objects
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_WHITELISTED,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.embed_allowed_domains = "pculture.org,eff.org"
+        self.assertFalse(logic.can_show_widget(self.video, None))
+        self.assertFalse(logic.can_show_widget(self.video, "microsoft.com"))
+        self.assertFalse(logic.can_show_widget(self.video, "pculture.org"))
+
+
+class WidgetRPCTest(BasicDataTest):
+
+    def test_visibility_in_widget(self):
+        video_url = self.video.get_video_url()
+        response = self.client.post(
+            reverse('widget:rpc', args=['show_widget']),
+            {
+                "video_url":video_url,
+            })
+        print "response '%s'" % response
+        data  =  json.loads(response.content)
+        print data, reponse.status_code
 
 def refresh(obj):
     return obj.__class__.objects.get(pk=obj.pk)

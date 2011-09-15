@@ -117,7 +117,9 @@
         {% widget widget_params %}
     </div>
     <div class="grid_6 omega right_column">
-        {% include '_sharing_widget.html' %}
+      {% if shows_widget_sharing %}
+      {% include '_sharing_widget.html' %}
+      {% endif %}
     </div>
     <div class="section">
         <div class="grid_3 left_nav_wrapper alpha">

@@ -272,6 +272,7 @@ def video(request, video, video_url=None, title=None):
     context['translations'] = translations
 
     context["user_can_moderate"] = user_can_moderate(video, request.user)
+    context['shows_widget_sharing'] = VideoVisibilityPolicy.objects.can_show_widget(video, request.META.get('HTTP_REFERER', ''))    
     if context["user_can_moderate"]:
         # FIXME: use  amore efficient count
         for l in translations:
@@ -498,6 +499,7 @@ def history(request, video, lang=None, lang_id=None):
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
+    context['shows_widget_sharing'] = VideoVisibilityPolicy.objects.can_show_widget(video, request.META.get('HTTP_REFERER', ''))
     
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
@@ -563,7 +565,7 @@ def rollback(request, version):
 def diffing(request, first_version, second_pk):
     language = first_version.language
     second_version = get_object_or_404(SubtitleVersion, pk=second_pk, language=language)
-    if first_version.version != second_version.video:
+    if first_version.video != second_version.video:
         # this is either a bad bug, or someone evil
         raise "Revisions for diff videos"
     video = first_version.language.video

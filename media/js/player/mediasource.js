@@ -106,7 +106,7 @@ unisubs.player.MediaSource.videoSourceForURL = function(videoURL, opt_videoConfi
     var blipFileGetRegex = /^\s*https?:\/\/([^\.]+\.)*blip\.tv\/file\/get\//;
     if (unisubs.player.YoutubeVideoSource.isYoutube(videoURL)) {
         var videoSource = null;
-        if (unisubs.supportsIFrameMessages()) {
+        if (!window['swfobject']["hasFlashPlayerVersion"]("9")) {
             videoSource = unisubs.player.YTIFrameVideoSource.forURL(
                 videoURL, opt_videoConfig);
         }

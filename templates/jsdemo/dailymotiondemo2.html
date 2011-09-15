@@ -16,7 +16,7 @@
   logConsole.setCapturing(true);
 
 
-  var videoSource = unisubs.video.VideoSource.videoSourceForURL(
+  var videoSource = unisubs.player.MediaSource.videoSourceForURL(
       'http://www.dailymotion.com/video/xf281w_panda-car_shortfilms');
   var controlledPlayer = videoSource.createControlledPlayer();
   var component = new goog.ui.Component();

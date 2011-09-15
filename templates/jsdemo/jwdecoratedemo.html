@@ -35,8 +35,8 @@
 
   function decorateTheVideo() {
     logger.info('decorating');
-    var videoSource = unisubs.video.VideoSource.videoSourceForURL('http://www.youtube.com/v/0a1EYZLXQRM');
-    var videoPlayer = new unisubs.video.JWVideoPlayer(videoSource);
+    var videoSource = unisubs.player.MediaSource.videoSourceForURL('http://www.youtube.com/v/0a1EYZLXQRM');
+    var videoPlayer = new unisubs.player.JWVideoPlayer(videoSource);
     videoPlayer.decorate(goog.dom.getElement('player21'));
   }
 

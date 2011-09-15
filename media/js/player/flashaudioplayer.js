@@ -18,6 +18,9 @@
 
 goog.provide('unisubs.player.FlashAudioPlayer');
 
+/**
+ * @constructor
+ */
 unisubs.player.FlashAudioPlayer = function(mediaSource, opt_forDialog) {
     unisubs.player.FlvVideoPlayer.call(this, mediaSource, opt_forDialog);
     this.forDialog_ = !!opt_forDialog;

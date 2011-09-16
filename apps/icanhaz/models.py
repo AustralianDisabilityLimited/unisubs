@@ -10,6 +10,7 @@ from django.utils.hashcompat import sha_constructor
 from auth.models import CustomUser as User
 from teams.models import Team
 from videos.models import Video
+from videos.tasks import video_changed_tasks
 from widget.video_cache import invalidate_video_id
 
 def _debug(func):
@@ -207,11 +208,7 @@ class VideoVisibilityPolicy(models.Model):
     embed_allowed_domains = models.TextField(blank=True, null=True)
     objects = VideoVisibilityManager()
 
-    def save(self, skips_timestamp=False, *args, **kwargs):
-        """
-        Saves this policy, updating time stamps and blowing up
-        the cache for the video.
-        """
+    def save(self, skips_timestamp=False, updates_metadata=True, *args, **kwargs):
         if self.created is None:
             self.created  = datetime.datetime.now()
         if not self.site_secret_key:
@@ -220,10 +217,12 @@ class VideoVisibilityPolicy(models.Model):
         if skips_timestamp is False:
             self.modified = datetime.datetime.now()
         super(VideoVisibilityPolicy, self).save(*args, **kwargs)
-        invalidate_video_id(self.video.video_id)    
+        if updates_metadata:
+            video_changed_tasks(self.video.video_id)
 
     def delete(self, *args, **kwargs):
-        invalidate_video_id(self.video.video_id)
+        if updates_metadata:
+            video_changed_tasks(self.video.video_id)
         super(VideoVisibilityPolicy, self).delete(*args, **kwargs)
         
 

@@ -60,6 +60,7 @@ from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
 from icanhaz.models import VideoVisibilityPolicy
+from videos.decorators import get_video_revision, get_video_from_code
 from doorman import feature_is_on
 
 from apps.teams.moderation import user_can_moderate, get_pending_count
@@ -197,61 +198,9 @@ create_from_feed.csrf_exempt = True
 
 
 
-SHA1_RE = re.compile('^[a-f0-9]{40}$')
-def _get_video_from_code(func):
-    def raise_forbidden(request, video):
-        return HttpResponseForbidden("You cannot see this video")
-    
-    def wrapper(request, video_id, *args, **kwargs):
-        #import pdb;pdb.set_trace()
-        # check if this is a a sha1 hash
-        if SHA1_RE.search(video_id):
-            # secret, find the url for this
-            video = VideoVisibilityPolicy.objects.video_for_user(
-                request.user,
-                video_id)
-            if not video:
-                return raise_forbidden(request, video)
-        else:
-            video =  VideoVisibilityPolicy.objects.video_for_user(
-            request.user,
-            video_id)
-            
-            if not video:
-                return raise_forbidden(request, video_id)
 
-    
-        return func(request, video, *args, **kwargs)
-    return wraps(func)(wrapper)
 
-def _get_video_revision(func):
-    def auth_video_id(request, video_id):
-        video = VideoVisibilityPolicy.objects.video_for_user(
-            request.user,
-            video_id)
-        if not video:
-            raise SuspiciousOperation("You cannot see this video")
-        return video
-    
-    def wrapper(request, video_id=None,pk=None, *args, **kwargs):
-        version = get_object_or_404(SubtitleVersion, pk=pk)
-
-        if video_id:
-            # check if this is a a sha1 hash
-            if SHA1_RE.search(video_id):
-                # secret, check for authorization
-                video = auth_video_id(request, video_id)
-            else:
-                video = get_object_or_404(Video, video_id=version.video.video_id)
-        else:
-            # no video, old legacy format for public urls, see if
-            # user can access
-            video = auth_video_id(request, version.video.video_id)
-            
-        return func(request, version, *args, **kwargs)
-    return wraps(func)(wrapper)
-
-@_get_video_from_code
+@get_video_from_code
 def video(request, video, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
@@ -307,7 +256,7 @@ def video_list(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
-@_get_video_revision
+@get_video_revision
 def actions_list(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     qs = Action.objects.filter(video=video)
@@ -423,7 +372,7 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-@_get_video_from_code
+@get_video_from_code
 def legacy_history(request ,video, lang=None):
     """
     In the old days we allowed only one translation per video.
@@ -444,7 +393,7 @@ def legacy_history(request ,video, lang=None):
             'lang': language.language,
             }))
 
-@_get_video_from_code
+@get_video_from_code
 def history(request, video, lang=None, lang_id=None):
     video.update_view_counter()
 
@@ -531,7 +480,7 @@ def _widget_params(request, video, version_no=None, language=None, video_url=Non
 
     return base_widget_params(request, params)
 
-@_get_video_revision
+@get_video_revision
 def revision(request,  version):
  
     context = widget.add_onsite_js_files({})
@@ -554,7 +503,7 @@ def revision(request,  version):
                               context_instance=RequestContext(request))     
     
 @login_required
-@_get_video_revision
+@get_video_revision
 def rollback(request, version):
 
     is_writelocked = version.language.is_writelocked
@@ -569,7 +518,7 @@ def rollback(request, version):
         return redirect(version.language.get_absolute_url()+'#revisions')
     return redirect(version)
 
-@_get_video_revision
+@get_video_revision
 def diffing(request, first_version, second_pk):
     language = first_version.language
     second_version = get_object_or_404(SubtitleVersion, pk=second_pk, language=language)

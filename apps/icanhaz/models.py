@@ -61,6 +61,10 @@ class VideoVisibilityManager(models.Manager):
         If no policy exists for this video, it's
         though to be public, thus avoiding to create
         rows for most videos.
+
+        This method demands you have already constructed
+        a video object. If all you've got is the the video_id or
+        a secret_key, use `video_for_user`.
         """
         q = self.filter(video=video)
         policy = q.exists() and q[0]
@@ -97,9 +101,11 @@ class VideoVisibilityManager(models.Manager):
             domain = urlparse.urlparse(referer).netloc
             return  domain in video.policy.embed_allowed_domains
         
-    def can_create_for_video(self, video, user):
-        if hasattr(video, "pk") is False:
-            video = Video.objects.get(pk=video)
+    def can_create_for_video(self, video_identifier, user):
+        if hasattr(video_identifier, "pk") is False:
+            video = Video.objects.get(pk=video_identifier)
+        else:
+            video = video_identifier
         if not video.policy:
            return True
         elif video.policy.owner == user or hasattr(user, "is_superuser") and user.is_superuser:
@@ -144,11 +150,6 @@ class VideoVisibilityManager(models.Manager):
         inp_str = "%s-%s-%s" % (settings.SECRET_KEY, time.time()  / (random.randint(0,1000)* 1.0), policy.video.pk)
         return sha_constructor(inp_str).hexdigest()[:40]
 
-    def id_for_video(self, video):
-        if video.policy and not video.policy.is_public:
-            return video.policy.site_secret_key
-        return video.video_id
-
     def site_policy_for_video(self, video):
         return (video.policy and video.policy.site_visibility_policy) or VideoVisibilityPolicy.SITE_DEFAULT_POLICY
 
@@ -178,7 +179,7 @@ class VideoVisibilityPolicy(models.Model):
     site_visibility_policy = models.CharField(choices=SITE_VISIBILITY_POLICIES,
                                          default=SITE_DEFAULT_POLICY,
                                          max_length=32)
-    # the secret kwy for url
+    # the secret key for url
     site_secret_key  = models.CharField(max_length=40,  unique=True)
     
     WIDGET_VISIBILITY_PUBLIC = "public"
@@ -193,9 +194,10 @@ class VideoVisibilityPolicy(models.Model):
         (WIDGET_VISIBILITY_WHITELISTED , "to specified domains only"),
     )
     widget_visibility_policy = models.CharField(choices=WIDGET_VISIBILITY_POLICIES,
-                                         default=WIDGET_VISIBILITY_PUBLIC,
+                                         default=WIDGET_DEFAULT_POLICY,
                                          max_length=32)
-    # denormalized list of dmain names separated by comas, #TODO: write a validator for this
+    # denormalized list of dmain names separated by comas,
+    # TODO: write a validator for this
     embed_allowed_domains = models.TextField(blank=True, null=True)
     objects = VideoVisibilityManager()
 

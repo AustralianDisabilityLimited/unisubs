@@ -8,6 +8,8 @@ class VideoVisibilityForm(forms.Form):
 
     site_visibility_policy = forms.ChoiceField(
             choices=VideoVisibilityPolicy.SITE_VISIBILITY_POLICIES)
+    #: Gets dinamically generated at instantiation time from
+    #: the request user
     owner = forms.ChoiceField()
 
     widget_visibility_policy = forms.ChoiceField(
@@ -37,8 +39,8 @@ class VideoVisibilityForm(forms.Form):
         return owner
 
     def is_valid(self, *args, **kwargs):
+        # be paranoid
         if not VideoVisibilityPolicy.objects.can_create_for_video(self.video, self.user):
             raise SuspiciousOperation(_("This user cannot change those settings"))
         valid =  super(VideoVisibilityForm, self).is_valid(*args, **kwargs)
-        print "is valid", valid, self.is_bound, self.errors
         return valid

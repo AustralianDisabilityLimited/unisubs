@@ -1,3 +1,4 @@
+
 # Universal Subtitles, universalsubtitles.org
 # 
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -88,7 +89,7 @@ class Rpc(BaseRpc):
         if video_id is None: # for example, private youtube video or private widgets
             return None
         visibility_policy = video_cache.get_visibility_policies(video_id)
-        if visibility_policy['widget'] != VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC:
+        if visibility_policy.get('widget', None) != VideoVisibilityPolicy.WIDGET_VISIBILITY_PUBLIC:
             if not VideoVisibilityPolicy.objects.can_show_widget(
                 video_id,
                 referer=request.META.get('referer'),

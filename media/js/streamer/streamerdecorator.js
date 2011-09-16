@@ -21,7 +21,7 @@ goog.provide('unisubs.streamer.StreamerDecorator');
 /**
  * @private
  * @constructor
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
 unisubs.streamer.StreamerDecorator = function(videoPlayer) {
     var streamBox = new unisubs.streamer.StreamBox();
@@ -43,7 +43,7 @@ unisubs.streamer.StreamerDecorator = function(videoPlayer) {
 
 /**
  *
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer should already
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer should already
  *     be attached to page.
  */
 unisubs.streamer.StreamerDecorator.decorate = function(videoPlayer) {

@@ -76,7 +76,8 @@ def email_title_changed(request):
         'old_title': u'Old title',
         'editor': request.user,
         'video': video,
-        'domain': Site.objects.get_current().domain
+        'domain': Site.objects.get_current().domain,
+        "STATIC_URL": settings.STATIC_URL,
     }
     return direct_to_template(request, 'videos/email_title_changed.html', context)
 
@@ -92,7 +93,8 @@ def email_video_url_add(request):
     context = {
         'video': video,
         'video_url': video_url,
-        'domain': Site.objects.get_current().domain
+        'domain': Site.objects.get_current().domain,
+        "STATIC_URL": settings.STATIC_URL,
     }
     return direct_to_template(request, 'videos/email_video_url_add.html', context)
 
@@ -107,6 +109,7 @@ def email_start_notification(request):
         'domain': Site.objects.get_current().domain,
         'language': language,
         'version': {'user': request.user},
-        'video': language.video
+        'video': language.video,
+        "STATIC_URL": settings.STATIC_URL,
     }
     return direct_to_template(request, 'videos/email_start_notification.html', context)

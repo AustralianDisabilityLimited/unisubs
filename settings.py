@@ -31,7 +31,7 @@ lang_dict = dict(global_settings.LANGUAGES)
 lang_dict['es-ar'] = gettext_noop(u'Spanish, Argentinian')
 lang_dict['en-gb'] = gettext_noop(u'English, British')
 lang_dict['pt-br'] = gettext_noop(u'Portuguese, Brazilian')
-lang_dict['sr-latn'] = gettext_noop(u'Latin, Serbian')
+lang_dict['sr-latn'] = gettext_noop(u'Serbian, Latin')
 lang_dict['zh-cn'] = gettext_noop(u'Chinese, Simplified')
 lang_dict['zh-tw'] = gettext_noop(u'Chinese, Traditional')
 lang_dict['eo'] = gettext_noop(u'Esperanto')
@@ -112,6 +112,7 @@ ALL_LANGUAGES['ast'] = gettext_noop(u'Asturian')
 ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
 ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
 ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
+ALL_LANGUAGES['kw'] = gettext_noop(u'Cornish')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -176,30 +177,33 @@ JS_CORE = \
      'js/tracker.js',
      'js/style.js',
      'js/messaging/simplemessage.js',
-     'js/video/video.js',
-     'js/video/captionview.js',
+     'js/player/video.js',
+     'js/player/captionview.js',
      'js/widget/usersettings.js',
-     'js/video/abstractvideoplayer.js',
-     'js/video/flashvideoplayer.js',
-     'js/video/html5videoplayer.js',
-     'js/video/youtubevideoplayer.js',
-     'js/video/ytiframevideoplayer.js',
-     'js/video/youtubebasemixin.js',
-     'js/video/jwvideoplayer.js',
-     'js/video/flvvideoplayer.js',
-     'js/video/videosource.js',
-     'js/video/html5videosource.js',
-     'js/video/youtubevideosource.js',
-     'js/video/ytiframevideosource.js',
-     'js/video/brightcovevideosource.js',
-     'js/video/brightcovevideoplayer.js',
-     'js/video/flvvideosource.js',
-     'js/video/bliptvplaceholder.js',
-     'js/video/controlledvideoplayer.js',
-     'js/video/vimeovideosource.js',
-     'js/video/vimeovideoplayer.js',
-     'js/video/dailymotionvideosource.js',
-     'js/video/dailymotionvideoplayer.js',
+     'js/player/abstractvideoplayer.js',
+     'js/player/flashvideoplayer.js',
+     'js/player/html5mediaplayer.js',
+     'js/player/html5videoplayer.js',
+     'js/player/youtubevideoplayer.js',
+     'js/player/ytiframevideoplayer.js',
+     'js/player/youtubebasemixin.js',
+     'js/player/jwvideoplayer.js',
+     'js/player/flvvideoplayer.js',
+     'js/player/flashaudioplayer.js',
+     'js/player/mediasource.js',
+     'js/player/mp3source.js',
+     'js/player/html5videosource.js',
+     'js/player/youtubevideosource.js',
+     'js/player/ytiframevideosource.js',
+     'js/player/brightcovevideosource.js',
+     'js/player/brightcovevideoplayer.js',
+     'js/player/flvvideosource.js',
+     'js/player/bliptvplaceholder.js',
+     'js/player/controlledvideoplayer.js',
+     'js/player/vimeovideosource.js',
+     'js/player/vimeovideoplayer.js',
+     'js/player/dailymotionvideosource.js',
+     'js/player/dailymotionvideoplayer.js',
      'js/startdialog/model.js',
      'js/startdialog/videolanguage.js',
      'js/startdialog/videolanguages.js',
@@ -782,6 +786,7 @@ MEDIA_BUNDLES = {
 
 
 FEATURE_FLAGS  = {
-    "MODERATION" : False
+    "MODERATION" : False,
+    "REQUESTS": False,
 }
 

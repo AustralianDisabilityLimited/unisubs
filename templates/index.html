@@ -146,14 +146,24 @@
     <div id="featured-videos" class="featured">
       <a class="more" href="{% url videos:featured_videos %}">{% trans "More Featured" %}</a>
       <h2>{% trans "Featured Videos" %}</h2>
-      <p class="links">
-        {% comment %}<a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>{% endcomment %}
-        <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
-      </p>
       
-
+      <p class="links">
+        &nbsp;
+        {% comment %}
+        <a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>
+        <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
+        {% endcomment %}
+      </p>
             {% with featured_videos as video_list %}
                 {% include 'videos/_watch_page.html' %}
             {% endwith %}
     </div><!-- // featured_videos -->
+
+    <div id="funders" class="clearboth">
+      <p>Universal Subtitles is generously supported by<br />
+      <a href="http://www.mozilla.org/"><img src="{{ STATIC_URL }}images/funders/mozilla.png" alt="Mozilla Foundation"/></a></p>
+      <p>With additional funding by<br />
+      <a href="http://www.macfound.org/"><img src="{{ STATIC_URL }}images/funders/macarthur.png" alt="MacArthur Foundation"/></a>
+      <a href="http://www.soros.org/"><img src="{{ STATIC_URL }}images/funders/opensociety.png" alt="Open Society Foundations"/></a></p>
+    </div>
 {% endblock %}<!-- // main_content -->

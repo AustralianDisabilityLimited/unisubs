@@ -30,8 +30,8 @@ unisubs.api.openDialog = function(config) {
     var subtitles = config['subtitles'];
     var closeListener = config['closeListener'];
     var videoURL = config['videoURL'];
-    var videoSource = new unisubs.video.Html5VideoSource(
-        videoURL, unisubs.video.Html5VideoType.OGG);
+    var videoSource = new unisubs.player.Html5VideoSource(
+        videoURL, unisubs.player.Html5VideoType.OGG);
     var serverModel = new unisubs.api.ServerModel(config);
     var subDialog = new unisubs.subtitle.Dialog(
         videoSource, serverModel, 
@@ -78,7 +78,7 @@ unisubs.api.openUnisubsDialogWithSettings =
         unisubs.returnURL = config['returnURL'];
     unisubs.IS_NULL = !!config['nullWidget'];
     var videoSource = 
-        unisubs.video.VideoSource.videoSourceForURL(
+        unisubs.player.MediaSource.videoSourceForURL(
             config['effectiveVideoURL']);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
@@ -109,7 +109,7 @@ unisubs.api.openUnisubsDialogForResume = function(config, generalSettings) {
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         unisubs.returnURL = config['returnURL'];
-    var videoSource = unisubs.video.VideoSource.videoSourceForURL(
+    var videoSource = unisubs.player.MediaSource.videoSourceForURL(
         config['effectiveVideoURL']);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         config['videoID'], config['videoURL'], videoSource);
@@ -128,7 +128,7 @@ unisubs.api.openUnisubsDialogForResume = function(config, generalSettings) {
  */
 unisubs.api.openUnisubsDialogOnsite = function(videoID, videoURL, generalSettings) {
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
-    var videoSource = unisubs.video.VideoSource.videoSourceForURL(
+    var videoSource = unisubs.player.MediaSource.videoSourceForURL(
         videoURL);
     var opener = new unisubs.widget.SubtitleDialogOpener(
         videoID, videoURL, videoSource);

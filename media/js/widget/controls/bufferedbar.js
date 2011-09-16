@@ -38,7 +38,7 @@ unisubs.controls.BufferedBar.prototype.createDom = function() {
 unisubs.controls.BufferedBar.prototype.enterDocument = function() {
     unisubs.controls.BufferedBar.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.videoPlayer_,
-			     unisubs.video.AbstractVideoPlayer.EventType.PROGRESS,
+			     unisubs.player.AbstractVideoPlayer.EventType.PROGRESS,
 			     this.onVideoProgress_);
 };
 

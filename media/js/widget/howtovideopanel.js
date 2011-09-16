@@ -24,23 +24,23 @@ goog.provide('unisubs.HowToVideoPanel');
  */
 unisubs.HowToVideoPanel = function(videoChoice) {
     goog.ui.Component.call(this);
-    if (unisubs.video.supportsOgg())
+    if (unisubs.player.supportsOgg())
         this.videoPlayer_ = 
-            (new unisubs.video.Html5VideoSource(
+            (new unisubs.player.Html5VideoSource(
                 videoChoice.videos.ogg, 
-                unisubs.video.Html5VideoType.OGG)).createPlayer();
-    else if (unisubs.video.supportsH264())
+                unisubs.player.Html5VideoType.OGG)).createPlayer();
+    else if (unisubs.player.supportsH264())
         this.videoPlayer_ = 
-            (new unisubs.video.Html5VideoSource(
+            (new unisubs.player.Html5VideoSource(
                 videoChoice.videos.h264, 
-                unisubs.video.Html5VideoType.H264)).createPlayer();
+                unisubs.player.Html5VideoType.H264)).createPlayer();
     else
-        this.videoPlayer_ = (new unisubs.video.YoutubeVideoSource(
+        this.videoPlayer_ = (new unisubs.player.YoutubeVideoSource(
             videoChoice.videos.yt)).createPlayer();
     this.howToImageURL_ = unisubs.imageAssetURL(videoChoice.image);
     this.usingHtml5Video_ = 
-        unisubs.video.supportsOgg() ||
-        unisubs.video.supportsH264();
+        unisubs.player.supportsOgg() ||
+        unisubs.player.supportsH264();
 };
 goog.inherits(unisubs.HowToVideoPanel, goog.ui.Component);
 

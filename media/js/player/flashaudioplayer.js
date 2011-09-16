@@ -16,9 +16,20 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.BufferingFF');
+goog.provide('unisubs.player.FlashAudioPlayer');
 
-unisubs.video.BufferingFF = function(videoElem) {
-    this.videoElem_ = videoElem;
-    this.videoElem_
+/**
+ * @constructor
+ */
+unisubs.player.FlashAudioPlayer = function(mediaSource, opt_forDialog) {
+    unisubs.player.FlvVideoPlayer.call(this, mediaSource, opt_forDialog);
+    this.forDialog_ = !!opt_forDialog;
+};
+goog.inherits(unisubs.player.FlashAudioPlayer, unisubs.player.FlvVideoPlayer);
+
+unisubs.player.FlashAudioPlayer.prototype.createDom = function() {
+    unisubs.player.FlashAudioPlayer.superClass_.createDom.call(this);
+    this.playerSize = this.forDialog_ ? 
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        (new goog.math.Size(480, 150));
 };

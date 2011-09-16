@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.AbstractVideoPlayer');
+goog.provide('unisubs.player.AbstractVideoPlayer');
 
 /**
  * Abstract base class for video player implementations. Any video player 
@@ -24,7 +24,7 @@ goog.provide('unisubs.video.AbstractVideoPlayer');
  * class.
  * @constructor
  */
-unisubs.video.AbstractVideoPlayer = function(videoSource) {
+unisubs.player.AbstractVideoPlayer = function(videoSource) {
     goog.ui.Component.call(this);
     this.videoSource_ = videoSource;
     this.noUpdateEvents_ = false;
@@ -39,7 +39,7 @@ unisubs.video.AbstractVideoPlayer = function(videoSource) {
      */
     this.storedPlayheadTime_ = 0;
     /*
-     * @type {unisubs.video.CaptionView}
+     * @type {unisubs.player.CaptionView}
      */
     this.captionView_ = null;
 
@@ -47,87 +47,87 @@ unisubs.video.AbstractVideoPlayer = function(videoSource) {
      * type {int} The duration, in seconds for this video
      */
     this.duration_ = 0;
-    unisubs.video.AbstractVideoPlayer.players.push(this);
+    unisubs.player.AbstractVideoPlayer.players.push(this);
     if (goog.DEBUG) {
-        unisubs.video.AbstractVideoPlayer.logger_.info(
-            'players length is now ' + unisubs.video.AbstractVideoPlayer.players.length);
+        unisubs.player.AbstractVideoPlayer.logger_.info(
+            'players length is now ' + unisubs.player.AbstractVideoPlayer.players.length);
     }
 };
-goog.inherits(unisubs.video.AbstractVideoPlayer, goog.ui.Component);
-unisubs.video.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
-unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
+goog.inherits(unisubs.player.AbstractVideoPlayer, goog.ui.Component);
+unisubs.player.AbstractVideoPlayer.PROGRESS_INTERVAL = 500;
+unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL = 80;
 
 /*
   We store the latest volume set on a cookie, so that a regular user 
   doesn't have to reset the volume for each edit, this is the identifier
   for that volume 
 */
-unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME  = "lastestVolume";
+unisubs.player.AbstractVideoPlayer.VOLUME_SETTING_NAME  = "lastestVolume";
 
 if (goog.DEBUG) {
-    unisubs.video.AbstractVideoPlayer.logger_ = 
+    unisubs.player.AbstractVideoPlayer.logger_ = 
         goog.debug.Logger.getLogger('AbstractVideoPlayer');
 }
 
-unisubs.video.AbstractVideoPlayer.players = [];
+unisubs.player.AbstractVideoPlayer.players = [];
 
 /**
  *
  * Used for flash-based video players that don't have a size specified.
  */
-unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
+unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE = new goog.math.Size(480, 360);
 /**
  *
  * Used for all video players in the dialog.
  */
-unisubs.video.AbstractVideoPlayer.DIALOG_SIZE = new goog.math.Size(400, 300);
+unisubs.player.AbstractVideoPlayer.DIALOG_SIZE = new goog.math.Size(400, 300);
 
 
-unisubs.video.AbstractVideoPlayer.prototype.createDom = function() {
+unisubs.player.AbstractVideoPlayer.prototype.createDom = function() {
     this.setElementInternal(this.getDomHelper().createElement('span'));
     goog.dom.classes.add(this.getElement(), 'unisubs-videoplayer');
 };
 
-unisubs.video.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
+unisubs.player.AbstractVideoPlayer.prototype.getPlayheadFn = function() {
     return goog.bind(this.getPlayheadTime, this);
 };
-unisubs.video.AbstractVideoPlayer.prototype.isPaused = function() {
+unisubs.player.AbstractVideoPlayer.prototype.isPaused = function() {
     if (this.isLoadingStopped_)
 	throw new "can't check if paused, loading is stopped";
     return this.isPausedInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.isPausedInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.isPlaying = function() {
+unisubs.player.AbstractVideoPlayer.prototype.isPausedInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.isPlaying = function() {
     if (this.isLoadingStopped_)
 	throw new "can't check if playing, loading is stopped";
     return this.isPlayingInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.isPlayingInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.videoEnded = function() {
+unisubs.player.AbstractVideoPlayer.prototype.isPlayingInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.videoEnded = function() {
     if (this.isLoadingStopped_)
 	throw new "can't check if video ended, loading is stopped";
     return this.videoEndedInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.videoEndedInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
+unisubs.player.AbstractVideoPlayer.prototype.videoEndedInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.play = function(opt_suppressEvent) {
     if (this.isLoadingStopped_)
 	throw new "can't play, loading is stopped";
     if (!opt_suppressEvent)
         this.dispatchEvent(
-            unisubs.video.AbstractVideoPlayer.EventType.PLAY_CALLED);
+            unisubs.player.AbstractVideoPlayer.EventType.PLAY_CALLED);
     this.playInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
+unisubs.player.AbstractVideoPlayer.prototype.playInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.pause = function(opt_suppressEvent) {
     if (this.isLoadingStopped_)
 	throw new "can't pause, loading is stopped";
     if (!opt_suppressEvent)
         this.dispatchEvent(
-            unisubs.video.AbstractVideoPlayer.EventType.PAUSE_CALLED);
+            unisubs.player.AbstractVideoPlayer.EventType.PAUSE_CALLED);
     this.pauseInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
+unisubs.player.AbstractVideoPlayer.prototype.pauseInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.togglePause = function() {
     if (this.isLoadingStopped_)
 	throw new "can't toggle pause, loading is stopped";
 
@@ -136,16 +136,16 @@ unisubs.video.AbstractVideoPlayer.prototype.togglePause = function() {
     else
         this.pause();
 };
-unisubs.video.AbstractVideoPlayer.prototype.isLoadingStopped = function() {
+unisubs.player.AbstractVideoPlayer.prototype.isLoadingStopped = function() {
   return this.isLoadingStopped_;  
 };
 /**
  * @protected
  */
-unisubs.video.AbstractVideoPlayer.prototype.setLoadingStopped = function(isLoadingStopped) {
+unisubs.player.AbstractVideoPlayer.prototype.setLoadingStopped = function(isLoadingStopped) {
   this.isLoadingStopped_ = isLoadingStopped;  
 };
-unisubs.video.AbstractVideoPlayer.prototype.stopLoading = function() {
+unisubs.player.AbstractVideoPlayer.prototype.stopLoading = function() {
     if (!this.isLoadingStopped_) {
 	this.pause();
 	this.storedPlayheadTime_ = this.getPlayheadTime();
@@ -154,30 +154,30 @@ unisubs.video.AbstractVideoPlayer.prototype.stopLoading = function() {
 	}
     }
 };
-unisubs.video.AbstractVideoPlayer.prototype.stopLoadingInternal = goog.abstractMethod;
-unisubs.video.AbstractVideoPlayer.prototype.resumeLoading = function() {
+unisubs.player.AbstractVideoPlayer.prototype.stopLoadingInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.resumeLoading = function() {
     if (this.isLoadingStopped_) {
 	this.resumeLoadingInternal(this.storedPlayheadTime_);
 	this.storedPlayheadTime_ = null;
     }
 };
-unisubs.video.AbstractVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.player.AbstractVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     goog.abstractMethod();
 };
 /**
  * @protected
  * Must be called by subclasses once they know their dimensions.
  */
-unisubs.video.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = function() {
+unisubs.player.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = function() {
     this.dimensionsKnown_ = true;
     unisubs.style.setSize(this.getElement(), this.getVideoSize());
     this.dispatchEvent(
-        unisubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN);
+        unisubs.player.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN);
 };
 
-unisubs.video.AbstractVideoPlayer.prototype.createCaptionView = function(){
+unisubs.player.AbstractVideoPlayer.prototype.createCaptionView = function(){
     if(!this.captionView_){
-        this.captionView_ = new unisubs.video.CaptionView(this.needsIFrame());
+        this.captionView_ = new unisubs.player.CaptionView(this.needsIFrame());
         var offset =  goog.style.getPosition(this.getElement());
         var size = this.getVideoSize();
         var box = new goog.math.Rect(offset.x, offset.y,  
@@ -190,20 +190,20 @@ unisubs.video.AbstractVideoPlayer.prototype.createCaptionView = function(){
     }
 };
 
-unisubs.video.AbstractVideoPlayer.prototype.areDimensionsKnown = function() {
+unisubs.player.AbstractVideoPlayer.prototype.areDimensionsKnown = function() {
     return this.dimensionsKnown_;
 };
-unisubs.video.AbstractVideoPlayer.prototype.getPlayheadTime = function() {
+unisubs.player.AbstractVideoPlayer.prototype.getPlayheadTime = function() {
     if (this.isLoadingStopped_)
 	return this.storedPlayheadTime_;
     return this.getPlayheadTimeInternal();
 };
-unisubs.video.AbstractVideoPlayer.prototype.getPlayheadTimeInternal = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getPlayheadTimeInternal = goog.abstractMethod;
 /**
  * 
  *
  */
-unisubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents = 
+unisubs.player.AbstractVideoPlayer.prototype.playWithNoUpdateEvents = 
     function(timeToStart, secondsToPlay) 
 {
     this.noUpdateEvents_ = true;
@@ -217,15 +217,15 @@ unisubs.video.AbstractVideoPlayer.prototype.playWithNoUpdateEvents =
 /**
  * @protected
  */
-unisubs.video.AbstractVideoPlayer.prototype.dispatchEndedEvent = function() {
-    this.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED);
+unisubs.player.AbstractVideoPlayer.prototype.dispatchEndedEvent = function() {
+    this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PLAY_ENDED);
 };
-unisubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal = 
+unisubs.player.AbstractVideoPlayer.prototype.sendTimeUpdateInternal = 
     function() 
 {
     if (!this.noUpdateEvents_)
         this.dispatchEvent(
-            unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+            unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE);
     else {
         if (this.ignoreTimeUpdate_)
             return;
@@ -243,32 +243,32 @@ unisubs.video.AbstractVideoPlayer.prototype.sendTimeUpdateInternal =
  * @returns {number} video duration in seconds. Returns 0 if duration isn't
  *     available yet.
  */
-unisubs.video.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getDuration = goog.abstractMethod;
 /**
  * @returns {int} Number of buffered ranges.
  */
-unisubs.video.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getBufferedLength = goog.abstractMethod;
 /**
  * @returns {number} Start of buffered range with index
  */
-unisubs.video.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.player.AbstractVideoPlayer.prototype.getBufferedStart = function(index) {
     goog.abstractMethod();
 };
-unisubs.video.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.player.AbstractVideoPlayer.prototype.getBufferedEnd = function(index) {
     goog.abstractMethod();
 };
 /**
  * @return {number} 0.0 to 1.0
  */
-unisubs.video.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getVolume = goog.abstractMethod;
 /**
  * @return {Array.<Element>} Video elements on the page represented by this player.
  *     Sometimes for a flash-based player, this is two elements: the object and the
  *     embed.
  */
-unisubs.video.AbstractVideoPlayer.prototype.getVideoElements = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getVideoElements = goog.abstractMethod;
 
-unisubs.video.AbstractVideoPlayer.prototype.videoElementsContain = function(elem) {
+unisubs.player.AbstractVideoPlayer.prototype.videoElementsContain = function(elem) {
     return goog.array.contains(this.getVideoElements(), elem);
 };
 
@@ -276,24 +276,24 @@ unisubs.video.AbstractVideoPlayer.prototype.videoElementsContain = function(elem
  * 
  * @param {number} volume A number between 0.0 and 1.0
  */
-unisubs.video.AbstractVideoPlayer.prototype.setVolume = function(volume) {
+unisubs.player.AbstractVideoPlayer.prototype.setVolume = function(volume) {
     this.rememberVolume_(volume);
 };
 
-unisubs.video.AbstractVideoPlayer.prototype.rememberVolume_ = function (volume){
-    unisubs.UserSettings.setFloatValue(unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME, volume)
+unisubs.player.AbstractVideoPlayer.prototype.rememberVolume_ = function (volume){
+    unisubs.UserSettings.setFloatValue(unisubs.player.AbstractVideoPlayer.VOLUME_SETTING_NAME, volume)
 }
 
-unisubs.video.AbstractVideoPlayer.prototype.fetchLastSetVolume_ = function (volume){
-    return unisubs.UserSettings.getFloatValue(unisubs.video.AbstractVideoPlayer.VOLUME_SETTING_NAME,  1)
+unisubs.player.AbstractVideoPlayer.prototype.fetchLastSetVolume_ = function (volume){
+    return unisubs.UserSettings.getFloatValue(unisubs.player.AbstractVideoPlayer.VOLUME_SETTING_NAME,  1)
 }
 
-unisubs.video.AbstractVideoPlayer.prototype.restorePreviousVolume_ = function (){
+unisubs.player.AbstractVideoPlayer.prototype.restorePreviousVolume_ = function (){
     var vol = this.fetchLastSetVolume_();
     this.setVolume(vol);
 }
 
-unisubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
+unisubs.player.AbstractVideoPlayer.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
 /*
@@ -304,7 +304,7 @@ unisubs.video.AbstractVideoPlayer.prototype.getVideoSource = function() {
  * time and still fire on the current (former) time. In this case, for example, 
  * the timeline might be taken to former time.
  */
-unisubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
+unisubs.player.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadTime, skipsUpdateEvent) {
     goog.abstractMethod();
 };
 
@@ -312,9 +312,9 @@ unisubs.video.AbstractVideoPlayer.prototype.setPlayheadTime = function(playheadT
  *
  * @param {String} text Caption text to display in video. null for blank.
  */
-unisubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
+unisubs.player.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
     if (goog.DEBUG) {
-        unisubs.video.AbstractVideoPlayer.logger_.info(
+        unisubs.player.AbstractVideoPlayer.logger_.info(
             'showing sub: ' + text);
     }
     this.captionView_ || this.createCaptionView();
@@ -326,7 +326,7 @@ unisubs.video.AbstractVideoPlayer.prototype.showCaptionText = function(text) {
  * certain browsers (e.g. flash on linux/ff)
  * @protected
  */
-unisubs.video.AbstractVideoPlayer.prototype.needsIFrame = function() {
+unisubs.player.AbstractVideoPlayer.prototype.needsIFrame = function() {
     return false;
 };
 
@@ -336,7 +336,7 @@ unisubs.video.AbstractVideoPlayer.prototype.needsIFrame = function() {
  * @protected
  * @returns {bool} If the video playe is chromeless
  */
-unisubs.video.AbstractVideoPlayer.prototype.isChromeless = function() {
+unisubs.player.AbstractVideoPlayer.prototype.isChromeless = function() {
     return true;
 };
 
@@ -345,13 +345,13 @@ unisubs.video.AbstractVideoPlayer.prototype.isChromeless = function() {
  * @protected
  * @return {goog.math.Size} size of the video
  */
-unisubs.video.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
+unisubs.player.AbstractVideoPlayer.prototype.getVideoSize = goog.abstractMethod;
 
 /**
  * Video player events
  * @enum {string}
  */
-unisubs.video.AbstractVideoPlayer.EventType = {
+unisubs.player.AbstractVideoPlayer.EventType = {
     /** dispatched when playback starts or resumes. */
     PLAY : 'videoplay',
     PLAY_CALLED : 'videoplaycalled',

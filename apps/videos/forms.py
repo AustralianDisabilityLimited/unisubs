@@ -24,7 +24,8 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 import re
-from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, SubtitleParserError, SbvSubtitleParser, TxtSubtitleParser
+from utils import SrtSubtitleParser, SsaSubtitleParser, TtmlSubtitleParser, \
+    SubtitleParserError, SbvSubtitleParser, TxtSubtitleParser, DfxpSubtitleParser
 from utils.subtitles import save_subtitle
 from django.utils.encoding import force_unicode, DjangoUnicodeDecodeError
 import chardet
@@ -110,7 +111,7 @@ class CreateVideoUrlForm(forms.ModelForm):
             video_url = video_type.video_url(video_type)
 
             if not url_exists(video_url) :
-                 raise forms.ValidationError(_(u'This URL appears to be a broken link.'))
+                raise forms.ValidationError(_(u'This URL appears to be a broken link.'))
 
         except VideoTypeError, e:
             raise forms.ValidationError(e)
@@ -258,8 +259,8 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
             raise forms.ValidationError(_(
                     u'File size should be less {0} kb'.format(KB_SIZELIMIT)))
         parts = subtitles.name.split('.')
-        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv']:
-            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)'))
+        if len(parts) < 1 or not parts[-1].lower() in ['srt', 'ass', 'ssa', 'xml', 'sbv', 'dfxp']:
+            raise forms.ValidationError(_(u'Incorrect format. Upload .srt, .ssa, .sbv, .dfxp or .xml (TTML  format)'))
         try:
             text = subtitles.read()
             encoding = chardet.detect(text)['encoding']
@@ -282,6 +283,8 @@ class SubtitlesUploadForm(SubtitlesUploadBaseForm):
             return TtmlSubtitleParser
         if end == 'sbv':
             return SbvSubtitleParser
+        if end == 'dfxp':
+            return DfxpSubtitleParser
         
     def save(self):
         subtitles = self.cleaned_data['subtitles']
@@ -430,12 +433,19 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 if len(self.video_types) >= self.VIDEOS_LIMIT:
                     self.video_limit_routreach = True
                     break  
-
-            if feed_parser.feed.version:
+            
+            invalid_feed = False
+            
+            if hasattr(feed_parser.feed, 'version') and feed_parser.feed.version:
                 try:
                     self.feed_urls.append((url, entry and entry['link']))
                 except KeyError:
-                    raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
+                    invalid_feed = True
+            else:
+                invalid_feed = True
+
+            if invalid_feed:
+                raise forms.ValidationError(_(u'Sorry, we could not find a valid feed at the URL you provided. Please check the URL and try again.'))
                 
         except FeedParserError, e:
             raise forms.ValidationError(e) 

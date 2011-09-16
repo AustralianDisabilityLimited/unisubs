@@ -50,7 +50,10 @@ class SearchForm(forms.Form):
         
         if sqs:
             facet_data = sqs.facet('video_language').facet('languages').facet_counts()
-            video_langs_data = facet_data['fields']['video_language']
+            try:
+                video_langs_data = facet_data['fields']['video_language']
+            except KeyError:
+                video_langs_data = {}
             self.fields['video_lang'].choices = self._make_choices_from_faceting(video_langs_data)
     
             langs_data = facet_data['fields']['languages']

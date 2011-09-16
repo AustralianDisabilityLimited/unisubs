@@ -36,6 +36,7 @@ from utils.celery_search_index import update_search_index
 from utils.multi_query_set import MultiQuerySet
 from videos.tasks import send_change_title_email
 from django.template.defaultfilters import slugify
+from utils.translation import get_user_languages_from_request
 import datetime
 
 VIDEOS_ON_PAGE = VideoIndex.IN_ROW*5
@@ -81,18 +82,42 @@ class VideosApiClass(object):
         update_search_index.delay(Video, video_id)  
         
         return {}
-    
-    def load_video_languages(self, video_id, user):
+
+    @add_request_to_kwargs
+    def load_video_languages(self, video_id, user, request):
+        """
+        Load langs for search pages. Will take into consideration
+        the languages the user speaks.
+        Ordering is user language, then completness , then percentage
+        then name of the language.
+        We're sorting all in memory since those sets should be pretty small
+        """
         try:
             video = Video.objects.get(pk=video_id)
         except Video.DoesNotExist:
             video = None
         
+        user_langs = get_user_languages_from_request(request)
+        def _lang_score(l):
+            score = 0
+            if l.language in user_langs:
+                score += 100
+            if l.is_complete:
+                score += 100    
+            elif l.is_dependent():
+                score += l.percent_done
+            score += ord('c'.decode('utf-8')) / 10.0    
+            return score
+
+        def _cmp_langs(a,b):
+            return cmp(_lang_score(b), _lang_score(a))
+            
+        langs = list(video.subtitlelanguage_set.filter(subtitle_count__gt=0))
+        langs.sort(cmp=_cmp_langs)
         context = {
             'video': video,
-            'languages': video.subtitlelanguage_set.filter(subtitle_count__gt=0)
+            'languages': langs
         }
-        
         return {
             'content': render_to_string('videos/_video_languages.html', context)
         }

@@ -2,22 +2,32 @@
 {% load i18n localeurl_tags %}
 
 {% block content %}
-    <p style="font-size: 12px;">
+    <div style="font-size: 12px;">
 
 
-      Your video just received a new comment. <a href="http://{{ domain }}{{ user_url }}">{{ user }}</a> commented on {{video.get_title}}
-            {% if is_rejection  %}
-            <p>They said </p>
-            {% endif %}
-            {{msg|linebreaks}}
-            {% if is_rejection %}
-            <p>about declining a version of <a href="{{language_url}}">  version.language.language </a> subtitles, <a href="{{version_url}}">versoin.version_no</a> </p.>
-            {% endif %}
-            You can respond to this comment on the <a href="{{version_url}}">comments page </a>
-            Thanks for your participation!
-            <br/>
+      <p>Your video just received a new comment. <a href="http://{{ domain }}{{ commenter_url }}">{{ commenter }}</a> commented on "{{video.title_display}}."</p>
 
-    </p>
+      {% if is_rejection  %}
+            <p>A version of <a href="{{language_url}}">version.language.language</a> subtitles, <a href="{{version_url}}">version.version_no</a>, was declined.</p>
+      {% endif %}
+
+      <blockquote style="margin:20px; padding-left: 20px; border-left: 4px solid #aaa; color: #777;">
+            {{body|linebreaks}}
+      </blockquote>
+
+      <p>You can respond to this comment on the 
+            {%if video_url %}
+                  <a href="{{ video_url }}#comments">
+            {% else %}
+                  {% if language_url %}
+                        <a href="{{ language_url }}#comments">
+                  {% else %}
+                        <a href="http://{{ domain }}/{{ video.get_absolute_url }}#comments">
+                  {% endif %}
+            {% endif %}comments page</a>. Thanks for your participation!</p>
+    </div>
 
 {% endblock %}
-{% block dont_send %}{% endblock %}
+
+{% block dont_send %}
+{% endblock %}

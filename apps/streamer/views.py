@@ -23,7 +23,7 @@ from django.conf import settings
 
 def youtubedemo(request):
     v, created = models.Video.get_or_create_for_url(
-        'http://www.youtube.com/v/yEAxG_D1HDw')
+        'http://www.youtube.com/v/1lxm-e0hMTw')
     subs = v.subtitles()
     return render_to_response(
         'streamer/youtubedemo.html',

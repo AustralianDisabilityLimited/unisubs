@@ -134,7 +134,7 @@ unisubs.subtitle.TranscribePanel.prototype.enterDocument = function() {
                              unisubs.subtitle.TranscribeEntry.NEWTITLE,
                              this.newTitle_);
     this.getHandler().listen(this.videoPlayer_,
-                             unisubs.video.AbstractVideoPlayer.EventType.PLAY,
+                             unisubs.player.AbstractVideoPlayer.EventType.PLAY,
                              this.videoPlaying_);
     this.listenToRightPanel_();
 };

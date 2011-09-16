@@ -16,26 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.BlipTVPlaceholder');
+goog.provide('unisubs.player.BlipTVPlaceholder');
 
 /** 
  * @constructor
- * @implements {unisubs.video.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} pageURL
  */
-unisubs.video.BlipTVPlaceholder = function(pageURL) {
+unisubs.player.BlipTVPlaceholder = function(pageURL) {
     this.pageURL_ = pageURL;
 };
 
-unisubs.video.BlipTVPlaceholder.prototype.getPageURL = function() {
+unisubs.player.BlipTVPlaceholder.prototype.getPageURL = function() {
     return this.pageURL_;
 };
 
-unisubs.video.BlipTVPlaceholder.prototype.createPlayer = function() {
+unisubs.player.BlipTVPlaceholder.prototype.createPlayer = function() {
     throw new Error();
 };
 
-unisubs.video.BlipTVPlaceholder.prototype.createControlledPlayer = 
+unisubs.player.BlipTVPlaceholder.prototype.createControlledPlayer = 
     function() 
 {
     throw new Error();

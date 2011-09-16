@@ -6,10 +6,10 @@
     <div id="videoDiv"></div>
     <script type="text/javascript">
       var scriptQueryString;
-      if (unisubs.video.supportsOgg())
+      if (unisubs.player.supportsOgg())
           scriptQueryString = 
               "video_url=http://videos.mozilla.org/firefox3/switch/switch.ogg";
-      else if (unisubs.video.supportsH264())
+      else if (unisubs.player.supportsH264())
           scriptQueryString = 
               "video_url=http://www.visitmix.com/content/files/HTML5.mp4";
       else

@@ -24,9 +24,9 @@
 
   logConsole.setCapturing(true);
 
-  var videoSource = new unisubs.video.Html5VideoSource(
+  var videoSource = new unisubs.player.Html5VideoSource(
       'http://videos.mozilla.org/firefox/3.5/switch/switch.ogv',
-      unisubs.video.Html5VideoType.OGG);
+      unisubs.player.Html5VideoType.OGG);
   var inPlacePlayer = videoSource.createPlayer();
   var insertedPlayer = videoSource.createPlayer();
 

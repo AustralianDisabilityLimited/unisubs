@@ -49,6 +49,8 @@ unisubs.widget.DropDownContents = function(languages, myLanguages,  isModerated)
 };
 
 unisubs.widget.DropDownContents.prototype.shouldShowRequestLink = function() {
+    // temporarely disabled
+    return false;
     var allMyLanguagesMissing = goog.array.every(
         this.MY_LANGUAGES,
         function(l) {

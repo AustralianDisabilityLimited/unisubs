@@ -16,15 +16,15 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.VimeoVideoPlayer');
+goog.provide('unisubs.player.VimeoVideoPlayer');
 
 /**
  * @constructor
- * @param {unisubs.video.VimeoVideoSource} videoSource
+ * @param {unisubs.player.VimeoVideoSource} videoSource
  * @param {boolean=} opt_forDialog
  */
-unisubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
-    unisubs.video.AbstractVideoPlayer.call(this, videoSource);
+unisubs.player.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
+    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
     this.forDialog_ = !!opt_forDialog;
 
@@ -56,24 +56,24 @@ unisubs.video.VimeoVideoPlayer = function(videoSource, opt_forDialog) {
     this.commands_ = [];
     this.swfEmbedded_ = false;
     this.timeUpdateTimer_ = new goog.Timer(
-        unisubs.video.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
+        unisubs.player.AbstractVideoPlayer.TIMEUPDATE_INTERVAL);
 };
-goog.inherits(unisubs.video.VimeoVideoPlayer, unisubs.video.AbstractVideoPlayer);
+goog.inherits(unisubs.player.VimeoVideoPlayer, unisubs.player.AbstractVideoPlayer);
 
-unisubs.video.VimeoVideoPlayer.prototype.createDom = function() {
+unisubs.player.VimeoVideoPlayer.prototype.createDom = function() {
     // FIXME: this is copied directly from youtube video player.
-    unisubs.video.VimeoVideoPlayer.superClass_.createDom.call(this);
+    unisubs.player.VimeoVideoPlayer.superClass_.createDom.call(this);
     var sizeFromConfig = this.sizeFromConfig_();
     if (!this.forDialog_ && sizeFromConfig)
         this.playerSize_ = sizeFromConfig;
     else
         this.playerSize_ = this.forDialog_ ?
-        unisubs.video.AbstractVideoPlayer.DIALOG_SIZE :
-        unisubs.video.AbstractVideoPlayer.DEFAULT_SIZE;
+        unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+        unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
-    unisubs.video.VimeoVideoPlayer.superClass_.enterDocument.call(this);
+unisubs.player.VimeoVideoPlayer.prototype.enterDocument = function() {
+    unisubs.player.VimeoVideoPlayer.superClass_.enterDocument.call(this);
     if (!this.swfEmbedded_) {
         this.swfEmbedded_ = true;
         var videoSpan = this.getDomHelper().createDom('span');
@@ -97,7 +97,7 @@ unisubs.video.VimeoVideoPlayer.prototype.enterDocument = function() {
         listen(this.timeUpdateTimer_, goog.Timer.TICK, this.timeUpdateTick_);
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
+unisubs.player.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
     var baseQuery = {};
     var config = this.videoSource_.getVideoConfig();
     if (!this.forDialog_ && config)
@@ -114,12 +114,12 @@ unisubs.video.VimeoVideoPlayer.prototype.createSWFURL_ = function() {
         goog.Uri.QueryData.createFromMap(baseQuery).toString();
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.exitDocument = function() {
-    unisubs.video.VimeoVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.player.VimeoVideoPlayer.prototype.exitDocument = function() {
+    unisubs.player.VimeoVideoPlayer.superClass_.exitDocument.call(this);
     this.timeUpdateTimer_.stop();
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
+unisubs.player.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
     // FIXME: duplicates same method in youtube player
     var config = this.videoSource_.getVideoConfig();
     if (config && config['width'] && config['height'])
@@ -129,41 +129,41 @@ unisubs.video.VimeoVideoPlayer.prototype.sizeFromConfig_ = function() {
         return null;
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.getPlayheadTimeInternal = function() {
     return this.swfLoaded_ ? this.player_['api_getCurrentTime']() : 0;
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
+unisubs.player.VimeoVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0)
         this.sendTimeUpdateInternal();
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.getDuration = function() {
+unisubs.player.VimeoVideoPlayer.prototype.getDuration = function() {
     return this.player_['api_getDuration']();
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.getBufferedLength = function() {
+unisubs.player.VimeoVideoPlayer.prototype.getBufferedLength = function() {
     return this.player_ ? 1 : 0;
 };
-unisubs.video.VimeoVideoPlayer.prototype.getBufferedStart = function(index) {
+unisubs.player.VimeoVideoPlayer.prototype.getBufferedStart = function(index) {
     // vimeo seems to only buffer from the start
     return 0;
 };
-unisubs.video.VimeoVideoPlayer.prototype.getBufferedEnd = function(index) {
+unisubs.player.VimeoVideoPlayer.prototype.getBufferedEnd = function(index) {
     return this.loadedFraction_ * this.getDuration();
 };
-unisubs.video.VimeoVideoPlayer.prototype.getVolume = function() {
+unisubs.player.VimeoVideoPlayer.prototype.getVolume = function() {
     return this.player_ ? this.player_['api_getVolume']() : 0.5;
 };
-unisubs.video.VimeoVideoPlayer.prototype.setVolume = function(volume) {
+unisubs.player.VimeoVideoPlayer.prototype.setVolume = function(volume) {
     if (this.player_) {
-        this.player_['api_setVolume'](volume);
+        this.player_['api_setVolume'](volume * 100);
     }
     else
         this.commands_.push(goog.bind(this.setVolume, this, volume));
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
+unisubs.player.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime) {
     if (this.player_) {
         this.player_['api_seekTo'](playheadTime);
         this.sendTimeUpdateInternal();
@@ -172,48 +172,47 @@ unisubs.video.VimeoVideoPlayer.prototype.setPlayheadTime = function(playheadTime
         this.commands_.push(goog.bind(this.setPlayheadTime, this, playheadTime));
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
-    return new goog.math.Size(unisubs.video.VimeoVideoPlayer.WIDTH,
-                              unisubs.video.VimeoVideoPlayer.HEIGHT);
+unisubs.player.VimeoVideoPlayer.prototype.getVideoSize = function() {
+    return new goog.math.Size(unisubs.player.VimeoVideoPlayer.WIDTH,
+                              unisubs.player.VimeoVideoPlayer.HEIGHT);
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.isPausedInternal = function() {
     return !this.isPlaying_;
 };
-unisubs.video.VimeoVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.isPlayingInternal = function() {
     return this.isPlaying_;
 };
-unisubs.video.VimeoVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.videoEndedInternal = function() {
     return this.getPlayheadTime() == this.getDuration();
 };
-unisubs.video.VimeoVideoPlayer.prototype.playInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.playInternal = function() {
     if (this.swfLoaded_)
         this.player_['api_play']();
     else
         this.commands_.push(goog.bind(this.playInternal, this));
 };
-unisubs.video.VimeoVideoPlayer.prototype.pauseInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.pauseInternal = function() {
     if (this.swfLoaded_)
         this.player_['api_pause']();
     else
         this.commands_.push(goog.bind(this.pauseInternal, this));
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.player.VimeoVideoPlayer.prototype.stopLoadingInternal = function() {
     this.pause();
 };
-unisubs.video.VimeoVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.player.VimeoVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     this.play();
 };
 
 
 
-unisubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) {
+unisubs.player.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) {
     if (swf_id != this.playerAPIID_)
         return;
 
     this.player_ = goog.dom.$(this.playerElemID_);
-    this.setVolume(0.5);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(cmd) { cmd(); });
     this.commands_ = [];
@@ -225,7 +224,7 @@ unisubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) 
     var onLoadingFn = "onVimeoLoa" + randomString;
     window[onLoadingFn] = function(data, swf_id) {
         that.loadedFraction_ = data;
-        that.dispatchEvent(unisubs.video.AbstractVideoPlayer.EventType.PROGRESS);
+        that.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.PROGRESS);
     };
     this.player_['api_addEventListener']('onLoading', onLoadingFn);
 
@@ -250,11 +249,11 @@ unisubs.video.VimeoVideoPlayer.prototype.onVimeoPlayerReady_ = function(swf_id) 
     this.player_['api_addEventListener']('onPause', onPauseFn);
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.getVideoSize = function() {
+unisubs.player.VimeoVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
 
-unisubs.video.VimeoVideoPlayer.prototype.disposeInternal = function() {
-    unisubs.video.VimeoVideoPlayer.superClass_.disposeInternal.call(this);
+unisubs.player.VimeoVideoPlayer.prototype.disposeInternal = function() {
+    unisubs.player.VimeoVideoPlayer.superClass_.disposeInternal.call(this);
     this.timeUpdateTimer_.dispose();
 };

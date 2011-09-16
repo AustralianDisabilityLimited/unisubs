@@ -37,9 +37,11 @@ from django.conf import settings
 import re
 import htmllib
 from subtitles import SubtitleParserError, SubtitleParser, TxtSubtitleParser, YoutubeSubtitleParser, \
-    TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser, YoutubeXMLParser
+    TtmlSubtitleParser, SrtSubtitleParser, SbvSubtitleParser, SsaSubtitleParser, YoutubeXMLParser, \
+    DfxpSubtitleParser
 import traceback, sys
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.sites.models import Site
 import inspect
 
 def print_last_exception():
@@ -115,6 +117,8 @@ def send_templated_email(to, subject, body_template, body_dict,
     if not isinstance(to, list): to = [to]
     if not from_email: from_email = settings.DEFAULT_FROM_EMAIL
 
+    body_dict['STATIC_URL'] = settings.STATIC_URL
+    body_dict['domain'] = Site.objects.get_current().domain
     message = render_to_string(body_template, body_dict)
     bcc = settings.EMAIL_BCC_LIST
     email = EmailMessage(subject, message, from_email, to, bcc=bcc)

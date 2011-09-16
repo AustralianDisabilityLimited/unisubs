@@ -57,7 +57,8 @@ def _create_env(username, hosts, s3_bucket,
 def staging(username):
     _create_env(username              = username, 
                 hosts                 = ['pcf-us-staging1.pculture.org:2191', 
-                                        'pcf-us-staging2.pculture.org:2191'],
+                                         'pcf-us-staging2.pculture.org:2191',
+                                         'pcf-us-staging3.pculture.org:2191'],
                 s3_bucket             = 's3.staging.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles.staging',
                 static_dir            = '/var/static/staging', 
@@ -89,7 +90,7 @@ def unisubs(username):
                                         'pcf-us-cluster2.pculture.org:2191'],
                 s3_bucket             = 's3.www.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles',
-                static_dir            = 'static/production',
+                static_dir            = '/var/static/production',
                 name                  =  None,
                 memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
                 admin_dir             = '/usr/local/universalsubtitles',
@@ -191,7 +192,7 @@ def _update_environment(base_dir):
         _git_pull()
         run('export PIP_REQUIRE_VIRTUALENV=true')
         # see http://lincolnloop.com/blog/2010/jul/1/automated-no-prompt-deployment-pip/
-        run('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
+        sudo('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
 
 def update_environment():
     _execute_on_all_hosts(lambda dir: _update_environment(dir))
@@ -404,26 +405,26 @@ def test_services():
 def test_memcached():
     print '=== TEST MEMCACHED ==='
     alphanum = string.letters+string.digits
-    host_set = set(env.web_hosts)
+    host_set = set([(h, env.web_dir,) for h in env.web_hosts])
+    if env.admin_dir:
+        host_set.add((ADMIN_HOST, env.admin_dir,))
     for host in host_set:
         random_string = ''.join(
             [alphanum[random.randint(0, len(alphanum)-1)] 
              for i in xrange(12)])
-        env.host_string = host
-        with cd(os.path.join(env.web_dir, 'unisubs')):
-            run('{0}/env/bin/python manage.py set_memcached {1} --settings=unisubs_settings'.format(
-                env.web_dir,
+        env.host_string = host[0]
+        with cd(os.path.join(host[1], 'unisubs')):
+            run('../env/bin/python manage.py set_memcached {0} --settings=unisubs_settings'.format(
                 random_string))
         other_hosts = host_set - set([host])
         for other_host in other_hosts:
-            env.host_string = host
+            env.host_string = other_host[0]
             output = ''
-            with cd(os.path.join(env.web_dir, 'unisubs')):
-                output = run('{0}/env/bin/python manage.py get_memcached --settings=unisubs_settings'.format(
-                    env.web_dir))
+            with cd(os.path.join(other_host[1], 'unisubs')):
+                output = run('../env/bin/python manage.py get_memcached --settings=unisubs_settings')
             if output.find(random_string) == -1:
                 raise Exception('Machines {0} and {1} are using different memcached instances'.format(
-                        host, other_host))
+                        host[0], other_host[0]))
 
 def generate_docs():
     env.host_string = DEV_HOST

@@ -18,7 +18,9 @@
 
 goog.provide('unisubs.streamer.StreamerController');
 
-
+/**
+ * @constructor
+ */
 unisubs.streamer.StreamerController = function(videoPlayer, streamBox) {
     this.videoPlayer_ = videoPlayer;
     this.streamBox_ = streamBox;
@@ -30,13 +32,23 @@ unisubs.streamer.StreamerController.prototype.initializeState = function(result)
         result['subtitles']);
     var captionSet = new unisubs.subtitle.EditableCaptionSet(
         subtitleState.SUBTITLES);
+    this.subMap_ = captionSet.makeMap();
     this.captionManager_ = 
         new unisubs.CaptionManager(this.videoPlayer_, captionSet);
-    this.playEventHandler_ = new goog.events.EventHandler(this);
-    this.playEventHandler_.
+    this.eventHandler_ = new goog.events.EventHandler(this);
+    this.eventHandler_.
         listen(this.captionManager_,
                unisubs.CaptionManager.CAPTION,
-               this.captionReached_);
+               this.captionReached_).
+        listen(this.streamBox_,
+               unisubs.streamer.StreamSub.SUB_CLICKED,
+               this.subClicked_);
+};
+
+unisubs.streamer.StreamerController.prototype.subClicked_ = function(e) {
+    var editableCaption = this.subMap_[e.target.SUBTITLE_ID];
+    this.videoPlayer_.setPlayheadTime(editableCaption.getStartTime());
+    this.streamBox_.displaySub(e.target.SUBTITLE_ID);
 };
 
 unisubs.streamer.StreamerController.prototype.captionReached_ = function(event) {

@@ -16,45 +16,45 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.video.FlvVideoSource');
+goog.provide('unisubs.player.FlvVideoSource');
 
 /**
  * @constructor
- * @implements {unisubs.video.VideoSource}
+ * @implements {unisubs.player.MediaSource}
  * @param {string} flvURL
  * @param {Object=} opt_videoConfig Plugins to use for FlowPlayer 
  *     (see http://flowplayer.org/documentation/configuration/plugins.html)
  *     plus optional 'width' and 'height' parameters.
  */
-unisubs.video.FlvVideoSource = function(flvURL, opt_videoConfig) {
+unisubs.player.FlvVideoSource = function(flvURL, opt_videoConfig) {
     this.flvURL_ = flvURL;
     this.videoConfig_ = opt_videoConfig;
 };
 
-unisubs.video.FlvVideoSource.prototype.createPlayer = function() {
+unisubs.player.FlvVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-unisubs.video.FlvVideoSource.prototype.createControlledPlayer = function() {
-    return new unisubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+unisubs.player.FlvVideoSource.prototype.createControlledPlayer = function() {
+    return new unisubs.player.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-unisubs.video.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
-    return new unisubs.video.FlvVideoPlayer(this, chromeless);
+unisubs.player.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
+    return new unisubs.player.FlvVideoPlayer(this, chromeless);
 };
 
-unisubs.video.FlvVideoSource.prototype.getFlvURL = function() {
+unisubs.player.FlvVideoSource.prototype.getFlvURL = function() {
     return this.flvURL_;
 };
 
-unisubs.video.FlvVideoSource.prototype.getVideoURL = function() {
+unisubs.player.FlvVideoSource.prototype.getVideoURL = function() {
     return this.getFlvURL();
 };
 
-unisubs.video.FlvVideoSource.prototype.getVideoConfig = function() {
+unisubs.player.FlvVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-unisubs.video.FlvVideoSource.prototype.setVideoConfig = function(config) {
+unisubs.player.FlvVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };

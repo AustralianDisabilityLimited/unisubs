@@ -95,3 +95,17 @@ def video_url_panel(context):
 @register.simple_tag
 def video_url_count(video):
     return video.videourl_set.count()
+
+
+@register.simple_tag
+def language_url(request, lang):
+    """
+    Returns the absolute url for that subtitle language.
+    Takens into consideration both if the lang is the original one
+    and if the video is private or public.
+    """
+    vid = VideoVisibilityPolicy.objects.id_for_video(lang.video)
+    if lang.is_original:
+        return  reverse('videos:history', args=[vid])
+    else:
+        return  reverse('videos:translation_history', args=[vid, lang.language, lang.pk])

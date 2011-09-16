@@ -150,6 +150,12 @@ class VideoVisibilityManager(models.Manager):
         inp_str = "%s-%s-%s" % (settings.SECRET_KEY, time.time()  / (random.randint(0,1000)* 1.0), policy.video.pk)
         return sha_constructor(inp_str).hexdigest()[:40]
 
+    def id_for_video(self, video):
+        if video.policy and not video.policy.is_public:
+            return video.policy.site_secret_key
+        return video.video_id
+    
+
     def site_policy_for_video(self, video):
         return (video.policy and video.policy.site_visibility_policy) or VideoVisibilityPolicy.SITE_DEFAULT_POLICY
 

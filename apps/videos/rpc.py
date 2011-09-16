@@ -88,8 +88,9 @@ class VideosApiClass(object):
         """
         Load langs for search pages. Will take into consideration
         the languages the user speaks.
-        Ordering is user language, then completness (percent then
-        completeness itself.)
+        Ordering is user language, then completness , then percentage
+        then name of the language.
+        We're sorting all in memory since those sets should be pretty small
         """
         try:
             video = Video.objects.get(pk=video_id)
@@ -101,10 +102,11 @@ class VideosApiClass(object):
             score = 0
             if l.language in user_langs:
                 score += 100
-            if l.is_dependent():
+            if l.is_complete:
+                score += 100    
+            elif l.is_dependent():
                 score += l.percent_done
-            elif l.is_complete:
-                score += 100
+            score += ord('c'.decode('utf-8')) / 10.0    
             return score
 
         def _cmp_langs(a,b):

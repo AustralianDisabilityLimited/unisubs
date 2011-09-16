@@ -86,6 +86,7 @@ def invalidate_cache(video_id):
     cache.delete(_video_languages_key(video_id))
     cache.delete(_video_languages_verbose_key(video_id))
     cache.delete(_video_is_moderated_key(video_id))
+    cache.delete(_video_visibility_policy_key(video_id))
 
     from videos.models import Video
     try:
@@ -130,7 +131,7 @@ def _video_is_moderated_key(video_id):
     return 'widget_video_is_moderated_{0}'.format(video_id)
 
 def _video_visibility_policy_key(video_id):
-    return 'widget_video_vis_key _{0}'.format(video_id)
+    return 'widget_video_vis_key_{0}'.format(video_id)
 
 
 def pk_for_default_language(video_id, language_code):

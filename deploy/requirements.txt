@@ -39,3 +39,5 @@ django-debug-toolbar==0.8.3
 # This can be commented out if you're using sqlite
 MySQL_python>=1.2.2
 Sphinx==1.0.7
+# pyfacebook isn't on PyPi for some reason
+-e git+https://github.com/sciyoshi/pyfacebook.git@be8e843c6eeedf0a03cf#egg=facebook

@@ -913,55 +913,5 @@
             "draft": null, 
             "end_time": 86.132000000000005
         }
-    },
-    {
-        "pk": 2, 
-        "model": "comments.comment", 
-        "fields": {
-            "submit_date": "2010-11-24 12:10:19", 
-            "object_pk": "6", 
-            "content": "sdfsdf", 
-            "user": 9998, 
-            "content_type": 19, 
-            "reply_to": null
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "comments.comment", 
-        "fields": {
-            "submit_date": "2010-11-24 12:10:03", 
-            "object_pk": "6", 
-            "content": "sdfsdf", 
-            "user": 9998, 
-            "content_type": 19, 
-            "reply_to": null
-        }
-    },    
-    {
-        "pk": 12, 
-        "model": "videos.action", 
-        "fields": {
-            "comment": 2, 
-            "language": null, 
-            "created": "2010-11-24 12:10:19", 
-            "new_video_title": "", 
-            "video": 6, 
-            "user": 9998, 
-            "action_type": 3
-        }
-    }, 
-    {
-        "pk": 11, 
-        "model": "videos.action", 
-        "fields": {
-            "comment": 1, 
-            "language": null, 
-            "created": "2010-11-24 12:10:03", 
-            "new_video_title": "", 
-            "video": 6, 
-            "user": 9998, 
-            "action_type": 3
-        }
-    }       
+    }
 ]

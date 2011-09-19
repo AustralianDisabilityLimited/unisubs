@@ -25,7 +25,7 @@
  * goog.testing.events.
  */
 
-goog.provide('mirosubs.testing.events');
+goog.provide('unisubs.testing.events');
 
 /**
  * Simulates a keydown event.
@@ -35,7 +35,7 @@ goog.provide('mirosubs.testing.events');
  * @return {boolean} The returnValue of the event: false 
  *     if preventDefault() was called, true otherwise.
  */
-mirosubs.testing.events.fireKeyDown = function(target, keyCode) {
+unisubs.testing.events.fireKeyDown = function(target, keyCode) {
     var keydown =
     new goog.testing.events.Event(goog.events.EventType.KEYDOWN, 
                                   target);
@@ -51,7 +51,7 @@ mirosubs.testing.events.fireKeyDown = function(target, keyCode) {
  * @return {boolean} The returnValue of the event: false 
  *     if preventDefault() was called, true otherwise.
  */
-mirosubs.testing.events.fireKeyUp = function(target, keyCode) {
+unisubs.testing.events.fireKeyUp = function(target, keyCode) {
     var keyup =
     new goog.testing.events.Event(goog.events.EventType.KEYUP, 
                                   target);

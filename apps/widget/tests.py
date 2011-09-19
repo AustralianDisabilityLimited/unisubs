@@ -51,6 +51,9 @@ class RequestMockup(object):
         self.user = user
         self.session = {}
         self.browser_id = browser_id
+        self.COOKIES = {}
+        self.META = {}
+        self.GET = {}
 
 class NotAuthenticatedUser:
     def __init__(self):
@@ -1036,13 +1039,14 @@ class TestRpc(TestCase):
         response = null_rpc.start_editing(request, 'sadfdsf', 'en')
         self.assertEquals(True, response['can_edit'])
 
-    #def test_fetch_request_dialog_contents(self):
-        #request = RequestMockup(self.user_0)
-        #request.COOKIES = {settings.USER_LANGUAGES_COOKIE_NAME: ['en']}
-        #video = Video.objects.get(id=self.video_pk)
-        #response = rpc.fetch_request_dialog_contents(request,
-                                                     #video.video_id)
-        #self.assertEquals(True, response['all_languages'] or False)
+    def test_fetch_request_dialog_contents(self):
+        request = RequestMockup(self.user_0)
+        request.COOKIES = {settings.USER_LANGUAGES_COOKIE_NAME: ['en']}
+        video = Video.objects.get(id=self.video_pk)
+        response = rpc.fetch_request_dialog_contents(request,
+                                                     video.video_id)
+        self.assertEquals(len(settings.ALL_LANGUAGES),
+                          len(response['all_languages']) or False)
 
     def test_submit_subtitle_request(self):
         request = RequestMockup(self.user_0)
@@ -1212,6 +1216,16 @@ class TestCache(TestCase):
             video_cache.invalidate_cache(video_id)
         except MemcachedKeyCharacterError:
             self.fail("Cache invalidation should not fail")
+
+    def test_missing_lang_no_fail(self):
+        # when sending a nonexisting lang, we should end up with the original lang, since
+        # others might have been cleared and not gotten through the cache
+        # we are asserting this won't raise an exception for https://www.pivotaltracker.com/story/show/15348901
+        url = "http://videos-cdn.mozilla.net/serv/mozhacks/demos/screencasts/londonproject/screencast.ogv"
+        cache_key = video_cache._video_id_key(url)
+        video_cache.cache.set(cache_key, "", video_cache.TIMEOUT)
+        video_id = video_cache.get_video_id(url)
+        res = video_cache.get_subtitles_dict(video_id, 0, 0, lambda x: x)
 
 from widget.srt_subs import TTMLSubtitles, SRTSubtitles, SBVSubtitles, TXTSubtitles, SSASubtitles
 

@@ -4,19 +4,18 @@
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-{% block scripts %}
-{% endblock %}
-  {% include_bundle "js-base-dependencies" %}
-
+  {% block scripts %}
+  {% endblock %}
   {% if not js_use_compiled %}
-  <script type="text/javascript">
-    window.DEBUG_UNISUBS = true;
-  </script>
-  <script>
-    goog.require('goog.debug.FancyWindow');
-  </script>
+    {% include_bundle "js-base-dependencies" %}
+    <script type="text/javascript">
+      window.DEBUG_UNISUBS = true;
+    </script>
+    <script type="text/javascript">
+      goog.require('goog.debug.FancyWindow');
+    </script>
   {% endif %}
-  {% include_bundle "mirosubs-widgetizer" %}
+  {% include_bundle "unisubs-widgetizer" %}
 </head>
 <body>
 {% block contents %}

@@ -21,13 +21,11 @@
 from settings import *
 from server_local_settings import *
 
-JS_USE_COMPILED = True
 
 DEBUG = False
 
 ADMINS = (
     ('Adam Duston', 'adam@8planes.com'),
-    ('Holmes Wilson', 'hwilson@gmail.com'),
     ('Craig Zheng', 'craig@pculture.org'),
     ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
 )
@@ -37,10 +35,15 @@ if INSTALLATION == DEV:
     SITE_NAME = 'unisubsdev'
     FEEDBACK_EMAILS.append('aduston@gmail.com')
     REDIS_DB = "3"
-    AWS_QUEUE_PREFIX = 'DEV'
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
     SOLR_ROOT = '/usr/share/'
+    BROKER_BACKEND = 'amqplib'
+    BROKER_HOST = "localhost"
+    BROKER_PORT = 5672
+    BROKER_USER = "unisub"
+    BROKER_PASSWORD = "unisub"
+    BROKER_VHOST = "unisub"
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
@@ -55,6 +58,9 @@ elif INSTALLATION == STAGING:
         import sys
         print >> sys.stderr, "[oboe] Unable to instrument app and middleware"
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
+    BROKER_USER = AWS_ACCESS_KEY_ID
+    BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+    BROKER_VHOST = AWS_QUEUE_PREFIX    
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
     SITE_NAME = 'unisubs'
@@ -67,6 +73,9 @@ elif INSTALLATION == PRODUCTION:
     ADMINS = (
       ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org'),
     )
+    BROKER_USER = AWS_ACCESS_KEY_ID
+    BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+    BROKER_VHOST = AWS_QUEUE_PREFIX
     
 if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     uslogging_db = {
@@ -83,7 +92,7 @@ if INSTALLATION == STAGING or INSTALLATION == PRODUCTION:
     DATABASE_ROUTERS = ['routers.UnisubsRouter']
     AWS_STORAGE_BUCKET_NAME = DEFAULT_BUCKET
     COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-    COMPRESS_URL = MEDIA_URL
+    COMPRESS_URL = STATIC_URL
     SOLR_ROOT = '/usr/share/'
 else:
     uslogging_db = {}
@@ -113,10 +122,6 @@ DATABASES.update(uslogging_db)
 
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
 
-BROKER_USER = AWS_ACCESS_KEY_ID
-BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
-BROKER_VHOST = AWS_QUEUE_PREFIX
-
 EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
 
 
@@ -130,7 +135,7 @@ if USE_AMAZON_S3:
 
 
 COMPRESS_MEDIA = not DEBUG
-MEDIA_URL_BASE = MEDIA_URL
+STATIC_URL_BASE = STATIC_URL
 if COMPRESS_MEDIA:
-    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
+    STATIC_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
 

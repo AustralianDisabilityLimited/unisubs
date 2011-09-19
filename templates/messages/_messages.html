@@ -2,8 +2,19 @@
 {% if msg_count %}
 <div class="note">
     {% blocktrans %}
-        You have {{ msg_count }} messages.
+        You have {{ msg_count }} new messages.
     {% endblocktrans %}
     <a href="{% url messages:index %}">{% trans 'View all' %}</a>
+    <a href="#" class="hide-messages" style="float: right; font-size: 0.8em">{% trans "hide" %}</a>
+    <script type="text/javascript">
+        $('.note .hide-messages').click(function(){
+            var $this = $(this);
+            $this.parents('.note').hide();
+            var d = new Date()
+            d.setTime(d.getTime() + 60*60*24*365*1000)
+            document.cookie = '{{ cookie_name }}={{ last_unread|urlencode }}; path=/; expires='+d.toUTCString();
+            return false;
+        });
+    </script>    
 </div>
 {% endif %}

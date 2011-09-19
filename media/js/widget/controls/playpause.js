@@ -16,47 +16,47 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.controls.PlayPause');
+goog.provide('unisubs.controls.PlayPause');
 /**
 * @constructor
 * @extends goog.ui.Component
 */
-mirosubs.controls.PlayPause = function(videoPlayer, opt_domHelper) {
+unisubs.controls.PlayPause = function(videoPlayer, opt_domHelper) {
     goog.ui.Component.call(this, opt_domHelper);
     this.videoPlayer_ = videoPlayer;
     this.state_ = null;
 };
-goog.inherits(mirosubs.controls.PlayPause, goog.ui.Component);
-mirosubs.controls.PlayPause.State_ = {
+goog.inherits(unisubs.controls.PlayPause, goog.ui.Component);
+unisubs.controls.PlayPause.State_ = {
     PLAYING : 'playing',
     PAUSED : 'paused'
 };
-mirosubs.controls.PlayPause.prototype.createDom = function() {
+unisubs.controls.PlayPause.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.setElementInternal($d('span', 'mirosubs-playPause', $d('span')));
+    this.setElementInternal($d('span', 'unisubs-playPause', $d('span')));
     goog.dom.a11y.setRole(this.getElement(), goog.dom.a11y.Role.BUTTON);
     this.setPaused_();;
 };
-mirosubs.controls.PlayPause.prototype.enterDocument = function() {
-    mirosubs.controls.PlayPause.superClass_.enterDocument.call(this);
-    var et = mirosubs.video.AbstractVideoPlayer.EventType;
+unisubs.controls.PlayPause.prototype.enterDocument = function() {
+    unisubs.controls.PlayPause.superClass_.enterDocument.call(this);
+    var et = unisubs.video.AbstractVideoPlayer.EventType;
     this.getHandler().
         listen(this.videoPlayer_, et.PLAY_CALLED, this.setPlaying_).
         listen(this.videoPlayer_, et.PAUSE_CALLED, this.setPaused_).
         listen(this.getElement(), 'click', this.clicked_);
 };
-mirosubs.controls.PlayPause.prototype.setPlaying_ = function() {
+unisubs.controls.PlayPause.prototype.setPlaying_ = function() {
     goog.dom.classes.addRemove(this.getElement(), 'play', 'pause');
-    this.state_ = mirosubs.controls.PlayPause.State_.PLAYING;
+    this.state_ = unisubs.controls.PlayPause.State_.PLAYING;
 };
-mirosubs.controls.PlayPause.prototype.setPaused_ = function() {
+unisubs.controls.PlayPause.prototype.setPaused_ = function() {
     goog.dom.classes.addRemove(this.getElement(), 'pause', 'play');
-    this.state_ = mirosubs.controls.PlayPause.State_.PAUSED;
+    this.state_ = unisubs.controls.PlayPause.State_.PAUSED;
 };
-mirosubs.controls.PlayPause.prototype.clicked_ = function() {
+unisubs.controls.PlayPause.prototype.clicked_ = function() {
     if (this.state_ == null)
         return;
-    else if (this.state_ == mirosubs.controls.PlayPause.State_.PLAYING)
+    else if (this.state_ == unisubs.controls.PlayPause.State_.PLAYING)
         this.videoPlayer_.pause();
     else
         this.videoPlayer_.play();

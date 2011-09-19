@@ -20,12 +20,17 @@ from settings import *
 import logging
 
 SITE_ID = 4
-SITE_NAME = 'mirosubs-dev'
+SITE_NAME = 'unisubs-dev'
+
+JS_USE_COMPILED = True
+
+debug = False
 
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 
-MEDIA_URL = "http://mirosubs.example.com:8000/site_media/"
+STATIC_URL = "http://unisubs.example.com:8000/site_media/"
+MEDIA_URL = "http://unisubs.example.com:8000/user-data/"
 
 # MIDDLEWARE_CLASSES += ('middleware.SqlPrintingMiddleware',)
 
@@ -46,16 +51,13 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
 # 3. >>> ./dev-runserver
 # 4. >>> python manage.py celerycam #this is optional. It allow see in admin-interface tasks running
 
+COMPRESS_MEDIA = not DEBUG
+
 try:
     from settings_local import *
 except ImportError:
     pass
 
-if USE_AMAZON_S3:
-    AWS_BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
-
-COMPRESS_MEDIA = not DEBUG
-MEDIA_URL_BASE = MEDIA_URL
+STATIC_URL_BASE = STATIC_URL
 if COMPRESS_MEDIA:
-    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
-
+    STATIC_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])

@@ -28,8 +28,11 @@ from videos.models import Action
 from apps.widget import video_cache
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
+from django.utils.http import urlquote
 from widget.views import base_widget_params
 from django.utils import simplejson as json
+from django.utils.http import urlquote
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -97,11 +100,30 @@ def team_activity(context, team):
 
 @register.inclusion_tag('teams/_team_add_video_select.html', takes_context=True)    
 def team_add_video_select(context):
+    request = context['request']
+    
+    #fix problem with encoding "?" in build_absolute_uri. It is not encoded,
+    #so we get not same URL that page has
+    location = request.get_full_path()
+    context['video_absolute_url'] = request.build_absolute_uri(urlquote(location))
+    
     user = context['user']
     if user.is_authenticated():
         qs = Team.objects.filter(users=user)
         context['teams'] = [item for item in qs if item.can_add_video(user)]
     return context 
+
+@register.inclusion_tag('videos/_team_list.html')
+def render_belongs_to_team_list(video):
+    teams =  []
+    for t in list(video.team_set.all()):
+        if video.moderated_by == t:
+            t.moderates =True
+            teams.insert(0, t)
+        else:
+            teams.append(t)
+    return {"teams": teams}
+
 
 @register.inclusion_tag('teams/_team_video_detail.html', takes_context=True)  
 def team_video_detail(context, team_video_search_record):
@@ -117,10 +139,10 @@ def team_video_detail(context, team_video_search_record):
 @register.inclusion_tag('teams/_complete_team_video_detail.html', takes_context=True)  
 def complete_team_video_detail(context, team_video_search_record):
     context['search_record'] = team_video_search_record
+    langs = team_video_search_record.video_completed_langs or ()
+    urls = team_video_search_record.video_completed_lang_urls or ()
     context['display_languages'] = \
-        zip([_(ALL_LANGUAGES_DICT[l]) for l in 
-             team_video_search_record.video_completed_langs],
-            team_video_search_record.video_completed_lang_urls)    
+        zip([_(ALL_LANGUAGES_DICT[l]) for l in langs if bool(l)], urls)
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_detail.html', takes_context=True)  
@@ -156,3 +178,15 @@ def team_video_in_progress_list(team_video_search_record):
     return  {
         'languages': langs
         }
+    
+@register.inclusion_tag('teams/_join_button.html', takes_context=True)
+def render_team_join(context, team, button_size="huge"):
+    context['team'] = team
+    context['button_size'] = button_size
+    return context
+
+@register.inclusion_tag('teams/_leave_button.html', takes_context=True)
+def render_team_leave(context, team, button_size="huge"):
+    context['team'] = team
+    context['button_size'] = button_size
+    return context

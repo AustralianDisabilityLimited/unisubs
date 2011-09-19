@@ -1,4 +1,5 @@
 {% extends "jsdemo/base_demo.html" %}
+{% load media_compressor %}
 {% block body %}
 
   <object width='425' height='350'>
@@ -29,7 +30,7 @@
 
   logConsole.setCapturing(true);
 
-  var videoSource = new mirosubs.video.YoutubeVideoSource('H2Ncxw1xfck');
+  var videoSource = new unisubs.video.YoutubeVideoSource('H2Ncxw1xfck');
   var player = videoSource.createPlayer();
   player.decorate(document.getElementsByTagName('embed')[0]);
 

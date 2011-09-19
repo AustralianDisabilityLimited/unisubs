@@ -11,7 +11,10 @@
             $('.remove-avatar').click(function(){
                 if (confirm('{% trans "Do you really want delete picture?" %}')){
                     $.post('{% url profiles:remove_avatar %}', {remove: true}, function(response){
-                        response.errors || $('.user-avatar').attr('src', '');
+                        if ( ! response.errors){
+                            $('.user-avatar').attr('src', response.avatar);
+                            $('.remove-avatar').remove();
+                        }
                     }, 'json');
                 }
                 return false;
@@ -39,14 +42,17 @@
 {% endblock %}
 
 {% block settings_content %}
+  <div class="hd">
+    <h2>
+      {% trans 'Edit Your Profile' %}
+    </h2>
+    <a href="{% url profiles:profile user.username %}" class="heading_button">{% trans 'View Profile' %}</a>
+  </div>
   <form class="edit_profile" action="." method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="edit_profile_shell">
-          <h2>
-              {% trans 'Edit Your Profile' %}
-          </h2>
+      <div class="grid_9 clearfix">
 
-          <div class="left_column">
+          <div class="grid_5 alpha">
               <h3>{% trans 'Personal Info' %}</h3>
               {{ form.non_field_errors }}
               <p>
@@ -77,7 +83,7 @@
               {{ form.picture.errors }}
               </p>
               <p class="avatar-container">
-                  <img class="thumbnail_medium user-avatar" src="{{ user_info.avatar }}" style="margin-right: 5px"/>
+                  <img class="user-avatar" src="{{ user_info.avatar }}" style="margin-right: 5px"/>
                   {% if user_info.picture %}
                       <a class="remove-avatar" href="#">{% trans 'remove picture' %}</a>
                   {% endif %}
@@ -129,11 +135,13 @@
               </p>                          
           </div>
 
-          <div class="right_column">
+          <div class="grid_3 omega">
               <h3>{% trans 'Language Info' %}</h3>
-              <p>
+              <h4>
                   {{ form.preferred_language.errors }}
                   {{ form.preferred_language.label_tag }}
+              </h4>
+              <p>
                   {{ form.preferred_language }}
               </p>
               {% comment %}
@@ -145,17 +153,21 @@
               {% endcomment %}
               <h4>{% trans 'Languages I Know' %}</h4>
               <div class="empty-form" style="display: none">
-                  <li class="user_language">
-                      <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                  <li class="user_language clearfix">
                       {{ formset.empty_form.id }}
-                      {{ formset.empty_form.language }}
-                      {{ formset.empty_form.proficiency }}
-                      <label for="{{ formset.empty_form.follow_requests.auto_id }}">
-                          {{ formset.empty_form.follow_requests.label }}
-                      </label>
-                      {{ formset.empty_form.follow_requests }}
-                      <div style="display: none" class="delete-checkbox">
-                          {{ form.DELETE }}
+                      <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                      <div class="entry">
+                        {{ formset.empty_form.language }}
+                        {{ formset.empty_form.proficiency }}
+                        <p>
+                          {{ formset.empty_form.follow_requests }}
+                          <label for="{{ formset.empty_form.follow_requests.auto_id }}">
+                              {{ formset.empty_form.follow_requests.label }}
+                          </label>
+                        </p>
+                        <div style="display: none" class="delete-checkbox">
+                            {{ form.DELETE }}
+                        </div>
                       </div>                
                   </li>
               </div>
@@ -163,20 +175,24 @@
                   {{ formset.management_form }}
                   {{ formset.non_field_errors }}
                   {% for form in formset.forms %}
-                      <li class="user_language">
+                      <li class="user_language clearfix">
                           {{ form.non_field_errors }}
-                          <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
                           {{ form.id }}
-                          {{ form.language.errors }}
-                          {{ form.language }}
-                          {{ form.proficiency.errors }}
-                          {{ form.proficiency }}
-                          <label for="{{ form.follow_requests.auto_id }}">
-                              {{ form.follow_requests.label }}
-                          </label>
-                          {{ form.follow_requests }}
-                          <div style="display: none" class="delete-checkbox">
-                              {{ form.DELETE }}
+                          <a href="#" class="small_close remove-language">{% trans 'Remove Language' %}</a>
+                          <div class="entry">
+                            {{ form.language.errors }}
+                            {{ form.language }}
+                            {{ form.proficiency.errors }}
+                            {{ form.proficiency }}
+                            <p>
+                              {{ form.follow_requests }}
+                              <label for="{{ form.follow_requests.auto_id }}">
+                                  {{ form.follow_requests.label }}
+                              </label>
+                            </p>
+                            <div style="display: none" class="delete-checkbox">
+                                {{ form.DELETE }}
+                            </div>
                           </div>
                       </li>
                   {% endfor %}
@@ -189,14 +205,15 @@
               &nbsp;
           </div>
       </div>
-
-      <button style="margin: 10px;" class="green_button small" type="submit" value="Save">
-          <span>{% trans 'Save Edits to Profile' %}</span>
-      </button>
-          
-      <a class="small" style="margin: 10px;" href="{% url auth:delete_user %}">
-          <span>{% trans 'Permanently Delete Your Profile' %}</span>
-      </a>  
+      <div class="ft">
+        <button class="blue_button small" type="submit" value="Save">
+            <span>{% trans 'Save Changes' %}</span>
+        </button>
+            
+        <a href="{% url auth:delete_user %}">
+            <span>{% trans 'Permanently Delete Your Profile' %}</span>
+        </a>
+      </div>
   </form>
 
 <script type="text/javascript">

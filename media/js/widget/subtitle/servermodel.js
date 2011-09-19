@@ -17,26 +17,26 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
- * @fileoverview Definition of the the mirosubs.subtitle.ServerModel 
+ * @fileoverview Definition of the the unisubs.subtitle.ServerModel 
  *     interface
  *
  */
 
-goog.provide('mirosubs.subtitle.ServerModel');
+goog.provide('unisubs.subtitle.ServerModel');
 
 /**
  * Interface for interaction with server during subtitling work.
  * @interface
  */
-mirosubs.subtitle.ServerModel = function() {};
+unisubs.subtitle.ServerModel = function() {};
 
 /**
  * Initializes this ServerModel with a UnitOfWork. The server model then 
  * proceeds to save periodically (or not) using the work recorded by the 
  * UnitOfWork. This method can only be called once.
- * @param {mirosubs.UnitOfWork} unitOfWork
+ * @param {unisubs.UnitOfWork} unitOfWork
  */
-mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
+unisubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
 
 /**
  * Announces to the server that subtitling is finished. Also frees timers, 
@@ -46,18 +46,18 @@ mirosubs.subtitle.ServerModel.prototype.init = function(unitOfWork) {};
  * @param {function()=} opt_cancelCallback
  * @param {boolean=} opt_completed
  */
-mirosubs.subtitle.ServerModel.prototype.finish = function(
+unisubs.subtitle.ServerModel.prototype.finish = function(
     jsonSubs, callback, opt_cancelCallback, opt_completed) {};
 
 /**
  * Instances implementing this interface must extend goog.Disposable
  */
-mirosubs.subtitle.ServerModel.prototype.dispose = function() {};
+unisubs.subtitle.ServerModel.prototype.dispose = function() {};
 
-mirosubs.subtitle.ServerModel.prototype.getEmbedCode = function() {};
+unisubs.subtitle.ServerModel.prototype.getEmbedCode = function() {};
 
-mirosubs.subtitle.ServerModel.prototype.currentUsername = function() {};
+unisubs.subtitle.ServerModel.prototype.currentUsername = function() {};
 
-mirosubs.subtitle.ServerModel.prototype.logIn = function() {};
+unisubs.subtitle.ServerModel.prototype.logIn = function() {};
 
-mirosubs.subtitle.ServerModel.prototype.getPermalink = function() {};
+unisubs.subtitle.ServerModel.prototype.getPermalink = function() {};

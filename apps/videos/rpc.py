@@ -22,7 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from videos.models import Video, SubtitleLanguage
+from videos.models import Video, SubtitleLanguage, Action
 from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from utils.rpc import Error, Msg, RpcExceptionEvent, add_request_to_kwargs
@@ -31,12 +31,14 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
 from haystack.query import SearchQuerySet
-from videos.search_indexes import VideoSearchResult
+from videos.search_indexes import VideoSearchResult, VideoIndex
 from utils.celery_search_index import update_search_index
+from utils.multi_query_set import MultiQuerySet
+from videos.tasks import send_change_title_email
+from django.template.defaultfilters import slugify
 import datetime
 
-VIDEOS_ON_WATCH_PAGE = getattr(settings, 'VIDEOS_ON_WATCH_PAGE', 15)
-VIDEOS_ON_PAGE = getattr(settings, 'VIDEOS_ON_PAGE', 30)
+VIDEOS_ON_PAGE = VideoIndex.IN_ROW*5
 
 class VideosApiClass(object):
     authentication_error_msg = _(u'You should be authenticated.')
@@ -97,16 +99,14 @@ class VideosApiClass(object):
     
     @add_request_to_kwargs
     def load_featured_page(self, page, request, user):
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-            .order_by('-featured')
+        sqs = VideoIndex.get_featured_videos()
         
         return render_page(page, sqs, request=request)    
 
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-edited')
+            .models(Video).order_by('-created')
             
         return render_page(page, sqs, request=request)
 
@@ -122,43 +122,80 @@ class VideosApiClass(object):
         
         sort_field = sort_types.get(sort, 'week_views')
         
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-%s' % sort_field)
+        sqs = VideoIndex.get_popular_videos('-%s' % sort_field)
         
         return render_page(page, sqs, request=request, display_views=sort)
 
     def _get_volunteer_sqs(self, request, user):
         '''
-        Return the search query set for videos which would be relevent to
+        Return the search query set for videos which would be relevant to
         volunteer for writing subtitles.
         '''
+
         user_langs = get_user_languages_from_request(request)
+        rest_langs = dict(settings.ALL_LANGUAGES).keys()
+        for lang in user_langs:
+            rest_langs.remove(lang)
 
-        relevent = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(video_language__in=user_langs) \
-            .filter_or(languages__in=user_langs)
+        relevant = SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(video_language_exact__in=user_langs) \
+            .filter_or(languages_exact__in=user_langs) \
+            .order_by('-requests_count')
 
-        ## The rest of videos which are NOT relevent
-        #rest = SearchQuerySet().result_class(VideoSearchResult) \
-            #.models(Video).filter(video_language__in=user_langs) \
-            #.filter_or(languages__in=user_langs)
+        # Rest of the videos, which most probably would not be much useful
+        # for the volunteer
+        rest = SearchQuerySet().result_class(VideoSearchResult) \
+            .exclude(languages_exact__in=user_langs) \
+            .exclude(video_language_exact__in=user_langs) \
+            .order_by('-requests_count')
 
-        return relevent
+        return relevant, rest
 
     @add_request_to_kwargs
     def load_featured_page_volunteer(self, page, request, user):
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        rel, rest = self._get_volunteer_sqs(request, user)
+
+        rel = rel.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
             .order_by('-featured')
 
-        return render_page(page, sqs, request=request)    
+        rest = rest.filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
+
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
+
+    @add_request_to_kwargs
+    def load_requested_page_volunteer(self, page, request, user):
+        user_langs = get_user_languages_from_request(request)
+
+        rel, rest = self._get_volunteer_sqs(request, user)
+
+        rel = rel.filter(requests_exact__in=user_langs)
+        rest = rest.filter(requests_exact__in=user_langs)
+
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
 
     @add_request_to_kwargs
     def load_latest_page_volunteer(self, page, request, user):
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-edited')
+        rel, rest = self._get_volunteer_sqs(request, user)
+        rel = rel.order_by('-created')
+        rest = rest.order_by('-created')
 
-        return render_page(page, sqs, request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs, request=request)
 
     @add_request_to_kwargs
     def load_popular_page_volunteer(self, page, sort, request, user):
@@ -173,10 +210,16 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevent = self._get_volunteer_sqs(request, user)
-        sqs = relevent.order_by('-%s' % sort_field)
+        rel, rest = self._get_volunteer_sqs(request, user)
+        rel = rel.order_by('-%s' % sort_field)
+        rest = rest.order_by('-%s' % sort_field)
 
-        return render_page(page, sqs, request=request)
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
+
+        return render_page(page, mqs,  request=request)
 
     @add_request_to_kwargs
     def load_popular_videos(self, sort, request, user):
@@ -195,8 +238,7 @@ class VideosApiClass(object):
             display_views = 'week'
             sort_field = 'week_views'            
 
-        popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-%s' % sort_field)[:5]
+        popular_videos = VideoIndex.get_popular_videos('-%s' % sort_field)[:VideoIndex.IN_ROW]
 
         context = {
             'display_views': display_views,
@@ -221,12 +263,18 @@ class VideosApiClass(object):
 
         sort_field = sort_types.get(sort, 'week_views')
 
-        relevent = self._get_volunteer_sqs(request, user)
+        rel, rest = self._get_volunteer_sqs(request, user)
 
-        popular_videos = relevent.order_by('-%s' % sort_field)[:5]
+        rel = rel.order_by('-%s' % sort_field)[:5]
+        rest = rest.order_by('-%s' % sort_field)[:5]
+
+        count = rel.count() + rest.count()
+
+        mqs = MultiQuerySet(rel, rest)
+        mqs.set_count(count)
 
         context = {
-            'video_list': popular_videos
+            'video_list': mqs
         }
 
         content = render_to_string('videos/_watch_page.html', context, RequestContext(request))
@@ -234,7 +282,33 @@ class VideosApiClass(object):
         return {
             'content': content
         }
-
+    
+    def change_title_video(self, video_pk, title, user):
+        title = title.strip()
+        if not user.is_authenticated():
+            return Error(self.authentication_error_msg)
+        
+        if not title:
+            return Error(_(u'Title can\'t be empty'))
+                
+        try:
+            video = Video.objects.get(pk=video_pk)
+            if title and not video.title or video.is_html5() or user.is_superuser:
+                if title != video.title:
+                    old_title = video.title_display()
+                    video.title = title
+                    video.slug = slugify(video.title)
+                    video.save()
+                    update_search_index.delay(Video, video.pk)
+                    Action.change_title_handler(video, user)
+                    send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))
+            else:
+                return Error(_(u'Title can\'t be changed for this video'))          
+        except Video.DoesNotExist:
+            return Error(_(u'Video does not exist'))
+        
+        return Msg(_(u'Title was changed success'))
+    
     def change_title_translation(self, language_id, title, user):
         if not user.is_authenticated():
             return Error(self.authentication_error_msg)
@@ -243,7 +317,7 @@ class VideosApiClass(object):
             return Error(_(u'Title can\'t be empty'))
         
         try:
-            sl = SubtitleLanguage.objects.get(id=language_id)
+            sl = SubtitleLanguage.objects.filter(is_original=False).get(id=language_id)
         except SubtitleLanguage.DoesNotExist:
             return Error(_(u'Subtitle language does not exist'))
         
@@ -338,7 +412,7 @@ def render_page(page, qs, on_page=VIDEOS_ON_PAGE, request=None,
     if request:
         content = render_to_string(template, context, RequestContext(request))
     else:
-        context['MEDIA_URL'] = settings.MEDIA_URL
+        context['STATIC_URL'] = settings.STATIC_URL
         content = render_to_string(template, context)
         
     total = qs.count()

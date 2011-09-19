@@ -37,17 +37,31 @@ def process_failure_signal(exception, traceback, sender, task_id,
     )  
 task_failure.connect(process_failure_signal)  
 
+@periodic_task(run_every=crontab(hour=3, day_of_week=1))
+def cleanup():
+    import datetime
+    from django.db import transaction
+    from django.contrib.sessions.models import Session
+    from djcelery.models import TaskState
+    
+    now = datetime.datetime.now()
+    Session.objects.filter(expire_date__lt=now).delete()
+    
+    d = now - datetime.timedelta(days=31)
+    TaskState.objects.filter(tstamp__lt=d).delete()
+    transaction.commit_unless_managed()
+    
 @task
 def save_thumbnail_in_s3(video_id):
     try:
         video = Video.objects.get(pk=video_id)
     except Video.DoesNotExist:
         return
-    
-    if video.thumbnail:
-        content = ContentFile(urlopen(video.thumbnail))
-        video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
 
+    if video.thumbnail and not video.s3_thumbnail:
+        content = ContentFile(urlopen(video.thumbnail).read())
+        video.s3_thumbnail.save(video.thumbnail.split('/')[-1], content)
+        
 @periodic_task(run_every=crontab(minute=0, hour=1))
 def update_from_feed(*args, **kwargs):
     for feed in VideoFeed.objects.all():
@@ -74,6 +88,17 @@ def update_video_feed(video_feed_id):
 def add(a, b):
     print "TEST TASK FOR CELERY. EXECUTED WITH ARGUMENTS: %s %s" % (a, b)
     return (a, b, a+b)
+
+@task
+def test_task(n):
+    if not n:
+        print '.'
+    
+    from time import sleep
+    
+    for i in xrange(n):
+        print '.',
+        sleep(0.5)
 
 @task
 def raise_exception(msg, **kwargs):

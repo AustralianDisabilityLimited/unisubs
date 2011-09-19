@@ -11,9 +11,11 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   running-unisubs
    static-files
-   video-models
    demos
+   deployment-guide
+   feature-flags
 
 
 Indices and tables

@@ -32,7 +32,7 @@ class VideoAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'video_thumbnail', 'languages', 'languages_count', 'is_subtitled']
     search_fields = ['video_id', 'title', 'videourl__url', 'user__username']
     readonly_fields = ['subtitles_fetched_count', 'widget_views_count', 'view_count']
-    raw_id_fields = ['user']
+    raw_id_fields = ['user', 'moderated_by']
     
     def video_thumbnail(self, obj):
         return '<img width="80" height="60" src="%s"/>' % obj.get_small_thumbnail()
@@ -74,7 +74,7 @@ class SubtitleLanguageAdmin(admin.ModelAdmin):
     versions.allow_tags = True
     
 class SubtitleVersionAdmin(admin.ModelAdmin):
-    list_display = ['video', 'language', 'version_no', 'note', 'timeline_changes', 'text_changes']
+    list_display = ['video', 'language', 'version_no', 'note', 'timeline_changes', 'text_changes', 'datetime_started']
     list_filter = []
     raw_id_fields = ['language', 'user']
     search_fields = ['language__video__title', 'language__video__video_id', 'language__language']

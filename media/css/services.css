@@ -16,7 +16,7 @@
 
 #services .row .feature {
   width: 505px;
-  background-color: #52686E;
+  background-color: #0f517a;
   color: #ECF3F5;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
@@ -63,17 +63,17 @@
   padding-top: 1em;
 }
 
-#partners {
+#services-partners {
   position: absolute;
   top:3em;
   right:0;
 }
 
-#partners li {
+#services-partners li {
   text-align: center;
   margin: 1em 0;
 }
 
-#partners li p {
+#services-partners li p {
   margin: .5em 0;
 }

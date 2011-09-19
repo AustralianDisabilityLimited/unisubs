@@ -16,23 +16,23 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.finishfaildialog.CopyDialog');
+goog.provide('unisubs.finishfaildialog.CopyDialog');
 
 /**
  * @constructor
  */
-mirosubs.finishfaildialog.CopyDialog = function(headerText, textToCopy) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+unisubs.finishfaildialog.CopyDialog = function(headerText, textToCopy) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.headerText_ = headerText;
     this.textToCopy_ = textToCopy;
 };
 
-goog.inherits(mirosubs.finishfaildialog.CopyDialog, goog.ui.Dialog);
+goog.inherits(unisubs.finishfaildialog.CopyDialog, goog.ui.Dialog);
 
-mirosubs.finishfaildialog.CopyDialog.prototype.createDom = function() {
-    mirosubs.finishfaildialog.CopyDialog.superClass_.createDom.call(this);
+unisubs.finishfaildialog.CopyDialog.prototype.createDom = function() {
+    unisubs.finishfaildialog.CopyDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.textarea_ = $d('textarea', {'value': this.textToCopy_});
     goog.dom.append(
@@ -41,40 +41,40 @@ mirosubs.finishfaildialog.CopyDialog.prototype.createDom = function() {
         this.textarea_);
 };
 
-mirosubs.finishfaildialog.CopyDialog.prototype.enterDocument = function() {
-    mirosubs.finishfaildialog.CopyDialog.superClass_.enterDocument.call(this);
+unisubs.finishfaildialog.CopyDialog.prototype.enterDocument = function() {
+    unisubs.finishfaildialog.CopyDialog.superClass_.enterDocument.call(this);
     this.getHandler().listen(
         this.textarea_,
         ['focus', 'click'],
         this.focusTextarea_);
 };
 
-mirosubs.finishfaildialog.CopyDialog.prototype.focusTextarea_ = function() {
+unisubs.finishfaildialog.CopyDialog.prototype.focusTextarea_ = function() {
     var textarea = this.textarea_;
     goog.Timer.callOnce(function() { textarea.select(); });
 };
 
-mirosubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
-    var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
+unisubs.finishfaildialog.CopyDialog.showForErrorLog = function(log) {
+    var copyDialog = new unisubs.finishfaildialog.CopyDialog(
         "This is the error report we generated. It would be a big help to us if you could copy and paste it into an email and send it to us at widget-logs@universalsubtitles.org. Thank you!",
         log);
     copyDialog.setVisible(true);
 };
 
-mirosubs.finishfaildialog.CopyDialog.showForSubs = function(jsonSubs) {
-    var copyDialog = new mirosubs.finishfaildialog.CopyDialog(
+unisubs.finishfaildialog.CopyDialog.showForSubs = function(jsonSubs) {
+    var copyDialog = new unisubs.finishfaildialog.CopyDialog(
         "Here are your subtitles. Please copy and paste them into a text file. You can email them to us at widget-logs@universalsubtitles.org.",
-        mirosubs.finishfaildialog.CopyDialog.subsToString_(jsonSubs));
+        unisubs.finishfaildialog.CopyDialog.subsToString_(jsonSubs));
     copyDialog.setVisible(true);
 };
 
-mirosubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
+unisubs.finishfaildialog.CopyDialog.subsToString_ = function(jsonSubs) {
     var baseString;
-    if (mirosubs.Dialog.translationDialogOpen)
+    if (unisubs.Dialog.translationDialogOpen)
         baseString = goog.json.serialize(jsonSubs);
     else
-        baseString = mirosubs.SRTWriter.toSRT(jsonSubs);
-    var serverModel = mirosubs.subtitle.MSServerModel.currentInstance;
+        baseString = unisubs.SRTWriter.toSRT(jsonSubs);
+    var serverModel = unisubs.subtitle.MSServerModel.currentInstance;
     baseString = ['browser_id: ' + goog.net.cookies.get('unisub-user-uuid', 'n/a'), 
                   'video_id: ' + (serverModel ? 
                                   serverModel.getVideoID() : 'n/a'),

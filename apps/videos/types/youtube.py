@@ -63,7 +63,7 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
 
     xml = YoutubeVideoType._get_response_from_youtube(url)
 
-    if not xml:
+    if xml is None:
         return
 
     parser = YoutubeXMLParser(xml)
@@ -85,7 +85,7 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
     version = SubtitleVersion(language=language)
     version.version_no = version_no
     version.datetime_started = datetime.now()
-    version.user = User.get_youtube_anonymous()
+    version.user = User.get_anonymous()
     version.note = u'From youtube'
     version.is_forked = True
     version.save()
@@ -107,10 +107,10 @@ def save_subtitles_for_lang(lang, video_pk, youtube_id):
     language.had_version = True
     language.is_complete = True
     language.save()
-
+    
     from videos.tasks import video_changed_tasks
     video_changed_tasks.delay(video.pk)
-
+    
 class YoutubeVideoType(VideoType):
     
     _url_patterns = [re.compile(x) for x in [
@@ -138,6 +138,10 @@ class YoutubeVideoType(VideoType):
 
     @classmethod    
     def video_url(cls, obj):
+        """
+        This method can be called with wither a VideoType object or
+        an actual VideoURL object, therefore the if statement
+        """
         if obj.videoid:
             return 'http://www.youtube.com/watch?v=%s' % obj.videoid
         else:
@@ -216,7 +220,7 @@ class YoutubeVideoType(VideoType):
         url = "http://www.youtube.com/api/timedtext?type=list&v=%s" % self.video_id
         xml = self._get_response_from_youtube(url)
 
-        if not xml:
+        if  xml is None:
             return []
         
         output = []

@@ -16,48 +16,49 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Widgetizer');
+goog.provide('unisubs.Widgetizer');
 
 /**
  * @constructor
  * This is a singleton, so don't call this method directly.
  */
-mirosubs.Widgetizer = function() {
-    mirosubs.siteConfig = mirosubs.Config.siteConfig;
+unisubs.Widgetizer = function() {
+    unisubs.siteConfig = unisubs.Config.siteConfig;
     var myURI = new goog.Uri(window.location);
-    var DEBUG_WIN_NAME = 'mirosubsdebuggingmain';
+    var DEBUG_WIN_NAME = 'unisubsdebuggingmain';
     if (goog.DEBUG) {
         var debugWindow = new goog.debug.FancyWindow(DEBUG_WIN_NAME);
         debugWindow.setEnabled(true);
         debugWindow.init();
-        mirosubs.DEBUG = true;
+        unisubs.DEBUG = true;
     }
     this.makers_ = [
-        new mirosubs.widgetizer.Youtube(),
-        new mirosubs.widgetizer.HTML5(),
-        new mirosubs.widgetizer.JWPlayer()
+        new unisubs.widgetizer.Youtube(),
+        new unisubs.widgetizer.HTML5(),
+        new unisubs.widgetizer.JWPlayer(),
+        new unisubs.widgetizer.YoutubeIFrame()
     ];
-    this.logger_ = goog.debug.Logger.getLogger('mirosubs.Widgetizer');
+    this.logger_ = goog.debug.Logger.getLogger('unisubs.Widgetizer');
 };
-goog.addSingletonGetter(mirosubs.Widgetizer);
+goog.addSingletonGetter(unisubs.Widgetizer);
 
 /**
- * Converts all videos in the page to Mirosubs widgets.
+ * Converts all videos in the page to unisubs widgets.
  *
  */
-mirosubs.Widgetizer.prototype.widgetize = function() {
-    if (mirosubs.LoadingDom.getInstance().isDomLoaded()) {
+unisubs.Widgetizer.prototype.widgetize = function() {
+    if (unisubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
     }
     else {
         goog.events.listenOnce(
-            mirosubs.LoadingDom.getInstance(),
-            mirosubs.LoadingDom.DOMLOAD,
+            unisubs.LoadingDom.getInstance(),
+            unisubs.LoadingDom.DOMLOAD,
             this.onLoaded_, false, this);
     }
 };
 
-mirosubs.Widgetizer.prototype.onLoaded_ = function() {
+unisubs.Widgetizer.prototype.onLoaded_ = function() {
     this.addHeadCss();
     this.widgetizeAttemptTimer_ = new goog.Timer(1000);
     this.widgetizeAttemptCount_ = 0;
@@ -68,7 +69,7 @@ mirosubs.Widgetizer.prototype.onLoaded_ = function() {
     this.widgetizeAttemptTimer_.start();
 };
 
-mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
+unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
     this.widgetizeAttemptCount_++;
     if (this.widgetizeAttemptCount_ > 5) {
         this.widgetizeAttemptTimer_.stop();
@@ -87,18 +88,18 @@ mirosubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
                           ' new video players on the page');
     }
     for (var i = 0; i < videoPlayers.length; i++)
-        mirosubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
+        unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
 };
 
-mirosubs.Widgetizer.prototype.addHeadCss = function() {
+unisubs.Widgetizer.prototype.addHeadCss = function() {
     if (!window.MiroCSSLoading) {
         window.MiroCSSLoading = true;
         var head = document.getElementsByTagName('head')[0];
         var css = document.createElement('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = mirosubs.Config.siteConfig['mediaURL'] + 
-            'css/mirosubs-widget.css';
+        css.href = unisubs.Config.siteConfig['staticURL'] + 
+            'css/unisubs-widget.css';
         css.media = 'screen';
         head.appendChild(css);
     }

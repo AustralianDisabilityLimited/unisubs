@@ -26,7 +26,7 @@
   function openDropLockDialog() {
       var serverModel = new FakeServerModel();
       var jsonSubs = "sadfdsf";
-      var dialog = new mirosubs.widget.DropLockDialog(serverModel, jsonSubs);
+      var dialog = new unisubs.widget.DropLockDialog(serverModel, jsonSubs);
       dialog.setVisible(true);
   }
   goog.events.listen(document.getElementById('openDropLockDialog'), 'click',

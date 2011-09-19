@@ -16,33 +16,33 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.ReviewRightPanel');
+goog.provide('unisubs.subtitle.ReviewRightPanel');
 /**
 * @constructor
-* @extends mirosubs.RightPanel
+* @extends unisubs.RightPanel
 */
-mirosubs.subtitle.ReviewRightPanel = function(serverModel,
+unisubs.subtitle.ReviewRightPanel = function(serverModel,
                                                   helpContents,
                                                   extraHelp,
                                                   legendKeySpecs,
                                                   showRestart,
                                                   doneStrongText,
                                                   doneText) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
+    unisubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);
 };
-goog.inherits(mirosubs.subtitle.ReviewRightPanel, mirosubs.RightPanel);
+goog.inherits(unisubs.subtitle.ReviewRightPanel, unisubs.RightPanel);
 
-mirosubs.subtitle.ReviewRightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
+unisubs.subtitle.ReviewRightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
     el.appendChild(this.makeExtra_($d,
         'Drag edges in timeline to adjust subtitle timing'));
     el.appendChild(this.makeExtra_($d,
         'Double click any subtitle to edit text. Rollover subtitles and use buttons to tweak time, add / remove subtitles.'));
 };
 
-mirosubs.subtitle.ReviewRightPanel.prototype.makeExtra_ = function($d, text) {
-    return $d('div', 'mirosubs-extra mirosubs-extra-left',
+unisubs.subtitle.ReviewRightPanel.prototype.makeExtra_ = function($d, text) {
+    return $d('div', 'unisubs-extra unisubs-extra-left',
               $d('p', null, text),
-              $d('span', 'mirosubs-spanarrow'));
+              $d('span', 'unisubs-spanarrow'));
 };

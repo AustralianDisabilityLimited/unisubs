@@ -7,8 +7,8 @@
 {% block scripts %}
     {{ block.super }}
     <script src="{% url videos:rpc_api %}" type="text/javascript"></script>  
-    <script src="{{ MEDIA_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
-    <script src="{{ MEDIA_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.address-1.4.fixed.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.ajax-paginator.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(function($){
             var $current_sort = $('#popular_sort .current-sort');
@@ -33,6 +33,7 @@
             var sort = $.address.parameter('sort');
             $('li[val='+sort+']', $sort_menu).click();
             
+            {% block pagination_script %}
             $('.ajax-pagination').ajaxPaginator({
                 container: $('.watch-page-content'),
                 onPageChange: function(page, callback){
@@ -41,15 +42,17 @@
                     }, this);
                 },
             });                
+            {% endblock %}
         });
     </script>
+
 {% endblock %}
 
 {% block main_content %}
 
 {% search_form %}
 
-<h1><a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a></h1>
+<h1>{% block heading %}<a href="{% url videos:watch_page %}">{% trans "Watch Subtitled Videos" %}</a>{% endblock %}</h1>
 
 <div class="pod" id="popular_videos">
     <div class="hd clearfix">
@@ -70,7 +73,7 @@
     <div class="bd">
         <div class="watch-page-content">
             <div style="text-align: center; padding: 75px">
-                <img align="absmiddle" width="256" height1="30" src="{{ MEDIA_URL }}images/ajax-loader.gif"/>
+                <img align="absmiddle" width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
             </div>
         </div>
         <!-- // pagination start -->

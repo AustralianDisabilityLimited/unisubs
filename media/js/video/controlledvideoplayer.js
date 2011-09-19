@@ -21,25 +21,25 @@
  *     particularly for completing subtitling work.
  */
 
-goog.provide('mirosubs.video.ControlledVideoPlayer');
+goog.provide('unisubs.video.ControlledVideoPlayer');
 
 /**
  *
  * @constructor
- * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
  */
-mirosubs.video.ControlledVideoPlayer = function(videoPlayer) {
+unisubs.video.ControlledVideoPlayer = function(videoPlayer) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.controls_ = null;
 };
-goog.inherits(mirosubs.video.ControlledVideoPlayer, goog.ui.Component);
+goog.inherits(unisubs.video.ControlledVideoPlayer, goog.ui.Component);
 
-mirosubs.video.ControlledVideoPlayer.prototype.createDom = function() {
-    mirosubs.video.ControlledVideoPlayer.superClass_.createDom.call(this);
+unisubs.video.ControlledVideoPlayer.prototype.createDom = function() {
+    unisubs.video.ControlledVideoPlayer.superClass_.createDom.call(this);
     this.addChild(this.videoPlayer_, true);
     if ( this.videoPlayer_.isChromeless()){
-        this.controls_ = new mirosubs.controls.VideoControls(this.videoPlayer_);
+        this.controls_ = new unisubs.controls.VideoControls(this.videoPlayer_);
         this.addChild(this.controls_, true);    
     }else{
         // dummy object  
@@ -47,6 +47,6 @@ mirosubs.video.ControlledVideoPlayer.prototype.createDom = function() {
     }
 };
 
-mirosubs.video.ControlledVideoPlayer.prototype.getPlayer = function() {
+unisubs.video.ControlledVideoPlayer.prototype.getPlayer = function() {
     return this.videoPlayer_;
 };

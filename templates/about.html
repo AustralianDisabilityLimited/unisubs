@@ -6,11 +6,11 @@
 
 {% block scripts %}
     {% if not js_use_compiled %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-library/closure/goog/base.js">
+    <script type="text/javascript" src="{{ STATIC_URL }}js/closure-library/closure/goog/base.js">
     </script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/closure-dependencies.js">
+    <script type="text/javascript" src="{{ STATIC_URL }}js/closure-dependencies.js">
     </script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/swfobject.js">
+    <script type="text/javascript" src="{{ STATIC_URL }}js/swfobject.js">
     </script>
     {% endif %}
     <style>
@@ -68,7 +68,7 @@
                 to get started!
             </li>
             <li>
-                If you are a developer, check out the <a href="http://wiki.github.com/8planes/mirosubs/dev-center">development center</a> 
+                If you are a developer, check out the <a href="http://wiki.github.com/pculture/unisubs/dev-center">development center</a> 
                 and start with some 'bite-sized' tickets that are listed there.
             </li>
             <li>
@@ -124,7 +124,7 @@
     <p>
         Are there other features that are particular important to your use? 
         We'd love to hear from you.<br/>
-        Email us: <a href="mailto:universalsubtitles@pculture.org">universalsubtitles@pculture.org</a>
+        Email us: <a href="mailto:feedback@universalsubtitles.org">universalsubtitles@pculture.org</a>
     </p>
     {% endblocktrans %}
 </div>

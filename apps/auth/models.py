@@ -83,10 +83,18 @@ class CustomUser(BaseUser):
                 return self.first_name
         return self.username
     
-    def unread_messages(self):
+    def unread_messages(self, hidden_meassage_id=None):
         from messages.models import Message
         
-        return Message.objects.for_user(self).filter(read=False)
+        qs = Message.objects.for_user(self).filter(read=False)
+        
+        try:
+            if hidden_meassage_id:
+                qs = qs.filter(pk__gt=hidden_meassage_id)
+        except (ValueError, TypeError):
+            pass
+        
+        return qs
     
     @classmethod
     def video_followers_change_handler(cls, sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -168,7 +176,8 @@ class CustomUser(BaseUser):
         return language_code in [l.language for l in self.get_languages()]
 
     def managed_teams(self):
-        return self.teams.filter(members__is_manager=True)
+        from apps.teams.models import TeamMember
+        return self.teams.filter(members__role=TeamMember.ROLE_MANAGER)
 
     def _get_gravatar(self, size):
         url = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower()).hexdigest() + "?"
@@ -203,8 +212,8 @@ class CustomUser(BaseUser):
         return hashlib.sha224(settings.SECRET_KEY+str(self.pk)+video_id).hexdigest()
     
     @classmethod
-    def get_youtube_anonymous(cls):
-        return cls.objects.get(pk=10000)
+    def get_anonymous(cls):
+        return cls.objects.get(pk=settings.ANONYMOUS_USER_ID)
     
 def create_custom_user(sender, instance, created, **kwargs):
     if created:
@@ -311,6 +320,8 @@ class Announcement(models.Model):
     hidden = models.BooleanField(default=False)
     
     cache_key = 'last_accouncement'
+    hide_cookie_name = 'hide_accouncement'
+    cookie_date_format = '%d/%m/%Y %H:%M:%S'
     
     class Meta:
         ordering = ['-created']
@@ -324,19 +335,24 @@ class Announcement(models.Model):
         self.clear_cache()
 
     def delete(self, *args, **kwargs):
-        self.clear_cache()
         return super(Announcement, self).delete(*args, **kwargs)
+        self.clear_cache()
     
     @classmethod
-    def last(cls):
+    def last(cls, hidden_date=None):
         last = cache.get(cls.cache_key, '')
-
+        
         if last == '':
             try:
-                last = cls.objects.filter(created__lte=datetime.today()).filter(hidden=False)[0:1].get()
+                qs = cls.objects.filter(created__lte=datetime.today()) \
+                    .filter(hidden=False)
+                last = qs[0:1].get()
             except cls.DoesNotExist:
                 last = None
             cache.set(cls.cache_key, last, 60*60)
-
+        
+        if hidden_date and last and last.created < hidden_date:
+            return None
+        
         return last    
         

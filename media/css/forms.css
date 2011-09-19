@@ -144,6 +144,10 @@ form ul li span.checkbox_hint {
 	clear: both;
 }
 
+.content li form {
+  clear: none;
+}
+
 form p {
   clear: both;
   font-size: 11px;
@@ -421,8 +425,9 @@ width: 21px;
 border: 1px solid #7e1504;
   }
 
-
-
+#messages .error {
+    color: #f21;
+}
 
 #messages *{
   margin: 0;
@@ -430,9 +435,6 @@ border: 1px solid #7e1504;
   padding: 0;
   font-size: 13px;
   }
-
-
-
 /*/////////////////////////////////////////////
 
 ~ Feedback Form
@@ -512,7 +514,7 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
     width: 339px;
 }
 
-.mirosubs-share{
+.unisubs-share{
   margin: 0px 0 0 0px;
   }
 
@@ -524,14 +526,6 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
 #id_picture{
 
 }
-
-
-
-#id_preferred_language{
-  margin-left: 20px;
-  }
-
-
 
 #id_valid_email{
 

@@ -26,8 +26,10 @@ from django.contrib import admin
 admin.autodiscover()
 admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
 
+from doorman import feature_is_on
+
 js_info_dict = {
-    'packages': ('mirosubs'),
+    'packages': ('unisubs'),
 }
 
 urlpatterns = patterns(
@@ -57,6 +59,7 @@ urlpatterns = patterns(
     (r'^widget_demo/$', 'widget.views.widget_demo'),
     (r'^widget_public_demo/$', 'widget.views.widget_public_demo'),
     url(r'^onsite_widget/$', 'widget.views.onsite_widget', name='onsite_widget'),
+    url(r'^onsite_widget_resume/$', 'widget.views.onsite_widget_resume', name='onsite_widget_resume'),
     (r'^widget/', include('widget.urls', namespace='widget', app_name='widget')),
     (r'^jstest/(\w+)', 'jstesting.views.jstest'),
     (r'^jsdemo/(\w+)', 'jsdemo.views.jsdemo'),
@@ -78,7 +81,9 @@ urlpatterns = patterns(
     url(r'^services/$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'services.html'}, 'services_page'),
    url(r'^solutions/ngo/$', 'django.views.generic.simple.direct_to_template', 
-        {'template': 'solutions/ngo.html'}, 'solutions_page'),    
+        {'template': 'solutions/ngo.html'}, 'solutions_page'),
+    url(r'^streaming-transcript/$', 'django.views.generic.simple.direct_to_template', 
+        {'template': 'streaming-transcript.html'}, 'streaming_transcript_demo'),  
     url(r'^w3c/p3p.xml$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'p3p.xml'}),
     url(r'^w3c/Policies.xml$', 'django.views.generic.simple.direct_to_template', 
@@ -118,6 +123,10 @@ try:
 except ImportError:
     pass
 
+if feature_is_on('MODERATION'):
+    urlpatterns += patterns("",
+        (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
+    )
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',

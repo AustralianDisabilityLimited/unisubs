@@ -18,11 +18,11 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.Config');
+goog.provide('unisubs.Config');
 
-mirosubs.Config.siteConfig = {
+unisubs.Config.siteConfig = {
     'siteURL': 'http://{{current_site.domain}}',
-    'mediaURL': '{{MEDIA_URL}}'
+    'staticURL': '{{STATIC_URL}}'
 };
 
-mirosubs.Config.innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
+unisubs.Config.innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';

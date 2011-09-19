@@ -77,6 +77,8 @@ jQuery.mod = function(){
     var modal = jQuery('#' + jQuery(this).attr('data-modal'))
     modal.trigger('before-show-modal', [this]);
     modal.mod();
+    // firefox needs to have it return false
+    return false;  
   })
 };
 

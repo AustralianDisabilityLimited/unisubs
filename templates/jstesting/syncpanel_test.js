@@ -25,11 +25,11 @@ function downPress() {
 }
 
 function downHold() {
-    mirosubs.testing.events.fireKeyDown(document, MS_down);
+    unisubs.testing.events.fireKeyDown(document, MS_down);
 }
 
 function downRelease() {
-    mirosubs.testing.events.fireKeyUp(document, MS_down);
+    unisubs.testing.events.fireKeyUp(document, MS_down);
 }
 
 function assertTimes(subIndex, start, end) {
@@ -41,17 +41,17 @@ function assertTimes(subIndex, start, end) {
 }
 
 function setUpSubs(opt_subs) {
-    MS_unitOfWork = new mirosubs.UnitOfWork();
-    MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
+    MS_unitOfWork = new unisubs.UnitOfWork();
+    MS_videoPlayer = new unisubs.testing.StubVideoPlayer();
     subs = opt_subs || [captionJSON(-1, -1, 1),
                         captionJSON(-1, -1, 2),
                         captionJSON(-1, -1, 3)];
     MS_captionSet =
-        new mirosubs.subtitle.EditableCaptionSet(
+        new unisubs.subtitle.EditableCaptionSet(
             subs, MS_unitOfWork);
-    MS_captionManager = new mirosubs.CaptionManager(
+    MS_captionManager = new unisubs.CaptionManager(
         MS_videoPlayer, MS_captionSet);
-    MS_syncPanel = new mirosubs.subtitle.SyncPanel(MS_captionSet,
+    MS_syncPanel = new unisubs.subtitle.SyncPanel(MS_captionSet,
                                                    MS_videoPlayer,
                                                    null,
                                                    MS_captionManager);
@@ -63,8 +63,8 @@ function setUpSubs(opt_subs) {
 
 // the tests
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
-    mirosubs.SubTracker.getInstance().start(false);
+    unisubs.REPORT_ANALYTICS = false;
+    unisubs.SubTracker.getInstance().start(false);
 }
 
 function tearDown() {
@@ -151,7 +151,7 @@ function testMoveFirstTwoSubs() {
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(10, 15, 2),
                captionJSON(15, 20, 3)]);
-    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var minLength = unisubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 2;
     downHold();
     MS_videoPlayer.playheadTime = 17;
@@ -227,7 +227,7 @@ function testClearFirstTwoWithSpace() {
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(30, 35, 3)]);
-    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var minLength = unisubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 3;
     downHold();
     MS_videoPlayer.playheadTime = 22;
@@ -244,7 +244,7 @@ function testClearMiddleWithSpace() {
     setUpSubs([captionJSON(5, 10, 1),
                captionJSON(15, 20, 2),
                captionJSON(30, 35, 3)]);
-    var minLength = mirosubs.subtitle.EditableCaption.MIN_LENGTH;
+    var minLength = unisubs.subtitle.EditableCaption.MIN_LENGTH;
     MS_videoPlayer.playheadTime = 13;
     downHold();
     MS_videoPlayer.playheadTime = 22;

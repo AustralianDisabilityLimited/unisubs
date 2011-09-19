@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.DropLockDialog');
+goog.provide('unisubs.widget.DropLockDialog');
 
 /**
  * @constructor
  */
-mirosubs.widget.DropLockDialog = function(serverModel, jsonSubs) {
-    goog.ui.Dialog.call(this, 'mirosubs-modal-lang', true);
+unisubs.widget.DropLockDialog = function(serverModel, jsonSubs) {
+    goog.ui.Dialog.call(this, 'unisubs-modal-lang', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.didLoseSession_ = false;
@@ -33,42 +33,42 @@ mirosubs.widget.DropLockDialog = function(serverModel, jsonSubs) {
     this.secondsIdle_ = 0;
 };
 
-goog.inherits(mirosubs.widget.DropLockDialog, goog.ui.Dialog);
+goog.inherits(unisubs.widget.DropLockDialog, goog.ui.Dialog);
 
-mirosubs.widget.DropLockDialog.prototype.didLoseSession = function() {
+unisubs.widget.DropLockDialog.prototype.didLoseSession = function() {
     return this.didLoseSession_;
 };
 
-mirosubs.widget.DropLockDialog.prototype.createDom = function() {
-    mirosubs.widget.DropLockDialog.superClass_.createDom.call(this);
+unisubs.widget.DropLockDialog.prototype.createDom = function() {
+    unisubs.widget.DropLockDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, 
                        this.getDomHelper());
     this.timeRemainingSpan_ = $d(
         "span", "remaining-seconds", 
-        mirosubs.Dialog.SECONDS_TILL_FREEZE + "");
+        unisubs.Dialog.SECONDS_TILL_FREEZE + "");
     this.contentDiv_ = $d('div', null);
 
-    this.backToEditingButton_ = mirosubs.createLinkButton(
+    this.backToEditingButton_ = unisubs.createLinkButton(
         $d, 'Nope! Get me back to subtitling', 
-        "mirosubs-green-button mirosubs-big");
-    this.downloadWorkLink_ = mirosubs.createLinkButton(
+        "unisubs-green-button unisubs-big");
+    this.downloadWorkLink_ = unisubs.createLinkButton(
         $d, "download your subtitles", "inline-download-subs");
-    this.tryToResumeButton_ = mirosubs.createLinkButton(
-        $d, "Try to Resume Work", "mirosubs-green-button mirosubs-big");
+    this.tryToResumeButton_ = unisubs.createLinkButton(
+        $d, "Try to Resume Work", "unisubs-green-button unisubs-big");
 
     goog.dom.append(
         this.getContentElement(), 
         $d('h3', null, 'Warning: Idle'),
         this.contentDiv_);
     this.clearDiv_ = $d('div');
-    mirosubs.style.setProperty(
+    unisubs.style.setProperty(
         this.clearDiv_, 'clear', 'both');
     this.clearDiv_.innerHTML = "&nbsp;";
     goog.dom.append(
         this.contentDiv_,
         $d("p", null,
            "Warning: you've been idle for more than " + 
-           mirosubs.Dialog.MINUTES_TILL_WARNING + 
+           unisubs.Dialog.MINUTES_TILL_WARNING + 
            " minutes.  To give other users a chance to help, " + 
            "we will close your session in ",
            this.timeRemainingSpan_,
@@ -77,7 +77,7 @@ mirosubs.widget.DropLockDialog.prototype.createDom = function() {
         this.clearDiv_);
 };
 
-mirosubs.widget.DropLockDialog.prototype.showLockDroppedDom_ = function(e){
+unisubs.widget.DropLockDialog.prototype.showLockDroppedDom_ = function(e){
     var $d = goog.bind(this.getDomHelper().createDom, 
                        this.getDomHelper()); 
     goog.dom.removeChildren(this.contentDiv_);
@@ -93,8 +93,8 @@ mirosubs.widget.DropLockDialog.prototype.showLockDroppedDom_ = function(e){
         this.clearDiv_);
 };
 
-mirosubs.widget.DropLockDialog.prototype.enterDocument = function() {
-    mirosubs.widget.DropLockDialog.superClass_.enterDocument.call(this);
+unisubs.widget.DropLockDialog.prototype.enterDocument = function() {
+    unisubs.widget.DropLockDialog.superClass_.enterDocument.call(this);
     this.getHandler().
         listen(
             this.backToEditingButton_,
@@ -114,14 +114,14 @@ mirosubs.widget.DropLockDialog.prototype.enterDocument = function() {
             this.timerTick_);
 };
 
-mirosubs.widget.DropLockDialog.prototype.timerTick_ = function(e) {
+unisubs.widget.DropLockDialog.prototype.timerTick_ = function(e) {
     this.secondsIdle_++;
-    if (this.secondsIdle_ >= mirosubs.Dialog.SECONDS_TILL_FREEZE) {
+    if (this.secondsIdle_ >= unisubs.Dialog.SECONDS_TILL_FREEZE) {
         this.sessionReallyIdleTimer_.stop();
         // oh snap, shit just got real
         this.didLoseSession_ = true;
         this.serverModel_.stopTimer();
-        mirosubs.Rpc.call(
+        unisubs.Rpc.call(
             "release_lock",
             { 'session_pk': this.serverModel_.getSessionPK() });
         this.showLockDroppedDom_();
@@ -129,25 +129,25 @@ mirosubs.widget.DropLockDialog.prototype.timerTick_ = function(e) {
     else {
         goog.dom.setTextContent(
             this.timeRemainingSpan_,
-            (mirosubs.Dialog.SECONDS_TILL_FREEZE - 
+            (unisubs.Dialog.SECONDS_TILL_FREEZE - 
              this.secondsIdle_) + '');
     }
 };
 
-mirosubs.widget.DropLockDialog.prototype.backToEditing_ = function(e) {
+unisubs.widget.DropLockDialog.prototype.backToEditing_ = function(e) {
     e.preventDefault();
     this.setVisible(false);
 };
 
-mirosubs.widget.DropLockDialog.prototype.downloadWork_ = function(e) {
+unisubs.widget.DropLockDialog.prototype.downloadWork_ = function(e) {
     e.preventDefault();
-    mirosubs.finishfaildialog.CopyDialog.showForSubs(this.jsonSubs_);
+    unisubs.finishfaildialog.CopyDialog.showForSubs(this.jsonSubs_);
 };
 
-mirosubs.widget.DropLockDialog.prototype.tryToResume_ = function(e) {
+unisubs.widget.DropLockDialog.prototype.tryToResume_ = function(e) {
     e.preventDefault();
     var that = this;
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
         'regain_lock',
         { 'session_pk': this.serverModel_.getSessionPK() },
         function(result) {
@@ -167,7 +167,7 @@ mirosubs.widget.DropLockDialog.prototype.tryToResume_ = function(e) {
         });
 };
 
-mirosubs.widget.DropLockDialog.prototype.disposeInternal = function() {
-    mirosubs.widget.DropLockDialog.superClass_.disposeInternal.call(this);
+unisubs.widget.DropLockDialog.prototype.disposeInternal = function() {
+    unisubs.widget.DropLockDialog.superClass_.disposeInternal.call(this);
     this.sessionReallyIdleTimer_.dispose();
 };

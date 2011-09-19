@@ -16,7 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-# Django settings for mirosubs project.
+# Django settings for unisubs project.
 import os, sys
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -141,7 +141,7 @@ WIDGET_LOG_EMAIL = 'widget-logs@universalsubtitles.org'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': rel('mirosubs.sqlite3'), # Or path to database file if using sqlite3.
+        'NAME': rel('unisubs.sqlite3'), # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -154,7 +154,6 @@ EMBED_JS_VERSION = ''
 PREVIOUS_EMBED_JS_VERSIONS = []
 
 CSS_USE_COMPILED = True
-JS_USE_COMPILED = False
 
 USE_BUNDLED_MEDIA = not DEBUG
 
@@ -166,7 +165,7 @@ USER_LANGUAGES_COOKIE_NAME = 'unisub-languages-cookie'
 
 # paths provided relative to media/js
 JS_CORE = \
-    ['js/mirosubs.js', 
+    ['js/unisubs.js', 
      'js/rpc.js',
      'js/clippy.js',
      'js/flash.js',
@@ -179,15 +178,19 @@ JS_CORE = \
      'js/messaging/simplemessage.js',
      'js/video/video.js',
      'js/video/captionview.js',
+     'js/widget/usersettings.js',
      'js/video/abstractvideoplayer.js',
      'js/video/flashvideoplayer.js',
      'js/video/html5videoplayer.js',
      'js/video/youtubevideoplayer.js',
+     'js/video/ytiframevideoplayer.js',
+     'js/video/youtubebasemixin.js',
      'js/video/jwvideoplayer.js',
      'js/video/flvvideoplayer.js',
      'js/video/videosource.js',
      'js/video/html5videosource.js',
      'js/video/youtubevideosource.js',
+     'js/video/ytiframevideosource.js',
      'js/video/brightcovevideosource.js',
      'js/video/brightcovevideoplayer.js',
      'js/video/flvvideosource.js',
@@ -206,7 +209,6 @@ JS_CORE = \
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
-     'js/widget/usersettings.js',
      'js/widget/logindialog.js',
      'js/widget/videotab.js',
      'js/widget/howtovideopanel.js',
@@ -221,6 +223,9 @@ JS_CORE = \
      'js/widget/subtitledialogopener.js',
      'js/widget/opendialogargs.js',
      'js/widget/dropdown.js',
+     'js/widget/resumeeditingrecord.js',
+     'js/widget/resumedialog.js',
+     'js/widget/subtitle/savedsubtitles.js',
      'js/widget/play/manager.js',
      'js/widget/widgetcontroller.js',
      'js/widget/widget.js'
@@ -230,7 +235,6 @@ JS_DIALOG = \
     ['js/subtracker.js',
      'js/srtwriter.js',
      'js/widget/unsavedwarning.js',
-     'js/widget/resumeeditingrecord.js',
      'js/widget/droplockdialog.js',
      'js/finishfaildialog/dialog.js',
      'js/finishfaildialog/errorpanel.js',
@@ -250,10 +254,10 @@ JS_DIALOG = \
      'js/widget/subtitle/sharepanel.js',
      'js/widget/subtitle/completeddialog.js',
      'js/widget/subtitle/editpanel.js',
+     'js/widget/subtitle/onsaveddialog.js',
      'js/widget/subtitle/editrightpanel.js',
      'js/widget/subtitle/bottomfinishedpanel.js',
      'js/widget/subtitle/logger.js',
-     'js/widget/subtitle/savedsubtitles.js',
      'js/widget/timeline/timerow.js',
      'js/widget/timeline/timerowul.js',
      'js/widget/timeline/timelinesub.js',
@@ -296,7 +300,8 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/widgetizer.js",
     "js/widgetizer/youtube.js",
     "js/widgetizer/html5.js",
-    "js/widgetizer/jwplayer.js"])
+    "js/widgetizer/jwplayer.js",
+    "js/widgetizer/youtubeiframe.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
@@ -316,6 +321,25 @@ JS_BASE_DEPENDENCIES = [
     'js/swfobject.js',
     'flowplayer/flowplayer-3.2.2.min.js',
 ]
+
+JS_MODERATION_DASHBOARD =  [
+    "js/jquery-1.4.3.js",
+    "js/jquery-ui-1.8.13.custom.min.js",
+    "js/jgrowl/jquery.jgrowl.js",
+    "js/jalerts/jquery.alerts.js",
+    "js/jquery.form.js",
+    "js/jquery.metadata.js",
+    "js/jquery.mod.js",
+    "js/jquery.rpc.js",
+    "js/jquery.input_replacement.min.js",
+    'js/closure-library/closure/goog/base.js',    
+    'js/closure-dependencies.js',    
+    "js/messages.js",
+    "js/jquery.address-1.4.fixed.js",
+    "js/jquery.ajax-paginator.js",
+    "js/moderation/simplewarning.js",
+    "js/moderation/confirmrejectiondialog.js",
+    ]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -335,7 +359,8 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = rel('media')+'/'
+STATIC_ROOT = rel('media')+'/'
+MEDIA_ROOT  = rel('user-data')+'/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -354,6 +379,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'middleware.ResponseTimeMiddleware',
+    'utils.ajaxmiddleware.AjaxErrorMiddleware',
     'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -366,7 +392,7 @@ MIDDLEWARE_CLASSES = (
     'middleware.SaveUserIp',
 )
 
-ROOT_URLCONF = 'mirosubs.urls'
+ROOT_URLCONF = 'unisubs.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -376,7 +402,7 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'context_processors.current_site',
@@ -427,7 +453,8 @@ INSTALLED_APPS = (
     'testhelpers',
     'unisubs_compressor',
     'subrequests',
-    'mirosubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
+    'doorman',
+    'unisubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
 # Celery settings
@@ -486,7 +513,7 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.OpenIdBackend',
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
-   'django.contrib.auth.backends.ModelBackend'
+   'django.contrib.auth.backends.ModelBackend',
 )
 
 SKIP_SOUTH_TESTS = True
@@ -518,6 +545,8 @@ PROJECT_VERSION = '0.5'
 
 EDIT_END_THRESHOLD = 120
 
+ANONYMOUS_USER_ID = 10000
+
 #Use on production
 GOOGLE_ANALYTICS_NUMBER = 'UA-163840-22'
 MIXPANEL_TOKEN = '44205f56e929f08b602ccc9b4605edc3'
@@ -531,7 +560,9 @@ except ImportError:
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 DEFAULT_BUCKET = ''
+AWS_USER_DATA_BUCKET_NAME  = ''
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
+
 
 AVATAR_MAX_SIZE = 500*1024
 THUMBNAILS_SIZE = (
@@ -544,7 +575,7 @@ EMAIL_BCC_LIST = []
 
 CACHE_BACKEND = 'locmem://'
 
-#for mirosubs.example.com
+#for unisubs.example.com
 RECAPTCHA_PUBLIC = '6LdoScUSAAAAANmmrD7ALuV6Gqncu0iJk7ks7jZ0'
 RECAPTCHA_SECRET = ' 6LdoScUSAAAAALvQj3aI1dRL9mHgh85Ks2xZH1qc'
 
@@ -592,8 +623,9 @@ MEDIA_BUNDLES = {
     "video_history":{
         "type":"css",
         "files":(
-               "css/mirosubs-widget.css" ,
-               "css/nyroModal.css"
+               "css/unisubs-widget.css" ,
+               "css/nyroModal.css",
+               "css/dev.css"
          ),
         },
 
@@ -601,53 +633,88 @@ MEDIA_BUNDLES = {
         "type":"css",
         "files":(
             "css/nyroModal.css",
-            "css/mirosubs-widget.css",
-
+            "css/unisubs-widget.css",
          ),
         },
-    "mirosubs-offsite-compiled":{
+     "new_home":{
+         "type":"css",
+         "files":(
+            "css/new_index.css",
+             "css/nyroModal.css",
+             "css/unisubs-widget.css",
+          ),
+         },
+    "widget-css":{
+         "type":"css",
+         "files":(
+             "css/unisubs-widget.css",
+          ),
+        },
+    "unisubs-offsite-compiled":{
         "type": "js",
         "files": JS_OFFSITE,
         },
 
-    "mirosubs-onsite-compiled":{
+    "unisubs-onsite-compiled":{
         "type": "js",
         "files": JS_ONSITE,
      },
-     "mirosubs-widgetizer":{
+     "unisubs-widgetizer":{
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
-    "mirosubs-widgetizer-debug":{
+    "unisubs-widgetizer-sumo": {
+        "type": "js",
+        "closure_deps": "js/closure-dependencies.js",
+        "files": ["js/config.js"] + JS_WIDGETIZER,
+        "extra_defines": {"unisubs.REPORT_ANALYTICS": "false"},
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
+    },
+    "unisubs-widgetizer-debug": {
         "type": "js",
         "files": ["js/config.js" ] + JS_WIDGETIZER  ,
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
+        "bootloader": { 
+            "gatekeeper": "UnisubsWidgetizerLoaded",
+            "render_bootloader": True
+        }
      },
-    "mirosubs-extension":{
+    "unisubs-extension":{
         "type": "js",
         "files": ["js/config.js" ] + JS_EXTENSION,
      },
-
-    "mirosubs-statwidget":{
+    "unisubs-statwidget":{
         "type": "js",
         "closure_deps": "js/closure-stat-dependencies.js",
         "include_flash_deps": False,
         "files": [
-            'js/mirosubs.js',
+            'js/unisubs.js',
             'js/rpc.js',
             'js/loadingdom.js',
             'js/statwidget/statwidgetconfig.js',
             'js/statwidget/statwidget.js'],
      },
 
-    "mirosubs-api":{
+    "unisubs-api":{
         "type": "js",
         "files": ["js/config.js"] + JS_API,
+        "bootloader": { 
+            "gatekeeper": "UnisubsApiLoaded", 
+            "render_bootloader": False
+        }
      },
     "js-base-dependencies":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files": JS_BASE_DEPENDENCIES,
      },
     "js-onsite-dialog": {
@@ -656,6 +723,7 @@ MEDIA_BUNDLES = {
     },
     "site_base_js":{
         "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
         "files":[
               "js/jquery-1.4.3.js",
               "js/jquery-ui-1.8.13.custom.min.js",
@@ -672,5 +740,33 @@ MEDIA_BUNDLES = {
         "optimizations": "SIMPLE_OPTIMIZATIONS",
         "closure_deps": "",
         "include_flash_deps": False,
-        }
+        },
+    "js-testing-base":{
+        "type":"js",
+        "files": [
+                 'js/widget/testing/stubvideoplayer.js',
+                 'js/widget/testing/events.js',
+                "js/subtracker.js" ,
+                "js/unitofwork.js",
+                "js/testing/testing.js",
+                "js/testing/timerstub.js",
+            ]
+    },
+    "js-moderation-dashboard":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "closure_deps": "js/closure-dependencies.js",
+        "files": JS_MODERATION_DASHBOARD,
+    },
+    "debug-embed-js": {
+        "type": "js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files": JS_BASE_DEPENDENCIES + JS_OFFSITE[:-1]
+    }
 }
+
+
+FEATURE_FLAGS  = {
+    "MODERATION" : False
+}
+

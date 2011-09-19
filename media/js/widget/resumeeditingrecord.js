@@ -16,28 +16,42 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.ResumeEditingRecord');
+goog.provide('unisubs.widget.ResumeEditingRecord');
 
 /**
  * @constructor
  */
-mirosubs.widget.ResumeEditingRecord = function(videoID, sessionPK, openDialogArgs) {
+unisubs.widget.ResumeEditingRecord = function(videoID, sessionPK, openDialogArgs) {
     this.videoID_ = videoID;
     this.sessionPK_ = sessionPK;
     this.openDialogArgs_ = openDialogArgs;
 };
 
-mirosubs.widget.ResumeEditingRecord.STORAGE_KEY_ = "_unisubs_editing";
+unisubs.widget.ResumeEditingRecord.STORAGE_KEY_ = "_unisubs_editing";
+unisubs.widget.ResumeEditingRecord.VERSION_ = 1;
 
-mirosubs.widget.ResumeEditingRecord.prototype.matches = function(videoID, openDialogArgs) {
+unisubs.widget.ResumeEditingRecord.prototype.getVideoID = function() {
+    return this.videoID_;
+};
+
+unisubs.widget.ResumeEditingRecord.prototype.getOpenDialogArgs = function() {
+    return this.openDialogArgs_;
+};
+
+unisubs.widget.ResumeEditingRecord.prototype.matches = function(videoID, openDialogArgs) {
     return videoID == this.videoID_ &&
         this.openDialogArgs_.matches(openDialogArgs);
 };
 
-mirosubs.widget.ResumeEditingRecord.prototype.save = function() {
-    mirosubs.saveInLocalStorage(
-        mirosubs.widget.ResumeEditingRecord.STORAGE_KEY_,
+unisubs.widget.ResumeEditingRecord.prototype.save = function() {
+    // Important note: if you ever change these serialized fields, also
+    // change unisubs.widget.ResumeEditingRecord.VERSION_.
+    // That way new releases won't break saved subs in users' 
+    // browsers -- it will simply invalidate them.
+    unisubs.saveInLocalStorage(
+        unisubs.widget.ResumeEditingRecord.STORAGE_KEY_,
         goog.json.serialize({
+            'version': unisubs.widget.ResumeEditingRecord.VERSION_,
             'videoID': this.videoID_,
             'sessionPK': this.sessionPK_,
             'openDialogArgs': this.openDialogArgs_.toObject()
@@ -45,9 +59,9 @@ mirosubs.widget.ResumeEditingRecord.prototype.save = function() {
         
 };
 
-mirosubs.widget.ResumeEditingRecord.prototype.getSavedSubtitles = function() {
+unisubs.widget.ResumeEditingRecord.prototype.getSavedSubtitles = function() {
     if (!this.savedSubtitles_) {
-        var savedSubtitles = mirosubs.widget.SavedSubtitles.fetchLatest();
+        var savedSubtitles = unisubs.widget.SavedSubtitles.fetchLatest();
         if (savedSubtitles && savedSubtitles.SESSION_PK == this.sessionPK_)
             this.savedSubtitles_ = savedSubtitles;
         else
@@ -56,22 +70,29 @@ mirosubs.widget.ResumeEditingRecord.prototype.getSavedSubtitles = function() {
     return this.savedSubtitles_;
 };
 
-mirosubs.widget.ResumeEditingRecord.clear = function() {
-    mirosubs.removeFromLocalStorage(
-        mirosubs.widget.ResumeEditingRecord.STORAGE_KEY_);
+unisubs.widget.ResumeEditingRecord.clear = function() {
+    unisubs.removeFromLocalStorage(
+        unisubs.widget.ResumeEditingRecord.STORAGE_KEY_);
 };
 
-mirosubs.widget.ResumeEditingRecord.fetch = function() {
-    var jsonText = mirosubs.fetchFromLocalStorage(
-        mirosubs.widget.ResumeEditingRecord.STORAGE_KEY_);
+unisubs.widget.ResumeEditingRecord.fetch = function() {
+    var jsonText = unisubs.fetchFromLocalStorage(
+        unisubs.widget.ResumeEditingRecord.STORAGE_KEY_);
     if (jsonText) {
         var obj = goog.json.parse(jsonText);
-        return new mirosubs.widget.ResumeEditingRecord(
-            obj['videoID'],
-            obj['sessionPK'], 
-            mirosubs.widget.OpenDialogArgs.fromObject(
-                obj['openDialogArgs']));
+        if (goog.isDefAndNotNull(obj['version']) &&
+            obj['version'] == unisubs.widget.ResumeEditingRecord.VERSION_) {
+            return new unisubs.widget.ResumeEditingRecord(
+                obj['videoID'],
+                obj['sessionPK'], 
+                unisubs.widget.OpenDialogArgs.fromObject(
+                    obj['openDialogArgs']));
+        }
+        else {
+            return null;
+        }
     }
-    else
+    else {
         return null;
+    }
 };

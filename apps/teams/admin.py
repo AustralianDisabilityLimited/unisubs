@@ -27,6 +27,7 @@ from teams.models import Team, TeamMember, TeamVideo
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
+from django.core.urlresolvers import reverse
 from django import forms
 
 class TeamMemberInline(admin.TabularInline):
@@ -64,10 +65,21 @@ class TeamAdmin(admin.ModelAdmin):
     unhighlight.short_description = _('Unfeature teams')
 
 class TeamMemberAdmin(admin.ModelAdmin):
-    search_fields = ('team__name', 'user__username', 'user__first_name', 'user__last_name')
-    list_display = ('team', 'user', 'is_manager')
-    raw_id_fields = ('team', 'user')
+    search_fields = ('user__username', 'team__name', 'user__first_name', 'user__last_name')
+    list_display = ('role', 'team_link', 'user_link')
     
+    def team_link(self, obj):
+        url = reverse('admin:teams_team_change', args=[obj.team_id])
+        return u'<a href="%s">%s</a>' % (url, obj.team)
+    team_link.short_description = _('Team')
+    team_link.allow_tags = True
+
+    def user_link(self, obj):
+        url = reverse('admin:auth_customuser_change', args=[obj.user_id])
+        return u'<a href="%s">%s</a>' % (url, obj.user)
+    user_link.short_description = _('User')
+    user_link.allow_tags = True
+
 class TeamVideoForm(forms.ModelForm):
     
     class Meta:
@@ -84,11 +96,16 @@ class TeamVideoForm(forms.ModelForm):
         self.fields['completed_languages'].queryset = qs
 
 class TeamVideoAdmin(admin.ModelAdmin):
-    form = TeamVideoForm
-    list_display = ('__unicode__', 'team')
-    search_fields = ('team__name', 'title')
+    list_display = ('__unicode__', 'team_link', 'created')
+    readonly_fields = ('completed_languages',)
     raw_id_fields = ['video', 'team', 'added_by']
     
+    def team_link(self, obj):
+        url = reverse('admin:teams_team_change', args=[obj.team_id])
+        return u'<a href="%s">%s</a>' % (url, obj.team)
+    team_link.short_description = _('Team')
+    team_link.allow_tags = True
+
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)

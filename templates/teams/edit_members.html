@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script> 
     <script src="{% url messages:rpc_api %}" type="text/javascript"></script> 
     <script type="text/javascript">
         jQuery(function($){
@@ -50,24 +51,32 @@
                 }
                 return false;
             });
-            
-            $('a.demote-user, a.promote-user').click(function(){
-                var confirm_text = $(this).hasClass('demote-user') ?
-                    '{% trans "Do you want demote user to member?" %}' :
-                    '{% trans "Do you want promote user to manager?" %}';
-                return confirm(confirm_text);
-            })                        
+
+            $(".role-changer").change(function(){
+                $this = $(this);
+                TeamsApi.promote_user($this.attr('team_id'), $this.attr('member_id'), $this.val(),
+                    function(response){
+                        if (response.error){
+                            $this.val($this.attr('role'));
+                            jQuery.jGrowl.error(response.error);
+                        }else{
+                            $this.attr('role', $this.val());
+                            jQuery.jGrowl(response.msg);
+                        }
+                    });
+            });
         });
     </script>
 {% endblock %}
 
 {% block settings_content %}
-  <h2>{{ team.name }}</h2>
-  {% with "members" as active %}
-      {% include 'teams/_edit_top_navigation.html' %}
-  {% endwith %}
-  
-    <div class="action_buttons">
+    <div class="hd">
+        <h2>{{ team.name }}</h2>
+        {% with "members" as active %}
+            {% include 'teams/_edit_top_navigation.html' %}
+        {% endwith %}
+    </div>
+    <div class="actions">
         {% if team|can_invite_to_team:user %}
             <a href="#" data-modal="invite-user" class="blue_button small">{% trans 'Invite User' %}</a>
         {% endif %}
@@ -98,17 +107,9 @@
                     <a href="{{ member.user.get_absolute_url }}"><strong>{{ member.user }}</strong></a>
                     <div class="small grey">
                         {% if team|is_team_manager:user and not member.user == user %}
-                            <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">{% trans 'Remove from Team' %}</a>
-                            {% if member.is_manager %}
-                                | <a href="{% url teams:demote_member team.slug member.user.pk %}" class="demote-user">
-                                    {% trans 'Demote to Member' %}
-                                  </a>
-                            {% else %}
-                                | <a href="{% url teams:promote_member team.slug member.user.pk %}" class="promote-user">
-                                    {% trans 'Promote to Manager' %}
-                                  </a>
-                            {% endif %}
-                            |
+                            <a href="{% url teams:remove_member team.slug member.user.pk %}" class="remove-user">
+                                {% trans 'Remove from Team' %}
+                            </a> |
                         {% endif %}
                         {% if not member.user == user and member.user.email %}
                             {% send_message_form member.user 'True' %}
@@ -116,18 +117,20 @@
                     </div>
                 </td>
                 <td>
-                    {% if member.is_manager %}
-                        {% trans 'Manager' %}
+                    {% if team|is_team_manager:user and not member.user == user %}
+                        <select name="role" role="member.role" class="role-changer" member_id="{{ member.pk }}" team_id="{{ team.pk }}">
+                            {% for choice in role_choices %}
+                                <option {% ifequal choice.0  member.role %}selected="selected" {% endifequal %} value="{{choice.0}}">{{choice.1}}</option>
+                            {% endfor %}
+                        </select>
                     {% else %}
-                        {% trans 'Member' %}
+                        {% trans member.role %}
                     {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    </div>
-    <div class="clearfix"></div>
 
 {% if team|can_invite_to_team:user %}
 <div id="invite-user" class="msg_modal_wrap" style="display: none">
@@ -146,4 +149,25 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block sidebar_content %}
+    <div class="help">
+        <h3>{% trans "About Roles" %}</h3>
+        <p>
+            {% blocktrans %}
+                <strong>Manager:</strong> Can access all administrative functions including managing team members and approving moderated subtitles.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                <strong>Member:</strong> Trusted members may add approved subtitles to a moderated without review by the team manager.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans %}
+                <strong>Contributor:</strong> Can access team videos and contribute subtitles, but their work is subject to moderation by a manager.
+            {% endblocktrans %}
+        </p>
+    </div>
 {% endblock %}

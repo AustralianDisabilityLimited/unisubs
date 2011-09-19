@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
@@ -35,18 +35,16 @@ from django.contrib.admin.views.decorators import staff_member_required
 from widget.views import base_widget_params
 from vidscraper.errors import Error as VidscraperError
 from auth.models import CustomUser as User
-from datetime import datetime
 from utils import send_templated_email
 from django.contrib.auth import logout
 from videos.share_utils import _add_share_panel_context_for_video, _add_share_panel_context_for_history
 from gdata.service import RequestError
-from django.db.models import Sum, Q, F
+from django.db.models import Sum
 from django.db import transaction
 from django.utils.translation import ugettext
 from django.utils.encoding import force_unicode
 from statistic.models import EmailShareStatistic
 import urllib, urllib2
-from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from videos.rpc import VideosApiClass
@@ -56,9 +54,10 @@ from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
 from haystack.query import SearchQuerySet
-from videos.search_indexes import VideoSearchResult
-from utils.celery_search_index import update_search_index
+from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
+
+from apps.teams.moderation import user_can_moderate, get_pending_count
 
 rpc_router = RpcRouter('videos:rpc_router', {
     'VideosApi': VideosApiClass()
@@ -67,26 +66,17 @@ rpc_router = RpcRouter('videos:rpc_router', {
 def index(request):
     context = widget.add_onsite_js_files({})
     context['all_videos'] = Video.objects.count()
+    context['popular_videos'] = VideoIndex.get_popular_videos("-today_views")[:VideoIndex.IN_ROW]
+    context['featured_videos'] = VideoIndex.get_featured_videos()[:VideoIndex.IN_ROW]
     return render_to_response('index.html', context,
                               context_instance=RequestContext(request))
 
 def watch_page(request):
-    #Popular videos
-    popular_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-week_views')[:5]
-        
-    #featured videos
-    featured_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
-        .load_all().order_by('-featured')[:5]
-    
-    latest_videos = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).load_all().order_by('-edited')[:15]
-    
+
     context = {
-        'featured_videos': featured_videos,
-        'popular_videos': popular_videos,
-        'latest_videos': latest_videos,
+        'featured_videos': VideoIndex.get_featured_videos()[:VideoIndex.IN_ROW],
+        'popular_videos': VideoIndex.get_popular_videos()[:VideoIndex.IN_ROW],
+        'latest_videos': VideoIndex.get_latest_videos()[:VideoIndex.IN_ROW*3],
         'popular_display_views': 'week'
     }
     return render_to_response('videos/watch.html', context,
@@ -105,24 +95,29 @@ def popular_videos(request):
                               context_instance=RequestContext(request)) 
 
 def volunteer_page(request):
-    user = request.user
     # Get the user comfort languages list 
     user_langs = get_user_languages_from_request(request)
 
-    relevevent = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language__in=user_langs) \
-        .filter_or(languages__in=user_langs)
+    relevant = SearchQuerySet().result_class(VideoSearchResult) \
+        .models(Video).filter(video_language_exact__in=user_langs) \
+        .filter_or(languages_exact__in=user_langs) \
+        .order_by('-requests_count')
 
-    featured_videos =  relevevent.order_by('-featured')[:5]
+    featured_videos =  relevant.filter(
+        featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        .order_by('-featured')[:5]
 
-    popular_videos = relevevent.order_by('-week_views')[:5]
+    popular_videos = relevant.order_by('-week_views')[:5]
 
-    latest_videos = relevevent.order_by('-edited')[:15]
+    latest_videos = relevant.order_by('-edited')[:15]
+
+    requested_videos = relevant.filter(requests_exact__in=user_langs)[:5]
 
     context = {
         'featured_videos': featured_videos,
         'popular_videos': popular_videos,
         'latest_videos': latest_videos,
+        'requested_videos': requested_videos,
         'user_langs':user_langs,
     }
 
@@ -139,7 +134,7 @@ def volunteer_category(request, category):
 
 def bug(request):
     from widget.rpc import add_general_settings
-    context = widget.add_config_based_js_files({}, settings.JS_API, 'mirosubs-api.js')
+    context = widget.add_config_based_js_files({}, settings.JS_API, 'unisubs-api.js')
     context['all_videos'] = Video.objects.count()
     try:
         context['video_url_obj'] = VideoUrl.objects.filter(type=VIDEO_TYPE_YOUTUBE)[:1].get()
@@ -150,28 +145,6 @@ def bug(request):
     context['general_settings'] = json.dumps(general_settings)    
     return render_to_response('bug.html', context,
                               context_instance=RequestContext(request))
-
-def ajax_change_video_title(request):
-    from videos.tasks import send_change_title_email
-    
-    video_id = request.POST.get('video_id')
-    title = request.POST.get('title')
-    user = request.user
-
-    try:
-        video = Video.objects.get(video_id=video_id)
-        if title and not video.title or video.is_html5() or user.is_superuser:
-            old_title = video.title_display()
-            video.title = title
-            video.slug = slugify(video.title)
-            video.save()
-            update_search_index.delay(Video, video.pk)
-            Action.change_title_handler(video, user)
-            send_change_title_email.delay(video.id, user and user.id, old_title.encode('utf8'), video.title.encode('utf8'))          
-    except Video.DoesNotExist:
-        pass
-    
-    return HttpResponse('')
 
 def create(request):
     video_form = VideoForm(request.user, request.POST or None)
@@ -230,15 +203,26 @@ def video(request, video_id, video_url=None, title=None):
     # TODO: make this more pythonic, prob using kwargs
     context = widget.add_onsite_js_files({})
     context['video'] = video
+    original = video.subtitle_language()
+    if original:
+        original.pending_moderation_count =  get_pending_count(video.subtitle_language())
     context['autosub'] = 'true' if request.GET.get('autosub', False) else 'false'
     translations = list(video.subtitlelanguage_set.filter(had_version=True) \
         .filter(is_original=False).select_related('video'))
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations
+
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
+    if context["user_can_moderate"]:
+        # FIXME: use  amore efficient count
+        for l in translations:
+            l.pending_moderation_count = get_pending_count(l)
+            
     context['widget_params'] = _widget_params(request, video, language=None, video_url=video_url and video_url.effective_url)
     _add_share_panel_context_for_video(context, video)
     context['lang_count'] = video.subtitlelanguage_set.filter(has_version=True).count()
     context['original'] = video.subtitle_language()
+    
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
 
@@ -287,7 +271,10 @@ def upload_subtitles(request):
         except AlreadyEditingException, e:
             output['errors'] = {"_all__":[force_unicode(e.msg)]}
             transaction.rollback()
-     
+        except Exception, e:
+            #trying find out one error on dev-server. hope this should help
+            transaction.rollback()
+            raise e
     else:
         output['errors'] = form.get_errors()
         transaction.rollback()
@@ -357,7 +344,8 @@ def email_friend(request):
             
             form.send()
             messages.info(request, 'Email Sent!')
-            return redirect('videos:email_friend')
+            
+            return redirect(request.get_full_path())
     else:
         form = EmailFriendForm(auto_id="email_friend_id_%s", initial=initial, label_suffix="")
     context = {
@@ -413,6 +401,8 @@ def history(request, video_id, lang=None, lang_id=None):
             config["languageCode"] = lang
             url = reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))
             return redirect(url)
+        elif video.subtitlelanguage_set.count() > 0:
+            language = video.subtitlelanguage_set.all()[0]
         else:
             raise Http404
 
@@ -430,14 +420,24 @@ def history(request, video_id, lang=None, lang_id=None):
         context['ordering'], context['order_type'] = ordering, order_type
 
     context['video'] = video
+    original = video.subtitle_language()
+    if original:
+        original.pending_moderation_count =  get_pending_count(video.subtitle_language())
     translations = list(video.subtitlelanguage_set.filter(is_original=False) \
         .filter(had_version=True).select_related('video'))
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
+    if context["user_can_moderate"]:
+        # FIXME: use  amore efficient count
+        for l in translations:
+            l.pending_moderation_count = get_pending_count(l)
+        
     translations.sort(key=lambda f: f.get_language_display())
     context['translations'] = translations    
-    context['last_version'] = language.latest_version()
+    context['last_version'] = language.latest_version(public_only=False)
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
+    
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
                        paginate_by=settings.REVISIONS_ONPAGE, 
@@ -472,9 +472,12 @@ def revision(request, pk):
     context['prev_version'] = version.prev_version()
     language = version.language
     context['language'] = language
+    context["user_can_moderate"] = user_can_moderate(version.video, request.user)
     context['widget_params'] = _widget_params(request, \
             language.video, version.version_no, language)
     context['latest_version'] = language.latest_version()
+    version.ordered_subtitles()
+
     return render_to_response('videos/revision.html', context,
                               context_instance=RequestContext(request))     
     
@@ -547,6 +550,7 @@ def diffing(request, first_pk, second_pk):
     context['first_version'] = first_version
     context['second_version'] = second_version
     context['latest_version'] = language.latest_version()
+    context["user_can_moderate"] = user_can_moderate(video, request.user)
     context['widget0_params'] = \
         _widget_params(request, video, 
                        first_version.version_no)
@@ -714,3 +718,8 @@ def video_debug(request, video_id):
             'lang_info': lang_info,
             "cache": cache
     }, context_instance=RequestContext(request))
+
+def reset_metadata(request, video_id):
+    video = get_object_or_404(Video, video_id=video_id)
+    video_changed_tasks.delay(video.id)
+    return HttpResponse('ok')

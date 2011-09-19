@@ -16,25 +16,25 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.SameDomainEmbed');
+goog.provide('unisubs.widget.SameDomainEmbed');
 
-mirosubs.widget.SameDomainEmbed = {};
+unisubs.widget.SameDomainEmbed = {};
 
-mirosubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
+unisubs.widget.SameDomainEmbed.embed = function(widgetDiv, widgetConfig) {
     if (goog.DEBUG) {
         if (widgetConfig['debug_js']) {
             var debugWindow = new goog.debug.FancyWindow('main');
             debugWindow.setEnabled(true);
             debugWindow.init(); 
-            mirosubs.DEBUG = true;
+            unisubs.DEBUG = true;
         }
     }
-    mirosubs.IS_NULL = !!widgetConfig['null_widget'];
+    unisubs.IS_NULL = !!widgetConfig['null_widget'];
     if (widgetConfig['returnURL'])
-        mirosubs.returnURL = widgetConfig['returnURL'];
-    var widget = new mirosubs.widget.Widget(widgetConfig);
+        unisubs.returnURL = widgetConfig['returnURL'];
+    var widget = new unisubs.widget.Widget(widgetConfig);
     widget.decorate(widgetDiv);
     return widget;
 };
 
-mirosubs.widget.Widget.exportJSSymbols(false);
+unisubs.widget.Widget.exportJSSymbols(false);

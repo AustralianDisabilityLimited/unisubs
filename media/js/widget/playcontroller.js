@@ -16,13 +16,13 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widget.PlayController');
+goog.provide('unisubs.widget.PlayController');
 
 /**
  * @constructor
  * 
  */
-mirosubs.widget.PlayController = function(
+unisubs.widget.PlayController = function(
     videoID, videoSource, videoPlayer, videoTab, dropDown, opt_subtitleState) 
 {
     goog.Disposable.call(this);
@@ -37,12 +37,12 @@ mirosubs.widget.PlayController = function(
     var that = this;
     this.menuEventHandler_.
         listen(this.dropDown_,
-               mirosubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
+               unisubs.widget.DropDown.Selection.LANGUAGE_SELECTED,
                function(e) {
                    that.languageSelected(e.videoLanguage);
                }).
         listen(this.dropDown_,
-               mirosubs.widget.DropDown.Selection.SUBTITLES_OFF,
+               unisubs.widget.DropDown.Selection.SUBTITLES_OFF,
                this.turnOffSubs);
     this.subtitleController_ = null;
     /* @type {bool}
@@ -52,24 +52,24 @@ mirosubs.widget.PlayController = function(
     this.nudgeShown_ = false;
     this.trackedURLs_ = new goog.structs.Set();
 };
-goog.inherits(mirosubs.widget.PlayController, goog.Disposable);
+goog.inherits(unisubs.widget.PlayController, goog.Disposable);
 
-mirosubs.widget.PlayController.prototype.setSubtitleController =
+unisubs.widget.PlayController.prototype.setSubtitleController =
     function(subController)
 {
     this.subtitleController_ = subController;
 };
 
-mirosubs.widget.PlayController.prototype.stopForDialog = function() {
+unisubs.widget.PlayController.prototype.stopForDialog = function() {
     this.videoPlayer_.stopLoading();
     this.turnOffSubs();
 };
 
-mirosubs.widget.PlayController.prototype.dialogClosed = function() {
+unisubs.widget.PlayController.prototype.dialogClosed = function() {
     this.videoPlayer_.resumeLoading();
 };
 
-mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
+unisubs.widget.PlayController.prototype.turnOffSubs = function() {
     this.dropDown_.setCurrentSubtitleState(null);
     this.dropDown_.hide();
     this.videoTab_.showNudge(false);
@@ -83,65 +83,65 @@ mirosubs.widget.PlayController.prototype.turnOffSubs = function() {
  * Returns a non-null value if and only if subs are not turned off for the 
  * the video right now.
  */
-mirosubs.widget.PlayController.prototype.getSubtitleState = function() {
+unisubs.widget.PlayController.prototype.getSubtitleState = function() {
     return this.subtitleState_;
 };
 
-mirosubs.widget.PlayController.prototype.getVideoSource = function() {
+unisubs.widget.PlayController.prototype.getVideoSource = function() {
     return this.videoSource_;
 };
 
-mirosubs.widget.PlayController.prototype.setUpSubs_ = 
+unisubs.widget.PlayController.prototype.setUpSubs_ = 
     function(subtitleState) 
 {
     this.nudgeShown_ = false;
     this.disposeComponents_();
     this.subtitleState_ = subtitleState;
-    var captionSet = new mirosubs.subtitle.EditableCaptionSet(
+    var captionSet = new unisubs.subtitle.EditableCaptionSet(
         subtitleState.SUBTITLES);
     this.captionManager_ = 
-        new mirosubs.CaptionManager(this.videoPlayer_, captionSet);
+        new unisubs.CaptionManager(this.videoPlayer_, captionSet);
     this.playEventHandler_ = new goog.events.EventHandler(this);
     this.playEventHandler_.
         listen(this.captionManager_,
-               mirosubs.CaptionManager.CAPTION,
+               unisubs.CaptionManager.CAPTION,
                this.captionReached_).
         listen(this.captionManager_,
-               mirosubs.CaptionManager.CAPTIONS_FINISHED,
+               unisubs.CaptionManager.CAPTIONS_FINISHED,
                this.finished_).
         listen(this.videoPlayer_,
-               mirosubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
+               unisubs.video.AbstractVideoPlayer.EventType.PLAY_ENDED,
                this.finished_).
         listen(this.videoPlayer_,
-               mirosubs.video.AbstractVideoPlayer.EventType.PLAY,
+               unisubs.video.AbstractVideoPlayer.EventType.PLAY,
                this.trackPlay_);
     if (this.videoPlayer_.isPlaying())
         this.trackPlay_();
 };
 
-mirosubs.widget.PlayController.prototype.trackPlay_ = function() {
+unisubs.widget.PlayController.prototype.trackPlay_ = function() {
     var videoURL = this.videoSource_.getVideoURL();
     if (!this.trackedURLs_.contains(videoURL)) {
         this.trackedURLs_.add(videoURL);
-        mirosubs.Tracker.getInstance().trackEvent(
+        unisubs.Tracker.getInstance().trackEvent(
             "Subs Played", 
             window.location.href,
             videoURL);
     }
 };
 
-mirosubs.widget.PlayController.prototype.languageSelected = function(videoLanguage) {
+unisubs.widget.PlayController.prototype.languageSelected = function(videoLanguage) {
     var that = this;
-    mirosubs.Tracker.getInstance().trackPageview(
+    unisubs.Tracker.getInstance().trackPageview(
         'Selects_language_from_widget_dropdown');
     this.videoTab_.showLoading();
-    mirosubs.Rpc.call(
+    unisubs.Rpc.call(
         'fetch_subtitles',
         { 'video_id': this.videoID_,
           'language_pk': videoLanguage.PK },
         function(subStateJSON) {
             that.turnOffSubs();
-            var subState = mirosubs.widget.SubtitleState.fromJSON(subStateJSON);
+            var subState = unisubs.widget.SubtitleState.fromJSON(subStateJSON);
             that.setUpSubs_(subState);
             that.videoTab_.showContent(
                 that.dropDown_.hasSubtitles(), subState);
@@ -149,12 +149,12 @@ mirosubs.widget.PlayController.prototype.languageSelected = function(videoLangua
         });
 };
 
-mirosubs.widget.PlayController.prototype.captionReached_ = function(event) {
+unisubs.widget.PlayController.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.videoPlayer_.showCaptionText(c ? c.getText() : '');
 };
 
-mirosubs.widget.PlayController.prototype.finished_ = function() {
+unisubs.widget.PlayController.prototype.finished_ = function() {
     if (this.nudgeShown_){
         return;
     }
@@ -168,7 +168,7 @@ mirosubs.widget.PlayController.prototype.finished_ = function() {
     this.nudgeShown_ = true;
 };
 
-mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {
+unisubs.widget.PlayController.prototype.disposeComponents_ = function() {
     if (this.captionManager_) {
         this.captionManager_.dispose();
         this.captionManager_ = null;
@@ -179,7 +179,7 @@ mirosubs.widget.PlayController.prototype.disposeComponents_ = function() {
     }
 };
 
-mirosubs.widget.PlayController.prototype.disposeInternal = function() {
-    mirosubs.widget.PlayController.superClass_.disposeInternal.call(this);
+unisubs.widget.PlayController.prototype.disposeInternal = function() {
+    unisubs.widget.PlayController.superClass_.disposeInternal.call(this);
     this.disposeComponents_();
 };

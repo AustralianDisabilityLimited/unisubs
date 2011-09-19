@@ -16,51 +16,51 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.JWVideoPlayer');
+goog.provide('unisubs.video.JWVideoPlayer');
 
 /**
  * @constructor
- * @param {mirosubs.video.YoutubeVideoSource} videoSource
+ * @param {unisubs.video.YoutubeVideoSource} videoSource
  */
-mirosubs.video.JWVideoPlayer = function(videoSource) {
-    mirosubs.video.FlashVideoPlayer.call(this, videoSource);
-    this.logger_ = goog.debug.Logger.getLogger('mirosubs.video.JWPlayer');
-    this.stateListener_ = 'jwevent' + mirosubs.randomString();
-    this.timeListener_ = 'jwtime' + mirosubs.randomString();
+unisubs.video.JWVideoPlayer = function(videoSource) {
+    unisubs.video.FlashVideoPlayer.call(this, videoSource);
+    this.logger_ = goog.debug.Logger.getLogger('unisubs.video.JWPlayer');
+    this.stateListener_ = 'jwevent' + unisubs.randomString();
+    this.timeListener_ = 'jwtime' + unisubs.randomString();
     this.playheadTime_ = 0;
-    mirosubs.video.JWVideoPlayer.players_.push(this);
+    unisubs.video.JWVideoPlayer.players_.push(this);
 };
-goog.inherits(mirosubs.video.JWVideoPlayer, 
-              mirosubs.video.FlashVideoPlayer);
+goog.inherits(unisubs.video.JWVideoPlayer, 
+              unisubs.video.FlashVideoPlayer);
 
-mirosubs.video.JWVideoPlayer.players_ = [];
-mirosubs.video.JWVideoPlayer.playerReadyCalled_ = false;
+unisubs.video.JWVideoPlayer.players_ = [];
+unisubs.video.JWVideoPlayer.playerReadyCalled_ = false;
 
-mirosubs.video.JWVideoPlayer.prototype.onJWPlayerReady_ = function(elem) {
+unisubs.video.JWVideoPlayer.prototype.onJWPlayerReady_ = function(elem) {
     if (goog.DEBUG) {
         this.logger_.info('player ready');
     }
     this.tryDecoratingAll();
 };
 
-mirosubs.video.JWVideoPlayer.prototype.decorateInternal = function(elem) {
-    mirosubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
+unisubs.video.JWVideoPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.video.JWVideoPlayer.superClass_.decorateInternal.call(this, elem);
     this.playerSize_ = goog.style.getSize(this.getElement());
     this.setDimensionsKnownInternal();
     if (goog.DEBUG) {
         this.logger_.info(
             "playerReadyCalled_: " +
-                mirosubs.video.JWVideoPlayer.playerReadyCalled_);
+                unisubs.video.JWVideoPlayer.playerReadyCalled_);
     }
-    if (mirosubs.video.JWVideoPlayer.playerReadyCalled_)
+    if (unisubs.video.JWVideoPlayer.playerReadyCalled_)
         this.onJWPlayerReady_();
 };
 
-mirosubs.video.JWVideoPlayer.prototype.isFlashElementReady = function(elem) {
+unisubs.video.JWVideoPlayer.prototype.isFlashElementReady = function(elem) {
     return elem['addModelListener'];
 };
 
-mirosubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) {
+unisubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element) {
     this.player_ = element;
     this.playerSize_ = goog.style.getSize(this.player_);
     this.setDimensionsKnownInternal();
@@ -69,16 +69,16 @@ mirosubs.video.JWVideoPlayer.prototype.setFlashPlayerElement = function(element)
     this.player_['addModelListener']('STATE', this.stateListener_);
     this.player_['addModelListener']('TIME', this.timeListener_);
 };
-mirosubs.video.JWVideoPlayer.prototype.getVideoSize = function() {
+unisubs.video.JWVideoPlayer.prototype.getVideoSize = function() {
     return this.playerSize_;
 };
-mirosubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
+unisubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
     var newState = data['newstate'];
     if (goog.DEBUG) {
         this.logger_.info('statechanged: ' + newState);
     }
-    var et = mirosubs.video.AbstractVideoPlayer.EventType;
-    var s = mirosubs.video.JWVideoPlayer.State_;
+    var et = unisubs.video.AbstractVideoPlayer.EventType;
+    var s = unisubs.video.JWVideoPlayer.State_;
     if (newState == s.PLAYING) {
         this.dispatchEvent(et.PLAY);
     } else if (newState == s.PAUSED) {
@@ -87,63 +87,63 @@ mirosubs.video.JWVideoPlayer.prototype.playerStateChanged_ = function(data) {
         this.dispatchEndedEvent();
     }
 };
-mirosubs.video.JWVideoPlayer.prototype.playerTimeChanged_ = function(data) {
+unisubs.video.JWVideoPlayer.prototype.playerTimeChanged_ = function(data) {
     this.playheadTime_ = data['position'];
     if (!this.duration_)
         this.duration_ = data['duration'];    
     this.dispatchEvent(
-        mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
+        unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE);
 };
-mirosubs.video.JWVideoPlayer.prototype.exitDocument = function() {
-    mirosubs.video.JWVideoPlayer.superClass_.exitDocument.call(this);
+unisubs.video.JWVideoPlayer.prototype.exitDocument = function() {
+    unisubs.video.JWVideoPlayer.superClass_.exitDocument.call(this);
     this.player_['removeModelListener']('STATE', this.stateListener_);
     this.player_['removeModelListener']('TIME', this.timeListener_);
 };
-mirosubs.video.JWVideoPlayer.prototype.getDuration = function() {
+unisubs.video.JWVideoPlayer.prototype.getDuration = function() {
     return this.duration_;
 };
-mirosubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
     // TODO: write me
 };
-mirosubs.video.JWVideoPlayer.prototype.videoEndedInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.videoEndedInternal = function() {
     // TODO: write me
 };
-mirosubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.isPausedInternal = function() {
     // TODO: write me
 };
-mirosubs.video.JWVideoPlayer.prototype.playInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.playInternal = function() {
     this.sendEvent_('play', ['true']);
 };
-mirosubs.video.JWVideoPlayer.prototype.pauseInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.pauseInternal = function() {
     this.sendEvent_('play', ['false']);
 };
-mirosubs.video.JWVideoPlayer.prototype.stopLoadingInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.stopLoadingInternal = function() {
     // TODO: implement this for real.
     this.pause();
     if (goog.DEBUG) {
         this.logger_.info('stopLoadingInternal called');
     }
 };
-mirosubs.video.JWVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
+unisubs.video.JWVideoPlayer.prototype.resumeLoadingInternal = function(playheadTime) {
     // TODO: implement this for real at some point.
     if (goog.DEBUG) {
         this.logger_.info('resumeLoadingInternal called');
     }
 };
-mirosubs.video.JWVideoPlayer.prototype.getPlayheadTime = function() {
+unisubs.video.JWVideoPlayer.prototype.getPlayheadTime = function() {
     return this.playheadTime_;
 };
-mirosubs.video.JWVideoPlayer.prototype.needsIFrame = function() {
+unisubs.video.JWVideoPlayer.prototype.needsIFrame = function() {
     return goog.userAgent.LINUX;
 };
-mirosubs.video.JWVideoPlayer.prototype.getVideoElement = function() {
+unisubs.video.JWVideoPlayer.prototype.getVideoElement = function() {
     return this.player_;
 };
-mirosubs.video.JWVideoPlayer.prototype.isPlayingInternal = function() {
+unisubs.video.JWVideoPlayer.prototype.isPlayingInternal = function() {
     return this.player_['getConfig']()['state'] == 
-        mirosubs.video.JWVideoPlayer.State_.PLAYING;
+        unisubs.video.JWVideoPlayer.State_.PLAYING;
 };
-mirosubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
+unisubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     // TODO: prob check to see if this.player_ exists yet; if not, queue the
     // command.
     if (goog.DEBUG) {
@@ -154,14 +154,14 @@ mirosubs.video.JWVideoPlayer.prototype.sendEvent_ = function(event, args) {
     this.player_['sendEvent'].apply(this.player_, goog.array.concat(event, args));
 };
 
-mirosubs.video.JWVideoPlayer.State_ = {
+unisubs.video.JWVideoPlayer.State_ = {
     PLAYING: 'PLAYING',
     PAUSED: 'PAUSED',
     COMPLETED: 'COMPLETED'
 };
 
-mirosubs.video.JWVideoPlayer.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.video.JWVideoPlayerStatic');
+unisubs.video.JWVideoPlayer.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.video.JWVideoPlayerStatic');
 
 (function() {
     var jwReady = "playerReady";
@@ -173,14 +173,14 @@ mirosubs.video.JWVideoPlayer.logger_ =
         catch (e) {
             // don't care
         }
-        mirosubs.video.JWVideoPlayer.playerReadyCalled_ = true;
+        unisubs.video.JWVideoPlayer.playerReadyCalled_ = true;
         if (goog.DEBUG) {
-            mirosubs.video.JWVideoPlayer.logger_.info(
+            unisubs.video.JWVideoPlayer.logger_.info(
                 "Number of players: " + 
-                    mirosubs.video.JWVideoPlayer.players_.length);
+                    unisubs.video.JWVideoPlayer.players_.length);
         }
         goog.array.forEach(
-            mirosubs.video.JWVideoPlayer.players_, 
+            unisubs.video.JWVideoPlayer.players_, 
             function(p) { p.onJWPlayerReady_(); });
     };
 })();

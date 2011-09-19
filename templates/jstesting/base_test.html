@@ -3,9 +3,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% include_bundle "mirosubs-onsite-compiled" %}
-    <script type="text/javascript" src="{{MEDIA_URL}}js/testing/testing.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/testing/timerstub.js"></script>
+    {% include_bundle "js-base-dependencies" 0 %}
+    {% include_bundle "unisubs-api" 0 %}
+    {% include_bundle "js-testing-base" 0 %} 
+
     <script>
       goog.require('goog.testing.jsunit');
       goog.require('goog.testing.events');

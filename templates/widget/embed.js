@@ -1,4 +1,4 @@
-{% load escapejs %}
+{% load escapejs media_compressor %}
 
 // Universal Subtitles, universalsubtitles.org
 // 
@@ -52,14 +52,11 @@
 (function() {
     var innerStyle = '{% escapejs %}{% include "widget/widget.css" %}{% endescapejs %}';
 
-    var scriptsToLoad = [
-      {% for dep in js_dependencies %}
-        '{{dep|safe}}'{% if not forloop.last %},{% endif %}
-      {% endfor %}];
+    var scriptsToLoad = ["{{js_file}}"];
 
     var siteConfig = {
         siteURL: 'http://{{current_site.domain}}',
-        mediaURL: '{{MEDIA_URL}}'
+        staticURL: '{{STATIC_URL}}'
     };
 
     var scripts = document.getElementsByTagName('script');
@@ -98,13 +95,13 @@
     containingElement.appendChild(styleElement);
 
     var widgetSpan = $c('span');
-    widgetSpan.className = 'mirosubs-widget';
+    widgetSpan.className = 'unisubs-widget';
     widgetSpan.style.cssText = "display: block !important;";
     containingElement.appendChild(widgetSpan);
 
     var head = document.getElementsByTagName('head')[0];
-    if (typeof(mirosubs) == 'undefined' && !window.MiroSubsLoading) {
-        window.MiroSubsLoading = true;
+    if (typeof(unisubsCrossDomainLoaded) == 'undefined' && !window.unisubsLoading) {
+        window.unisubsLoading = true;
         for (var i = 0; i < scriptsToLoad.length; i++) {
             var curScript = $c('script');
             curScript.type = 'text/javascript';
@@ -119,7 +116,7 @@
         var css = $c('link');
         css.type = 'text/css';
         css.rel = 'stylesheet';
-        css.href = '{{MEDIA_URL}}css/mirosubs-widget.css';
+        css.href = '{{STATIC_URL}}{% url_for "widget-css" %}';
         css.media = 'screen';
         head.appendChild(css);
     }
@@ -131,14 +128,14 @@
             return;
         insertCalled = true;
         script.parentNode.insertBefore(containingElement, script);
-        if (typeof(mirosubs) != 'undefined' &&
-            typeof(mirosubs.widget) != 'undefined' &&
-            typeof(mirosubs.widget.CrossDomainEmbed) != 'undefined')
-            mirosubs.widget.CrossDomainEmbed.embed(widgetSpan, widgetConfig, siteConfig);
+        if (typeof(unisubs) != 'undefined' &&
+            typeof(unisubs.widget) != 'undefined' &&
+            typeof(unisubs.widget.CrossDomainEmbed) != 'undefined')
+            unisubs.widget.CrossDomainEmbed.embed(widgetSpan, widgetConfig, siteConfig);
         else {
-            if (typeof(MiroSubsToEmbed) == 'undefined')
-                window.MiroSubsToEmbed = [];
-            window.MiroSubsToEmbed.push([widgetSpan, widgetConfig, siteConfig]);
+            if (typeof(unisubsToEmbed) == 'undefined')
+                window.unisubsToEmbed = [];
+            window.unisubsToEmbed.push([widgetSpan, widgetConfig, siteConfig]);
         }
     }
 

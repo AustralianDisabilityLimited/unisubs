@@ -16,15 +16,15 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.CaptionManager');
+goog.provide('unisubs.CaptionManager');
 
 /**
  * @constructor
  *
- * @param {mirosubs.video.AbstractVideoPlayer} videoPlayer
- * @param {mirosubs.subtitle.EditableCaptionSet} captionSet
+ * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  */
-mirosubs.CaptionManager = function(videoPlayer, captionSet) {
+unisubs.CaptionManager = function(videoPlayer, captionSet) {
     goog.events.EventTarget.call(this);
     this.captions_ = captionSet.captionsWithTimes();
     this.binaryCompare_ = function(time, caption) {
@@ -38,28 +38,28 @@ mirosubs.CaptionManager = function(videoPlayer, captionSet) {
 
     this.eventHandler_.listen(
 	videoPlayer,
-	mirosubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+	unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
 	this.timeUpdate_);
     this.eventHandler_.listen(
 	captionSet,
         goog.array.concat(
             goog.object.getValues(
-                mirosubs.subtitle.EditableCaptionSet.EventType),
-            mirosubs.subtitle.EditableCaption.CHANGE),
+                unisubs.subtitle.EditableCaptionSet.EventType),
+            unisubs.subtitle.EditableCaption.CHANGE),
 	this.captionSetUpdate_);
 
     this.currentCaptionIndex_ = -1;
     this.lastCaptionDispatched_ = null;
     this.eventsDisabled_ = false;
-    this.logger_ = goog.debug.Logger.getLogger('mirosubs.CaptionManager');
+    this.logger_ = goog.debug.Logger.getLogger('unisubs.CaptionManager');
 };
-goog.inherits(mirosubs.CaptionManager, goog.events.EventTarget);
+goog.inherits(unisubs.CaptionManager, goog.events.EventTarget);
 
-mirosubs.CaptionManager.CAPTION = 'caption';
-mirosubs.CaptionManager.CAPTIONS_FINISHED = 'captionsfinished';
+unisubs.CaptionManager.CAPTION = 'caption';
+unisubs.CaptionManager.CAPTIONS_FINISHED = 'captionsfinished';
 
-mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
-    var et = mirosubs.subtitle.EditableCaptionSet.EventType;
+unisubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
+    var et = unisubs.subtitle.EditableCaptionSet.EventType;
     if (event.type == et.CLEAR_ALL ||
         event.type == et.CLEAR_TIMES) {
 	this.captions_ = [];
@@ -84,7 +84,7 @@ mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
                 this.videoPlayer_.getPlayheadTime());
         }
     }
-    else if (event.type == mirosubs.subtitle.EditableCaption.CHANGE) {
+    else if (event.type == unisubs.subtitle.EditableCaption.CHANGE) {
 	if (event.timesFirstAssigned) {
 	    this.captions_.push(event.target);
 	    this.timeUpdate_();
@@ -92,12 +92,12 @@ mirosubs.CaptionManager.prototype.captionSetUpdate_ = function(event) {
     }
 };
 
-mirosubs.CaptionManager.prototype.timeUpdate_ = function() {
+unisubs.CaptionManager.prototype.timeUpdate_ = function() {
     this.sendEventsForPlayheadTime_(
 	this.videoPlayer_.getPlayheadTime());
 };
 
-mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
+unisubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
     function(playheadTime)
 {
     if (this.captions_.length == 0)
@@ -127,13 +127,13 @@ mirosubs.CaptionManager.prototype.sendEventsForPlayheadTime_ =
          playheadTime >= curCaption.getStartTime())) {
         this.dispatchCaptionEvent_(null);
         if (nextCaption == null && !this.eventsDisabled_)
-            this.dispatchEvent(mirosubs.CaptionManager.CAPTIONS_FINISHED);
+            this.dispatchEvent(unisubs.CaptionManager.CAPTIONS_FINISHED);
         return;
     }
     this.sendEventForRandomPlayheadTime_(playheadTime);
 };
 
-mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ =
+unisubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ =
     function(playheadTime)
 {
     var lastCaptionIndex = goog.array.binarySearch(this.captions_,
@@ -150,28 +150,28 @@ mirosubs.CaptionManager.prototype.sendEventForRandomPlayheadTime_ =
     }
 };
 
-mirosubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
+unisubs.CaptionManager.prototype.dispatchCaptionEvent_ = function(caption) {
     if (caption == this.lastCaptionDispatched_)
         return;
     if (this.eventsDisabled_)
         return;
     this.lastCaptionDispatched_ = caption;
-    this.dispatchEvent(new mirosubs.CaptionManager.CaptionEvent(caption));
+    this.dispatchEvent(new unisubs.CaptionManager.CaptionEvent(caption));
 };
 
-mirosubs.CaptionManager.prototype.disposeInternal = function() {
-    mirosubs.CaptionManager.superClass_.disposeInternal.call(this);
+unisubs.CaptionManager.prototype.disposeInternal = function() {
+    unisubs.CaptionManager.superClass_.disposeInternal.call(this);
     this.eventHandler_.dispose();
 };
 
-mirosubs.CaptionManager.prototype.disableCaptionEvents = function(disabled) {
+unisubs.CaptionManager.prototype.disableCaptionEvents = function(disabled) {
     this.eventsDisabled_ = disabled;
 };
 
 /**
 * @constructor
 */
-mirosubs.CaptionManager.CaptionEvent = function(editableCaption) {
-    this.type = mirosubs.CaptionManager.CAPTION;
+unisubs.CaptionManager.CaptionEvent = function(editableCaption) {
+    this.type = unisubs.CaptionManager.CAPTION;
     this.caption = editableCaption;
 };

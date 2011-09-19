@@ -16,10 +16,10 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.BrightcoveVideoSource');
+goog.provide('unisubs.video.BrightcoveVideoSource');
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  * @param {string} playerID Brightcove player id
  * @param {string} playerKey Brightcove player key
  * @param {string} videoID Brightcove video id* 
@@ -27,24 +27,24 @@ goog.provide('mirosubs.video.BrightcoveVideoSource');
  *     brightCove query string, plus optional 'width' and 'height' 
  *     parameters.
  */
-mirosubs.video.BrightcoveVideoSource = function(playerID, playerKey, videoID, opt_videoConfig) {
+unisubs.video.BrightcoveVideoSource = function(playerID, playerKey, videoID, opt_videoConfig) {
     this.playerID_ = playerID;
     this.videoID_ = videoID;
     this.playerKey_ = playerKey;
-    this.uuid_ = mirosubs.randomString();
+    this.uuid_ = unisubs.randomString();
     this.videoConfig_ = opt_videoConfig;
 };
 
 /* @const
  * @type {string} 
  */
-mirosubs.video.BrightcoveVideoSource.BASE_DOMAIN = "brightcove.com";
+unisubs.video.BrightcoveVideoSource.BASE_DOMAIN = "brightcove.com";
 
-mirosubs.video.BrightcoveVideoSource.forURL = 
+unisubs.video.BrightcoveVideoSource.forURL = 
     function(videoURL, opt_videoConfig) 
 {
     
-    if (mirosubs.video.BrightcoveVideoSource.isBrightcove(videoURL)){
+    if (unisubs.video.BrightcoveVideoSource.isBrightcove(videoURL)){
         var uri = new goog.Uri(videoURL);
         var playerKey = uri.getParameterValue("bckey");
         var videoID = uri.getParameterValue("bctid");
@@ -59,7 +59,7 @@ mirosubs.video.BrightcoveVideoSource.forURL =
         }
         opt_videoConfig["uri"] = videoURL;
         if (playerID){
-            return new mirosubs.video.BrightcoveVideoSource(
+            return new unisubs.video.BrightcoveVideoSource(
                 playerID, playerKey, videoID, opt_videoConfig);    
         }
         
@@ -67,60 +67,60 @@ mirosubs.video.BrightcoveVideoSource.forURL =
     return null;
 };
 
-mirosubs.video.BrightcoveVideoSource.isBrightcove = function(videoURL) {
+unisubs.video.BrightcoveVideoSource.isBrightcove = function(videoURL) {
     var uri = new goog.Uri(videoURL);
     return   goog.string.caseInsensitiveEndsWith(
         uri.getDomain(),
-        mirosubs.video.BrightcoveVideoSource.BASE_DOMAIN);
+        unisubs.video.BrightcoveVideoSource.BASE_DOMAIN);
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.createPlayer = function() {
+unisubs.video.BrightcoveVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.createControlledPlayer = 
+unisubs.video.BrightcoveVideoSource.prototype.createControlledPlayer = 
     function() 
 {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+    return new unisubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.createPlayer_ = function(forDialog) {
-    return new mirosubs.video.BrightcoveVideoPlayer(
-        new mirosubs.video.BrightcoveVideoSource(
+unisubs.video.BrightcoveVideoSource.prototype.createPlayer_ = function(forDialog) {
+    return new unisubs.video.BrightcoveVideoPlayer(
+        new unisubs.video.BrightcoveVideoSource(
             this.playerID_, this.playerKey_, this.videoID_, this.videoConfig_), 
         forDialog);
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.getPlayerID = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getPlayerID = function() {
     return this.playerID_;
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.getVideoID = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getVideoID = function() {
     return this.videoID_;
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.getPlayerKey = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getPlayerKey = function() {
      return this.playerKey_;
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.getUUID = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getUUID = function() {
     return this.uuid_;
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.getVideoConfig = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-mirosubs.video.BrightcoveVideoSource.prototype.setVideoConfig = function(config) {
+unisubs.video.BrightcoveVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };
 
 
-mirosubs.video.BrightcoveVideoSource.prototype.getVideoURL = function() {
+unisubs.video.BrightcoveVideoSource.prototype.getVideoURL = function() {
     return this.videoConfig_["url"];
 };
 
-mirosubs.video.BrightcoveVideoSource.EMBED_SOURCE = "http://c.brightcove.com/services/viewer/federated_f9?isVid=1&isUI=1";
-mirosubs.video.BrightcoveVideoSource.prototype.toString = function() {
+unisubs.video.BrightcoveVideoSource.EMBED_SOURCE = "http://c.brightcove.com/services/viewer/federated_f9?isVid=1&isUI=1";
+unisubs.video.BrightcoveVideoSource.prototype.toString = function() {
     return "BrightcoveVideoSource " + this.videoID_;
 }

@@ -33,6 +33,8 @@ from django.utils.translation import ugettext as _
 from subrequests.models import SubtitleRequest
 from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
+from django.utils import translation
+
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
 import logging
@@ -96,7 +98,7 @@ class Rpc(BaseRpc):
             'subtitles': None,
         }
         return_value['video_urls']= video_urls
-        
+        return_value['is_moderated'] = video_cache.get_is_moderated(video_id)
         if additional_video_urls is not None:
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
@@ -110,10 +112,14 @@ class Rpc(BaseRpc):
         return_value['drop_down_contents'] = \
             video_cache.get_video_languages(video_id)
 
-        if base_state is not None and base_state.get("language_code", None) is not None:
+        return_value['my_languages'] = \
+            get_user_languages_from_request(request)
+
+        # keeping both forms valid as backwards compatibility layer
+        lang_code = base_state and base_state.get("language_code", base_state.get("language", None))
+        if base_state is not None and lang_code is not None:
             lang_pk = base_state.get('language_pk', None)
             if lang_pk is  None:
-                lang_code = base_state.get('language_code', None)
                 lang_pk = video_cache.pk_for_default_language(video_id, lang_code)
             subtitles = self._autoplay_subtitles(
                 request.user, video_id, 
@@ -129,6 +135,14 @@ class Rpc(BaseRpc):
                         request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
+
+    def _find_remote_autoplay_language(self, request):
+        language = None
+        if request.user.is_anonymous() or request.user.preferred_language == '':
+            language = translation.get_language_from_request(request)
+        else:
+            language = request.user.preferred_language
+        return language if language != '' else None
 
     def fetch_start_dialog_contents(self, request, video_id):
         my_languages = get_user_languages_from_request(request)
@@ -185,6 +199,7 @@ class Rpc(BaseRpc):
                 request.user,
                 request_languages,
                 track=track_request,
+                description=description,
         )
 
         return {
@@ -298,11 +313,17 @@ class Rpc(BaseRpc):
         if throw_exception:
             raise Exception('purposeful exception for testing')
 
+        return self.save_finished(
+            request.user, session, subtitles, new_title, completed, forked)
+
+    def save_finished(self, user, session, subtitles, new_title=None, completed=None, forked=False):
+        from apps.teams.moderation import is_moderated, user_can_moderate
+        
         language = session.language
         new_version = None
         if subtitles is not None and \
-                (len(subtitles) > 0 or language.latest_version() is not None):
-            new_version = self._create_version_from_session(session, request.user, forked)
+                (len(subtitles) > 0 or language.latest_version(public_only=False) is not None):
+            new_version = self._create_version_from_session(session, user, forked)
             new_version.save()
             self._save_subtitles(
                 new_version.subtitle_set, subtitles, new_version.is_forked)
@@ -319,13 +340,20 @@ class Rpc(BaseRpc):
         else:
             video_changed_tasks.delay(language.video.id)
 
-        user_message = None
+        # we have a default user message, since the UI lets users save non
+        # changed subs, but the backend will realize and will not save that
+        # version. In those cases, we want to show the defatul user message.
+        user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
         if new_version is not None and new_version.version_no == 0:
-            user_message = {
-                "body": ("Thank you for uploading. It will take a minute "
-                         "or so for your subtitles to appear.") }
+            user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+        elif new_version and is_moderated(new_version):
+            if user_can_moderate(language.video, user) is False:
+                user_message = """This video is moderated by %s. 
+
+You will not see your subtitles in our widget when you leave this page, they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles, they will show up on our site and in the widget.
+""" % (new_version.video.moderated_by.name)
         return {
-            '_user_message': user_message,
+            'user_message': user_message,
             'response': 'ok' }
 
     def _save_subtitles(self, subtitle_set, json_subs, forked):
@@ -343,7 +371,7 @@ class Rpc(BaseRpc):
                     subtitle_order=s['sub_order'])
 
     def _create_version_from_session(self, session, user=None, forked=False):
-        latest_version = session.language.version()
+        latest_version = session.language.version(public_only=False)
         return models.SubtitleVersion(
             language=session.language,
             version_no=(0 if latest_version is None 

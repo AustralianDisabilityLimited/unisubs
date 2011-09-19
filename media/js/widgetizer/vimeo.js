@@ -16,26 +16,26 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.widgetizer.Vimeo');
+goog.provide('unisubs.widgetizer.Vimeo');
 
 /**
  * @constructor
  */
-mirosubs.widgetizer.Vimeo = function() {
-    mirosubs.widgetizer.Vimeo.call(this);
+unisubs.widgetizer.Vimeo = function() {
+    unisubs.widgetizer.VideoPlayerMaker.call(this);
     /**
      * @const
      */
     this.ON_VIMEO_SITE =
         window.location.hostname.match(/vimeo\.com$/) != null;
 };
-goog.inheirts(mirosubs.widgetizer.Vimeo,
-              mirosubs.widgetizer.VideoPlayerMaker);
+goog.inheirts(unisubs.widgetizer.Vimeo,
+              unisubs.widgetizer.VideoPlayerMaker);
 
-mirosubs.widgetizer.Vimeo.prototype.logger_ = 
-    goog.debug.Logger.getLogger('mirosubs.widgetizer.Vimeo');
+unisubs.widgetizer.Vimeo.prototype.logger_ = 
+    goog.debug.Logger.getLogger('unisubs.widgetizer.Vimeo');
 
-mirosubs.widgetizer.Vimeo.prototype.unwidgetizedElement_ = function() {
+unisubs.widgetizer.Vimeo.prototype.unwidgetizedElement_ = function() {
     if (this.ON_VIMEO_SITE) {
         var moviePlayer = goog.dom.getElementsByTagAndClassName('object');
         

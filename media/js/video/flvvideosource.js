@@ -16,45 +16,45 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video.FlvVideoSource');
+goog.provide('unisubs.video.FlvVideoSource');
 
 /**
  * @constructor
- * @implements {mirosubs.video.VideoSource}
+ * @implements {unisubs.video.VideoSource}
  * @param {string} flvURL
  * @param {Object=} opt_videoConfig Plugins to use for FlowPlayer 
  *     (see http://flowplayer.org/documentation/configuration/plugins.html)
  *     plus optional 'width' and 'height' parameters.
  */
-mirosubs.video.FlvVideoSource = function(flvURL, opt_videoConfig) {
+unisubs.video.FlvVideoSource = function(flvURL, opt_videoConfig) {
     this.flvURL_ = flvURL;
     this.videoConfig_ = opt_videoConfig;
 };
 
-mirosubs.video.FlvVideoSource.prototype.createPlayer = function() {
+unisubs.video.FlvVideoSource.prototype.createPlayer = function() {
     return this.createPlayer_(false);
 };
 
-mirosubs.video.FlvVideoSource.prototype.createControlledPlayer = function() {
-    return new mirosubs.video.ControlledVideoPlayer(this.createPlayer_(true));
+unisubs.video.FlvVideoSource.prototype.createControlledPlayer = function() {
+    return new unisubs.video.ControlledVideoPlayer(this.createPlayer_(true));
 };
 
-mirosubs.video.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
-    return new mirosubs.video.FlvVideoPlayer(this, chromeless);
+unisubs.video.FlvVideoSource.prototype.createPlayer_ = function(chromeless) {
+    return new unisubs.video.FlvVideoPlayer(this, chromeless);
 };
 
-mirosubs.video.FlvVideoSource.prototype.getFlvURL = function() {
+unisubs.video.FlvVideoSource.prototype.getFlvURL = function() {
     return this.flvURL_;
 };
 
-mirosubs.video.FlvVideoSource.prototype.getVideoURL = function() {
+unisubs.video.FlvVideoSource.prototype.getVideoURL = function() {
     return this.getFlvURL();
 };
 
-mirosubs.video.FlvVideoSource.prototype.getVideoConfig = function() {
+unisubs.video.FlvVideoSource.prototype.getVideoConfig = function() {
     return this.videoConfig_;
 };
 
-mirosubs.video.FlvVideoSource.prototype.setVideoConfig = function(config) {
+unisubs.video.FlvVideoSource.prototype.setVideoConfig = function(config) {
     this.videoConfig_ = config;
 };

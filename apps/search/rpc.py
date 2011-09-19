@@ -30,8 +30,10 @@ class SearchApiClass(object):
     def search(self, rdata, user, testing=False):
         sqs = SearchQuerySet().result_class(VideoSearchResult) \
                 .models(Video)
-                
+        
+        rdata['q'] = rdata['q'] or u' '
         q = rdata.get('q')
+
         if q:
             sqs = SearchForm.apply_query(q, sqs)
             form = SearchForm(rdata, sqs=sqs)
@@ -42,7 +44,7 @@ class SearchApiClass(object):
             qs = form.search_qs(sqs)
         else:
             qs = SearchQuerySet().none()    
-        
+
         #result = [item.object for item in qs]
         #qs1 = Video.objects.filter(title__contains=rdata['q'])
         #for o in qs1:

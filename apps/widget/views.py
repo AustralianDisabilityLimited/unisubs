@@ -39,6 +39,7 @@ from django.db.models import ObjectDoesNotExist
 from uslogging.models import WidgetDialogCall
 from auth.models import CustomUser
 from django.contrib.admin.views.decorators import staff_member_required
+from widget.models import SubtitlingSession
 
 rpc_views = Rpc()
 null_rpc_views = NullRpc()
@@ -47,9 +48,10 @@ def embed(request, version_no=''):
     """
     This is for serving embed when in development since the compilation
     with the media url hasn't taken place.
-    Public clients will use the url : SITE_MEDIA/js/embed.js
+    Public clients will use the url : SITE_MEDIA/embed.js
     """
-    context = widget.add_offsite_js_files({})
+    context = widget.embed_context()
+
     if bool(version_no) is False:
         version_no = ""
     return render_to_response('widget/embed{0}.js'.format(version_no), 
@@ -65,7 +67,7 @@ def widget_public_demo(request):
 def onsite_widget(request):
     """Used for subtitle dialog"""
     context = widget.add_config_based_js_files(
-        {}, settings.JS_API, 'mirosubs-api.js')
+        {}, settings.JS_API, 'unisubs-api.js')
     config = request.GET.get('config', '{}')
 
     try:
@@ -98,9 +100,33 @@ def onsite_widget(request):
                               context,
                               context_instance=RequestContext(request))
 
+def onsite_widget_resume(request):
+    context = widget.add_config_based_js_files(
+        {}, settings.JS_API, 'unisubs-api.js')
+    config = request.GET.get('config', '{}')
+
+    try:
+        config = json.loads(config)
+    except (ValueError, KeyError):
+        raise Http404
+
+    video_id = config.get('videoID')
+    if not video_id:
+        raise Http404
+
+    video = get_object_or_404(models.Video, video_id=video_id)
+
+    context['widget_params'] = json.dumps(config)
+    general_settings = {}
+    add_general_settings(request, general_settings)
+    context['general_settings'] = json.dumps(general_settings)
+    return render_to_response('widget/onsite_widget_resume.html',
+                              context,
+                              context_instance=RequestContext(request))
+
 def widget_demo(request):
     context = {}
-    context['js_use_compiled'] = settings.JS_USE_COMPILED
+    context['js_use_compiled'] = settings.COMPRESS_MEDIA
     context['site_url'] = 'http://{0}'.format(
         request.get_host())
     if 'video_url' not in request.GET:
@@ -120,7 +146,7 @@ def widget_demo(request):
 
 def video_demo(request, template):
     context = widget.add_config_based_js_files(
-        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+        {}, settings.JS_WIDGETIZER, 'unisubs-widgetizer.js')
     context['embed_js_url'] = \
         "http://{0}/embed{1}.js".format(
         Site.objects.get_current().domain,
@@ -133,7 +159,7 @@ def video_demo(request, template):
 
 def widgetize_demo(request, page_name):
     context = widget.add_config_based_js_files(
-        {}, settings.JS_WIDGETIZER, 'mirosubs-widgetizer.js')
+        {}, settings.JS_WIDGETIZER, 'unisubs-widgetizer.js')
     return render_to_response('widget/widgetize_demo/{0}.html'.format(page_name),
                               context,
                               context_instance=RequestContext(request))
@@ -142,19 +168,12 @@ def statwidget_demo(request):
     js_files = ['http://{0}/widget/statwidgetconfig.js'.format(
             Site.objects.get_current().domain)]
     js_files.append('{0}js/statwidget/statwidget.js'.format(
-            settings.MEDIA_URL))
-    context = widget.add_js_files({}, settings.JS_USE_COMPILED,
+            settings.STATIC_URL))
+    context = widget.add_js_files({}, settings.COMPRESS_MEDIA,
                                settings.JS_OFFSITE,
-                               'mirosubs-statwidget.js',
+                               'unisubs-statwidget.js',
                                full_path_js_files=js_files)
     return render_to_response('widget/statwidget_demo.html',
-                              context,
-                              context_instance=RequestContext(request))
-
-def api_demo(request):
-    context = widget.add_config_based_js_files(
-        {}, settings.JS_API, 'mirosubs-api.js')
-    return render_to_response('widget/api_demo.html',
                               context,
                               context_instance=RequestContext(request))
 
@@ -165,19 +184,11 @@ def save_emailed_translations(request):
             'widget/save_emailed_translations.html',
             context_instance=RequestContext(request))
     else:
-        draft = models.SubtitleDraft.objects.get(pk=request.POST['draft_pk'])
+        session = SubtitlingSession.objects.get(pk=request.POST['session_pk'])
         user = CustomUser.objects.get(pk=request.POST['user_pk'])
         subs = json.loads(request.POST['sub_text'])
-        draft.subtitle_set.all().delete()
-        for sub in subs:
-            subtitle = models.Subtitle(
-                draft=draft,
-                subtitle_id=sub['subtitle_id'],
-                subtitle_text=sub['text'])
-            subtitle.save()
-        draft = models.SubtitleDraft.objects.get(pk=draft.pk)
-        rpc_views.save_finished(draft, user)
-        return redirect(draft.video.video_link())        
+        rpc_views.save_finished(user, session, subs)
+        return redirect(session.language.video.video_link())        
 
 def base_widget_params(request, extra_params={}):
     params = {}

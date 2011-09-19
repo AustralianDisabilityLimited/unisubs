@@ -10,70 +10,18 @@
 
 {% block scripts %}
     {{ block.super }}
-    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
-    <script type="text/javascript">
-        jQuery(function($){
-            var IS_AUTHENTICATED = {% if user.is_authenticated %}true{% else %}false{% endif %};
-             
-            $('.join-team', $('ul.big_list')).live('click', function(){
-                if ( ! IS_AUTHENTICATED){
-                    document.location = '{% url auth:login %}?next={{ request.path_info|urlencode }}';
-                }else{
-                    if (confirm('{% trans "Do you really wish join this team?" %}')){
-                        var $this = $(this);
-                        TeamsApi.join($this.attr('team_id'), function(response){
-                            if (response.error){
-                                $.jGrowl.error(response.error);
-                            }else{
-                                $.jGrowl(response.msg);
-                                $this.remove();
-                            }
-                        });
-                    }
-                }
-                return false;
-            });
-            $('.leave-team', $('ul.big_list')).live('click', function(){
-                if (confirm('{% trans "Do you really wish to leave this team?" %}')){
-                    var $this = $(this);
-                    TeamsApi.leave($this.attr('team_id'), function(response){
-                        if (response.error){
-                            $.jGrowl.error(response.error);
-                        }else{
-                            $.jGrowl(response.msg);
-                            $this.parents('.info').find('.your-team').remove();
-                            $this.remove();
-                        }
-                    });
-                }
-                return false;
-            });            
-        });
-    </script>    
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}
 
 {% block main_content %}
 
-{% if user.is_superuser and user.is_active %}
-    <a href="{% url teams:create %}" class="green_button big start_team">
-        <span>{% trans 'Start a Team' %}</span>
-    </a>
-{% endif %}
-
 <h2>{% trans 'Team Directory' %}</h2>
 
 <div class="grid_8 alpha">
-    <p class="intro">
-        {% blocktrans %}
-        Teams are a great way to work together on subtitling videos. 
-        Membership and participation policies vary from team to team. 
-        Don't know where to start? Check the sidebar!
-        {% endblocktrans %}
-    </p>
-    <div class="boxx">
-        <div class="padding_small">
+    <div class="pod">
+        <div class="padding_small clearfix">
             <div class="sort_button">
-                <div class='arrow'>
+                <div class="arrow">
                 </div>
                 <span class="sort_label">{% trans 'Sort by' %} <strong>{{ order_name }}</strong></span>
                 <ul>
@@ -96,12 +44,10 @@
             <div class="inline_search">
                 <form action=".">
                     <input type="text" name="q" value="{{ query|default:'' }}"/>
-                    <button class="green_button big">
+                    <button class="green_button big" style="margin:0;">
                         <span>{% trans 'Search' %}</span>
                     </button>
                 </form>
-            </div>
-            <div class="clearfix">
             </div>
         </div>
     </div>
@@ -117,20 +63,20 @@
                 {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100"/>{% endif %}
             </a>
             <div class="info">
-                <h4><a href="{{ team.get_absolute_url }}">{{ team }}{% if team|is_team_member:user %} <span class="your-team">({% trans 'your team' %})</span>{% endif %}</a></h4>
-                {% if team|is_team_member:user %}
-                    {% if team|is_team_manager:user %}
-                        <a href="{{ team.get_edit_url }}">{% trans 'Edit' %}</a><br/>
-                    {% endif %}
-                    {% if team.member_count > 1 %}
-                    <a class="leave-team" team_id="{{ team.pk }}" href="#">{% trans "Leave" %}</a><br/>
-                    {% endif %}
-                {% else %}
-                    {% if team.is_open %}<a href="{% url teams:join_team team.slug %}" class="join-team" team_id="{{ team.pk }}">{% trans "Join" %}</a><br/>{% endif %}
-                {% endif %}      
-                <span>
+                <h4>
+                    <a href="{{ team.get_absolute_url }}">
+                        {{ team }}
+                        {% if team|is_team_member:user %} 
+                            <span class="your-team">({% trans 'your team' %})</span>
+                        {% endif %}
+                        {% if not team.is_visible %}
+                            <span class="your-team">({% trans 'private' %})</span>
+                        {% endif %}
+                    </a>
+                </h4>
+                <span class="count">
                     {% blocktrans with team.member_count as count %}
-                    Team with {{ count }} Members
+                    {{ count }} Members
                     {% endblocktrans %}
                 </span>
                 {% if team.description %}
@@ -138,15 +84,25 @@
                     {{ team.description|urlize }}
                 </p>
                 {% endif %}
-                {% if user.is_staff and perms.teams.change_team %}
-                <p style="float: none;">
-                    {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
+                <div class="buttons-container">
+                    {% if user.is_staff and perms.teams.change_team %}
+                        {% if team.highlight %}
+                            <a href="{% url teams:unhighlight team.slug %}" class="blue_button small">{% trans 'Un-highlight this team' %}</a>
+                        {% else %}
+                            <a href="{% url teams:highlight team.slug %}" class="blue_button small">{% trans 'Highlight this team' %}</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if team|is_team_member:user and team|is_team_manager:user%}
+                        <a href="{{ team.get_edit_url }}" class="blue_button small">{% trans 'Edit' %}</a>
+                    {% endif %}
+                    {% if team|is_team_member:user %}
+                        {% render_team_leave team %}
                     {% else %}
-                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
-                    {% endif %}                    
-                </p>
-                {% endif %}         
+                        {% if team.is_open %}
+                            {% render_team_join team "small" %}
+                        {% endif %}
+                    {% endif %}  
+                </div>
             </div>         
         </li>
         {% endfor %}
@@ -154,39 +110,55 @@
     {% if is_paginated %}{% paginator %}{% endif %}
 </div>
 <div class="grid_4 omega">
-    <h3>{% trans 'Highlighted Teams' %}</h3>
-    <ul class="small_list">
-        {% for team in highlighted_qs %}
-        <li>
-            <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
-                {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
-            </a>
-            <div class="info">
-                <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
-                <span>
-                    {% blocktrans with team.member_count as count %}
-                    Team with {{ count }} Members
-                    {% endblocktrans %}                    
-                </span>
-                
-                {% if team.description %}
-                <p>
-                    {{ team.description }}
-                </p>              
-                {% endif %}
-                
-                {% if user.is_staff and perms.teams.change_team %}
-                    <div>
-                    {% if team.highlight %}
-                        <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
-                    {% else %}
-                        <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
+    <h3>{% trans 'About Teams' %}</h3>
+    <p class="notice">
+        {% blocktrans %}
+        Teams are a great way to work together on subtitling videos. 
+        Membership and participation policies vary from team to team.
+        {% endblocktrans %}
+    </p>
+    <p class="notice">Want to create your own captioning and translation team? Contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>
+    <br />
+    {% if highlighted_qs %}
+        <h3>{% trans 'Highlighted Teams' %}</h3>
+        <ul class="small_list">
+            {% for team in highlighted_qs %}
+            <li>
+                <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
+                    {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
+                </a>
+                <div class="info">
+                    <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
+                    <span>
+                        {% blocktrans with team.member_count as count %}
+                        Team with {{ count }} Members
+                        {% endblocktrans %}                    
+                    </span>
+                    
+                    {% if team.description %}
+                    <p>
+                        {{ team.description }}
+                    </p>              
                     {% endif %}
-                    </div>
-                {% endif %}                
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+                    
+                    {% if user.is_staff and perms.teams.change_team %}
+                        <div>
+                        {% if team.highlight %}
+                            <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
+                        {% else %}
+                            <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
+                        {% endif %}
+                        </div>
+                    {% endif %}                
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if user.is_superuser and user.is_active %}
+    <a href="{% url teams:create %}" class="green_button big start_team">
+        <span>{% trans 'Start a Team' %}</span>
+    </a>
+{% endif %}
 </div>
 {% endblock %}

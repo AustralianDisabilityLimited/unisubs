@@ -24,6 +24,8 @@ from search.forms import SearchForm
 from search.rpc import SearchApiClass
 from auth.models import CustomUser as User
 from utils.rpc import RpcMultiValueDict
+from django.core.urlresolvers import reverse
+from videos.tasks import video_changed_tasks
 
 def reset_solr():
     # cause the default site to load
@@ -51,6 +53,26 @@ class TestSearch(TestCase):
     def setUp(self):
         self.user = User.objects.all()[0]
     
+    def test_query_clean(self):
+        video = Video.objects.all()[0]
+        video.title = u"Cher BBC and Dawn French's Lookalikes"
+        video.save()
+        reset_solr()
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u'?BBC'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        self.assertTrue(len(result))        
+    
+    def test_views(self):
+        url = reverse('search:index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        
+        url = reverse('search:rpc_api')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)        
+    
     def test_search_index_updating(self):
         reset_solr()
         rpc = SearchApiClass()
@@ -65,6 +87,40 @@ class TestSearch(TestCase):
             result = rpc.search(rdata, self.user, testing=True)['sqs']
             self.assertTrue(video in [item.object for item in result], title)
     
+    def test_empty_query(self):
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u''))
+        rpc.search(rdata, self.user, testing=True)['sqs']
+
+        rdata = RpcMultiValueDict(dict(q=u' '))
+        rpc.search(rdata, self.user, testing=True)['sqs']
+    
+    def test_filtering(self):
+        self.assertTrue(Video.objects.count())
+        for video in Video.objects.all():
+            video_changed_tasks.delay(video.pk)
+        
+        reset_solr()
+        
+        rpc = SearchApiClass()
+        
+        rdata = RpcMultiValueDict(dict(q=u' ', video_lang='en'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        
+        self.assertTrue(len(result))
+        for video in SearchQuerySet().models(Video):
+            if video.video_language == 'en':
+                self.assertTrue(video.object in [item.object for item in result])
+        
+        rdata = RpcMultiValueDict(dict(q=u' ', langs='en'))
+        result = rpc.search(rdata, self.user, testing=True)['sqs']
+        
+        self.assertTrue(len(result))
+        for video in SearchQuerySet().models(Video):
+            if video.languages and 'en' in video.languages:
+                self.assertTrue(video.object in [item.object for item in result])        
+            
     def test_rpc(self):
         rpc = SearchApiClass()
         rdata = RpcMultiValueDict(dict(q=u'BBC'))

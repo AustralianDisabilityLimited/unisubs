@@ -16,24 +16,24 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.Dialog');
+goog.provide('unisubs.subtitle.Dialog');
 
 /**
  * @constructor
- * @param {mirosubs.subtitle.ServerModel} serverModel
- * @param {mirosubs.widget.SubtitleState} subtitles existing subtitles
+ * @param {unisubs.subtitle.ServerModel} serverModel
+ * @param {unisubs.widget.SubtitleState} subtitles existing subtitles
  */
-mirosubs.subtitle.Dialog = function(videoSource, serverModel,
+unisubs.subtitle.Dialog = function(videoSource, serverModel,
                                     subtitles, opt_opener,
                                     opt_skipFinished) {
-    mirosubs.Dialog.call(this, videoSource);
-    mirosubs.SubTracker.getInstance().start(false);
+    unisubs.Dialog.call(this, videoSource);
+    unisubs.SubTracker.getInstance().start(false);
     this.serverModel_ = serverModel;
     this.opener_ = opt_opener;
     this.skipFinished_ = !!opt_skipFinished;
     this.captionSet_ = this.serverModel_.getCaptionSet();
     this.captionManager_ =
-        new mirosubs.CaptionManager(
+        new unisubs.CaptionManager(
             this.getVideoPlayerInternal(), this.captionSet_);
     this.serverModel_ = serverModel;
     this.serverModel_.init();
@@ -43,7 +43,7 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.saved_ = false;
     /**
      *
-     * @type {?mirosubs.subtitle.Dialog.State_}
+     * @type {?unisubs.subtitle.Dialog.State_}
      */
     this.state_ = null;
     this.currentSubtitlePanel_ = null;
@@ -51,42 +51,42 @@ mirosubs.subtitle.Dialog = function(videoSource, serverModel,
     this.doneButtonEnabled_ = true;
 
     /**
-     * @type {mirosubs.widget.SubtitleState}
+     * @type {unisubs.widget.SubtitleState}
      */
     this.subtitles_ = subtitles;
 
     this.keyEventsSuspended_ = false;
 };
-goog.inherits(mirosubs.subtitle.Dialog, mirosubs.Dialog);
+goog.inherits(unisubs.subtitle.Dialog, unisubs.Dialog);
 
 /**
  *
  * @enum
  */
-mirosubs.subtitle.Dialog.State_ = {
+unisubs.subtitle.Dialog.State_ = {
     TRANSCRIBE: 0,
     SYNC: 1,
     REVIEW: 2,
     FINISHED: 3
 };
-mirosubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
+unisubs.subtitle.Dialog.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
-mirosubs.subtitle.Dialog.prototype.createDom = function() {
-    mirosubs.subtitle.Dialog.superClass_.createDom.call(this);
-    this.enterState_(mirosubs.subtitle.Dialog.State_.TRANSCRIBE);
+unisubs.subtitle.Dialog.prototype.createDom = function() {
+    unisubs.subtitle.Dialog.superClass_.createDom.call(this);
+    this.enterState_(unisubs.subtitle.Dialog.State_.TRANSCRIBE);
 };
-mirosubs.subtitle.Dialog.prototype.showDownloadLink_ = function() {
+unisubs.subtitle.Dialog.prototype.showDownloadLink_ = function() {
     var that = this;
     this.getRightPanelInternal().showDownloadLink(
         function() { 
             return that.captionSet_.makeJsonSubs();
         });
 };
-mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
-    mirosubs.subtitle.Dialog.superClass_.enterDocument.call(this);
-    mirosubs.Dialog.translationDialogOpen = false;
+unisubs.subtitle.Dialog.prototype.enterDocument = function() {
+    unisubs.subtitle.Dialog.superClass_.enterDocument.call(this);
+    unisubs.Dialog.translationDialogOpen = false;
     var doc = this.getDomHelper().getDocument();
     this.getHandler().
         listen(
@@ -99,15 +99,15 @@ mirosubs.subtitle.Dialog.prototype.enterDocument = function() {
             this.handleKeyUp_).
         listen(
             this.captionManager_,
-            mirosubs.CaptionManager.CAPTION,
+            unisubs.CaptionManager.CAPTION,
             this.captionReached_);
 };
-mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
+unisubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
     var extraClasses = goog.array.map(
         ['transcribe', 'sync', 'review', 'finished'],
-        function(suffix) { return 'mirosubs-modal-widget-' + suffix; });
+        function(suffix) { return 'unisubs-modal-widget-' + suffix; });
     var currentClass = "";
-    var s = mirosubs.subtitle.Dialog.State_;
+    var s = unisubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         currentClass = extraClasses[0];
     else if (this.state_ == s.SYNC)
@@ -119,12 +119,12 @@ mirosubs.subtitle.Dialog.prototype.setExtraClass_ = function() {
     goog.array.remove(extraClasses, currentClass);
     goog.dom.classes.addRemove(this.getContentElement(), extraClasses, currentClass);
 };
-mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
+unisubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.state_ = state;
 
     this.suspendKeyEvents_(false);
 
-    var s = mirosubs.subtitle.Dialog.State_;
+    var s = unisubs.subtitle.Dialog.State_;
 
     this.setExtraClass_();
 
@@ -141,7 +141,7 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.disposeCurrentPanels_();
     this.currentSubtitlePanel_ = nextSubPanel;
 
-    var et = mirosubs.RightPanel.EventType;
+    var et = unisubs.RightPanel.EventType;
     this.rightPanelListener_.listen(
         rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
     this.rightPanelListener_.listen(
@@ -154,10 +154,10 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
         this.rightPanelListener_.listen(
             rightPanel, et.BACK, this.handleBackKeyPress_);
         this.timelineSubtitleSet_ =
-            new mirosubs.timeline.SubtitleSet(
+            new unisubs.timeline.SubtitleSet(
                 this.captionSet_, this.getVideoPlayerInternal());
         this.getTimelinePanelInternal().addChild(
-            new mirosubs.timeline.Timeline(
+            new unisubs.timeline.Timeline(
                 1, this.timelineSubtitleSet_,
                 this.getVideoPlayerInternal()), true);
     }
@@ -166,53 +166,53 @@ mirosubs.subtitle.Dialog.prototype.setState_ = function(state) {
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
-        videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
+        videoPlayer.setPlayheadTime(0);
     }
 };
-mirosubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
+unisubs.subtitle.Dialog.prototype.suspendKeyEvents_ = function(suspended) {
     this.keyEventsSuspended_ = suspended;
     if (this.currentSubtitlePanel_)
         this.currentSubtitlePanel_.suspendKeyEvents(suspended);
 };
-mirosubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
+unisubs.subtitle.Dialog.prototype.setFinishedState_ = function() {
     if (this.skipFinished_)
         this.setVisible(false);
-    if (!mirosubs.isFromDifferentDomain()) {
+    if (!unisubs.isFromDifferentDomain()) {
         window.location.assign(this.serverModel_.getPermalink() + '?saved=true');
         return;
     }
-    this.state_ = mirosubs.subtitle.Dialog.State_.FINISHED;
+    this.state_ = unisubs.subtitle.Dialog.State_.FINISHED;
     this.setExtraClass_();
-    var sharePanel = new mirosubs.subtitle.SharePanel(
+    var sharePanel = new unisubs.subtitle.SharePanel(
         this.serverModel_);
     this.setRightPanelInternal(sharePanel);
     this.getTimelinePanelInternal().removeChildren(true);
     this.getCaptioningAreaInternal().removeChildren(true);
     var bottomContainer = this.getBottomPanelContainerInternal();
-    var bottomFinishedPanel = new mirosubs.subtitle.BottomFinishedPanel(
+    var bottomFinishedPanel = new unisubs.subtitle.BottomFinishedPanel(
         this, this.serverModel_.getPermalink());
     bottomContainer.addChild(bottomFinishedPanel, true);
 
     var videoPlayer = this.getVideoPlayerInternal();
     if (this.isInDocument()) {
         // TODO: make video player stop loading here?
-        videoPlayer.setPlayheadTime(0);
         videoPlayer.pause();
+        videoPlayer.setPlayheadTime(0);
     }
 };
-mirosubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
+unisubs.subtitle.Dialog.prototype.handleGoToStep_ = function(event) {
     this.setState_(event.stepNo);
 };
-mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
+unisubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
     if (this.keyEventsSuspended_)
         return;
-    var s = mirosubs.subtitle.Dialog.State_;
+    var s = unisubs.subtitle.Dialog.State_;
     if (event.keyCode == goog.events.KeyCodes.TAB) {
         if (event.shiftKey) {
             this.skipBack_();
             this.getRightPanelInternal().setKeyDown(event.keyCode,
-                mirosubs.RightPanel.KeySpec.Modifier.SHIFT, true);
+                unisubs.RightPanel.KeySpec.Modifier.SHIFT, true);
         }
         else {
             this.togglePause_();
@@ -221,53 +221,53 @@ mirosubs.subtitle.Dialog.prototype.handleKeyDown_ = function(event) {
         event.preventDefault();
     }
 };
-mirosubs.subtitle.Dialog.prototype.handleKeyUp_ = function(event) {
+unisubs.subtitle.Dialog.prototype.handleKeyUp_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.TAB) {
         var modifier = 0;
         if (event.shiftKey)
-            modifier = mirosubs.RightPanel.KeySpec.Modifier.SHIFT;
+            modifier = unisubs.RightPanel.KeySpec.Modifier.SHIFT;
         this.getRightPanelInternal().setKeyDown(event.keyCode, modifier, false);
     }
     else if (event.keyCode == goog.events.KeyCodes.SHIFT) {
         // if shift is released before tab, we still need to untoggle the legend
         this.getRightPanelInternal().setKeyDown(goog.events.KeyCodes.TAB,
-            mirosubs.RightPanel.KeySpec.Modifier.SHIFT, false);
+            unisubs.RightPanel.KeySpec.Modifier.SHIFT, false);
     }
 };
-mirosubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
-    var s = mirosubs.subtitle.Dialog.State_;
+unisubs.subtitle.Dialog.prototype.handleBackKeyPress_ = function(event) {
+    var s = unisubs.subtitle.Dialog.State_;
     if (this.state_ == s.SYNC)
         this.setState_(s.TRANSCRIBE);
     else if (this.state_ == s.REVIEW)
         this.setState_(s.SYNC);
 };
-mirosubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
+unisubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
     if (event.keyCode == goog.events.KeyCodes.TAB &&
         event.keyEventType == goog.events.EventType.CLICK) {
-        if (event.modifiers == mirosubs.RightPanel.KeySpec.Modifier.SHIFT)
+        if (event.modifiers == unisubs.RightPanel.KeySpec.Modifier.SHIFT)
             this.skipBack_();
         else
             this.togglePause_();
     }
 };
-mirosubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
+unisubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)
         return;
-    if (this.state_ == mirosubs.subtitle.Dialog.State_.REVIEW)
+    if (this.state_ == unisubs.subtitle.Dialog.State_.REVIEW)
         this.saveWork(false);
     else
         this.enterState_(this.nextState_());
 };
 
-mirosubs.subtitle.Dialog.prototype.isWorkSaved = function() {
+unisubs.subtitle.Dialog.prototype.isWorkSaved = function() {
     return this.saved_ || !this.serverModel_.anySubtitlingWorkDone();
 };
 
-mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
+unisubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     if (this.captionSet_.needsSync()) {
         this.saveWorkImpl_(closeAfterSave, false);
     } else {
-        mirosubs.subtitle.CompletedDialog.show(
+        unisubs.subtitle.CompletedDialog.show(
             !!this.subtitles_.IS_COMPLETE,
             goog.bind(this.saveWorkImpl_, this, 
                       closeAfterSave));    
@@ -275,30 +275,38 @@ mirosubs.subtitle.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     
 };
 
-mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
+unisubs.subtitle.Dialog.prototype.onWorkSaved = function(closeAfterSave, isComplete){
+    this.saved_ = true;
+    unisubs.widget.ResumeEditingRecord.clear();
+    if (this.finishFailDialog_) {
+        this.finishFailDialog_.setVisible(false);
+        this.finishFailDialog_ = null;
+    }
+    if (closeAfterSave)
+        this.setVisible(false);
+    else {
+        this.doneButtonEnabled_ = true;
+        this.setFinishedState_();
+    }
+};
+
+unisubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
     this.doneButtonEnabled_ = false;
     this.getRightPanelInternal().showLoading(true);
     this.captionSet_.completed = isComplete;
     var that = this;
     this.serverModel_.finish(
-        function() {
-            that.saved_ = true;
-            if (that.finishFailDialog_) {
-                that.finishFailDialog_.setVisible(false);
-                that.finishFailDialog_ = null;
-            }
-            if (closeAfterSave)
-                that.setVisible(false);
-            else {
-                that.doneButtonEnabled_ = true;
-                that.setFinishedState_();
-            }
+        function(serverMsg){
+            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
+                that.onWorkSaved(closeAfterSave, isComplete);
+            })
+            
         },
         function(opt_status) {
             if (that.finishFailDialog_)
                 that.finishFailDialog_.failedAgain(opt_status);
             else
-                that.finishFailDialog_ = mirosubs.finishfaildialog.Dialog.show(
+                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
                     that.captionSet_, opt_status,
                     goog.bind(that.saveWorkImpl_, that, 
                               closeAfterSave, isComplete));
@@ -309,19 +317,19 @@ mirosubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCo
         });
 };
 
-mirosubs.subtitle.Dialog.prototype.enterState_ = function(state) {
-    if (mirosubs.UserSettings.getBooleanValue(
-        mirosubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
+unisubs.subtitle.Dialog.prototype.enterState_ = function(state) {
+    if (unisubs.UserSettings.getBooleanValue(
+        unisubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
         this.setState_(state);
     else
         this.showHowToForState_(state);
 };
 
-mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
+unisubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
     this.suspendKeyEvents_(true);
     this.getVideoPlayerInternal().pause();
-    var s = mirosubs.subtitle.Dialog.State_;
-    var vc = mirosubs.HowToVideoPanel.VideoChoice;
+    var s = unisubs.subtitle.Dialog.State_;
+    var vc = unisubs.HowToVideoPanel.VideoChoice;
     var videoChoice;
     if (state == s.TRANSCRIBE)
         videoChoice = vc.TRANSCRIBE;
@@ -329,12 +337,12 @@ mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
         videoChoice = vc.SYNC;
     else if (state == s.REVIEW)
         videoChoice = vc.REVIEW;
-    var howToPanel = new mirosubs.HowToVideoPanel(videoChoice);
+    var howToPanel = new unisubs.HowToVideoPanel(videoChoice);
     this.showTemporaryPanel(howToPanel);
     this.displayingHowTo_ = true;
     var that = this;
     this.getHandler().listenOnce(
-        howToPanel, mirosubs.HowToVideoPanel.CONTINUE,
+        howToPanel, unisubs.HowToVideoPanel.CONTINUE,
         function(e) {
             goog.Timer.callOnce(function() {
                 that.displayingHowTo_ = false;
@@ -343,37 +351,37 @@ mirosubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
             });
         });
 };
-mirosubs.subtitle.Dialog.prototype.skipBack_ = function() {
+unisubs.subtitle.Dialog.prototype.skipBack_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
     var now = videoPlayer.getPlayheadTime();
     videoPlayer.setPlayheadTime(Math.max(now - 8, 0));
     videoPlayer.play();
 };
-mirosubs.subtitle.Dialog.prototype.togglePause_ = function() {
+unisubs.subtitle.Dialog.prototype.togglePause_ = function() {
     this.getVideoPlayerInternal().togglePause();
 };
-mirosubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
-    var s = mirosubs.subtitle.Dialog.State_;
+unisubs.subtitle.Dialog.prototype.makeCurrentStateSubtitlePanel_ = function() {
+    var s = unisubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
-        return new mirosubs.subtitle.TranscribePanel(
+        return new unisubs.subtitle.TranscribePanel(
             this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_);
     else if (this.state_ == s.SYNC)
-        return new mirosubs.subtitle.SyncPanel(
+        return new unisubs.subtitle.SyncPanel(
             this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
     else if (this.state_ == s.REVIEW)
-        return new mirosubs.subtitle.ReviewPanel(
+        return new unisubs.subtitle.ReviewPanel(
             this.captionSet_,
             this.getVideoPlayerInternal(),
             this.serverModel_,
             this.captionManager_);
 };
-mirosubs.subtitle.Dialog.prototype.nextState_ = function() {
-    var s = mirosubs.subtitle.Dialog.State_;
+unisubs.subtitle.Dialog.prototype.nextState_ = function() {
+    var s = unisubs.subtitle.Dialog.State_;
     if (this.state_ == s.TRANSCRIBE)
         return s.SYNC;
     else if (this.state_ == s.SYNC)
@@ -381,16 +389,16 @@ mirosubs.subtitle.Dialog.prototype.nextState_ = function() {
     else if (this.state_ == s.REVIEW)
         return s.FINISHED;
 };
-mirosubs.subtitle.Dialog.prototype.showLoginNag_ = function() {
+unisubs.subtitle.Dialog.prototype.showLoginNag_ = function() {
     // not doing anything here right now.
 };
 /**
  * Did we ever pass into finished state?
  */
-mirosubs.subtitle.Dialog.prototype.isSaved = function() {
+unisubs.subtitle.Dialog.prototype.isSaved = function() {
     return this.saved_;
 };
-mirosubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
+unisubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
     if (this.currentSubtitlePanel_) {
         this.currentSubtitlePanel_.dispose();
         this.currentSubtitlePanel_ = null;
@@ -401,37 +409,37 @@ mirosubs.subtitle.Dialog.prototype.disposeCurrentPanels_ = function() {
         this.timelineSubtitleSet_ = null;
     }
 };
-mirosubs.subtitle.Dialog.prototype.disposeInternal = function() {
-    mirosubs.subtitle.Dialog.superClass_.disposeInternal.call(this);
+unisubs.subtitle.Dialog.prototype.disposeInternal = function() {
+    unisubs.subtitle.Dialog.superClass_.disposeInternal.call(this);
     this.disposeCurrentPanels_();
     this.captionManager_.dispose();
     this.serverModel_.dispose();
     this.rightPanelListener_.dispose();
     this.captionSet_.dispose();
 };
-mirosubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
+unisubs.subtitle.Dialog.prototype.addTranslationsAndClose = function() {
     // Adam hypothesizes that this will get called 0 times except in testing
-    mirosubs.Tracker.getInstance().trackPageview('Adding_translations_on_close');
-    var oldReturnURL = mirosubs.returnURL;
-    mirosubs.returnURL = null;
+    unisubs.Tracker.getInstance().trackPageview('Adding_translations_on_close');
+    var oldReturnURL = unisubs.returnURL;
+    unisubs.returnURL = null;
     this.setVisible(false);
-    mirosubs.returnURL = oldReturnURL;
+    unisubs.returnURL = oldReturnURL;
     var that = this;
     if (this.opener_) {
-        mirosubs.widget.ChooseLanguageDialog.show(
+        unisubs.widget.ChooseLanguageDialog.show(
             true,
             function(subLanguage, originalLanguage, forked) {
                 that.opener_.openDialog(
                     null, subLanguage, null, 
-                    mirosubs.isForkedLanguage(subLanguage));
+                    unisubs.isForkedLanguage(subLanguage));
             });
     }
 };
 
-mirosubs.subtitle.Dialog.prototype.getServerModel = function(){
+unisubs.subtitle.Dialog.prototype.getServerModel = function(){
     return this.serverModel_;
 }
 
-mirosubs.subtitle.Dialog.prototype.makeJsonSubs =  function (){
+unisubs.subtitle.Dialog.prototype.makeJsonSubs =  function (){
     return this.captionSet_.makeJsonSubs();
 }

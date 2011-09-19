@@ -21,14 +21,14 @@
  *     for use with cleanslatecss.
  */
 
-goog.provide('mirosubs.style');
+goog.provide('unisubs.style');
 
-mirosubs.style.makeCssPropertyRegex_ = function(property) {
+unisubs.style.makeCssPropertyRegex_ = function(property) {
     return new RegExp('\\s*' + property + '\\s*:\\s*[^;]*;?', 'i');
 };
 
-mirosubs.style.findCssProperty_ = function(css, property) {
-    return css.match(mirosubs.style.makeCssPropertyRegex_(property));
+unisubs.style.findCssProperty_ = function(css, property) {
+    return css.match(unisubs.style.makeCssPropertyRegex_(property));
 };
 
 /**
@@ -37,13 +37,13 @@ mirosubs.style.findCssProperty_ = function(css, property) {
  * @param {string} property
  * @param {?string} value or null (to unset)
  */
-mirosubs.style.setProperty = function(elem, property, value) {
-    elem.style.cssText = mirosubs.style.setPropertyInString(
+unisubs.style.setProperty = function(elem, property, value) {
+    elem.style.cssText = unisubs.style.setPropertyInString(
         elem.style.cssText, property, value);
 };
 
-mirosubs.style.setPropertyInString = function(cssString, property, value) {
-    var oldDeclaration = mirosubs.style.findCssProperty_(
+unisubs.style.setPropertyInString = function(cssString, property, value) {
+    var oldDeclaration = unisubs.style.findCssProperty_(
         cssString, property);
     var newDeclaration = 
         goog.isNull(value) ? 
@@ -71,21 +71,21 @@ mirosubs.style.setPropertyInString = function(cssString, property, value) {
  * @param {string|number=} opt_h Height of the element. Required if w is not a
  *     size object.
  */
-mirosubs.style.setSize = function(element, w, opt_h) {
-    var wh = mirosubs.style.processWidthHeightArgs_(w, opt_h);
-    mirosubs.style.setWidth(element, /** @type {string|number} */ (wh[0]));
-    mirosubs.style.setHeight(element, /** @type {string|number} */ (wh[1]));
+unisubs.style.setSize = function(element, w, opt_h) {
+    var wh = unisubs.style.processWidthHeightArgs_(w, opt_h);
+    unisubs.style.setWidth(element, /** @type {string|number} */ (wh[0]));
+    unisubs.style.setHeight(element, /** @type {string|number} */ (wh[1]));
 };
 
-mirosubs.style.setSizeInString = function(cssString, w, opt_h) {
-    var wh = mirosubs.style.processWidthHeightArgs_(w, opt_h);
-    cssString = mirosubs.style.setPropertyInString(
-        cssString, 'width', mirosubs.style.getPixelStyleValue_(wh[0]));
-    return mirosubs.style.setPropertyInString(
-        cssString, 'height', mirosubs.style.getPixelStyleValue_(wh[1]));
+unisubs.style.setSizeInString = function(cssString, w, opt_h) {
+    var wh = unisubs.style.processWidthHeightArgs_(w, opt_h);
+    cssString = unisubs.style.setPropertyInString(
+        cssString, 'width', unisubs.style.getPixelStyleValue_(wh[0]));
+    return unisubs.style.setPropertyInString(
+        cssString, 'height', unisubs.style.getPixelStyleValue_(wh[1]));
 };
 
-mirosubs.style.processWidthHeightArgs_ = function(w, opt_h) {
+unisubs.style.processWidthHeightArgs_ = function(w, opt_h) {
     var h;
     if (w instanceof goog.math.Size) {
         h = w.height;
@@ -99,24 +99,24 @@ mirosubs.style.processWidthHeightArgs_ = function(w, opt_h) {
     return [w, h];
 };
 
-mirosubs.style.getPixelStyleValue_ = function(value, round) {
+unisubs.style.getPixelStyleValue_ = function(value, round) {
     return goog.isNumber(value) ? 
         ((round ? Math.round(value) : value) + 'px') : value;
 };
 
-mirosubs.style.setPixelStyleProperty_ = function(property, round, element, value) {
-    mirosubs.style.setProperty(
+unisubs.style.setPixelStyleProperty_ = function(property, round, element, value) {
+    unisubs.style.setProperty(
         element, property, 
-        /** @type {string} */(mirosubs.style.getPixelStyleValue_(value)));
+        /** @type {string} */(unisubs.style.getPixelStyleValue_(value)));
 };
 
-mirosubs.style.setHeight = goog.partial(
-    mirosubs.style.setPixelStyleProperty_, 'height', true);
+unisubs.style.setHeight = goog.partial(
+    unisubs.style.setPixelStyleProperty_, 'height', true);
 
-mirosubs.style.setWidth = goog.partial(
-    mirosubs.style.setPixelStyleProperty_, 'width', true);
+unisubs.style.setWidth = goog.partial(
+    unisubs.style.setPixelStyleProperty_, 'width', true);
 
-mirosubs.style.setPosition = function(el, opt_arg1, opt_arg2) {
+unisubs.style.setPosition = function(el, opt_arg1, opt_arg2) {
     var x, y;
     var buggyGeckoSubPixelPos = goog.userAgent.GECKO &&
         (goog.userAgent.MAC || goog.userAgent.X11) &&
@@ -132,20 +132,20 @@ mirosubs.style.setPosition = function(el, opt_arg1, opt_arg2) {
     }
 
     if (goog.isDefAndNotNull(x))
-        mirosubs.style.setPixelStyleProperty_(
+        unisubs.style.setPixelStyleProperty_(
             'left', buggyGeckoSubPixelPos, el,
             /** @type {number|string} */ (x));
     if (goog.isDefAndNotNull(y))
-        mirosubs.style.setPixelStyleProperty_(
+        unisubs.style.setPixelStyleProperty_(
             'top', buggyGeckoSubPixelPos, el,
             /** @type {number|string} */ (y));
 };
 
-mirosubs.style.showElement = function(el, display) {
-    mirosubs.style.setProperty(el, 'display', display ? null : 'none');
+unisubs.style.showElement = function(el, display) {
+    unisubs.style.setProperty(el, 'display', display ? null : 'none');
 };
 
-mirosubs.style.setVisibility = function(el, visible) {
-    mirosubs.style.setProperty(
+unisubs.style.setVisibility = function(el, visible) {
+    unisubs.style.setProperty(
         el, 'visibility', visible ? 'visible' : 'hidden');
 };

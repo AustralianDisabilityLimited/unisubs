@@ -1,7 +1,6 @@
 
 .start_team {
-  float: right !important;
-  margin: 16px 0 0 !important;
+  margin: 0 0 30px !important;
 }
 
 .team_meta {
@@ -186,8 +185,22 @@ a.add_subtitles_bt{
     font-weight: bold;
 }
 
+.video-info{
+   margin-left:80px;
+}
+.video-moderation-item{
+   margin-bottom:40px;
+}
 p.notice {
   color: #899;
-  margin-top: 2em;
+  margin-bottom: 2em;
   font-size: .95em;
+}
+
+.team-detail-block p {
+  margin-bottom: 10px;
+}
+
+#teams .big_list li span.count {
+  display: block;
 }

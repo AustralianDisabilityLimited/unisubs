@@ -2,7 +2,7 @@
     <head> 
       <script type="text/javascript">
         function widgetize() {
-            var url = '{{MEDIA_URL}}js/mirosubs-widgetizer.js';
+            var url = '{{STATIC_URL_BASE}}js/unisubs-widgetizer.js';
             var ws = document.createElement('script'); 
             ws.type = 'text/javascript'; 
             ws.async = true;
@@ -11,7 +11,7 @@
             s.parentNode.insertBefore(ws, s);
         }
       </script>
-      <script type="text/javascript" src="{{MEDIA_URL}}js/widgetizer/widgetizerprimer.js"></script>
+      <script type="text/javascript" src="{{STATIC_URL}}js/widgetizer/widgetizerprimer.js"></script>
     </head> 
     <body>
       <object id="idOVideo" name="idOVideo" width="800" height="480" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> 

@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 {% block body_attrs %}id="video"{% endblock %}
 
-{% load widget i18n media_compressor %}
+{% load widget i18n media_compressor moderation doorman %}
+
+
 
 {% block css %}
   {{ block.super }}
-  <link href="{{ MEDIA_URL }}css/mirosubs-widget.css" media="all" type="text/css" rel="stylesheet" />
+  {% include_bundle "widget-css"%}
   <style>
-    div.mirosubs-widget {
+    div.unisubs-widget {
         position: relative;    
     }
-    .mirosubs-videoDiv {
+    .unisubs-videoDiv {
         text-align: center;
     }
-    .mirosubs-videoDiv video {
+    .unisubs-videoDiv video {
         width: 480px;
     }
     span.data {
@@ -46,12 +48,12 @@
             }
             $('#edit_0').click(function() {
                 widget_widget_div_0.selectMenuItem(
-                    mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                    unisubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
             $('#edit_1').click(function() {
                 widget_widget_div_1.selectMenuItem(
-                    mirosubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
+                    unisubs.widget.DropDown.Selection.IMPROVE_SUBTITLES);
                 return false;
             });
             $('.time_link_0').click(function() {
@@ -66,7 +68,10 @@
             });
         });
     </script>
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "unisubs-onsite-compiled" 0 %}
+    {% if user_can_moderate %}
+       {% include_bundle "js-moderation-dashboard" 0 %}
+    {% endif %}
 {% endblock %}
 
 {% block main_content %}
@@ -110,7 +115,7 @@
             {% blocktrans with second_version.version_no as version_no and second_version.user as user %}
             Revision #{{ version_no }} by {{ user }}
             {% endblocktrans %}
-            <span class="small">{{ second_version.datetime_started|date:"H:i, j F Y" }}</span>
+            <span class="small">{{ second_version.datetime_started|timesince }} {% trans "ago" %}</span>
         </h3>
       
         <div class="clear">&nbsp;</div>
@@ -127,6 +132,7 @@
                     {% trans 'Roll back to version' %} (#{{ second_version.version_no }})
                 </a>
             {% endif %}
+
         </div>
         
         <table cellpadding="0" cellspacing="0">
@@ -164,7 +170,7 @@
             {% blocktrans with first_version.version_no as version_no and first_version.user as user %}
             Revision #{{ version_no }} by {{ user }}
             {% endblocktrans %}            
-             <span class="small">{{ first_version.datetime_started|date:"H:i, j F Y" }} </span>
+             <span class="small">{{ first_version.datetime_started|timesince }} {% trans "ago" %}</span>
         </h3>
    
         
@@ -183,6 +189,9 @@
                     {% trans 'Roll back to version' %} (#{{ first_version.version_no }})
                 </a>
             {% endif %}
+                {% switch_feature MODERATION %}
+                {% render_approval_toolbar user first_version %}
+                {% endswitch_feature %}
         </div>
         
         <table cellpadding="0" cellspacing="0">
@@ -215,4 +224,13 @@
           {% endfor %}
         </table>
     </div>    
+    {% if user_can_moderate %}
+    <script type="text/javascript">
+       $(window).load(function(){
+          window.UNISUBS_MOD_REPLACE_HTML_BUTTON = true;
+       
+          {% include 'moderation/moderation-buttons.js' %}
+      });
+    </script> 
+    {% endif %}
 {% endblock %}

@@ -35,20 +35,20 @@ function addNewCaption(startTime, endTime) {
 /* the tests */
 
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
-    mirosubs.SubTracker.getInstance().start(false);
+    unisubs.REPORT_ANALYTICS = false;
+    unisubs.SubTracker.getInstance().start(false);
 }
 
 function setUpForInitialCaptions(captions) {
-    var uw = new mirosubs.UnitOfWork();
+    var uw = new unisubs.UnitOfWork();
     MS_editableCaptionSet =
-	     new mirosubs.subtitle.EditableCaptionSet(captions, uw);
+	     new unisubs.subtitle.EditableCaptionSet(captions, uw);
     MS_dispatchedCaptions = [];
-    MS_videoPlayer = new mirosubs.testing.StubVideoPlayer();
-    MS_captionManager = new mirosubs.CaptionManager(
+    MS_videoPlayer = new unisubs.testing.StubVideoPlayer();
+    MS_captionManager = new unisubs.CaptionManager(
 	MS_videoPlayer, MS_editableCaptionSet);
     MS_captionManager.addEventListener(
-	mirosubs.CaptionManager.CAPTION, MS_captionListener);
+	unisubs.CaptionManager.CAPTION, MS_captionListener);
 }
 
 function tearDown() {

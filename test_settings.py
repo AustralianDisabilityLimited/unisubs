@@ -1,3 +1,4 @@
+
 from settings import *
 #from dev_settings import *
 
@@ -6,9 +7,10 @@ ROOT_URLCONF = 'urls'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': rel('mirosubs.sqlite3'), 
+        'NAME': rel('unisubs.sqlite3'), 
     }
 }
+
 
 HAYSTACK_SOLR_URL = 'http://localhost:38983/solr/testing'
 
@@ -16,11 +18,12 @@ CELERY_ALWAYS_EAGER = True
 
 INSTALLED_APPS += ('django_nose', )
 INSTALLED_APPS = list(INSTALLED_APPS)
-INSTALLED_APPS.remove('mirosubs')
+INSTALLED_APPS.remove('unisubs')
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+
 SITE_ID = 4
-SITE_NAME = 'mirosubs-dev'
+SITE_NAME = 'unisubs-dev'
 
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
@@ -34,9 +37,10 @@ COMPRESS_URL = "/"
 
 RECAPTCHA_SECRET = ""
 
-MEDIA_URL = ""
+STATIC_URL = ""
 COMPRESS_MEDIA = not DEBUG
-MEDIA_URL_BASE = MEDIA_URL
+STATIC_URL_BASE = STATIC_URL
 if COMPRESS_MEDIA:
-    MEDIA_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
+    STATIC_URL += "%s/%s/" % (COMPRESS_OUTPUT_DIRNAME, LAST_COMMIT_GUID.split("/")[1])
+
 

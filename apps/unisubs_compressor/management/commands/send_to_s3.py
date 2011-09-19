@@ -2,7 +2,7 @@
 Sync Media to S3
 ================
 
-Django command that scans all files in your settings.MEDIA_ROOT + settings.COMPRESS_OUTPUT_DIRNAME + [git commit]  folder and uploads them to S3 with the same directory structure.
+Django command that scans all files in your settings.STATIC_ROOT + settings.COMPRESS_OUTPUT_DIRNAME + [git commit]  folder and uploads them to S3 with the same directory structure.
 
 This command also does the following 
 * gzip compress any CSS and Javascript files it finds and adds the appropriate
@@ -18,7 +18,7 @@ AWS_SECRET_ACCESS_KEY = ''
 AWS_BUCKET_NAME = ''
 
 For example it wil sync anything in
-MEDIA_ROOT/static-cache/0234dsd/*
+STATIC_ROOT/static-cache/0234dsd/*
 
 
 """
@@ -44,6 +44,28 @@ from apps.unisubs_compressor.management.commands.compile_media import get_cache_
 from deploy.git_helpers import get_current_commit_hash
 from compile_media import NO_UNIQUE_URL
 
+def add_far_future_expires(headers, verbose=False):
+    # HTTP/1.0
+    headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
+            time.mktime((datetime.datetime.now() +
+                         datetime.timedelta(days=365*2)).timetuple())))
+    # HTTP/1.1
+    headers['Cache-Control'] = 'max-age %d' % (3600 * 24 * 365 * 2)
+    if verbose:
+        print "\texpires: %s" % (headers['Expires'])
+        print "\tcache-control: %s" % (headers['Cache-Control'])
+
+def add_no_cache(headers, verbose=False):
+    headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+    headers['Pragma'] = 'no-cache'
+    headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
+            time.mktime((datetime.datetime.now() +
+                         datetime.timedelta(days=-30*365)).timetuple())))
+    if verbose:
+        print "\texpires: %s" % (headers['Expires'])
+        print "\tcache-control: %s" % (headers['Cache-Control'])
+        print "\tPragma: %s" % (headers['Pragma'])
+
 class Command(BaseCommand):
 
     # Extra variables to avoid passing these around
@@ -53,7 +75,6 @@ class Command(BaseCommand):
     DIRECTORY = ''
     FILTER_LIST = [re.compile(x) for x in ['\.DS_Store', "^videos.+","^js\/closure-lib" , "^teams", "^test", "^videos"]]
 
-    NO_FAR_FUTURE = NO_UNIQUE_URL
     GZIP_CONTENT_TYPES = (
         'text/css',
         'application/javascript',
@@ -78,7 +99,7 @@ class Command(BaseCommand):
             help="Skip the file mtime check to force upload of all files.")
     )
 
-    help = 'Syncs the complete MEDIA_ROOT structure and files to S3 into the given bucket name.'
+    help = 'Syncs the complete STATIC_ROOT structure and files to S3 into the given bucket name.'
     args = 'bucket_name'
 
     can_import_settings = True
@@ -87,11 +108,11 @@ class Command(BaseCommand):
         from django.conf import settings
 
 
-        if not hasattr(settings, 'MEDIA_ROOT'):
-            raise CommandError('MEDIA_ROOT must be set in your settings.')
+        if not hasattr(settings, 'STATIC_ROOT'):
+            raise CommandError('STATIC_ROOT must be set in your settings.')
         else:
-            if not settings.MEDIA_ROOT:
-                raise CommandError('MEDIA_ROOT must be set in your settings.')
+            if not settings.STATIC_ROOT:
+                raise CommandError('STATIC_ROOT must be set in your settings.')
         self.DIRECTORY = get_cache_dir()
         # Check for AWS keys in settings
         if not hasattr(settings, 'AWS_ACCESS_KEY_ID') or \
@@ -117,7 +138,7 @@ class Command(BaseCommand):
         self.do_expires = options.get('expires')
         self.do_force = options.get('force')
 
-        # Now call the syncing method to walk the MEDIA_ROOT directory and
+        # Now call the syncing method to walk the STATIC_ROOT directory and
         # upload all files found.
         self.sync_s3()
 
@@ -129,24 +150,40 @@ class Command(BaseCommand):
         """
         Walks the media directory and syncs files to S3
         """
-        from django.conf import settings
         bucket, key = self.open_s3()
         os.path.walk(self.DIRECTORY, self.upload_s3,
             (bucket, key, self.AWS_BUCKET_NAME, self.DIRECTORY))
          
         old_prefix = self.prefix
         self.prefix = ""
+
+        self.sync_no_unique_url_items(bucket, key)
+
+        self.prefix = old_prefix
+
+    def sync_no_unique_url_items(self, bucket, key):
+        from django.conf import settings
         outside_dir = os.path.dirname(self.DIRECTORY)
 
+        def upload_no_unique_url_item(file_name):
+            fname = os.path.basename(file_name)
+            base_dir = os.path.join(settings.STATIC_ROOT, os.path.dirname(file_name))
+            full_path = os.path.join(settings.STATIC_ROOT, file_name)
+            self.upload_one(
+                bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, file_name,
+                add_no_cache if item['no-cache'] else None)
+
         # these are not to be prefixed by commit, e.g. outside systems link to them
-        # they need a stable url with regular expire headers
-        for item in self.NO_FAR_FUTURE:
-            fname = os.path.basename(item)
-            base_dir =os.path.join(settings.MEDIA_ROOT, os.path.dirname( item))
-            full_path = os.path.join(settings.MEDIA_ROOT, item)
-            self.upload_one(bucket, key, self.AWS_BUCKET_NAME, outside_dir, full_path, item, do_expires=False)
-        self.prefix = old_prefix    
-            
+        no_unique_url_items = NO_UNIQUE_URL
+        # embed.js is a special case :(
+        no_unique_url_items += ({ "name": "embed.js", "no-cache": True },)
+        for item in no_unique_url_items:
+            file_name = item['name']
+            upload_no_unique_url_item(file_name)
+            # for backwards compatibility with old mirosubs names
+            mirosubs_filename = re.sub(r'unisubs\-', 'mirosubs-', file_name)
+            if file_name != mirosubs_filename:
+                upload_no_unique_url_item(mirosubs_filename)
 
     def compress_string(self, s):
         """Gzip a given string."""
@@ -177,16 +214,12 @@ class Command(BaseCommand):
         if root_dir == dirname:
             return # We're in the root media folder
 
-        # Later we assume the MEDIA_ROOT ends with a trailing slash
+        # Later we assume the STATIC_ROOT ends with a trailing slash
         # TODO: Check if we should check os.path.sep for Windows
         if not root_dir.endswith('/'):
             root_dir = root_dir + '/'
 
         for file in names:
-            
-
-            
-
             filename = os.path.join(dirname, file)
             for p in self.FILTER_LIST:
                 if p.match(file) or p.match(filename):
@@ -201,26 +234,14 @@ class Command(BaseCommand):
             if self.prefix:
                 file_key = '%s/%s' % (self.prefix, file_key)
                            
-                           
-            # Check if file on S3 is older than local file, if so, upload
-            if not self.do_force:
-                s3_key = bucket.get_key(file_key)
-                if s3_key:
-                    s3_datetime = datetime.datetime(*time.strptime(
-                        s3_key.last_modified, '%a, %d %b %Y %H:%M:%S %Z')[0:6])
-                    local_datetime = datetime.datetime.utcfromtimestamp(
-                        os.stat(filename).st_mtime)
-                    if local_datetime < s3_datetime:
-                        self.skip_count += 1
-                        if self.verbosity > 1:
-                            print "File %s hasn't been modified since last " \
-                                "being uploaded" % (file_key)
-                        continue
-            self.upload_one(bucket, key, bucket_name, root_dir, filename, file_key)
-                    
+            cache_strategy = None
+            if self.do_expires:
+                cache_strategy = add_far_future_expires
+            self.upload_one(bucket, key, bucket_name, root_dir, filename, file_key, cache_strategy)                    
 
-                    
-    def upload_one(self, bucket, key, bucket_name, root_dir , filename, file_key, do_expires=True):
+
+    def upload_one(self, bucket, key, bucket_name, root_dir, filename, 
+                   file_key, cache_strategy=None):
         if self.verbosity > 0:
             print "Uploading %s..." % (file_key)
         headers = {}
@@ -239,23 +260,14 @@ class Command(BaseCommand):
                 if self.verbosity > 1:
                     print "\tgzipped: %dk to %dk" % \
                         (file_size/1024, len(filedata)/1024)
-        if self.do_expires and do_expires :
-            # HTTP/1.0
-            headers['Expires'] = '%s GMT' % (email.Utils.formatdate(
-                time.mktime((datetime.datetime.now() +
-                datetime.timedelta(days=365*2)).timetuple())))
-            # HTTP/1.1
-            headers['Cache-Control'] = 'max-age %d' % (3600 * 24 * 365 * 2)
-            if self.verbosity > 1:
-                print "\texpires: %s" % (headers['Expires'])
-                print "\tcache-control: %s" % (headers['Cache-Control'])
-
+        if cache_strategy is not None:
+            cache_strategy(headers, self.verbosity > 1)
 
         try:
             key.name = file_key
             key.set_contents_from_string(filedata, headers, replace=True)
             key.make_public()
-        except boto.s3.connection.S3CreateError, e:
+        except boto.s3.connection.BotoClientError, e:
             print "Failed: %s" % e
         except Exception, e:
             print e

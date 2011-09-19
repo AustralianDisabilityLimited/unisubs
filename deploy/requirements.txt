@@ -1,4 +1,4 @@
-Django==1.2.1
+Django==1.3
 Fabric==0.9.1
 PIL==1.1.7
 PyRSS2Gen==1.0.0
@@ -38,3 +38,4 @@ django-extensions==0.4.1
 django-debug-toolbar==0.8.3
 # This can be commented out if you're using sqlite
 MySQL_python>=1.2.2
+Sphinx==1.0.7

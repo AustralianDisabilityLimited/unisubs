@@ -16,29 +16,29 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.EditRightPanel');
+goog.provide('unisubs.subtitle.EditRightPanel');
 /**
 * @constructor
-* @extends mirosubs.RightPanel
+* @extends unisubs.RightPanel
 */
-mirosubs.subtitle.EditRightPanel = function(serverModel,
+unisubs.subtitle.EditRightPanel = function(serverModel,
                                             helpContents,
                                             extraHelp,
                                             legendKeySpecs,
                                             showRestart,
                                             doneStrongText,
                                             doneText) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents,
+    unisubs.RightPanel.call(this, serverModel, helpContents,
                              extraHelp, legendKeySpecs,
                              showRestart, doneStrongText,
                              doneText);
 };
-goog.inherits(mirosubs.subtitle.EditRightPanel, mirosubs.RightPanel);
-mirosubs.subtitle.EditRightPanel.prototype.appendHelpContentsInternal = function($d, el) {
+goog.inherits(unisubs.subtitle.EditRightPanel, unisubs.RightPanel);
+unisubs.subtitle.EditRightPanel.prototype.appendHelpContentsInternal = function($d, el) {
     var backLink = $d('a', {'href': '#'}, 'click here');
     this.getHandler().listenOnce(
         backLink, 'click', this.backClickedInternal);
-    var helpDiv = $d('div', 'mirosubs-help-heading',
+    var helpDiv = $d('div', 'unisubs-help-heading',
                      $d('h2', null, "EDIT: Edit existing subtitles"));
     el.appendChild(helpDiv);
     el.appendChild($d('p', null,

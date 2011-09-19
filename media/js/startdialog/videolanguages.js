@@ -16,24 +16,24 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.VideoLanguages');
+goog.provide('unisubs.startdialog.VideoLanguages');
 
 /**
  * @constructor
  */
-mirosubs.startdialog.VideoLanguages = function(jsonVideoLanguages) {
+unisubs.startdialog.VideoLanguages = function(jsonVideoLanguages) {
     var videoLanguages = goog.array.map(
         jsonVideoLanguages,
         function(vljson) {
-            return new mirosubs.startdialog.VideoLanguage(vljson);
+            return new unisubs.startdialog.VideoLanguage(vljson);
         });
     /**
-     * @type {Array.<mirosubs.startdialog.VideoLanguage>}
+     * @type {Array.<unisubs.startdialog.VideoLanguage>}
      */
     this.videoLanguages_ = goog.array.filter(
         videoLanguages,
         function(l) {
-            return !!mirosubs.languageNameForCode(l.LANGUAGE) ||
+            return !!unisubs.languageNameForCode(l.LANGUAGE) ||
                 l.SUBTITLE_COUNT > 0;
         });
     goog.array.forEach(
@@ -44,15 +44,15 @@ mirosubs.startdialog.VideoLanguages = function(jsonVideoLanguages) {
     this.pkMap_ = null;
 };
 
-mirosubs.startdialog.VideoLanguages.prototype.forEach = function(f, opt_obj) {
+unisubs.startdialog.VideoLanguages.prototype.forEach = function(f, opt_obj) {
     goog.array.forEach(this.videoLanguages_, f, opt_obj);
 };
 
 /**
  * @param {string} language Language code
- * @returns {Array.<mirosubs.startdialog.VideoLanguage>} List of video langauges for language.
+ * @returns {Array.<unisubs.startdialog.VideoLanguage>} List of video langauges for language.
  */
-mirosubs.startdialog.VideoLanguages.prototype.findForLanguage = function(language) {
+unisubs.startdialog.VideoLanguages.prototype.findForLanguage = function(language) {
     if (!this.languageMap_) {
         this.languageMap_ = {};
         var vl;
@@ -70,9 +70,9 @@ mirosubs.startdialog.VideoLanguages.prototype.findForLanguage = function(languag
 /**
  * @param {string} to The "to" language code
  * @param {string} from The "from" language code
- * @returns {?mirosubs.startdialog.VideoLanguage} Only not null if it finds one.
+ * @returns {?unisubs.startdialog.VideoLanguage} Only not null if it finds one.
  */
-mirosubs.startdialog.VideoLanguages.prototype.findForLanguagePair = function(to, from) {
+unisubs.startdialog.VideoLanguages.prototype.findForLanguagePair = function(to, from) {
     var langs = this.findForLanguage(to);
     return goog.array.find(
         langs, 
@@ -82,7 +82,7 @@ mirosubs.startdialog.VideoLanguages.prototype.findForLanguagePair = function(to,
         });
 };
 
-mirosubs.startdialog.VideoLanguages.prototype.findForPK = function(pk) {
+unisubs.startdialog.VideoLanguages.prototype.findForPK = function(pk) {
     if (!this.pkMap_) {
         this.pkMap_ = {};
         goog.array.forEach(

@@ -25,6 +25,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
+from utils.jsonresponse import _json_response
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect, render_to_response
@@ -49,6 +50,7 @@ from teams.rpc import TeamsApi
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 from haystack.query import SearchQuerySet
+
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -94,7 +96,7 @@ def index(request, my_teams=False):
     if ordering in order_fields and order_type in ['asc', 'desc']:
         qs = qs.order_by(('-' if order_type == 'desc' else '')+order_fields[ordering])
     
-    highlighted_ids = list(Team.objects.filter(highlight=True).values_list('id', flat=True))
+    highlighted_ids = list(Team.objects.for_user(request.user).filter(highlight=True).values_list('id', flat=True))
     random.shuffle(highlighted_ids)
     highlighted_qs = Team.objects.filter(pk__in=highlighted_ids[:HIGHTLIGHTED_TEAMS_ON_PAGE]) \
         .annotate(_member_count=Count('users__pk'))
@@ -269,13 +271,13 @@ def create(request):
         raise Http404 
     
     if request.method == 'POST':
-        form = CreateTeamForm(request.POST, request.FILES)
+        form = CreateTeamForm(request.user, request.POST, request.FILES)
         if form.is_valid():
             team = form.save(user)
             messages.success(request, _('Your team has been created. Review or edit its information below.'))
             return redirect(team.get_edit_url())
     else:
-        form = CreateTeamForm()
+        form = CreateTeamForm(request.user)
     return {
         'form': form
     }
@@ -315,7 +317,7 @@ def edit(request, slug):
 @login_required
 def edit_logo(request, slug):
     team = Team.get(slug, request.user)
-    
+
     if not team.is_member(request.user):
         raise Http404
     
@@ -350,7 +352,7 @@ def add_video(request, slug):
         'title': request.GET.get('title', '')
     }
     
-    form = AddTeamVideoForm(team, request.POST or None, request.FILES or None, initial=initial)
+    form = AddTeamVideoForm(team, request.user, request.POST or None, request.FILES or None, initial=initial)
     
     if form.is_valid():
         obj =  form.save(False)
@@ -381,6 +383,7 @@ def edit_videos(request, slug):
                        template_object_name='videos',
                        extra_context=extra_context)
 
+
 @login_required
 @render_to('teams/team_video.html')
 def team_video(request, team_video_pk):
@@ -389,7 +392,9 @@ def team_video(request, team_video_pk):
     if not team_video.can_edit(request.user):
         raise Http404
     
-    form = EditTeamVideoForm(request.POST or None, request.FILES or None, instance=team_video)
+    form = EditTeamVideoForm(request.POST or None, request.FILES or None,
+                             instance=team_video,
+                             user=request.user)
 
     if form.is_valid():
         form.save()
@@ -451,38 +456,6 @@ def remove_member(request, slug, user_pk):
             'error': ugettext('You can\'t remove user')
         }        
 
-@login_required
-def demote_member(request, slug, user_pk):
-    team = Team.get(slug, request.user)
-
-    if not team.is_member(request.user):
-        raise Http404
-
-    if team.is_manager(request.user):
-        user = get_object_or_404(User, pk=user_pk)
-        if not user == request.user:
-            TeamMember.objects.filter(team=team, user=user).update(is_manager=False)
-        else:
-            messages.error(request, _('You can\'t demote to member yorself'))
-    else:
-        messages.error(request, _('You can\'t demote to member'))          
-    return redirect('teams:edit_members', team.slug)
-
-@login_required
-def promote_member(request, slug, user_pk):
-    team = Team.get(slug, request.user)
-
-    if not team.is_member(request.user):
-        raise Http404
-
-    if team.is_manager(request.user):
-        user = get_object_or_404(User, pk=user_pk)
-        if not user == request.user:
-            TeamMember.objects.filter(team=team, user=user).update(is_manager=True)
-    else:
-        messages.error(request, _('You can\'t promote to manager'))
-    return redirect('teams:edit_members', team.slug)
-
 @login_required        
 def edit_members(request, slug):
     team = Team.get(slug, request.user)
@@ -494,16 +467,18 @@ def edit_members(request, slug):
     
     ordering = request.GET.get('o')
     order_type = request.GET.get('ot')
-    
+
     if ordering == 'username' and order_type in ['asc', 'desc']:
         pr = '-' if order_type == 'desc' else ''
         qs = qs.order_by(pr+'user__first_name', pr+'user__last_name', pr+'user__username')
     elif ordering == 'role' and order_type in ['asc', 'desc']:
-        qs = qs.order_by(('-' if order_type == 'desc' else '')+'is_manager')
+        qs = qs.order_by(('-' if order_type == 'desc' else '')+'role')
+    
     extra_context = {
         'team': team,
         'ordering': ordering,
-        'order_type': order_type
+        'order_type': order_type,
+        'role_choices' : TeamMember.ROLES,
     }
 
     return object_list(request, queryset=qs,
@@ -625,12 +600,36 @@ def highlight(request, slug, highlight=True):
 @login_required
 def join_team(request, slug):
     team = get_object_or_404(Team, slug=slug)
-    response = TeamsApi.join(team.pk, request.user)
+    user = request.user
     
-    if response.get('error'):
-        messages.error(request, response.get('error'))
-        
-    if response.get('msg'):
-        messages.success(request, response.get('msg'))
+    try:
+        TeamMember.objects.get(team=team, user=user)
+        messages.error(request, _(u'You are already a member of this team.'))
+    except TeamMember.DoesNotExist:
+        if not team.is_open():
+            messages.error(request, _(u'This team is not open.'))
+        else:
+            TeamMember(team=team, user=user).save()
+            messages.success(request, _(u'You are now a member of this team.'))
     
     return redirect(team)
+
+@login_required
+def leave_team(request, slug):
+    team = get_object_or_404(Team, slug=slug)
+    user = request.user
+    
+    try:
+        tm = TeamMember.objects.get(team=team, user=user)
+        
+        if not team.members.exclude(pk=tm.pk).exists():
+            messages.error(request, _(u'You are last member of this team.'))
+        elif not team.members.filter(role=TeamMember.ROLE_MANAGER).exclude(pk=tm.pk).exists():
+            messages.error(request, _(u'You are last manager of this team.'))
+        else:
+            tm.delete()
+            messages.success(request, _(u'You have left this team.'))
+    except TeamMember.DoesNotExist:
+        messages.error(request, _(u'You are not member of this team.'))
+    
+    return redirect(request.META.get('HTTP_REFERER') or team)

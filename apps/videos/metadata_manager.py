@@ -19,6 +19,7 @@
 from teams.models import TeamVideo, TeamVideoLanguage
 from datetime import datetime
 
+from apps.teams.moderation import user_can_moderate, APPROVED
 def update_metadata(video_pk):
     from videos.models import Video
     video = Video.objects.get(pk=video_pk)
@@ -64,6 +65,7 @@ def _update_changes_on_version(version, last_version):
         version.time_change = 0 if old_subs_length == 0 else 1
         version.text_change = version.time_change
         return
+
     _update_changes_on_nonzero_version(version, last_version)
 
 def _update_changes_on_nonzero_version(version, last_version):
@@ -90,6 +92,8 @@ def _update_changes_on_nonzero_version(version, last_version):
     subs_length = len(subtitles)
     version.time_change = min(time_count_changed / 1. / subs_length, 1)
     version.text_change = min(text_count_changed / 1. / subs_length, 1)
+    if user_can_moderate(version.video, version.user):
+        version.moderation_status = APPROVED
 
 def _update_subtitle_counts(video):
     for sl in video.subtitlelanguage_set.all():
@@ -105,18 +109,21 @@ def _update_percent_done(video):
             continue
         translation_count = sl.nonblank_subtitle_count()
         real_standard_language = sl.real_standard_language()
-        
+
         if real_standard_language:
             subtitle_count = real_standard_language.nonblank_subtitle_count()
         else:
             subtitle_count = 0
-            
+
         if subtitle_count == 0:
             percent_done = 0
         else:
-            percent_done = int(100.0 * float(translation_count) / 
-                               float(subtitle_count))
+            percent_done = int(100 * float(translation_count) / float(subtitle_count))
             percent_done = max(0, min(percent_done, 100))
+
+        if translation_count and percent_done < 1:
+            percent_done = 1
+        
         if percent_done != sl.percent_done:
             sl.percent_done = percent_done
             sl.is_complete = percent_done == 100

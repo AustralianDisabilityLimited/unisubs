@@ -16,49 +16,49 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.video');
+goog.provide('unisubs.video');
 
-mirosubs.video.Html5VideoType = {
+unisubs.video.Html5VideoType = {
     H264: 'H264',
     OGG: 'Ogg',
     WEBM: 'WebM'
 };
 
-mirosubs.video.supportsVideo = function() {
+unisubs.video.supportsVideo = function() {
     return !!goog.dom.createElement('video')['canPlayType'];
 };
 
-mirosubs.video.supportsVideoType = function(html5VideoType) {
-    var vt = mirosubs.video.Html5VideoType;
+unisubs.video.supportsVideoType = function(html5VideoType) {
+    var vt = unisubs.video.Html5VideoType;
     switch (html5VideoType) {
     case vt.H264:
-        return mirosubs.video.supportsH264();
+        return unisubs.video.supportsH264();
     case vt.OGG:
-        return mirosubs.video.supportsOgg();
+        return unisubs.video.supportsOgg();
     case vt.WEBM:
-        return mirosubs.video.supportsWebM();
+        return unisubs.video.supportsWebM();
     default:
         throw "unknown type";
     }
 };
 
-mirosubs.video.supports_ = function(playType) {
+unisubs.video.supports_ = function(playType) {
     var video = document.createElement('video');
     return !!(video['canPlayType'] &&
               video['canPlayType'](playType).replace(/no/, ''));
 };
 
-mirosubs.video.supportsH264 = function() {
-    return mirosubs.video.supports_(
+unisubs.video.supportsH264 = function() {
+    return unisubs.video.supports_(
         'video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
 };
 
-mirosubs.video.supportsOgg = function() {
-    return mirosubs.video.supports_(
+unisubs.video.supportsOgg = function() {
+    return unisubs.video.supports_(
         'video/ogg; codecs="theora, vorbis"');
 };
 
-mirosubs.video.supportsWebM = function() {
-    return mirosubs.video.supports_(
+unisubs.video.supportsWebM = function() {
+    return unisubs.video.supports_(
         'video/webm; codecs="vp8, vorbis"');
 };

@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% include_bundle "mirosubs-onsite-compiled" %}
+    {% include_bundle "js-base-dependencies" 0 %}
+    {% include_bundle "unisubs-api" 0 %}
+    {% include_bundle "js-testing-base" 0 %} 
     <script>
       goog.require('goog.userAgent.product');
       goog.require('goog.testing.MultiTestRunner');
@@ -13,7 +15,7 @@
       var _allTests = [
           "captionmanager_test",
           "editablecaptionset_test",
-          "mirosubs_test",
+          "unisubs_test",
           "syncpanel_test",
           "srtwriter_test",
           "style_test",

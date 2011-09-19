@@ -22,6 +22,7 @@ INSTALLATION = INSERT_INSTALLATION_HERE # one of DEV, STAGING, PRODUCTION
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
+AWS_USER_DATA_BUCKET_NAME = 'INSERT USERDATA BUCKET'
 
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
@@ -32,7 +33,9 @@ DATABASE_USER = 'INSERT DATABASE USER'
 
 DEFAULT_BUCKET = '' # special note: should be blank for dev.
 HAYSTACK_SOLR_URL = 'http://localhost:38983/solr'
-MEDIA_URL = 'http://dev.universalsubtitles.org/site_media/'
+MEDIA_URL = 'INSERT MEDIA_URL'
+STATIC_URL = 'INSERT STATIC_URL'
+
 PROMOTE_TO_ADMINS = []
 
 # SENTRY_* db settings only used on staging and production.

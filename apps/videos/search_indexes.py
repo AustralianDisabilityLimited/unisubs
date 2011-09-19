@@ -5,6 +5,9 @@ from models import Video, SubtitleLanguage
 from comments.models import Comment
 from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
+from django.conf import settings
+from haystack.query import SearchQuerySet
+import datetime
 
 #SUFFIX = u'+++++'
 SUFFIX = u''
@@ -70,11 +73,13 @@ class VideoIndex(CelerySearchIndex):
     text = CharField(document=True, use_template=True)
     title = CharField(model_attr='title_display', boost=2)
     languages = LanguagesField(faceted=True)
+    requests = LanguagesField(faceted=True)
     video_language = LanguageField(faceted=True)
     languages_count = IntegerField()
+    requests_count = IntegerField()
     video_id = CharField(model_attr='video_id', indexed=False)
     thumbnail_url = CharField(model_attr='get_thumbnail', indexed=False)
-    small_thumbnail = CharField(model_attr='small_thumbnail', indexed=False)
+    small_thumbnail = CharField(model_attr='get_small_thumbnail', indexed=False)
     created = DateTimeField(model_attr='created')
     edited = DateTimeField(model_attr='edited')
     subtitles_fetched_count = IntegerField(model_attr='subtitles_fetched_count')
@@ -91,23 +96,28 @@ class VideoIndex(CelerySearchIndex):
     year_views = IntegerField()
     total_views = IntegerField(model_attr='widget_views_count')
     
+    IN_ROW = getattr(settings, 'VIDEO_IN_ROW', 6)
+    
     def prepare(self, obj):
         self.prepared_data = super(VideoIndex, self).prepare(obj)
         
         langs = obj.subtitlelanguage_set.exclude(language=u'', subtitle_count__gt=0)
+        requests = obj.subtitlerequest_set.filter(done=False)
         self.prepared_data['languages_count'] = obj.subtitlelanguage_set.filter(subtitle_count__gt=0).count()
         self.prepared_data['video_language'] = obj.language
         #TODO: converting should be in Field
         self.prepared_data['video_language'] = obj.language and LanguageField.prepare_lang(obj.language) or u''
         self.prepared_data['languages'] = [LanguageField.prepare_lang(lang.language) for lang in langs if lang.subtitle_count]
+        self.prepared_data['requests'] = [LanguageField.prepare_lang(request.language) for request in requests]
         self.prepared_data['contributors_count'] = User.objects.filter(subtitleversion__language__video=obj).distinct().count()
         self.prepared_data['activity_count'] = obj.action_set.count()
+        self.prepared_data['requests_count'] = requests.count()
         self.prepared_data['week_views'] = obj.views['week']
         self.prepared_data['month_views'] = obj.views['month']
         self.prepared_data['year_views'] = obj.views['year']
         self.prepared_data['today_views'] = obj.views['today']
         return self.prepared_data
-
+    
     def _setup_save(self, model):
         pass
     
@@ -117,6 +127,22 @@ class VideoIndex(CelerySearchIndex):
     def index_queryset(self):
         return self.model.objects.order_by('-id')
     
+    @classmethod
+    def get_featured_videos(cls):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+            .order_by('-featured')
+    
+    @classmethod
+    def get_popular_videos(cls, sort='-week_views'):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).order_by(sort)
+    
+    @classmethod
+    def get_latest_videos(cls):
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).order_by('-created')
+
 class VideoSearchResult(SearchResult):
     title_for_url = Video.__dict__['title_for_url']
     get_absolute_url = Video.__dict__['_get_absolute_url']

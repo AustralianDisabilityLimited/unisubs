@@ -56,51 +56,28 @@ class TeamsApiClass(object):
             return Msg(_(u'Application sent success. Wait for answer from team.'))
         else:
             return Error(_(u'You can\'t join this team by application.'))
-        
-    def leave(self, team_id, user):
-        if not user.is_authenticated():
-            return Error(_('You should be authenticated.'))
-            
-        try:
-            if not team_id:
-                raise Team.DoesNotExist            
-            team = Team.objects.get(pk=team_id)
-        except Team.DoesNotExist:
-            return Error(_('Team does not exist'))
-            
-        try:
-            tm = TeamMember.objects.get(team=team, user=user)
-            if team.members.exclude(pk=tm.pk).exists():
-                tm.delete()
-                return Msg(_(u'You have left this team.'), is_open=team.is_open())
-            else:
-                return Error(_(u'You are last member of this team.'))
-        except TeamMember.DoesNotExist:
-            return Error(_(u'You have left this team.'))
     
-    def join(self, team_id, user):
-        if not user.is_authenticated():
-            return Error(_('You should be authenticated.'))
-            
+    def promote_user(self, team_id, member_id, role, user):
         try:
-            if not team_id:
-                raise Team.DoesNotExist            
-            team = Team.objects.get(pk=team_id)
+            team = Team.objects.for_user(user).get(pk=team_id)
         except Team.DoesNotExist:
-            return Error(_('Team does not exist'))
+            return Error(_(u'Team does not exist.'))
+        
+        if not team.is_manager(user):
+            return Error(_(u'You are not manager of this team.'))
+        
+        if not role in dict(TeamMember.ROLES):
+            return Error(_(u'Incorrect team member role.'))
         
         try:
-            TeamMember.objects.get(team=team, user=user)
-            return Error(_(u'You are already a member of this team.'))
+            tm = TeamMember.objects.get(pk=member_id, team=team)
         except TeamMember.DoesNotExist:
-            pass
+            return Error(_(u'Team member does not exist.'))
         
-        if not team.is_open():
-            return Error(_(u'This team is not open.'))
-        else:
-            TeamMember(team=team, user=user).save()
-            return Msg(_(u'You are now a member of this team.'))
-
+        tm.role = role
+        tm.save()
+        return Msg(_(u'Team member role changed.'))
+    
 TeamsApi = TeamsApiClass()
 
 rpc_router = RpcRouter('teams:rpc_router', {

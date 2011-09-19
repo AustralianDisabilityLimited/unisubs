@@ -1,0 +1,67 @@
+{% extends "settings.html" %}
+{% load i18n teams_tags paginator moderation utils_tags media_compressor %}
+
+{% block css %}
+{{ block.super }}
+    {% include_bundle "video_history" %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% url videos:rpc_api %}" type="text/javascript"></script>
+    <script src="{% url search:rpc_api %}" type="text/javascript"></script> 
+    {% include_bundle "js-moderation-dashboard" 0 %}
+
+{% endblock %}
+
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+{% block title %}
+    {{ team }} {% trans 'Team Videos' %} | Universal Subtitles
+{% endblock %}
+
+{% block settings_content %}
+  <div class="hd">
+    <h2>{{ team.name }}</h2>
+    {% with "moderation" as active %}
+        {% include 'teams/_edit_top_navigation.html' %}
+    {% endwith %}
+  </div>
+  <div class="actions">
+    <form class="moderation-dashboard" action="{% url moderation:get-pending-videos team_id=team.pk %}" method="GET">
+        <fieldset>
+          {{form.to_langs.label_tag}}
+          {{form.to_langs}}
+        </fieldset>
+        <fieldset>
+          {{form.from_langs.label_tag}}
+          {{form.from_langs}}
+        </fieldset>
+        <fieldset>
+          {{form.sort.label_tag}}
+          {{form.sort}}
+        </fieldset>
+        <fieldset>
+          {{form.q.label_tag}}
+          {{form.q}}
+        </fieldset>
+          <input id="filter_submit" type="submit" name="submit" value="Apply"/>
+    </form>
+  </div>
+  <div class="moderation-list-container">
+    <div style="text-align: center; padding: 75px">
+      <img align="absmiddle" src="{{ STATIC_URL }}/images/ajax-loader.gif"/>
+    </div>
+  </div>
+  <div class="ft">
+      <div class="dev-button-container">
+        <a class="batch-approve-selected-button green_button small">{% trans "Approve Selected" %}</a>
+        <a class="batch-reject-selected-button red_button small dev-button-sequence">{% trans "Reject Selected" %}</a>
+      </div>
+  </div>
+<script type="text/javascript">
+    {% include 'moderation/moderation-buttons.js' %}
+    {% include 'moderation/dashboard.js' %}
+</script>
+{% endblock %}

@@ -15,14 +15,14 @@ function captionJSON(startTime, endTime, captionID, subOrder, text) {
 /* the tests */
 
 function setUp() {
-    mirosubs.Tracker.getInstance().dontReport();
+    unisubs.REPORT_ANALYTICS = false;
 }
 
 function testSrt() {
     var subs = [captionJSON(0.0, 5.0, 'a', 1, 'sub a'), 
                 captionJSON(5.1, -1, 'b', 2, 'sub b'),
                 captionJSON(-1, -1, 'c', 3, 'sub c')];
-    var srtFile = mirosubs.SRTWriter.toSRT(subs);
+    var srtFile = unisubs.SRTWriter.toSRT(subs);
     assertEquals(
         "1\n00:00:00,000 --> 00:00:05,000\nsub a\n\n2\n00:00:05,100 --> 99:59:59,000\nsub b\n\n3\n99:59:59,000 --> 99:59:59,000\nsub c",
         goog.string.trimRight(srtFile));

@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.startdialog.Model');
+goog.provide('unisubs.startdialog.Model');
 
 /**
  * @constructor
  * @param {Object} json from widget rpc
- * @param {mirosubs.widget.SubtitleState=} opt_langState The subtitle state to display initially.
+ * @param {unisubs.widget.SubtitleState=} opt_langState The subtitle state to display initially.
  */
-mirosubs.startdialog.Model = function(json, opt_langState) {
+unisubs.startdialog.Model = function(json, opt_langState) {
     /**
      * @type {Array.<string>} Array of langauge codes
      */
@@ -31,12 +31,12 @@ mirosubs.startdialog.Model = function(json, opt_langState) {
     goog.array.removeDuplicates(this.myLanguages_);
     this.myLanguages_ = goog.array.filter(
         this.myLanguages_, function(l) { 
-            return !!mirosubs.languageNameForCode(l); 
+            return !!unisubs.languageNameForCode(l); 
         });
     this.originalLanguage_ = json['original_language'];
-    this.videoLanguages_ = new mirosubs.startdialog.VideoLanguages(
+    this.videoLanguages_ = new unisubs.startdialog.VideoLanguages(
         json['video_languages']);
-    this.toLanguages_ = new mirosubs.startdialog.ToLanguages(
+    this.toLanguages_ = new unisubs.startdialog.ToLanguages(
         this.myLanguages_, this.videoLanguages_, 
         opt_langState);
     /**
@@ -57,25 +57,25 @@ mirosubs.startdialog.Model = function(json, opt_langState) {
     }
 };
 
-mirosubs.startdialog.Model.prototype.getOriginalLanguage = function() {
+unisubs.startdialog.Model.prototype.getOriginalLanguage = function() {
     return this.originalLanguage_;
 };
 
-mirosubs.startdialog.Model.prototype.originalLanguageShown = function() {
+unisubs.startdialog.Model.prototype.originalLanguageShown = function() {
     return !this.originalLanguage_;
 };
 
 /**
- * @returns {Array.<mirosubs.startdialog.ToLanguage>}
+ * @returns {Array.<unisubs.startdialog.ToLanguage>}
  */
-mirosubs.startdialog.Model.prototype.toLanguages = function() {
+unisubs.startdialog.Model.prototype.toLanguages = function() {
     return this.toLanguages_.getToLanguages();
 };
 
 /**
- * @returns {mirosubs.startdialog.ToLanguage}
+ * @returns {unisubs.startdialog.ToLanguage}
  */
-mirosubs.startdialog.Model.prototype.getSelectedLanguage = function() {
+unisubs.startdialog.Model.prototype.getSelectedLanguage = function() {
     if (!this.selectedLanguage_)
         this.selectedLanguage_ = this.toLanguages_.getToLanguages()[0];
     return this.selectedLanguage_;
@@ -84,22 +84,22 @@ mirosubs.startdialog.Model.prototype.getSelectedLanguage = function() {
 /**
  * @param {string} key KEY from toLanguages to select
  */
-mirosubs.startdialog.Model.prototype.selectLanguage = function(key) {
+unisubs.startdialog.Model.prototype.selectLanguage = function(key) {
     this.selectedLanguage_ = this.toLanguages_.forKey(key);
 };
 
 /**
  * @param {string} language language code to select.
  */
-mirosubs.startdialog.Model.prototype.selectOriginalLanguage = function(language) {
+unisubs.startdialog.Model.prototype.selectOriginalLanguage = function(language) {
     this.selectedOriginalLanguage_ = language;
 };
 
-mirosubs.startdialog.Model.prototype.findFromForPK = function(pk) {
+unisubs.startdialog.Model.prototype.findFromForPK = function(pk) {
     return this.videoLanguages_.findForPK(pk);
 };
 
-mirosubs.startdialog.Model.prototype.bestLanguages = function(toLangCode, fromLangCode) {
+unisubs.startdialog.Model.prototype.bestLanguages = function(toLangCode, fromLangCode) {
     var videoLanguage = this.videoLanguages_.findForLanguagePair(
         toLangCode, fromLangCode);
     if (!videoLanguage)
@@ -109,9 +109,9 @@ mirosubs.startdialog.Model.prototype.bestLanguages = function(toLangCode, fromLa
 };
 
 /**
- * @return {Array.<mirosubs.startdialog.LanguageSummary>}
+ * @return {Array.<unisubs.startdialog.LanguageSummary>}
  */
-mirosubs.startdialog.Model.prototype.fromLanguages = function() {
+unisubs.startdialog.Model.prototype.fromLanguages = function() {
     var originalLanguage = this.originalLanguage_;
     if (!originalLanguage)
         originalLanguage = this.selectedOriginalLanguage_;
@@ -142,6 +142,6 @@ mirosubs.startdialog.Model.prototype.fromLanguages = function() {
     return possibleFromLanguages;
 };
 
-mirosubs.startdialog.Model.prototype.toLanguageForKey = function(key) {
+unisubs.startdialog.Model.prototype.toLanguageForKey = function(key) {
     return this.toLanguages_.forKey(key);
 };

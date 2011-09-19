@@ -27,85 +27,85 @@
  * goog.ui.SliderBase.
  */
 
-goog.provide('mirosubs.SliderBase');
+goog.provide('unisubs.SliderBase');
 
 /**
  * @constructor
  */
-mirosubs.SliderBase = function(opt_domHelper) {
+unisubs.SliderBase = function(opt_domHelper) {
     goog.ui.Component.call(this, opt_domHelper);
 };
-goog.inherits(mirosubs.SliderBase, goog.ui.Component);
+goog.inherits(unisubs.SliderBase, goog.ui.Component);
 
-mirosubs.SliderBase.EventType = {
+unisubs.SliderBase.EventType = {
     START : 'startinteraction',
     STOP : 'stopinteraction',
     /** Means the progress bar track was clicked. */
     TRACK_CLICKED : 'trackclicked'
 };
 
-mirosubs.SliderBase.Orientation = {
+unisubs.SliderBase.Orientation = {
     VERTICAL: 'vertical',
     HORIZONTAL: 'horizontal'
 };
 
-mirosubs.SliderBase.prototype.orientation =
-    mirosubs.SliderBase.Orientation.HORIZONTAL;
+unisubs.SliderBase.prototype.orientation =
+    unisubs.SliderBase.Orientation.HORIZONTAL;
 
 /**
  * How long the animations should take (in milliseconds).
  * @type {number}
  * @private
  */
-mirosubs.SliderBase.ANIMATION_INTERVAL_ = 100;
+unisubs.SliderBase.ANIMATION_INTERVAL_ = 100;
 
 /**
  * The thumb dom element.
  * @type {HTMLDivElement}
  * @protected
  */
-mirosubs.SliderBase.prototype.thumb;
+unisubs.SliderBase.prototype.thumb;
 
 /**
  * Current value.
  * @private
  */
-mirosubs.SliderBase.prototype.value_;
+unisubs.SliderBase.prototype.value_;
 
-mirosubs.SliderBase.prototype.minimum_ = 0;
-mirosubs.SliderBase.prototype.maximum_ = 100;
+unisubs.SliderBase.prototype.minimum_ = 0;
+unisubs.SliderBase.prototype.maximum_ = 100;
 
-mirosubs.SliderBase.prototype.currentlyInteracting_ = false;
+unisubs.SliderBase.prototype.currentlyInteracting_ = false;
 
-mirosubs.SliderBase.prototype.clickToMove_ = true;
+unisubs.SliderBase.prototype.clickToMove_ = true;
 
 /**
  * The Dragger for dragging the thumb.
  * @type {goog.fx.Dragger}
  * @private
  */
-mirosubs.SliderBase.prototype.dragger_;
+unisubs.SliderBase.prototype.dragger_;
 
 /**
  * If we are currently animating the thumb.
  * @private
  * @type {boolean}
  */
-mirosubs.SliderBase.prototype.isAnimating_ = false;
+unisubs.SliderBase.prototype.isAnimating_ = false;
 
 /**
  * Returns the CSS class applied to the slider element for the given
  * orientation. Subclasses must override this method.
- * @param {mirosubs.SliderBase.Orientation} orient The orientation.
+ * @param {unisubs.SliderBase.Orientation} orient The orientation.
  * @return {string} The CSS class applied to slider elements.
  * @protected
  */
-mirosubs.SliderBase.prototype.getCssClass = goog.abstractMethod;
+unisubs.SliderBase.prototype.getCssClass = goog.abstractMethod;
 
 
 /** @inheritDoc */
-mirosubs.SliderBase.prototype.createDom = function() {
-    mirosubs.SliderBase.superClass_.createDom.call(this);
+unisubs.SliderBase.prototype.createDom = function() {
+    unisubs.SliderBase.superClass_.createDom.call(this);
     var element =
         this.getDomHelper().createDom(
             'div', this.getCssClass(this.orientation_));
@@ -118,19 +118,19 @@ mirosubs.SliderBase.prototype.createDom = function() {
  * @type {function() : void}
  * @protected
  */
-mirosubs.SliderBase.prototype.createThumb = goog.abstractMethod;
+unisubs.SliderBase.prototype.createThumb = goog.abstractMethod;
 
 
 /** @inheritDoc */
-mirosubs.SliderBase.prototype.decorateInternal = function(element) {
-    mirosubs.SliderBase.superClass_.decorateInternal.call(this, element);
+unisubs.SliderBase.prototype.decorateInternal = function(element) {
+    unisubs.SliderBase.superClass_.decorateInternal.call(this, element);
     goog.dom.classes.add(element, this.getCssClass(this.orientation_));
     this.createThumb();
     this.setAriaRoles();
 };
 
-mirosubs.SliderBase.prototype.enterDocument = function() {
-    mirosubs.SliderBase.superClass_.enterDocument.call(this);
+unisubs.SliderBase.prototype.enterDocument = function() {
+    unisubs.SliderBase.superClass_.enterDocument.call(this);
 
     this.dragger_ = new goog.fx.Dragger(this.thumb);
     this.dragger_.defaultAction = goog.nullFunction;
@@ -146,8 +146,8 @@ mirosubs.SliderBase.prototype.enterDocument = function() {
     this.updateUi_();
 };
 
-mirosubs.SliderBase.prototype.exitDocument = function() {
-    mirosubs.SliderBase.superClass_.exitDocument.call(this);
+unisubs.SliderBase.prototype.exitDocument = function() {
+    unisubs.SliderBase.superClass_.exitDocument.call(this);
     this.dragger_.dispose();
 };
 
@@ -157,9 +157,9 @@ mirosubs.SliderBase.prototype.exitDocument = function() {
  * @param {goog.fx.DragEvent} e  The drag event used to drag the thumb.
  * @private
  */
-mirosubs.SliderBase.prototype.handleBeforeDrag_ = function(e) {
+unisubs.SliderBase.prototype.handleBeforeDrag_ = function(e) {
     var value;
-    if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
+    if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
         var availHeight = this.getElement().clientHeight;
         value = (availHeight - (e.top + this.thumb.offsetHeight / 2)) / 
             availHeight *
@@ -176,19 +176,19 @@ mirosubs.SliderBase.prototype.handleBeforeDrag_ = function(e) {
     this.setValue(value);
 };
 
-mirosubs.SliderBase.prototype.handleEndDrag_ = function(e) {
+unisubs.SliderBase.prototype.handleEndDrag_ = function(e) {
     this.setCurrentlyInteracting_(false);
 };
 
-mirosubs.SliderBase.prototype.setCurrentlyInteracting_ = 
+unisubs.SliderBase.prototype.setCurrentlyInteracting_ = 
     function(interacting) 
 {
     if (interacting == this.currentlyInteracting_)
         return;
     this.currentlyInteracting_ = interacting;
     this.dispatchEvent(interacting ? 
-                       mirosubs.SliderBase.EventType.START :
-                       mirosubs.SliderBase.EventType.STOP);
+                       unisubs.SliderBase.EventType.START :
+                       unisubs.SliderBase.EventType.STOP);
 };
 
 /**
@@ -196,7 +196,7 @@ mirosubs.SliderBase.prototype.setCurrentlyInteracting_ =
  * @param {goog.events.Event} e  The mouse event object.
  * @private
  */
-mirosubs.SliderBase.prototype.handleMouseDown_ = function(e) {
+unisubs.SliderBase.prototype.handleMouseDown_ = function(e) {
     if (this.getElement().focus)
         this.getElement().focus();
 
@@ -208,7 +208,7 @@ mirosubs.SliderBase.prototype.handleMouseDown_ = function(e) {
             this.animatedSetValue_(this.getValueFromMousePosition_(e));
         else
             this.dispatchEvent(
-                new mirosubs.SliderBase.TrackClickEvent(
+                new unisubs.SliderBase.TrackClickEvent(
                     this.getValueFromMousePosition_(e)));
     }
 };
@@ -219,9 +219,9 @@ mirosubs.SliderBase.prototype.handleMouseDown_ = function(e) {
  * @return {number} The relative mouse position to the slider.
  * @private
  */
-mirosubs.SliderBase.prototype.getRelativeMousePos_ = function(e) {
+unisubs.SliderBase.prototype.getRelativeMousePos_ = function(e) {
     var coord = goog.style.getRelativePosition(e, this.getElement());
-    if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
+    if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
         return coord.y;
     } else {
         return coord.x;
@@ -233,7 +233,7 @@ mirosubs.SliderBase.prototype.getRelativeMousePos_ = function(e) {
  * @param {goog.events.Event} e  The mouse event object.
  * @private
  */
-mirosubs.SliderBase.prototype.storeMousePos_ = function(e) {
+unisubs.SliderBase.prototype.storeMousePos_ = function(e) {
     this.lastMousePosition_ = this.getRelativeMousePos_(e);
 };
 
@@ -243,8 +243,8 @@ mirosubs.SliderBase.prototype.storeMousePos_ = function(e) {
  * @return {number} The value that this mouse position represents.
  * @private
  */
-mirosubs.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
-    if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
+unisubs.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
+    if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
         var availH = this.getElement().clientHeight;
         var y = this.getRelativeMousePos_(e);
         return (this.maximum_ - this.minimum_) * 
@@ -257,7 +257,7 @@ mirosubs.SliderBase.prototype.getValueFromMousePosition_ = function(e) {
     }
 };
 
-mirosubs.SliderBase.prototype.setValue = function(value, opt_suppressEvents) {
+unisubs.SliderBase.prototype.setValue = function(value, opt_suppressEvents) {
     value = goog.math.clamp(value, this.minimum_, this.maximum_);
     if (value == this.value_)
         return;
@@ -267,7 +267,7 @@ mirosubs.SliderBase.prototype.setValue = function(value, opt_suppressEvents) {
         this.dispatchEvent(goog.ui.Component.EventType.CHANGE);
 };
 
-mirosubs.SliderBase.prototype.getValue = function() {
+unisubs.SliderBase.prototype.getValue = function() {
     return this.value_;
 };
 
@@ -276,14 +276,14 @@ mirosubs.SliderBase.prototype.getValue = function() {
  * when first created as well as when the value and the orientation changes.
  * @private
  */
-mirosubs.SliderBase.prototype.updateUi_ = function() {
+unisubs.SliderBase.prototype.updateUi_ = function() {
     if (this.thumb && !this.isAnimating_) {
         var coord = this.getThumbCoordinateForValue_(this.value_);
 
-        if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
-            mirosubs.style.setPosition(this.thumb, null, coord.y);
+        if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
+            unisubs.style.setPosition(this.thumb, null, coord.y);
         } else {
-            mirosubs.style.setPosition(this.thumb, coord.x, null);
+            unisubs.style.setPosition(this.thumb, coord.x, null);
         }
     }
 };
@@ -295,7 +295,7 @@ mirosubs.SliderBase.prototype.updateUi_ = function() {
  * @return {goog.math.Coordinate} Coordinate with either x or y set.
  * @private
  */
-mirosubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
+unisubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
     var coord = new goog.math.Coordinate();
     if (this.thumb) {
         var min = this.minimum_;
@@ -308,7 +308,7 @@ mirosubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
         if (isNaN(ratio))
             ratio = 0;
         
-        if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
+        if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
             var thumbHeight = this.thumb.offsetHeight;
             var h = this.getElement().clientHeight;
             var bottom = Math.round(ratio * h);
@@ -327,7 +327,7 @@ mirosubs.SliderBase.prototype.getThumbCoordinateForValue_ = function(val) {
  * @param {number} v Value to set and animate to.
  * @private
  */
-mirosubs.SliderBase.prototype.animatedSetValue_ = function(v) {
+unisubs.SliderBase.prototype.animatedSetValue_ = function(v) {
     // the value might be out of bounds
     v = goog.math.clamp(v, this.minimum_, this.maximum_);
 
@@ -337,13 +337,13 @@ mirosubs.SliderBase.prototype.animatedSetValue_ = function(v) {
 
     var end;
     var coord = this.getThumbCoordinateForValue_(v);
-    if (this.orientation_ == mirosubs.SliderBase.Orientation.VERTICAL) {
+    if (this.orientation_ == unisubs.SliderBase.Orientation.VERTICAL) {
         end = [this.thumb.offsetLeft, coord.y];
     } else {
         end = [coord.x, this.thumb.offsetTop];
     }
     var animation = new goog.fx.dom.SlideFrom(
-        this.thumb, end, mirosubs.SliderBase.ANIMATION_INTERVAL_);
+        this.thumb, end, unisubs.SliderBase.ANIMATION_INTERVAL_);
     this.currentAnimation_ = animation;
     this.getHandler().listen(
         animation, goog.fx.Animation.EventType.END,
@@ -362,7 +362,7 @@ mirosubs.SliderBase.prototype.animatedSetValue_ = function(v) {
  *     object.
  * @private
  */
-mirosubs.SliderBase.prototype.endAnimation_ = function(e) {
+unisubs.SliderBase.prototype.endAnimation_ = function(e) {
     this.setCurrentlyInteracting_(false);
     this.isAnimating_ = false;
 };
@@ -370,9 +370,9 @@ mirosubs.SliderBase.prototype.endAnimation_ = function(e) {
 
 /**
  * Changes the orientation.
- * @param {mirosubs.SliderBase.Orientation} orient The orientation.
+ * @param {unisubs.SliderBase.Orientation} orient The orientation.
  */
-mirosubs.SliderBase.prototype.setOrientation = function(orient) {
+unisubs.SliderBase.prototype.setOrientation = function(orient) {
     if (this.orientation_ != orient) {
         var oldCss = this.getCssClass(this.orientation_);
         var newCss = this.getCssClass(orient);
@@ -382,21 +382,21 @@ mirosubs.SliderBase.prototype.setOrientation = function(orient) {
         if (this.getElement()) {
             goog.dom.classes.swap(this.getElement(), oldCss, newCss);
             // we need to reset the left and top
-            mirosubs.style.setProperty(this.thumb, 'left', null);
-            mirosubs.style.setProperty(this.thumb, 'top', null);
+            unisubs.style.setProperty(this.thumb, 'left', null);
+            unisubs.style.setProperty(this.thumb, 'top', null);
             this.updateUi_();
         }
     }
 };
 
 /**
- * @return {mirosubs.SliderBase.Orientation} the orientation of the slider.
+ * @return {unisubs.SliderBase.Orientation} the orientation of the slider.
  */
-mirosubs.SliderBase.prototype.getOrientation = function() {
+unisubs.SliderBase.prototype.getOrientation = function() {
   return this.orientation_;
 };
 
-mirosubs.SliderBase.prototype.isCurrentlyInteracting = function() {
+unisubs.SliderBase.prototype.isCurrentlyInteracting = function() {
     return this.currentlyInteracting_;
 };
 
@@ -404,12 +404,12 @@ mirosubs.SliderBase.prototype.isCurrentlyInteracting = function() {
  * Set a11y roles and state.
  * @protected
  */
-mirosubs.SliderBase.prototype.setAriaRoles = function() {
+unisubs.SliderBase.prototype.setAriaRoles = function() {
     goog.dom.a11y.setRole(this.getElement(), goog.dom.a11y.Role.SLIDER);
     this.updateAriaStates();
 };
 
-mirosubs.SliderBase.prototype.setClickToMove = function(clickToMove) {
+unisubs.SliderBase.prototype.setClickToMove = function(clickToMove) {
     this.clickToMove_ = clickToMove;
 };
 
@@ -417,7 +417,7 @@ mirosubs.SliderBase.prototype.setClickToMove = function(clickToMove) {
  * Set a11y roles and state when values change.
  * @protected
  */
-mirosubs.SliderBase.prototype.updateAriaStates = function() {
+unisubs.SliderBase.prototype.updateAriaStates = function() {
     var element = this.getElement();
     if (element) {
         goog.dom.a11y.setState(element,
@@ -435,7 +435,7 @@ mirosubs.SliderBase.prototype.updateAriaStates = function() {
 /**
  * @constructor
  */
-mirosubs.SliderBase.TrackClickEvent = function(value) {
-    this.type = mirosubs.SliderBase.EventType.TRACK_CLICKED;
+unisubs.SliderBase.TrackClickEvent = function(value) {
+    this.type = unisubs.SliderBase.EventType.TRACK_CLICKED;
     this.value = value;
 };

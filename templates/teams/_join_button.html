@@ -1,0 +1,3 @@
+{% load i18n %}
+<a class="join-team green_button {{button_size}}" onclick="return confirm('{% trans "Do you really wish to join this team?" %}')" href="{% url teams:join_team team.slug %}">{% trans "Join this team now!" %}</a>
+<div class="clearfix"></div>

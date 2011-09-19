@@ -17,23 +17,23 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
- * @fileoverview Meant to be used in mirosubs.finishfaildialog.Dialog. 
+ * @fileoverview Meant to be used in unisubs.finishfaildialog.Dialog. 
  *    Corresponds to 'error' state of that dialog.
  */
 
-goog.provide('mirosubs.finishfaildialog.ErrorPanel');
+goog.provide('unisubs.finishfaildialog.ErrorPanel');
 
 /**
  * @constructor
  */
-mirosubs.finishfaildialog.ErrorPanel = function(captionSet) {
+unisubs.finishfaildialog.ErrorPanel = function(captionSet) {
     goog.ui.Component.call(this);
     this.captionSet_ = captionSet;
 };
-goog.inherits(mirosubs.finishfaildialog.ErrorPanel, goog.ui.Component);
+goog.inherits(unisubs.finishfaildialog.ErrorPanel, goog.ui.Component);
 
-mirosubs.finishfaildialog.ErrorPanel.prototype.createDom = function() {
-    mirosubs.finishfaildialog.ErrorPanel.superClass_.createDom.call(this);
+unisubs.finishfaildialog.ErrorPanel.prototype.createDom = function() {
+    unisubs.finishfaildialog.ErrorPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.downloadSubsLink_ = 
         $d('a', {'href': '#'}, 'Download your subtitles to save your work.');
@@ -45,16 +45,16 @@ mirosubs.finishfaildialog.ErrorPanel.prototype.createDom = function() {
         $d('p', null, this.downloadSubsLink_));
 };
 
-mirosubs.finishfaildialog.ErrorPanel.prototype.enterDocument = function() {
-    mirosubs.finishfaildialog.ErrorPanel.superClass_.enterDocument.call(this);
+unisubs.finishfaildialog.ErrorPanel.prototype.enterDocument = function() {
+    unisubs.finishfaildialog.ErrorPanel.superClass_.enterDocument.call(this);
     this.getHandler()
         .listen(
             this.downloadSubsLink_, 'click',
             this.downloadSubsClicked_);
 };
 
-mirosubs.finishfaildialog.ErrorPanel.prototype.downloadSubsClicked_ = function(e) {
+unisubs.finishfaildialog.ErrorPanel.prototype.downloadSubsClicked_ = function(e) {
     e.preventDefault();
-    mirosubs.finishfaildialog.CopyDialog.showForSubs(
+    unisubs.finishfaildialog.CopyDialog.showForSubs(
         this.captionSet_.makeJsonSubs());
 };

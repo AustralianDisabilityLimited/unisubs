@@ -25,7 +25,8 @@ from videos.types import video_type_registrar
 from videos.types.bliptv import BlipTvVideoType
 from utils.translation import get_user_languages_from_request
 
-
+ALL_LANGUAGES = settings.ALL_LANGUAGES
+LANGUAGES_MAP = dict(ALL_LANGUAGES)
 
 class NullRpc(BaseRpc):
 
@@ -48,6 +49,7 @@ class NullRpc(BaseRpc):
             video_urls = [video_url]
         return_value['video_urls'] = video_urls
         return_value['drop_down_contents'] = []
+        return_value['my_languages'] = ['en'];
         return return_value
 
     def fetch_start_dialog_contents(self, request, video_id):
@@ -63,6 +65,24 @@ class NullRpc(BaseRpc):
             'video_languages': video_languages,
             'original_language': original_language }
 
+    def fetch_request_dialog_contents(self, request, video_id):
+        '''
+        Fetch the contents for creating a dialog to create request subtitles
+        form.
+        '''
+        my_languages = get_user_languages_from_request(request)
+        my_languages.extend([l[:l.find('-')] for l in my_languages if l.find('-') > -1])
+
+        # List of language-code tuples
+        all_languages = sorted(LANGUAGES_MAP.items())
+
+        ##TODO: Filter all_languages according to already submitted requests
+        # after creation of SubtitleRequest Model
+
+        return {
+            'my_languages': my_languages,
+            'all_languages': all_languages
+        }
     
     def start_editing(self, request, video_id, 
                       language_code, 
@@ -74,9 +94,11 @@ class NullRpc(BaseRpc):
             "draft_pk": 1,
             "subtitles": self._subtitles_dict() }
 
-    def save_subtitles(self, request, draft_pk, packets):
-        return {'response':'ok',
-                'last_saved_packet': 3000}
+    def release_lock(self, request, session_pk):
+        return { 'response': 'ok' }
+
+    def regain_lock(self, request, session_pk):
+        return { 'response': 'ok' }
 
     def finished_subtitles(self, request, draft_pk, packets):
         response = self.save_subtitles(

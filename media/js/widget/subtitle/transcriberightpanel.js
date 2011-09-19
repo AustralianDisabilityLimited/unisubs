@@ -16,28 +16,28 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('mirosubs.subtitle.TranscribeRightPanel');
+goog.provide('unisubs.subtitle.TranscribeRightPanel');
 /**
 * @constructor
-* @extends mirosubs.RightPanel
+* @extends unisubs.RightPanel
 */
-mirosubs.subtitle.TranscribeRightPanel = function(serverModel,
+unisubs.subtitle.TranscribeRightPanel = function(serverModel,
                                                   helpContents,
                                                   extraHelp,
                                                   legendKeySpecs,
                                                   showRestart,
                                                   doneStrongText,
                                                   doneText) {
-    mirosubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
+    unisubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);
 };
-goog.inherits(mirosubs.subtitle.TranscribeRightPanel, mirosubs.RightPanel);
+goog.inherits(unisubs.subtitle.TranscribeRightPanel, unisubs.RightPanel);
 
-mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED = 'modechanged';
+unisubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED = 'modechanged';
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.playModeText_ = function(playMode) {
-    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
+unisubs.subtitle.TranscribeRightPanel.prototype.playModeText_ = function(playMode) {
+    var pm = unisubs.subtitle.TranscribePanel.PlayMode;
     if (playMode == pm.NO_AUTOPAUSE)
         return "Expert: no automatic pausing (use TAB key)";
     else if (playMode == pm.AUTOPAUSE)
@@ -46,18 +46,18 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.playModeText_ = function(playMo
         return "Beginner: play 8 seconds, then pause";
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
+unisubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
     function($d, legendDiv)
 {
-    mirosubs.subtitle.TranscribeRightPanel.superClass_
+    unisubs.subtitle.TranscribeRightPanel.superClass_
         .appendLegendContentsInternal.call(this, $d, legendDiv);
     this.playModeSelect_ = $d('select');
 
-    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
-    var speed = mirosubs.UserSettings.getStringValue(
-        mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE) || pm.PLAY_STOP;
+    var pm = unisubs.subtitle.TranscribePanel.PlayMode;
+    var speed = unisubs.UserSettings.getStringValue(
+        unisubs.UserSettings.Settings.VIDEO_SPEED_MODE) || pm.PLAY_STOP;
     var select = this.playModeSelect_;
-    var pm = mirosubs.subtitle.TranscribePanel.PlayMode;
+    var pm = unisubs.subtitle.TranscribePanel.PlayMode;
     var text = goog.bind(this.playModeText_, this);
     goog.array.forEach(
         [pm.PLAY_STOP, pm.AUTOPAUSE, pm.NO_AUTOPAUSE],
@@ -68,49 +68,49 @@ mirosubs.subtitle.TranscribeRightPanel.prototype.appendLegendContentsInternal =
             select.appendChild(
                 $d('option', attrs, text(opt)));
         });
-    legendDiv.appendChild($d('div', 'mirosubs-speedmode',
+    legendDiv.appendChild($d('div', 'unisubs-speedmode',
                              $d('h4', null, 'Speed Mode'),
                              select));
     this.setButtonText_();
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.enterDocument = function() {
-    mirosubs.subtitle.TranscribeRightPanel.superClass_.enterDocument.call(this);
+unisubs.subtitle.TranscribeRightPanel.prototype.enterDocument = function() {
+    unisubs.subtitle.TranscribeRightPanel.superClass_.enterDocument.call(this);
     this.getHandler().listen(this.playModeSelect_,
                              goog.events.EventType.CHANGE,
                              this.playModeChanged_);
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
+unisubs.subtitle.TranscribeRightPanel.prototype.setButtonText_ = function() {
     var kc = goog.events.KeyCodes;
     if (this.playModeSelect_.value ==
-        mirosubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
-        this.setButtonTextInternal(kc.TAB, mirosubs.RightPanel.KeySpec.Modifier.SHIFT,
+        unisubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP) {
+        this.setButtonTextInternal(kc.TAB, unisubs.RightPanel.KeySpec.Modifier.SHIFT,
                                    "Re-play last 8 seconds");
         this.setButtonTextInternal(kc.TAB, 0, "Play next 8 seconds");
         this.enableButtonClassInternal(kc.TAB, 0, '-beginner', true);
     }
     else {
-        this.setButtonTextInternal(kc.TAB, mirosubs.RightPanel.KeySpec.Modifier.SHIFT);
+        this.setButtonTextInternal(kc.TAB, unisubs.RightPanel.KeySpec.Modifier.SHIFT);
         this.setButtonTextInternal(kc.TAB, 0);
         this.enableButtonClassInternal(kc.TAB, 0, '-beginner', false);
     }
 };
 
-mirosubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {
+unisubs.subtitle.TranscribeRightPanel.prototype.playModeChanged_ = function(event) {
     this.setButtonText_();
-    mirosubs.UserSettings.setStringValue(
-        mirosubs.UserSettings.Settings.VIDEO_SPEED_MODE,
+    unisubs.UserSettings.setStringValue(
+        unisubs.UserSettings.Settings.VIDEO_SPEED_MODE,
         this.playModeSelect_.value);
     this.dispatchEvent(
-        new mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent(
+        new unisubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent(
             this.playModeSelect_.value));
 };
 
 /**
 * @constructor
 */
-mirosubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent = function(mode) {
-    this.type = mirosubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED;
+unisubs.subtitle.TranscribeRightPanel.PlayModeChangeEvent = function(mode) {
+    this.type = unisubs.subtitle.TranscribeRightPanel.PLAYMODE_CHANGED;
     this.mode = mode;
 };

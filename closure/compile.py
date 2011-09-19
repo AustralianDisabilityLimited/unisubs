@@ -28,7 +28,7 @@ def compile(output_file_name, js_file_list,
     logging.info("Starting {0}".format(output_file_name))
 
     deps = [" --js %s " % os.path.join(JS_LIB, file) for file in js_file_list]
-    calcdeps_js = os.path.join(JS_LIB, 'mirosubs-calcdeps.js')
+    calcdeps_js = os.path.join(JS_LIB, 'unisubs-calcdeps.js')
     compiled_js = os.path.join(JS_LIB, output_file_name)
     compiler_jar = os.path.join(BASE, 'compiler.jar')
 
@@ -44,7 +44,7 @@ def compile(output_file_name, js_file_list,
                              js_debug_dep_file, CLOSURE_LIB))
 
     # This is to reduce the number of warnings in the code.
-    # The mirosubs-calcdeps.js file is a concatenation of a bunch of Google Closure
+    # The unisubs-calcdeps.js file is a concatenation of a bunch of Google Closure
     # JavaScript files, each of which has a @fileoverview tag to describe it.
     # When put all in one file, the compiler complains, so remove them all.
     output_lines = filter(lambda s: s.find("@fileoverview") == -1,
@@ -88,33 +88,33 @@ def compile(output_file_name, js_file_list,
 
     logging.info("Successfully compiled {0}".format(output_file_name))
 
-compile('mirosubs-offsite-compiled.js', settings.JS_OFFSITE)
-compile('mirosubs-onsite-compiled.js', settings.JS_ONSITE)
+compile('unisubs-offsite-compiled.js', settings.JS_OFFSITE)
+compile('unisubs-onsite-compiled.js', settings.JS_ONSITE)
 
 # assumes that some other process has generated config.js
 widgetizer_js_files = ['config.js']
 widgetizer_js_files.extend(settings.JS_WIDGETIZER)
-compile('mirosubs-widgetizer.js', widgetizer_js_files)
-compile('mirosubs-widgetizer-debug.js', widgetizer_js_files, 
+compile('unisubs-widgetizer.js', widgetizer_js_files)
+compile('unisubs-widgetizer-debug.js', widgetizer_js_files, 
         debug=True)
 
 # assumes that some other process has generated config.js
 extension_js_files = ['config.js']
 extension_js_files.extend(settings.JS_EXTENSION)
-compile('mirosubs-extension.js', extension_js_files)
+compile('unisubs-extension.js', extension_js_files)
 
 statwidget_js_files = [
-    'mirosubs.js',
+    'unisubs.js',
     'rpc.js',
     'loadingdom.js',
     'statwidget/statwidgetconfig.js',
     'statwidget/statwidget.js']
 # assumes that some other process has generated statwidget/statwidgetconfig.js
-compile('mirosubs-statwidget.js', statwidget_js_files, 
+compile('unisubs-statwidget.js', statwidget_js_files, 
         closure_dep_file='closure-stat-dependencies.js',
         include_flash_deps=False)
 
 # assumes that some other process has generated config.js
 api_js_files = ['config.js']
 api_js_files.extend(settings.JS_API)
-compile('mirosubs-api.js', api_js_files)
+compile('unisubs-api.js', api_js_files)

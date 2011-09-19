@@ -1,4 +1,4 @@
-{% load  thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor %}
+{% load  thumbnail i18n announcement_tags messages_tags profiles_tags media_compressor auth_tags %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -124,6 +124,9 @@ jQuery(function($){
 {% announcement %}
 {% if user.is_authenticated %}
     {% messages %}
+    {% block email_confirmation_block %}
+        {% email_confirmation_notification %}
+    {% endblock %}
 {% endif %}
 {% if user.is_staff or user|can_translate %}
     <div id="admin_controls">

@@ -389,6 +389,8 @@ class EmailConfirmationManager(models.Manager):
     def send_confirmation(self, user):
         assert user.email
         
+        self.filter(user=user).delete()
+        
         salt = sha_constructor(str(random())+settings.SECRET_KEY).hexdigest()[:5]
         confirmation_key = sha_constructor(salt + user.email).hexdigest()
         current_site = Site.objects.get_current()
@@ -404,16 +406,15 @@ class EmailConfirmationManager(models.Manager):
         message = render_to_string(
             "auth/email_confirmation_message.txt", context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
-                  [user.email], priority="high")
+                  [user.email])
         return self.create(
             user=user,
             sent=datetime.now(),
             confirmation_key=confirmation_key)
 
     def delete_expired_confirmations(self):
-        for confirmation in self.all():
-            if confirmation.key_expired():
-                confirmation.delete()
+        d = datetime.now() - timedelta(days=EMAIL_CONFIRMATION_DAYS)
+        self.filter(sent__lt=d).delete()
 
 class EmailConfirmation(models.Model):
 
@@ -423,15 +424,14 @@ class EmailConfirmation(models.Model):
 
     objects = EmailConfirmationManager()
 
-    def key_expired(self):
-        expiration_date = self.sent + timedelta(
-            days=EMAIL_CONFIRMATION_DAYS)
-        return expiration_date <= datetime.now()
-    key_expired.boolean = True
-
     def __unicode__(self):
         return u"confirmation for %s" % self.user.email
 
     class Meta:
         verbose_name = _("e-mail confirmation")
         verbose_name_plural = _("e-mail confirmations")
+        
+    def key_expired(self):
+        expiration_date = self.sent + timedelta(days=EMAIL_CONFIRMATION_DAYS)
+        return expiration_date <= datetime.now()
+    key_expired.boolean = True        

@@ -47,7 +47,17 @@ def confirm_email(request, confirmation_key):
     else:
         messages.success(request, _(u'Email is confirmed.'))
         
-    return redirect(User)
+    return redirect(user)
+
+@login_required
+def resend_confirmation_email(request):
+    user = request.user
+    if user.email and not user.valid_email:
+        EmailConfirmation.objects.send_confirmation(user)
+        messages.success(request, _(u'Confirmation email was sent.'))
+    else:
+        messages.error(request, _(u'You email is empty or already confirmed.'))
+    return redirect(request.META.get('HTTP_REFERER') or request.user)
 
 def create_user(request):
     redirect_to = make_redirect_to(request)

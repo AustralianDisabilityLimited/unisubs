@@ -1,0 +1,8 @@
+{% load i18n %}
+
+{% if notification_content %}
+<div class="note">
+    {{ notification_content }}
+    <a href="{% url auth:resend_confirmation_email %}">{% trans "Resend confirmation email" %}</a>
+</div>
+{% endif %}

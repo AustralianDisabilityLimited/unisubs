@@ -16,17 +16,20 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.conf.urls.defaults import *
+from django import template
+from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = patterns(
-    'auth.views',
-    url(r'^login/$', 'login', name='login'),
-    url(r'^create/$', 'create_user', name='create_user'),
-    url(r'^delete/$', 'delete_user', name='delete_user'),
-    url(r'^login_post/$', 'login_post', name='login_post'),
-    url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
-    url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
-    url(r'^user_list/$', 'user_list', name='user_list'),
-    url(r'confirm_email/(?P<confirmation_key>\w+)/$', 'confirm_email', name='confirm_email'),
-    url(r'resend_confirmation_email/$', 'resend_confirmation_email', name='resend_confirmation_email'),
-)
+register = template.Library()
+
+@register.inclusion_tag('auth/_email_confirmation_notification.html', takes_context=True)
+def email_confirmation_notification(context, force=False):
+    user = context['request'].user
+    content = ''
+    if user.is_authenticated():
+        if not user.email:
+            content = _(u'Fill email field, please.')
+        elif not user.valid_email:
+            content = _(u'Confirm your email, please.')
+            
+    context['notification_content'] = content
+    return context

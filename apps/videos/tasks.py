@@ -43,6 +43,9 @@ def cleanup():
     from django.db import transaction
     from django.contrib.sessions.models import Session
     from djcelery.models import TaskState
+    from auth.models import EmailConfirmation
+    
+    EmailConfirmation.objects.delete_expired_confirmations()
     
     now = datetime.datetime.now()
     Session.objects.filter(expire_date__lt=now).delete()

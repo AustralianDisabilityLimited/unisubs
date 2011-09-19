@@ -83,6 +83,7 @@ class CommentEmailTests(TestCase):
     def test_simple_email(self):
         num_followers = 5
         self._create_followers(self.video, num_followers)
+        mail.outbox = []
         notify_comment_by_email(self.comment)
         self.assertEqual(len(mail.outbox), num_followers)
         email = mail.outbox[0]
@@ -109,6 +110,7 @@ class CommentEmailTests(TestCase):
     def test_comment_view_for_video(self):
         num_followers = 2
         self._create_followers(self.video, num_followers)
+        mail.outbox = []
         response = self._post_comment_for(self.video)
         followers = set(self.video.notification_list(self.logged_user))
         self.assertEqual(len(mail.outbox), len(followers))
@@ -120,6 +122,7 @@ class CommentEmailTests(TestCase):
         num_followers = 2
         self._create_followers(self.video, num_followers)
         lang = self.video.subtitle_language()
+        mail.outbox = []
         response = self._post_comment_for(lang)
         followers = set(self.video.notification_list(self.logged_user))
         followers.update(lang.notification_list(self.logged_user))

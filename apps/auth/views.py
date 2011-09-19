@@ -30,7 +30,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from socialauth.models import AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile
 from utils.translation import get_user_languages_from_cookie
-from auth.models import UserLanguage, CustomUser as User
+from auth.models import UserLanguage, CustomUser as User, EmailConfirmation
 from django.contrib.admin.views.decorators import staff_member_required
 import re
 
@@ -38,6 +38,16 @@ def login(request):
     redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, '')
     return render_login(request, CustomUserCreationForm(label_suffix=""), 
                         AuthenticationForm(label_suffix=""), redirect_to)
+
+def confirm_email(request, confirmation_key):
+    confirmation_key = confirmation_key.lower()
+    user = EmailConfirmation.objects.confirm_email(confirmation_key)
+    if not user:
+        messages.error(request, _(u'Confirmation key expired.'))
+    else:
+        messages.success(request, _(u'Email is confirmed.'))
+        
+    return redirect(User)
 
 def create_user(request):
     redirect_to = make_redirect_to(request)

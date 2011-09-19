@@ -27,4 +27,5 @@ urlpatterns = patterns(
     url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
     url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
     url(r'^user_list/$', 'user_list', name='user_list'),
+    url(r'confirm_email/(?P<confirmation_key>\w+)/$', 'confirm_email', name='confirm_email'),
 )

@@ -91,14 +91,26 @@ class CustomUser(BaseUser):
         return self.username
     
     def save(self, *args, **kwargs):
+        send_confirmation = False
+        
         if not self.email:
             self.valid_email = False
-        else:
-            before_save = self.__class__._default_manager.get(pk=self.pk)
-            if before_save.email != self.email:
-                self.valid_email = False
-                EmailConfirmation.objects.send_confirmation(self)
-        return super(CustomUser, self).save(*args, **kwargs)
+        elif self.pk:
+            try:
+                before_save = self.__class__._default_manager.get(pk=self.pk)
+                send_confirmation = before_save.email != self.email
+            except models.ObjectDoesNotExist:
+                send_confirmation = True
+        elif self.email:
+            send_confirmation = True
+            
+        if send_confirmation:
+            self.valid_email = False
+                
+        super(CustomUser, self).save(*args, **kwargs)
+        
+        if send_confirmation:
+            EmailConfirmation.objects.send_confirmation(self)
     
     def unread_messages(self, hidden_meassage_id=None):
         from messages.models import Message
@@ -393,7 +405,10 @@ class EmailConfirmationManager(models.Manager):
         
         salt = sha_constructor(str(random())+settings.SECRET_KEY).hexdigest()[:5]
         confirmation_key = sha_constructor(salt + user.email).hexdigest()
-        current_site = Site.objects.get_current()
+        try:
+            current_site = Site.objects.get_current()
+        except Site.DoesNotExist:
+            return
         path = reverse("auth:confirm_email", args=[confirmation_key])
         activate_url = u"http://%s%s" % (unicode(current_site.domain), path)
         context = {

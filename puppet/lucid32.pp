@@ -8,7 +8,8 @@ class lucid32 {
   class { 'python': } ->
   python::venv { "unisubsvenv": path => $venv } ->
   class { 'unisubs::pip': venv => $venv, projectdir => $projectdir } ->
-  class { 'unisubs::db': }
+  class { 'unisubs::db': } ->
+  class { 'solr': }
 }
 
 class { "lucid32": }

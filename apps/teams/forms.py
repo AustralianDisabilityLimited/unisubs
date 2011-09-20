@@ -27,7 +27,7 @@ from teams.models import Team, TeamMember, TeamVideo
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
-from videos.models import SubtitleLanguage
+from videos.models import SubtitleLanguage, VideoMetadata, VIDEO_META_TYPE_IDS
 from django.utils.safestring import mark_safe
 from utils.forms import AjaxForm
 import re
@@ -51,7 +51,8 @@ class EditLogoForm(forms.ModelForm, AjaxForm):
         return self.cleaned_data
 
 class EditTeamVideoForm(forms.ModelForm):
-
+    author = forms.CharField(max_length=255, required=False)
+    creation_date = forms.DateField(required=False)
 
     class Meta:
         model = TeamVideo
@@ -117,7 +118,7 @@ class EditTeamVideoForm(forms.ModelForm):
                         self.should_add_moderation = True
                 else:
                     if not who_owns:
-                        # do nothiing we are good!
+                        # do nothing we are good!
                         pass
                     elif is_ours:
                         self.should_remove_moderation = True
@@ -144,6 +145,30 @@ class EditTeamVideoForm(forms.ModelForm):
                     except Exception ,e:
                         raise
                         self._errors["should_moderate"] = [e]
+
+        author = self.cleaned_data['author'].strip()
+        creation_date = VideoMetadata.date_to_string(self.cleaned_data['creation_date'])
+
+        self._save_metadata(video, 'Author', author)
+        self._save_metadata(video, 'Creation Date', creation_date)
+
+    def _save_metadata(self, video, meta, content):
+        '''Save a single piece of metadata for the given video.
+
+        The metadata is only saved if necessary (i.e. it's not blank OR it's blank
+        but there's already other data that needs to be overwritten).
+
+        '''
+        meta_type_id = VIDEO_META_TYPE_IDS[meta]
+
+        try:
+            meta = VideoMetadata.objects.get(video=video, metadata_type=meta_type_id)
+            meta.content = content
+            meta.save()
+        except VideoMetadata.DoesNotExist:
+            if content:
+                VideoMetadata(video=video, metadata_type=meta_type_id,
+                              content=content).save()
 
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 

@@ -513,7 +513,7 @@ class Video(models.Model):
         meta = dict([(VIDEO_META_TYPE_VARS[md.metadata_type], md.content)
                      for md in self.videometadata_set.all()])
 
-        meta['creation_date'] = VideoMetadata.string_to_date(meta['creation_date'])
+        meta['creation_date'] = VideoMetadata.string_to_date(meta.get('creation_date'))
 
         return meta
 

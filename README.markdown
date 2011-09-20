@@ -77,22 +77,36 @@ To run the development version:
 
     You can access the site at <http://unisubs.example.com:8000>.
 
-9. (optional) If you want to run video searches locally, you need to set up Solr:
+9. (optional) If you want to view video listings and run video searches locally, you
+   need to set up Solr:
 
     1. [Download Solr](http://www.apache.org/dyn/closer.cgi/lucene/solr/) and unzip
        to `../buildout/parts/solr` (relative to this directory).
 
-    2. Run `./manage.py run_solr` in one terminal that is dedicated to running the
-       solr process.
+    2. Replace the contents of `../buildout/parts/solr/example/solr/solr.xml` with:
 
-    3. run `./manage.py` rebuild_index to update the index.
+            <solr persistent="true" sharedLib="lib">
+                <cores adminPath="/admin/cores">
+                    <core name="core0" instanceDir="." >
+                        <property name="dataDir" value="/data/core0" />
+                    </core>
+                    <core name="core1" instanceDir="." >
+                        <property name="dataDir" value="/data/core1" />
+                    </core>
+                </cores>
+            </solr>
 
-    4. That should be it, but in case you're interested there's a list of haystack
+    3. Run `./manage.py run_solr --settings=dev_settings` in one terminal that is
+       dedicated to running the Solr process.
+
+    4. Run `./manage.py rebuild_index --settings=dev_settings` to update the index.
+
+    5. That should be it, but in case you're interested there's a list of haystack
        commands at <http://docs.haystacksearch.org/dev/management_commands.html>
 
-    5. If you want to install SOLR as a daemon on your Mac, please see
+    6. If you want to install SOLR as a daemon on your Mac, please see
        <https://github.com/8planes/pculture//unisubs/wiki/Running-SOLR-as-a-daemon-on-Mac>
 
-    6. For the setup relating linux distributions see
+    7. For the setup relating linux distributions see
        <https://github.com/8planes/pculture//unisubs/wiki/Setting-up-solr-on-linux>
 

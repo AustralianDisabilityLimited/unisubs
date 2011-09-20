@@ -336,7 +336,7 @@ JS_BASE_DEPENDENCIES = [
 
 JS_MODERATION_DASHBOARD =  [
     "js/jquery-1.4.3.js",
-    "js/jquery-ui-1.8.13.custom.min.js",
+    "js/jquery-ui-1.8.16.custom.min.js",
     "js/jgrowl/jquery.jgrowl.js",
     "js/jalerts/jquery.alerts.js",
     "js/jquery.form.js",
@@ -641,6 +641,13 @@ MEDIA_BUNDLES = {
          ),
         },
 
+    "jquery-ui":{
+        "type":"css",
+        "files":(
+               "css/jquery-ui/jquery-ui-1.8.16.custom.css",
+         ),
+        },
+
     "home":{
         "type":"css",
         "files":(
@@ -744,7 +751,7 @@ MEDIA_BUNDLES = {
         "optimizations": "WHITESPACE_ONLY",
         "files":[
               "js/jquery-1.4.3.js",
-              "js/jquery-ui-1.8.13.custom.min.js",
+              "js/jquery-ui-1.8.16.custom.min.js",
               "js/jgrowl/jquery.jgrowl.js",
               "js/jalerts/jquery.alerts.js",
               "js/jquery.form.js",

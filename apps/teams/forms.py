@@ -52,7 +52,7 @@ class EditLogoForm(forms.ModelForm, AjaxForm):
 
 class EditTeamVideoForm(forms.ModelForm):
     author = forms.CharField(max_length=255, required=False)
-    creation_date = forms.DateField(required=False)
+    creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
 
     class Meta:
         model = TeamVideo

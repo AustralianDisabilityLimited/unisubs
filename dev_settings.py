@@ -26,6 +26,18 @@ JS_USE_COMPILED = True
 
 debug = False
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "unisubs",
+        'USER': "root",
+        'PASSWORD': "root",
+        'HOST': "localhost",
+        'PORT': '3306'
+        }
+    }
+
+
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
 

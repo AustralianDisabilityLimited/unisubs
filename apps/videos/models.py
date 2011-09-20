@@ -565,7 +565,7 @@ class VideoMetadata(models.Model):
 
     @classmethod
     def string_to_date(cls, s):
-        return datetime.strptime(s, '%Y-%m-%d').date if s else None
+        return datetime.strptime(s, '%Y-%m-%d').date() if s else None
 
 
 class SubtitleLanguage(models.Model):

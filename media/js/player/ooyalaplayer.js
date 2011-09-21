@@ -22,15 +22,34 @@ goog.provide('unisubs.player.OoyalaPlayer');
  * @constructor
  * @param {unisubs.player.OoyalaVideoSource} videoSource
  */
-unisubs.player.OoyalaPlayer = function(videoSource) {
-    unisubs.player.FlashVideoPlayer.call(this, videoSource);
+unisubs.player.OoyalaPlayer = function(videoSource, playerID) {
+    unisubs.player.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
 };
-goog.inherits(unisubs.player.OoyalaPlayer, unisubs.player.FlashVideoPlayer);
+goog.inherits(unisubs.player.OoyalaPlayer, unisubs.player.AbstractVideoPlayer);
 
-unisubs.player.YoutubeVideoPlayer.readyAPIIDs_ = new goog.structs.Set();
+unisubs.player.OoyalaPlayer.readyPlayerIDs_ = new goog.structs.Set();
+/**
+ * mapping of playerID -> player.
+ */
+unisubs.player.OoyalaPlayer.players_ = {};
 
-unisubs.player.OoyalaPlayer.prototype.widgetize = function(callback, playerId, eventName) {
+unisubs.player.OoyalaPlayer.callbackMade = function(playerID, eventName, eventParams) {
+    if (eventName == unisubs.player.OoyalaPlayer.Event_.API_READY &&
+        !unisubs.player.OoyalaPlayer.readyPlayerIDs_.contains(playerID))
+    {
+        unisubs.player.OoyalaPlayer.readyPlayerIDs_.add(playerID);
+        var player = new unisubs.player.OoyalaPlayer(null, playerID);
+        player.decorate(goog.dom.getElement(playerID));
+        unisubs.player.OoyalaPlayer.players_[playerID] = player;
+        return player;
+    }
+    else {
+        unisubs.player.OoyalaPlayer.players_[playerID].callback(eventName, eventParams);
+    }
+};
+
+unisubs.player.OoyalaPlayer.prototype.callback = function(eventName, eventParams) {
     
 };
 
@@ -41,5 +60,7 @@ unisubs.player.OoyalaPlayer.prototype.decorateInternal = function(elem) {
 
 unisubs.player.OoyalaPlayer.Event_ = {
     API_READY: "apiReady",
-    METADATA_READY: "meta"
+    METADATA_READY: "meta",
+    STATE_CHANGED: "stateChanged",
+    PLAYHEAD_TIME_CHANGED: "playheadTimeChanged"
 };

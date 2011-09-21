@@ -82,10 +82,12 @@ unisubs.Widgetizer.prototype.onLoaded_ = function() {
 unisubs.Widgetizer.prototype.unisubsPlayerReady_ = function(code, args) {
     var videoPlayer;
     if (code == "y") {
-        videoPlayer = unisubs.player.YoutubeVideoPlayer.makeFromReady(args[0]);
+        unisubs.player.YoutubeVideoPlayer.registerReady.apply(
+            null, args);
     }
     else if (code == "o") {
-        videoPlayer = unisubs.player.OoyalaPlayer.callbackMade(args);
+        videoPlayer = unisubs.player.OoyalaPlayer.callbackMade.apply(
+            null, args);
     }
     if (videoPlayer) {
         this.decorateVideoPlayer_(videoPlayer);
@@ -99,6 +101,12 @@ unisubs.Widgetizer.prototype.initListenedPlayers_ = function() {
             this.unisubsPlayerReady_(ready[0], ready[1]);
         }, 
         this);
+    // for legacy purposes with widgetizerprimer
+    goog.array.forEach(
+        window['unisubs_readyAPIIDs'],
+        function(playerID) {
+            this.unisubsPlayerReady_("y", [playerID]);
+        }, this);
 };
 
 unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {

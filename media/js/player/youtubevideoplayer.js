@@ -63,7 +63,7 @@ unisubs.player.YoutubeVideoPlayer.prototype.isFlashElementReady = function(elem)
     return elem['playVideo'];
 };
 
-unisubs.player.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains = function(apiID) {
+unisubs.player.YoutubeVideoPlayer.prototype.windowReadyAPIIDsContains_ = function(apiID) {
     // this is activated if a widgetizer user has inserted the widgetizerprimer
     // into the HEAD of their document.
     var arr = window['unisubs_readyAPIIDs'];
@@ -76,7 +76,7 @@ unisubs.player.YoutubeVideoPlayer.prototype.decorateInternal = function(elem) {
     var apiidMatch = /playerapiid=([^&]+)/.exec(unisubs.Flash.swfURL(elem));
     this.playerAPIID_ = apiidMatch ? apiidMatch[1] : '';
     if (unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.contains(this.playerAPIID_) ||
-        this.windowReadyAPIIDsContains(this.playerAPIID_))
+        this.windowReadyAPIIDsContains_(this.playerAPIID_))
         this.onYouTubePlayerReady_(this.playerAPIID_);
     this.playerSize_ = goog.style.getSize(this.getElement());
     this.setDimensionsKnownInternal();
@@ -215,28 +215,11 @@ unisubs.player.YoutubeVideoPlayer.State_ = {
 unisubs.player.YoutubeVideoPlayer.logger_ = 
     goog.debug.Logger.getLogger('unisubs.player.YoutubeVideoPlayerStatic');
 
-(function() {
-    var ytReady = "onYouTubePlayerReady";
-    var oldReady = window[ytReady] || goog.nullFunction;
-    window[ytReady] = function(apiID) {
-        if (goog.DEBUG) {
-            unisubs.player.YoutubeVideoPlayer.logger_.info(
-                'onYouTubePlayerReady for ' + apiID);
-            unisubs.player.YoutubeVideoPlayer.logger_.info(
-                'players_ length is ' + 
-                    unisubs.player.YoutubeVideoPlayer.players_.length);
-        }
-        try {
-            oldReady(apiID);
-        }
-        catch (e) {
-            // don't care
-        }
-        if (apiID == 'undefined' || !goog.isDefAndNotNull(apiID))
-            apiID = '';
-        unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.add(apiID);
+unisubs.player.YoutubeVideoPlayer.registerReady = function(playerID) {
+    if (!unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.contains(playerID)) {
+        unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.add(playerID);
         goog.array.forEach(
             unisubs.player.YoutubeVideoPlayer.players_,
-            function(p) { p.onYouTubePlayerReady_(apiID); });
-    };
-})();
+            function(p) { p.onYouTubePlayerReady_(playerID); });
+    }
+};

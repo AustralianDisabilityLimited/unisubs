@@ -388,13 +388,13 @@ def edit_videos(request, slug):
 @render_to('teams/team_video.html')
 def team_video(request, team_video_pk):
     team_video = get_object_or_404(TeamVideo, pk=team_video_pk)
-    
+
     if not team_video.can_edit(request.user):
         raise Http404
-    
+
+    meta = team_video.video.metadata()
     form = EditTeamVideoForm(request.POST or None, request.FILES or None,
-                             instance=team_video,
-                             user=request.user)
+                             instance=team_video, user=request.user, initial=meta)
 
     if form.is_valid():
         form.save()
@@ -402,7 +402,7 @@ def team_video(request, team_video_pk):
         return redirect(team_video)
 
     context = widget.add_onsite_js_files({})
-    
+
     context.update({
         'team': team_video.team,
         'team_video': team_video,

@@ -17,8 +17,8 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from videos.models import Video, SubtitleLanguage, SubtitleVersion, Subtitle, \
-    VideoFeed
+from videos.models import Video, SubtitleLanguage, SubtitleVersion, \
+    VideoFeed, VideoMetadata
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from utils.livesettings_values import EmailListValue
@@ -55,6 +55,13 @@ class VideoAdmin(admin.ModelAdmin):
         obj.save()
         update_search_index.delay(obj.__class__, obj.pk)
         
+class VideoMetadataAdmin(admin.ModelAdmin):
+    list_display = ['video', 'metadata_type', 'content']
+    list_filter = ['metadata_type', 'created', 'modified']
+    search_fields = ['video__video_id', 'video__title', 'video__user__username',
+                     'content']
+    raw_id_fields = ['video']
+
 class SubtitleLanguageAdmin(admin.ModelAdmin):
     actions = None
     list_display = ['video', 'is_original', 'language', 'is_complete', 'had_version', 'versions', 'subtitle_count']
@@ -103,8 +110,9 @@ class VideoFeedAdmin(admin.ModelAdmin):
     raw_id_fields = ['user']
     
 #admin.site.register(Subtitle, SubtitleAdmin)
-admin.site.register(SubtitleVersion, SubtitleVersionAdmin)    
+admin.site.register(SubtitleVersion, SubtitleVersionAdmin)
 admin.site.register(Video, VideoAdmin)
+admin.site.register(VideoMetadata, VideoMetadataAdmin)
 admin.site.register(SubtitleLanguage, SubtitleLanguageAdmin)
 admin.site.register(VideoFeed, VideoFeedAdmin)
 
@@ -145,4 +153,4 @@ class FixedTaskMonitor(TaskMonitor):
     traceback_display.short_description = 'Traceback'
     
 admin.site.unregister(TaskState)
-admin.site.register(TaskState, FixedTaskMonitor)    
+admin.site.register(TaskState, FixedTaskMonitor)

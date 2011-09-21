@@ -79,6 +79,14 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_FLV, 'FLV'),
     (VIDEO_TYPE_BRIGHTCOVE, 'brightcove.com')
 )
+VIDEO_META_CHOICES = (
+    (1, 'Author'),
+    (2, 'Creation Date'),
+)
+VIDEO_META_TYPE_NAMES = dict(VIDEO_META_CHOICES)
+VIDEO_META_TYPE_VARS = dict((k, name.lower().replace(' ', '_'))
+                            for k, name in VIDEO_META_CHOICES)
+VIDEO_META_TYPE_IDS = dict([choice[::-1] for choice in VIDEO_META_CHOICES])
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -493,6 +501,23 @@ class Video(models.Model):
     def is_moderated(self):
         return bool(self.moderated_by_id)
     
+    def metadata(self):
+        '''Return a dict of metadata for this video.
+
+        Example:
+
+        { 'author': 'Sample author',
+          'creation_date': datetime(...), }
+
+        '''
+        meta = dict([(VIDEO_META_TYPE_VARS[md.metadata_type], md.content)
+                     for md in self.videometadata_set.all()])
+
+        meta['creation_date'] = VideoMetadata.string_to_date(meta.get('creation_date'))
+
+        return meta
+
+
     class Meta(object):
         permissions = (
             ("can_moderate_version"   , "Can moderate version" ,),
@@ -512,6 +537,36 @@ def video_delete_handler(sender, instance, **kwargs):
 models.signals.pre_save.connect(create_video_id, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
+
+
+class VideoMetadata(models.Model):
+    video = models.ForeignKey(Video)
+    metadata_type = models.PositiveIntegerField(choices=VIDEO_META_CHOICES)
+    content = models.CharField(max_length=255)
+
+    created = models.DateTimeField(editable=False, auto_now_add=True)
+    modified = models.DateTimeField(editable=False, auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+        verbose_name_plural = 'video metadata'
+
+    def __unicode__(self):
+        content = self.content
+        if len(content) > 30:
+            content = content[:30] + '...'
+        return u'%s - %s: %s' % (self.video,
+                                 VIDEO_META_TYPE_NAMES[self.metadata_type],
+                                 content)
+
+    @classmethod
+    def date_to_string(cls, d):
+        return d.strftime('%Y-%m-%d') if d else ''
+
+    @classmethod
+    def string_to_date(cls, s):
+        return datetime.strptime(s, '%Y-%m-%d').date() if s else None
+
 
 class SubtitleLanguage(models.Model):
     

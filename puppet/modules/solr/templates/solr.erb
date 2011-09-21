@@ -1,0 +1,43 @@
+#!/bin/bash                                                                                                                                                                                                                     
+DESC="Solr server"
+NAME=solr
+SCRIPTNAME=/etc/init.d/$NAME
+CURRENT_USER=solr
+
+DAEMON=/usr/bin/java
+
+PROG_OUTPUT=/var/log/solr/solr.log
+PID_FILE=/var/run/solr.pid
+JAR_FILE="/opt/solr/example/start.jar"
+
+DAEMON_OPTS=" -client -Xmx512m -jar $JAR_FILE -log $PROG_OUTPUT"
+
+NAME=solr
+
+case "$1" in
+    start)
+        echo -n "Starting $DESC: "
+        start-stop-daemon -c $CURRENT_USER --start --background --pidfile $PID_FILE --make-pidfile --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+
+    stop)
+        echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+        echo "$NAME."
+        ;;
+
+    restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+        sleep 1
+        start-stop-daemon -c $CURRENT_USER --start --background --pidfile $PID_FILE  --make-pidfile --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+
+    *)
+    N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac

@@ -39,6 +39,11 @@ unisubs.Widgetizer = function() {
         new unisubs.widgetizer.YoutubeIFrame()
     ];
     this.logger_ = goog.debug.Logger.getLogger('unisubs.Widgetizer');
+    var uri = new goog.Uri(window.location);
+    unisubs.Tracker.getInstance().trackEvent(
+        "Widgetizer",
+        uri.getDomain(),
+        uri.toString());
 };
 goog.addSingletonGetter(unisubs.Widgetizer);
 

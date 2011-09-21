@@ -766,6 +766,14 @@ MEDIA_BUNDLES = {
         "closure_deps": "",
         "include_flash_deps": False,
         },
+    "js-jqueryui-datepicker":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files":[
+              "js/jquery-ui-1.8.16.custom.datepicker.min.js",
+            ],
+        "include_js_base_dependencies": False,
+        },
     "js-testing-base":{
         "type":"js",
         "files": [

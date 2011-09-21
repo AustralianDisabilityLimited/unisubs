@@ -52,7 +52,7 @@ def _urls_for(bundle_name, should_compress):
                 suffix = "-inner"
         urls += ["%s%s%s.%s" % ( base, bundle_name, suffix, bundle_type)]
     else:
-        if bundle_type == "js":
+        if bundle_type == "js" and bundle.get('include_js_base_dependencies', True):
             urls = list(settings.JS_BASE_DEPENDENCIES)
         urls += settings.MEDIA_BUNDLES.get(bundle_name)["files"]
         

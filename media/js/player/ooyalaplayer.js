@@ -16,9 +16,30 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-if (!window['UnisubsWidgetizerLoaded']) {
-    unisubs.Widgetizer.getInstance().widgetize();
-    unisubs.widget.WidgetDecorator.exportJSSymbols();
-}
+goog.provide('unisubs.player.OoyalaPlayer');
 
-window['UnisubsWidgetizerLoaded'] = true;
+/**
+ * @constructor
+ * @param {unisubs.player.OoyalaVideoSource} videoSource
+ */
+unisubs.player.OoyalaPlayer = function(videoSource) {
+    unisubs.player.FlashVideoPlayer.call(this, videoSource);
+    this.videoSource_ = videoSource;
+};
+goog.inherits(unisubs.player.OoyalaPlayer, unisubs.player.FlashVideoPlayer);
+
+unisubs.player.YoutubeVideoPlayer.readyAPIIDs_ = new goog.structs.Set();
+
+unisubs.player.OoyalaPlayer.prototype.widgetize = function(callback, playerId, eventName) {
+    
+};
+
+unisubs.player.OoyalaPlayer.prototype.decorateInternal = function(elem) {
+    unisubs.player.OoyalaPlayer.superClass_.decorateInternal.call(this, elem);
+    
+};
+
+unisubs.player.OoyalaPlayer.Event_ = {
+    API_READY: "apiReady",
+    METADATA_READY: "meta"
+};

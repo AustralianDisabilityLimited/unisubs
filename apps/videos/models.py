@@ -528,8 +528,7 @@ def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
     alphanum = string.letters+string.digits
-    instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
-                                 for i in xrange(12)])
+    instance.video_id = ''.join([random.choice(alphanum) for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video_id)

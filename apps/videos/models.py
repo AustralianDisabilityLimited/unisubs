@@ -67,6 +67,7 @@ VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE_DAILYMOTION = 'D'
 VIDEO_TYPE_FLV = 'L'
 VIDEO_TYPE_BRIGHTCOVE = 'C'
+VIDEO_TYPE_MP3 = 'M'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
@@ -77,7 +78,8 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
     (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com'),
     (VIDEO_TYPE_FLV, 'FLV'),
-    (VIDEO_TYPE_BRIGHTCOVE, 'brightcove.com')
+    (VIDEO_TYPE_BRIGHTCOVE, 'brightcove.com'),
+    (VIDEO_TYPE_MP3, 'MP3'),
 )
 VIDEO_META_CHOICES = (
     (1, 'Author'),

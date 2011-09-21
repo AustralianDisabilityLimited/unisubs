@@ -47,3 +47,4 @@ apps/services
 media/unisubservices
 user-data/pictures
 .vagrant
+venv/

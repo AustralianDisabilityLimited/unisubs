@@ -12,44 +12,26 @@ To run the development version:
 
 1. Git clone the repository:
 
-        git clone git://github.com/8planes/pculture//unisubs.git unisubs
+        git clone git://github.com/pculture/unisubs.git unisubs
 
     Now the entire project will be in the unisubs directory.
 
-2. Install [virtualenv](http://pypi.python.org/pypi/virtualenv).
+2. Install VirtualBox if you don't have it yet. Then type:
 
-3. (optional) Download and install the [virtualenv
-   wrapper](http://www.doughellmann.com/projects/virtualenvwrapper/) bash functions.
+       vagrant up
 
-4. Create a virtual environment and activate it.
+   This is going to create a vm and provision it. It should take 10-15 minutes. 
+   Remember what mom said: a watched pot never boils.
 
-    Here is how to do it *without* the virtualenv wrapper. Run these commands from
-    the parent of the unisubs directory created in #1:
+3. Run following commands:
 
-        $ virtualenv unisubs-env
-        $ source unisubs-env/bin/activate
+       vagrant ssh
+       cd /opt/unisubs
+       source venv/bin/activate
+       python manage.py syncdb --all --settings=dev_settings
+       python manage.py migrate --fake --settings=dev_settings
 
-    If you're using the virtualenv wrapper (run from any directory):
-
-        $ mkvirtualenv unisubs
-        $ workon unisubs
-
-5. Run:
-
-        $ easy_install -U setuptools
-        $ easy_install pip
-        $ cd deploy
-        # this is the unisubs directory you cloned from git, not the parent you created the virtualenv in.
-        $ pip install -r requirements.txt
-
-    **Note:** You'll need [Mercurial](http://hg-scm.org) installed to make this last
-    command work.
-
-    **Note 2:** If you do not have the MySQL bindings installed (MySQLdb) and wish to
-    keep it that way, unisubs runs just fine on sqlite, just comment out the line
-    `MySQL_python>=1.2.2` on `deploy/requirements.txt` before running this command.
-
-6. Check out Google Closure into directory of your choice:
+4. Check out Google Closure into directory of your choice:
 
         svn checkout http://closure-library.googlecode.com/svn/trunk/ <directory>
 
@@ -59,23 +41,18 @@ To run the development version:
         $ cd media/js
         $ ln -s <google closure checkout directory> closure-library
 
-7. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This is
+5. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This is
    necessary for Twitter oauth to work correctly.
 
-8. From the unisubs directory created in step 1, first create the
-   database with:
-
-        python manage.py syncdb --all
-
-    Then update the south migrations with
-
-        python manage.py migrate --fake
-
-    SQLLite warnings are okay. Then run the site with:
+6. Run the site with:
 
         ./dev-runserver.sh
 
     You can access the site at <http://unisubs.example.com:8000>.
+
+-- IGNORE THE FOLLOWING FOR RIGHT NOW. UNDER CONSTRUCTION. --
+
+
 
 9. (optional) If you want to view video listings and run video searches locally, you
    need to set up Solr:

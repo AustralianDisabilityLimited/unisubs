@@ -452,7 +452,6 @@ INSTALLED_APPS = (
     'messages',
     'statistic',
     'search',
-    'api',
     'utils',
     'targetter',
     'livesettings',

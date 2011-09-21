@@ -15,4 +15,9 @@ class solr::package {
     require => [Exec["solr_download"], File["/opt/solr"]],
     cwd => "/opt";
   }
+  exec { "fix_solr_owner":
+    path => "/usr/local/bin:/usr/bin:/bin",
+    command => "chown -R solr:solr /opt/solr/example",
+    require => [Exec["solr_tgz"], User["solr"], Group["solr"]],
+  }
 }

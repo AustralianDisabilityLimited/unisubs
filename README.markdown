@@ -12,7 +12,7 @@ To run the development version:
 
 1. Git clone the repository:
 
-        git clone git://github.com/8planes/pculture//unisubs.git unisubs
+        git clone git://github.com/pculture/unisubs.git unisubs
 
     Now the entire project will be in the unisubs directory.
 
@@ -20,7 +20,7 @@ To run the development version:
 
         vagrant up
 
-   This is going to create a vm and provision it. It should take 10-15 minutes. 
+   This is going to create a vm and provision it. It should take 10-15 minutes.
    Remember what mom said: a watched pot never boils.
 
 3. Run following commands:

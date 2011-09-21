@@ -18,18 +18,18 @@ To run the development version:
 
 2. Install VirtualBox if you don't have it yet. Then type:
 
-       vagrant up
+        vagrant up
 
    This is going to create a vm and provision it. It should take 10-15 minutes. 
    Remember what mom said: a watched pot never boils.
 
 3. Run following commands:
 
-       vagrant ssh
-       cd /opt/unisubs
-       source venv/bin/activate
-       python manage.py syncdb --all --settings=dev_settings
-       python manage.py migrate --fake --settings=dev_settings
+        vagrant ssh
+        cd /opt/unisubs
+        source venv/bin/activate
+        python manage.py syncdb --all --settings=dev_settings
+        python manage.py migrate --fake --settings=dev_settings
 
 4. Check out Google Closure into directory of your choice:
 

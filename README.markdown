@@ -12,7 +12,7 @@ To run the development version:
 
 1. Git clone the repository:
 
-        git clone git://github.com/8planes/pculture//unisubs.git unisubs
+        git clone git://github.com/pculture/unisubs.git unisubs
 
     Now the entire project will be in the unisubs directory.
 

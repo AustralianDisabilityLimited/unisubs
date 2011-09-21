@@ -1132,10 +1132,10 @@ class YoutubeVideoTypeTest(TestCase):
 from videos.types.htmlfive import HtmlFiveVideoType
 
 class HtmlFiveVideoTypeTest(TestCase):
-    
+
     def setUp(self):
         self.vt = HtmlFiveVideoType
-        
+
     def test_type(self):
         url = 'http://someurl.com/video.ogv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.ogv'

@@ -102,7 +102,7 @@ class AlreadyEditingException(Exception):
     
 class Video(models.Model):
     """Central object in the system"""
-    
+
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
@@ -134,7 +134,7 @@ class Video(models.Model):
     languages_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
     moderated_by = models.ForeignKey("teams.Team", blank=True, null=True, related_name="moderating")
 
-    
+
     def __unicode__(self):
         title = self.title_display()
         if len(title) > 60:
@@ -281,7 +281,7 @@ class Video(models.Model):
             video, created = video_url_obj.video, False
         except models.ObjectDoesNotExist:
             video, created = None, False
-        
+
         if not video:
             try:
                 video_url_obj = VideoUrl.objects.get(
@@ -299,7 +299,7 @@ class Video(models.Model):
 
                 from videos.tasks import save_thumbnail_in_s3
                 save_thumbnail_in_s3.delay(obj.pk)
-    
+
                 Action.create_video_handler(obj, user)
                 
                 SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
@@ -1463,7 +1463,7 @@ class Action(models.Model):
             instance.action = obj
             instance.save()
                 
-post_save.connect(Action.create_comment_handler, Comment)        
+post_save.connect(Action.create_comment_handler, Comment)
 
 class UserTestResult(models.Model):
     email = models.EmailField()
@@ -1507,7 +1507,7 @@ class VideoUrl(models.Model):
     def effective_url(self):
         return video_type_registrar[self.type].video_url(self)
 
-post_save.connect(Action.create_video_url_handler, VideoUrl)   
+post_save.connect(Action.create_video_url_handler, VideoUrl)
 post_save.connect(video_cache.on_video_url_save, VideoUrl)
 
 class VideoFeed(models.Model):

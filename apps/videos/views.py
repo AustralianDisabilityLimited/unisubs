@@ -153,7 +153,7 @@ def create(request):
     context = {
         'video_form': video_form,
         'youtube_form': AddFromFeedForm(request.user)
-    }    
+    }
     if video_form.is_valid():
         try:
             video = video_form.save()

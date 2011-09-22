@@ -17,6 +17,7 @@ class lucid32 {
     group => "vagrant"; } ->
   class { 'unisubs::db': } ->
   class { 'solr': }
+  class { 'nginx': }
 }
 
 class { "lucid32": }

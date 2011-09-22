@@ -1132,10 +1132,10 @@ class YoutubeVideoTypeTest(TestCase):
 from videos.types.htmlfive import HtmlFiveVideoType
 
 class HtmlFiveVideoTypeTest(TestCase):
-    
+
     def setUp(self):
         self.vt = HtmlFiveVideoType
-        
+
     def test_type(self):
         url = 'http://someurl.com/video.ogv?val=should&val1=be#removed'
         clean_url = 'http://someurl.com/video.ogv'
@@ -1158,6 +1158,27 @@ class HtmlFiveVideoTypeTest(TestCase):
         self.assertFalse(self.vt.matches_video_url('http://someurl.com/video.flv'))
         self.assertFalse(self.vt.matches_video_url('http://someurl.com/ogv.video'))
         
+from videos.types.mp3 import Mp3VideoType
+class Mp3VideoTypeTest(TestCase):
+
+    def setUp(self):
+        self.vt = Mp3VideoType
+
+    def test_type(self):
+        url = 'http://someurl.com/audio.mp3?val=should&val1=be#removed'
+        clean_url = 'http://someurl.com/audio.mp3'
+
+        video, created = Video.get_or_create_for_url(url)
+        vu = video.videourl_set.all()[:1].get()
+
+        self.assertEqual(vu.url, clean_url)
+        self.assertEqual(self.vt.video_url(vu), vu.url)
+
+        self.assertTrue(self.vt.matches_video_url(url))
+
+        self.assertTrue(self.vt.matches_video_url('http://someurl.com/audio.mp3'))
+        self.assertFalse(self.vt.matches_video_url('http://someurl.com/mp3.audio'))
+
 from videos.types.bliptv import BlipTvVideoType
 
 class BlipTvVideoTypeTest(TestCase):

@@ -216,6 +216,9 @@ unisubs.player.YoutubeVideoPlayer.logger_ =
     goog.debug.Logger.getLogger('unisubs.player.YoutubeVideoPlayerStatic');
 
 unisubs.player.YoutubeVideoPlayer.registerReady = function(playerID) {
+    if (!goog.isDefAndNotNull(playerID) || playerID == "undefined") {
+        playerID = "";
+    }
     if (!unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.contains(playerID)) {
         unisubs.player.YoutubeVideoPlayer.readyAPIIDs_.add(playerID);
         goog.array.forEach(

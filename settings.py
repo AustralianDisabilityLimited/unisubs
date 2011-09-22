@@ -316,6 +316,7 @@ JS_STREAMER.extend([
         'js/streamer/streamercontroller.js', 
         'js/streamer/streambox.js', 
         'js/streamer/streamsub.js', 
+        'js/streamer/overlaycontroller.js',
         'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)

@@ -39,7 +39,8 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
 };
 
 unisubs.streamer.StreamerDecorator.makeOverlayStreamer_ = function(videoPlayer) {
-    
+    var controller = new unisubs.streamer.OverlayController(
+        videoPlayer, unisubs.streamer.StreamerDecorator.getSTElem_());
 };
 
 unisubs.streamer.StreamerDecorator.getUnisubsElem_ = function(videoPlayer) {

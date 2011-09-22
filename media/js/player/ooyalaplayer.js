@@ -25,6 +25,8 @@ goog.provide('unisubs.player.OoyalaPlayer');
 unisubs.player.OoyalaPlayer = function(videoSource, playerID) {
     unisubs.player.AbstractVideoPlayer.call(this, videoSource);
     this.videoSource_ = videoSource;
+    this.logger_ = goog.debug.Logger.getLogger(
+        "unisubs.player.OoyalaPlayer");
 };
 goog.inherits(unisubs.player.OoyalaPlayer, unisubs.player.AbstractVideoPlayer);
 
@@ -50,12 +52,28 @@ unisubs.player.OoyalaPlayer.callbackMade = function(playerID, eventName, eventPa
 };
 
 unisubs.player.OoyalaPlayer.prototype.callback = function(eventName, eventParams) {
-    
+    if (eventName == unisubs.player.OoyalaPlayer.Event_.PLAYHEAD_TIME_CHANGED) {
+        this.dispatchEvent(unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE);
+    }
+};
+
+unisubs.player.OoyalaPlayer.prototype.getPlayheadTime = function() {
+    return this.player_['getPlayheadTime']();
 };
 
 unisubs.player.OoyalaPlayer.prototype.decorateInternal = function(elem) {
     unisubs.player.OoyalaPlayer.superClass_.decorateInternal.call(this, elem);
-    
+    this.player_ = elem;
+    this.playerSize_ = goog.style.getSize(this.getElement());
+    this.setDimensionsKnownInternal();
+    if (goog.DEBUG) {
+        this.logger_.info("In decorateInternal, a containing element size of " + 
+                          this.playerSize_);
+    }
+};
+
+unisubs.player.OoyalaPlayer.prototype.getVideoSize = function() {
+    return this.playerSize_;
 };
 
 unisubs.player.OoyalaPlayer.Event_ = {

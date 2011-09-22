@@ -23,20 +23,28 @@ from django.conf import settings
 import widget
 
 def youtubedemo(request):
-    return _youtubedemo(request, 'streamer/youtubedemo.html')
-
-def overlayytdemo(request):
-    return _youtubedemo(request, 'streamer/overlayytdemo.html')
-
-def _youtubedemo(request, template):
     v, created = models.Video.get_or_create_for_url(
         'http://www.youtube.com/v/1lxm-e0hMTw')
     subs = v.subtitles()
     scripts = [widget.full_path(s) for s in settings.JS_STREAMER[:-1]]
     return render_to_response(
-        template,
+        'streamer/youtubedemo.html',
         { 'js_use_compiled': settings.COMPRESS_MEDIA,
           'videoid': v.video_id,
           'subs': subs,
+          'scripts': scripts },
+        context_instance=RequestContext(request))
+
+def overlayytdemo(request):
+    return _overlaydemo(request, 'streamer/overlayytdemo.html')
+
+def overlayooyalademo(request):
+    return _overlaydemo(request, 'streamer/overlayooyalademo.html')
+
+def _overlaydemo(request, template):
+    scripts = [widget.full_path(s) for s in settings.JS_STREAMER[:-1]]
+    return render_to_response(
+        template,
+        { 'js_use_compiled': settings.COMPRESS_MEDIA,
           'scripts': scripts },
         context_instance=RequestContext(request))

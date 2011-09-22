@@ -17,50 +17,48 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 if (!window['{{gatekeeper}}']) {
-    (function() {
-        var d = document, w = window;
-        function addScript() {
-            var script = d.createElement('script');
-            script.src = "{{script_src}}";
-            script.async = true;
-            var firstScript = d.getElementsByTagName('script')[0];
-            firstScript.parentNode.insertBefore(script, firstScript);
+    var d = document, w = window;
+    function addScript() {
+        var script = d.createElement('script');
+        script.src = "{{script_src}}";
+        script.async = true;
+        var firstScript = d.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    };
+
+    var readyArrayName = "unisubsReady";
+    var readyArray = w[readyArrayName] = w[readyArrayName] || [];
+
+    var readyFuncName = "unisubsPlayerReady";
+    w[readyFuncName] = function(code, args) {
+        readyArray.push([code, args]);
+    };
+
+    function addReadyListener(callback, code) {
+        var oldReady = w[callback] || function() {};
+        w[callback] = function() {
+            try {
+                oldReady.apply(null, arguments);
+            }
+            catch (e) {
+                // don't care
+            }
+            w[readyFuncName](code, arguments);
         };
+    }
 
-        var readyArrayName = "unisubsReady";
-        var readyArray = w[readyArrayName] = w[readyArrayName] || [];
+    addReadyListener("onYouTubePlayerReady", "y");
+    addReadyListener("us_ooyala_callback", "o");
 
-        var readyFuncName = "unisubsPlayerReady";
-        w[readyFuncName] = function(code, args) {
-            readyArray.push([code, args]);
-        };
-
-        function addReadyListener(callback, code) {
-            var oldReady = w[callback] || function() {};
-            window[callback] = function() {
-                try {
-                    oldReady.apply(null, arguments);
-                }
-                catch (e) {
-                    // don't care
-                }
-                w[readyFuncName](code, arguments);
-            };
-        }
-
-        addReadyListener("onYouTubePlayerReady", "y");
-        addReadyListener("us_ooyala_callback", "o");
-
-        if (document.readyState == "complete") {
-            addScript();
+    if (d.readyState == "complete") {
+        addScript();
+    }
+    else {
+        if (w.addEventListener) {
+            w.addEventListener("load", addScript, false);
         }
         else {
-            if (window.addEventListener) {
-                window.addEventListener("load", addScript, false);
-            }
-            else {
-                window.attachEvent("onload", addScript);
-            }
+            w.attachEvent("onload", addScript);
         }
-    })();
+    }
 }

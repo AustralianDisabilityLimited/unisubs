@@ -16,7 +16,7 @@
     {% endfor %}
     <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
   {% else %}
-    {% include_bundle "unisubs-streamer" %}
+    <script type="text/javascript" src="{{STATIC_URL_BASE}}js/unisubs-streamer.js"></script>
   {% endif %}
 </head>
 <body>

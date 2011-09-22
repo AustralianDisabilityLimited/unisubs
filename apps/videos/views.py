@@ -264,10 +264,15 @@ def actions_list(request, video_id):
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
+
     if form.is_valid():
         try:
             language = form.save()
             output['success'] = True
+            if form._sl_created:
+                output['msg'] = ugettext(u'Thank you for uploading. It will take a minute or so for your subtitles to appear.')
+            else:
+                output['msg'] = ugettext(u'Your changes have been saved.')
             output['next'] = language.get_absolute_url()
             transaction.commit()
         except AlreadyEditingException, e:

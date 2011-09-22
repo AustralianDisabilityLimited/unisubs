@@ -45,18 +45,18 @@
         (function($) {
             var LANGUAGE_PAGE_URL = '{% url videos:history video.video_id %}';
             var ERROR_MSG = "{% trans "If you believe your subtitle file is compatible, <a href='mailto:feedback@universalsubtitles.org'>send it to us</a>" %}";
-            var SUCCESS_MESSAGE = '{% trans "Thank you for uploading. It will take a minute or so for your subtitles to appear." %}';
-             $('#subtitles-file-field ,select#id_language').change(function() {
+             
+            $('#subtitles-file-field ,select#id_language').change(function() {
                 $(".upload-subtitles-submit-button-").show();
                 $('p.error_list').remove();
-                 $('p.#feedback-message').remove();
+                $('p.#feedback-message').remove();
             });
             
             $('#upload-subtitles-form').ajaxForm({
                 dataType: 'json',
                 success: function(data, status, xhr, $form){
                     if (data.success){
-                        $form.append('<p class="feedback-message" id="feedback-message">' + SUCCESS_MESSAGE + '</p>').fadeIn('fast');
+                        $form.append('<p class="feedback-message" id="feedback-message">' + data.msg + '</p>').fadeIn('fast');
                         $(".upload-subtitles-submit-button-").hide();
                     } else {
                         $form.prepend('<p class="error_list">'+ERROR_MSG+'</p>');

@@ -19,18 +19,15 @@
 goog.provide('unisubs.streamer.StreamerDecorator');
 
 /**
- * @private
- * @constructor
  * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
-unisubs.streamer.StreamerDecorator = function(videoPlayer) {
+unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var streamBox = new unisubs.streamer.StreamBox();
     var videoElem = videoPlayer.getElement();
-    // TODO: walk dom to get this in the future in case there's more than one per page.
-    var captionBoxElem = goog.dom.getElementsByTagNameAndClass(
-        'div', 'unisubs-substreamer')[0];
+    var captionBoxElem = 
+        unisubs.streamer.StreamerDecorator.getUnisubsElem_(videoElem);
     streamBox.decorate(captionBoxElem);
-    this.controller_ = new unisubs.streamer.StreamerController(
+    var controller = new unisubs.streamer.StreamerController(
         videoPlayer, streamBox);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
@@ -38,7 +35,25 @@ unisubs.streamer.StreamerDecorator = function(videoPlayer) {
     };
     unisubs.Rpc.call(
         'show_widget', args,
-        goog.bind(this.controller_.initializeState, this.controller_));
+        goog.bind(controller.initializeState, controller));
+};
+
+unisubs.streamer.StreamerDecorator.makeOverlayStreamer_ = function(videoPlayer) {
+    
+};
+
+unisubs.streamer.StreamerDecorator.getUnisubsElem_ = function(videoPlayer) {
+    // TODO: walk dom to get this in the future in case there's more than one per page.
+    var elems = goog.dom.getElementsByTagNameAndClass(
+        'div', 'unisubs-substreamer');
+    return elems.length > 0 ? elems[0] : null;
+};
+
+unisubs.streamer.StreamerDecorator.getSTElem_ = function(videoPlayer) {
+    // TODO: walk dom to get this in the future in case there's more than one per page.
+    var elems = goog.dom.getElementsByTagNameAndClass(
+        'div', 'STembedWrapper');
+    return elems.length > 0 ? elems[0] : null;
 };
 
 /**
@@ -47,5 +62,10 @@ unisubs.streamer.StreamerDecorator = function(videoPlayer) {
  *     be attached to page.
  */
 unisubs.streamer.StreamerDecorator.decorate = function(videoPlayer) {
-    return new unisubs.streamer.StreamerDecorator(videoPlayer);
+    if (unisubs.streamer.StreamerDecorator.getUnisubsElem_(videoPlayer)) {
+        unisubs.streamer.StreamerDecorator.makeStreamer_(videoPlayer);
+    }
+    else {
+        unisubs.streamer.StreamerDecorator.makeOverlayStreamer_(videoPlayer);
+    }
 };

@@ -102,11 +102,13 @@ unisubs.Widgetizer.prototype.initListenedPlayers_ = function() {
         }, 
         this);
     // for legacy purposes with widgetizerprimer
-    goog.array.forEach(
-        window['unisubs_readyAPIIDs'],
-        function(playerID) {
-            this.unisubsPlayerReady_("y", [playerID]);
-        }, this);
+    if (window["unisubs_readyAPIIDs"]) {
+        goog.array.forEach(
+            window['unisubs_readyAPIIDs'],
+            function(playerID) {
+                this.unisubsPlayerReady_("y", [playerID]);
+            }, this);
+    }
 };
 
 unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {

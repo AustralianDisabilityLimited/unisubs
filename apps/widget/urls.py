@@ -27,6 +27,8 @@ urlpatterns = patterns(
     url(r'^null_rpc/xhr/(\w+)$', 'rpc', kwargs={'null':True}),
     url(r'^rpc/jsonp/(\w+)$', 'jsonp'),
     url(r'^null_rpc/jsonp/(\w+)$', 'jsonp', kwargs={'null':True}),
+    url(r'^widgetizerbootloader\.js$', 'widgetizerbootloader', 
+        name='widgetizerbootloader'),
     url(r'^widgetize_demo/(\w+)$', 'widgetize_demo'),
     url(r'^statwidget_demo.html$', 'statwidget_demo'),
     url(r'^video_demo/(\w+)$', 'video_demo'),

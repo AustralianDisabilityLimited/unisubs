@@ -176,7 +176,7 @@ unisubs.player.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = functi
 };
 
 unisubs.player.AbstractVideoPlayer.prototype.createCaptionView = function(){
-    if(!this.captionView_){
+    if (!this.captionView_){
         this.captionView_ = new unisubs.player.CaptionView(this.needsIFrame());
         var offset =  goog.style.getPosition(this.getElement());
         var size = this.getVideoSize();
@@ -186,7 +186,6 @@ unisubs.player.AbstractVideoPlayer.prototype.createCaptionView = function(){
         this.captionView_.createDom();
         var videoOffsetParent = this.getElement().offsetParent || goog.dom.getOwnerDocument(this.getElement()).body;
         goog.dom.appendChild(videoOffsetParent, this.captionView_.getElement());
-        
     }
 };
 

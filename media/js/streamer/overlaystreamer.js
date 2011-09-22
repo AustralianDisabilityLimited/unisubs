@@ -16,9 +16,21 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-if (!window['UnisubsWidgetizerLoaded']) {
-    unisubs.Widgetizer.getInstance().widgetize();
-    unisubs.widget.WidgetDecorator.exportJSSymbols();
+goog.provide('unisubs.streamer.OverlayStreamer');
+
+unisubs.streamer.OverlayStreamer.GATEKEEPER = "unisubsoverlaystreamer";
+
+unisubs.streamer.OverlayStreamer.init = function() {
+    unisubs.streamer.OverlayStreamer.initOoyala_();
+};
+
+unisubs.streamer.OverlayStreamer.initOoyala_ = function() {
+    var players = unisubs.player.OoyalaPlayer.initForExisting();
+    
+};
+
+if (!window[unisubs.streamer.OverlayStreamer.GATEKEEPER]) {
+    unisubs.streamer.OverlayStreamer.init();
 }
 
-window['UnisubsWidgetizerLoaded'] = true;
+window[unisubs.streamer.OverlayStreamer.GATEKEEPER] = true;

@@ -95,7 +95,7 @@ NO_UNIQUE_URL = (
 )
 
 def call_command(command):
-    process = subprocess.Popen( command.split(' '),
+    process = subprocess.Popen(command.split(' '),
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
     return process.communicate()
@@ -270,7 +270,10 @@ class Command(BaseCommand):
         context = { 'gatekeeper' : bootloader_settings['gatekeeper'],
                     'script_src': "{0}/js/{1}-inner.js".format(
                 get_cache_base_url(), bundle_name) }
-        rendered = render_to_string("widget/bootloader.js", context)
+        template_name = "widget/bootloader.js"
+        if "template" in bootloader_settings:
+            template_name = bootloader_settings["template"]
+        rendered = render_to_string(template_name, context)
         file_name = os.path.join(
             self.temp_dir, "js", "{0}.js".format(bundle_name))
         uncompiled_file_name = os.path.join(

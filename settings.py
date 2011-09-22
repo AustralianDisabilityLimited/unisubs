@@ -313,10 +313,12 @@ JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
 
 JS_STREAMER = list(JS_WIDGETIZER_CORE)
 JS_STREAMER.extend([
+        'js/player/ooyalaplayer.js', 
         'js/streamer/streamerdecorator.js', 
         'js/streamer/streamercontroller.js', 
         'js/streamer/streambox.js', 
         'js/streamer/streamsub.js', 
+        'js/streamer/overlaycontroller.js',
         'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
@@ -683,6 +685,7 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
@@ -693,6 +696,7 @@ MEDIA_BUNDLES = {
         "files": ["js/config.js"] + JS_STREAMER,
         "extra_defines": {"unisubs.STREAMER": "true"},
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsStreamerLoaded",
             "render_bootloader": True
         }
@@ -703,6 +707,7 @@ MEDIA_BUNDLES = {
         "files": ["js/config.js"] + JS_WIDGETIZER,
         "extra_defines": {"unisubs.REPORT_ANALYTICS": "false"},
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
@@ -713,6 +718,7 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }

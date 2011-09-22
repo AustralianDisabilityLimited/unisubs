@@ -27,7 +27,7 @@ from teams.models import Team, TeamMember, TeamVideo
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
-from videos.models import SubtitleLanguage, VideoMetadata, VIDEO_META_TYPE_IDS
+from videos.models import VideoMetadata, VIDEO_META_TYPE_IDS
 from django.utils.safestring import mark_safe
 from utils.forms import AjaxForm
 import re
@@ -52,25 +52,17 @@ class EditLogoForm(forms.ModelForm, AjaxForm):
 
 class EditTeamVideoForm(forms.ModelForm):
     author = forms.CharField(max_length=255, required=False)
-    creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'])
+    creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'],
+                                    help_text="Format: YYYY-MM-DD")
 
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail', 'all_languages', 'completed_languages')
+        fields = ('title', 'description', 'thumbnail')
     
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
-        
-            
+
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
-        
-        self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
-        self.fields['completed_languages'].help_text = None
-        self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
-        if self.instance:
-            self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
-        else:
-            self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
 
         if feature_is_on("MODERATION"):
             self.should_add_moderation = self.should_remove_moderation = False

@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from datetime import timedelta
 from settings import *
 import logging
 
@@ -56,6 +57,7 @@ FACEBOOK_SECRET_KEY = '2a18604dac1ad7e9817f80f3aa3a69f2'
 # Celery
 CELERY_ALWAYS_EAGER = True
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
+CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
 
 # Or you can use redis as backend
 #BROKER_BACKEND = 'redis'

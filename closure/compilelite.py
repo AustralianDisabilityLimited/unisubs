@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO,
 
 JS_LIB = os.path.join(BASE, "../media/js")
 CLOSURE_LIB = os.path.join(JS_LIB, "closure-library")
-FLOWPLAYER_JS = os.path.join(BASE, "../media/flowplayer/flowplayer-3.2.2.min.js")
+FLOWPLAYER_JS = os.path.join(BASE, "../media/flowplayer/flowplayer-3.2.6.min.js")
 
 calcdeps_js = os.path.join(JS_LIB, 'unisubs-calcdeps.js')
 

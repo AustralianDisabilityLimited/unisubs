@@ -185,6 +185,7 @@ JS_CORE = \
      'js/player/flashvideoplayer.js',
      'js/player/html5mediaplayer.js',
      'js/player/html5videoplayer.js',
+     'js/player/html5audioplayer.js',
      'js/player/youtubevideoplayer.js',
      'js/player/ytiframevideoplayer.js',
      'js/player/youtubebasemixin.js',
@@ -334,7 +335,7 @@ JS_BASE_DEPENDENCIES = [
     'js/closure-library/closure/goog/base.js',
     'js/closure-dependencies.js',
     'js/swfobject.js',
-    'flowplayer/flowplayer-3.2.2.min.js',
+    'flowplayer/flowplayer-3.2.6.min.js',
 ]
 
 JS_MODERATION_DASHBOARD =  [

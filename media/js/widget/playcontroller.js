@@ -131,7 +131,7 @@ unisubs.widget.PlayController.prototype.trackPlay_ = function() {
             videoURL); 
         unisubs.Rpc.call(
             'track_subtitle_play',
-            { 'video_id': this.videoID_, });
+            { 'video_id': this.videoID_ });
     }
 };
 

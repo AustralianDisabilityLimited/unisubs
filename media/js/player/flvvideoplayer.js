@@ -163,7 +163,6 @@ unisubs.player.FlvVideoPlayer.prototype.refreshStatus_ = function() {
 
 unisubs.player.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
     if (this.getDuration() > 0) {
-        console.log('tick');
         this.sendTimeUpdateInternal();
     }
 };

@@ -41,6 +41,9 @@ def overlayytdemo(request):
 def overlayooyalademo(request):
     return _overlaydemo(request, 'streamer/overlayooyalademo.html')
 
+def overlaywistiademo(request):
+    return _overlaydemo(request, 'streamer/overlaywistiademo.html')
+
 def _overlaydemo(request, template):
     scripts = [widget.full_path(s) for s in settings.JS_STREAMER[:-1]]
     return render_to_response(

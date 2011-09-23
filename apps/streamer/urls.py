@@ -22,5 +22,6 @@ urlpatterns = patterns(
     'streamer.views',
     url(r'^youtubedemo$', 'youtubedemo'),
     url(r'^overlayytdemo$', 'overlayytdemo'),
-    url(r'^overlayooyalademo$', 'overlayooyalademo')
+    url(r'^overlayooyalademo$', 'overlayooyalademo'),
+    url(r'^overlaywistiademo$', 'overlaywistiademo')
 )

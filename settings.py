@@ -308,7 +308,8 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/youtube.js",
     "js/widgetizer/html5.js",
     "js/widgetizer/jwplayer.js",
-    "js/widgetizer/youtubeiframe.js"])
+    "js/widgetizer/youtubeiframe.js",
+    "js/widgetizer/wistia.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
@@ -316,6 +317,7 @@ JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
 JS_STREAMER = list(JS_WIDGETIZER_CORE)
 JS_STREAMER.extend([
         'js/player/ooyalaplayer.js', 
+        'js/player/wistiavideoplayer.js', 
         'js/streamer/streamerdecorator.js', 
         'js/streamer/streamercontroller.js', 
         'js/streamer/streambox.js', 

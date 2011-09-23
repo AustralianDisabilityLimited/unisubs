@@ -126,9 +126,12 @@ unisubs.widget.PlayController.prototype.trackPlay_ = function() {
     if (!this.trackedURLs_.contains(videoURL)) {
         this.trackedURLs_.add(videoURL);
         unisubs.Tracker.getInstance().trackEvent(
-            "Subs Played", 
+            "Subs Played",
             window.location.href,
-            videoURL);
+            videoURL); 
+        unisubs.Rpc.call(
+            'track_subtitle_play',
+            { 'video_id': this.videoID_, });
     }
 };
 

@@ -180,6 +180,10 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
         'show_widget', args, 
         goog.bind(this.initializeState_, this),
         goog.bind(this.showWidgetError_, this));
+    unisubs.Tracker.getInstance().trackEvent(
+        "Widget displayed",
+        window.location.href,
+        this.videoSource_.getVideoURL());
 };
 
 unisubs.widget.Widget.prototype.showWidgetError_ = function() {

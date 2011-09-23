@@ -16,8 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-# Note that this file is kept in .gitignore since it contains password information.
-
 from settings import *
 from server_local_settings import *
 

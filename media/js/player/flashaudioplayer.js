@@ -33,3 +33,10 @@ unisubs.player.FlashAudioPlayer.prototype.createDom = function() {
         unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
         unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
 };
+
+unisubs.player.FlashAudioPlayer.prototype.getDuration = function() {
+    // see http://flowplayer.org/forum/8/37767
+    // http://code.google.com/p/flowplayer-core/issues/detail?id=187
+    // this is a temporary monkey-patch.
+    return 10000;
+};

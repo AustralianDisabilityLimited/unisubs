@@ -26,6 +26,13 @@ from django.contrib import admin
 admin.autodiscover()
 admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
 
+# Monkeypatch the Celery admin to show a column for task run time in the list view.
+from djcelery.admin import TaskMonitor
+from djcelery.models import TaskState
+admin.site.unregister([TaskState])
+TaskMonitor.list_display += ('runtime',)
+admin.site.register(TaskState, TaskMonitor)
+
 from doorman import feature_is_on
 
 js_info_dict = {

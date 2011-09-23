@@ -226,3 +226,24 @@ unisubs.player.YoutubeVideoPlayer.registerReady = function(playerID) {
             function(p) { p.onYouTubePlayerReady_(playerID); });
     }
 };
+
+(function() {
+    var ytReady = "onYouTubePlayerReady";
+    var oldReady = window[ytReady] || goog.nullFunction;
+    window[ytReady] = function(apiID) {
+        if (goog.DEBUG) {
+            unisubs.player.YoutubeVideoPlayer.logger_.info(
+                'onYouTubePlayerReady for ' + apiID);
+            unisubs.player.YoutubeVideoPlayer.logger_.info(
+                'players_ length is ' + 
+                    unisubs.player.YoutubeVideoPlayer.players_.length);
+        }
+        try {
+            oldReady(apiID);
+        }
+        catch (e) {
+            // don't care
+        }
+        unisubs.player.YoutubeVideoPlayer.registerReady(apiID);
+    };
+})();

@@ -7,7 +7,7 @@
   {% include_bundle "unisubs-api" %}
   <script type="text/javascript">
     window.STATIC_URL = '{{STATIC_URL}}';
-    {% if DEBUG %}
+    {% if not COMPRESS_MEDIA %}
     goog.require('goog.debug.FancyWindow');
     {% endif %}
   </script>

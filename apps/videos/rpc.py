@@ -36,7 +36,6 @@ from utils.celery_search_index import update_search_index
 from utils.multi_query_set import MultiQuerySet
 from videos.tasks import send_change_title_email
 from django.template.defaultfilters import slugify
-from utils.translation import get_user_languages_from_request
 import datetime
 
 VIDEOS_ON_PAGE = VideoIndex.IN_ROW*5
@@ -92,28 +91,53 @@ class VideosApiClass(object):
         then name of the language.
         We're sorting all in memory since those sets should be pretty small
         """
+        LANGS_COUNT = 7
+        
         try:
             video = Video.objects.get(pk=video_id)
         except Video.DoesNotExist:
             video = None
         
         user_langs = get_user_languages_from_request(request)
-        def _lang_score(l):
-            score = 0
-            if l.language in user_langs:
-                score += 100
-            if l.is_complete:
-                score += 100    
-            elif l.is_dependent():
-                score += l.percent_done
-            score += ord('c'.decode('utf-8')) / 10.0    
-            return score
 
-        def _cmp_langs(a,b):
-            return cmp(_lang_score(b), _lang_score(a))
+        langs = list(video.subtitlelanguage_set.filter(subtitle_count__gt=0).order_by('-subtitle_count'))
+        
+        first_languages = [] #user languages and original
+        other_languages = [] #other languages already ordered by subtitle_count
+        
+        for l in langs:
+            if l.language in user_langs or l.is_original:
+                first_languages.append(l)
+            else:
+                other_languages.append(l)
+
+        def _cmp_first_langs(lang1, lang2):
+            """
+            languages should original in user_langs
+            """
+            in_user_language_cmp = cmp(lang1.language in user_langs, lang2.language in user_langs)
+
+            #one is not in user language
+            if in_user_language_cmp != 0:
+                return in_user_language_cmp
             
-        langs = list(video.subtitlelanguage_set.filter(subtitle_count__gt=0))
-        langs.sort(cmp=_cmp_langs)
+            if lang1.language in user_langs:
+                #both in user's language, sort alphabetically 
+                return cmp(lang2.get_language_display(), lang1.get_language_display())
+            
+            #one should be original
+            return cmp(lang1.is_original, lang2.is_original)
+        
+        first_languages.sort(cmp=_cmp_first_langs, reverse=True)
+        
+        #fill first languages to LANGS_COUNT
+        if len(first_languages) < LANGS_COUNT:
+            other_languages = other_languages[:(LANGS_COUNT-len(first_languages))]
+            other_languages.sort(lambda l1, l2: cmp(l1.get_language_display(), l2.get_language_display()))
+            langs = first_languages + other_languages
+        else:
+            langs = first_languages[:LANGS_COUNT]
+            
         context = {
             'video': video,
             'languages': langs

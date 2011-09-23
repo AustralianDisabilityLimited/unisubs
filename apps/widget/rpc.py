@@ -103,8 +103,6 @@ class Rpc(BaseRpc):
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
 
-        st_widget_view_statistic_update.delay(video_id=video_id)
-        
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
@@ -135,6 +133,10 @@ class Rpc(BaseRpc):
                         request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
+
+    def track_subtitle_play(self, request, video_id):
+        st_widget_view_statistic_update.delay(video_id=video_id)
+        return { 'response': 'ok' }
 
     def _find_remote_autoplay_language(self, request):
         language = None

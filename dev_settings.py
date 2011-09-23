@@ -38,6 +38,8 @@ DATABASES = {
         }
     }
 
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'a9yr_yzp2vmj-2q1zq)d2+b^w(7fqu2o&jh18u9dozjbd@-$0!'
 
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'

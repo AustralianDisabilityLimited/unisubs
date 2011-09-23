@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from datetime import timedelta
 from settings import *
 from server_local_settings import *
 
@@ -42,6 +43,7 @@ if INSTALLATION == DEV:
     BROKER_USER = "unisub"
     BROKER_PASSWORD = "unisub"
     BROKER_VHOST = "unisub"
+    CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
 elif INSTALLATION == STAGING:
     SITE_ID = 14
     SITE_NAME = 'unisubsstaging'
@@ -58,7 +60,8 @@ elif INSTALLATION == STAGING:
     EMAIL_SUBJECT_PREFIX = '[usubs-staging]'
     BROKER_USER = AWS_ACCESS_KEY_ID
     BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
-    BROKER_VHOST = AWS_QUEUE_PREFIX    
+    BROKER_VHOST = AWS_QUEUE_PREFIX
+    CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
 elif INSTALLATION == PRODUCTION:
     SITE_ID = 8
     SITE_NAME = 'unisubs'

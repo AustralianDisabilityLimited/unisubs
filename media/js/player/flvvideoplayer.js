@@ -142,6 +142,9 @@ unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     this.getClip_()['onStart'](function() {
         that.onPlay_();
     });
+    this.getClip_()['onBegin'](function() {
+        that.onPlay_();
+    });
     this.getClip_()['onResume'](function() {
         that.onPlay_();
     });

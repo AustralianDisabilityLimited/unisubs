@@ -28,6 +28,7 @@ from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
 from videos.models import VideoMetadata, VIDEO_META_TYPE_IDS
+from videos.forms import AddFromFeedForm
 from django.utils.safestring import mark_safe
 from utils.forms import AjaxForm
 import re
@@ -222,7 +223,29 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         obj.team = self.team
         commit and obj.save()
         return obj
-    
+
+class AddTeamVideosFromFeedForm(AddFromFeedForm):
+    def __init__(self, team, user, *args, **kwargs):
+        self.team = team
+        super(AddTeamVideosFromFeedForm, self).__init__(user, *args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        videos = super(AddTeamVideosFromFeedForm, self).save(*args, **kwargs)
+
+        team_videos = []
+        for video, video_created in videos:
+            try:
+                tv = TeamVideo.objects.get(video=video, team=self.team)
+                tv_created = False
+            except TeamVideo.DoesNotExist:
+                tv = TeamVideo(video=video, team=self.team, added_by=self.user)
+                tv.save()
+                tv_created = True
+            team_videos.append((tv, tv_created))
+
+        return team_videos
+
+
 class CreateTeamForm(BaseVideoBoundForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     

@@ -456,6 +456,15 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         except FeedParserError, e:
             raise forms.ValidationError(e) 
     
+    def success_message(self):
+        if not self.video_limit_routreach:
+            return _(u"%(count)s videos have been added")
+        else:
+            return _(u"%(count)s videos have been added. "
+                     u"To add the remaining videos from this feed, "
+                     u"submit this feed again and make sure to "
+                     u'check "Save feed" box.')
+
     def save_feed_url(self, feed_url, last_entry_url):
         try:
             VideoFeed.objects.get(url=feed_url)
@@ -464,17 +473,18 @@ class AddFromFeedForm(forms.Form, AjaxForm):
             vf.user = self.user
             vf.last_link = last_entry_url
             vf.save()
-                                                
+
     def save(self):
         if self.cleaned_data.get('save_feed'):
             for feed_url, last_entry_url in self.feed_urls:
                 self.save_feed_url(feed_url, last_entry_url)
-            
+
+        videos = []
         for vt, info in self.video_types:
-            video, created = Video.get_or_create_for_url(vt=vt, user=self.user)
-            
-        return len(self.video_types)
-    
+            videos.append(Video.get_or_create_for_url(vt=vt, user=self.user))
+
+        return videos
+
 class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())

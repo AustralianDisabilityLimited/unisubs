@@ -25,8 +25,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
-from utils.jsonresponse import _json_response
-from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
+from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -46,7 +45,6 @@ from videos.models import Action
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from teams.rpc import TeamsApi
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 from haystack.query import SearchQuerySet
@@ -333,19 +331,25 @@ def edit_logo(request, slug):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
-@render_to('teams/add_video.html')
-@login_required
-def add_video(request, slug):
-    team = Team.get(slug, request.user)
-    
+
+def _check_add_video_permission(request, team):
     if not team.is_member(request.user):
         raise Http404
-    
+
     if not team.can_add_video(request.user):
         messages.error(request, _(u'You can\'t add video.'))
         return {
             'team': team
         }
+
+@render_to('teams/add_video.html')
+@login_required
+def add_video(request, slug):
+    team = Team.get(slug, request.user)
+
+    resp = _check_add_video_permission(request, team)
+    if resp:
+        return resp
     
     initial = {
         'video_url': request.GET.get('url', ''),
@@ -364,6 +368,25 @@ def add_video(request, slug):
         'form': form,
         'team': team
     }
+
+@render_to('teams/add_videos.html')
+@login_required
+def add_videos(request, slug):
+    team = Team.get(slug, request.user)
+
+    resp = _check_add_video_permission(request, team)
+    if resp:
+        return resp
+
+    form = AddTeamVideosFromFeedForm(team, request.user, request.POST or None)
+
+    if form.is_valid():
+        team_videos = form.save()
+        messages.success(request, form.success_message() % {'count': len(team_videos)})
+        return redirect(team)
+
+    return { 'form': form, 'team': team, }
+
 
 @login_required
 def edit_videos(request, slug):

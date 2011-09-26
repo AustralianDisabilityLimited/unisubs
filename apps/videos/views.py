@@ -176,11 +176,8 @@ create.csrf_exempt = True
 def create_from_feed(request):
     form = AddFromFeedForm(request.user, request.POST or None)
     if form.is_valid():
-        count = form.save()
-        if not form.video_limit_routreach:
-            messages.success(request, _(u"%(count)s videos have been added") % {'count': count})
-        else:
-            messages.success(request, _(u"%(count)s videos have been added. To add the remaining videos from this feed, submit this feed again and make sure to check \"Save feed\" box.") % {'count': count})
+        videos = form.save()
+        messages.success(request, form.success_message() % {'count': len(videos)})
         return redirect('videos:create')
     context = {
         'video_form': VideoForm(),

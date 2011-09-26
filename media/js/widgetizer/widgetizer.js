@@ -90,6 +90,10 @@ unisubs.Widgetizer.prototype.unisubsPlayerReady_ = function(code, args) {
         videoPlayer = unisubs.player.OoyalaPlayer.callbackMade.apply(
             null, args);
     }
+    else if (code == "b") {
+        videoPlayer = unisubs.player.BrightcoveLitePlayer.templateReady.apply(
+            null, args);
+    }
     if (videoPlayer) {
         this.decorateVideoPlayer_(videoPlayer);
     }

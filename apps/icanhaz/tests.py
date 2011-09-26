@@ -370,14 +370,11 @@ class WidgetRPCTest(BasicDataTest):
 
     def test_visibility_in_widget(self):
         video_url = self.video.get_video_url()
-        response = self.client.post(
-            reverse('widget:rpc', args=['show_widget']),
-            {
-                "video_url":video_url,
-            })
-        print "response '%s'" % response
+        widget_url = reverse('widget:rpc',args=['show_widget'])
+        response = self.client.post(widget_url,  {"video_url":video_url,})
+        self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
-        print data, reponse.status_code
+        
 
 def refresh(obj):
     return obj.__class__.objects.get(pk=obj.pk)

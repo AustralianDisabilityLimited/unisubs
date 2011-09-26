@@ -20,13 +20,18 @@
   {% endif %}
 </head>
 <body>
-  <object id="idOVideo" name="idOVideo" width="600" height="360"> 
-    <param name="movie" value="http://www.youtube.com/v/1lxm-e0hMTw?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
-    <param name="allowFullScreen" value="true"> 
-    <param name="allowScriptAccess" value="always"> 
-    <param name="wmode" value="transparent"> 
-    <embed id="idPlayer" name="idPlayer" wmode="transparent" src="http://www.youtube.com/v/1lxm-e0hMTw?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="600" height="360"> 
-  </object> 
+ <object id="idOVideo" name="idOVideo" width="600" height="360" 
+         classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+    <param name="movie" value="http://www.youtube.com/v/1lxm-e0hMTw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1">
+    <param name="allowFullScreen" value="true">
+    <param name="allowScriptAccess" value="always">
+    <param name="wmode" value="transparent">
+    <embed id="idPlayer" name="idPlayer" wmode="transparent" 
+           src="http://www.youtube.com/v/1lxm-e0hMTw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" 
+           type="application/x-shockwave-flash" 
+           allowScriptAccess="always" allowfullscreen="true" 
+           width="600" height="360">
+  </object>
   <div class="STplayer STplayerEmbedded STplayerBarebones" 
        id="STtranscriptEmbed_5_pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH" 
        style='width:440px; display: none;'>

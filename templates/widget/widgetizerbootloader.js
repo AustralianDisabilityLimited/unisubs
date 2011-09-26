@@ -49,6 +49,7 @@ if (!window['{{gatekeeper}}']) {
 
     addReadyListener("onYouTubePlayerReady", "y");
     addReadyListener("us_ooyala_callback", "o");
+    addReadyListener("onTemplateLoaded", "b");
 
     if (d.readyState == "complete") {
         addScript();

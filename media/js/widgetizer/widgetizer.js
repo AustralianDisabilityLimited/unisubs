@@ -36,7 +36,8 @@ unisubs.Widgetizer = function() {
         new unisubs.widgetizer.Youtube(),
         new unisubs.widgetizer.HTML5(),
         new unisubs.widgetizer.JWPlayer(),
-        new unisubs.widgetizer.YoutubeIFrame()
+        new unisubs.widgetizer.YoutubeIFrame(),
+        new unisubs.widgetizer.Wistia()
     ];
     this.logger_ = goog.debug.Logger.getLogger('unisubs.Widgetizer');
     var uri = new goog.Uri(window.location);

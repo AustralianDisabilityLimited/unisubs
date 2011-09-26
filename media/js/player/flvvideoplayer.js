@@ -129,7 +129,7 @@ unisubs.player.FlvVideoPlayer.prototype.exitDocument = function() {
 unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
-        this.playerSize)
+        this.playerSize);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];

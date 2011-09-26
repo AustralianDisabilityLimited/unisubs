@@ -132,9 +132,11 @@
                 <div class="info">
                     <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
                     <span>
-                        {% blocktrans with team.member_count as count %}
-                        Team with {{ count }} Members
-                        {% endblocktrans %}                    
+                        {% blocktrans count count=team.member_count %}
+                            Team with {{ count }} member
+                        {% plural %}
+                            Team with {{ count }} members
+                        {% endblocktrans %}
                     </span>
                     
                     {% if team.description %}

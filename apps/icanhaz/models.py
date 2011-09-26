@@ -218,11 +218,11 @@ class VideoVisibilityPolicy(models.Model):
             self.modified = datetime.datetime.now()
         super(VideoVisibilityPolicy, self).save(*args, **kwargs)
         if updates_metadata:
-            video_changed_tasks(self.video.video_id)
+            video_changed_tasks(self.video.pk)
 
     def delete(self, *args, **kwargs):
         if updates_metadata:
-            video_changed_tasks(self.video.video_id)
+            video_changed_tasks(self.video.pk)
         super(VideoVisibilityPolicy, self).delete(*args, **kwargs)
         
 

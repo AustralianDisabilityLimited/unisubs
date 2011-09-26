@@ -400,6 +400,66 @@ class WidgetRPCTest(BasicDataTest):
         # we expect an empty object
         self.assertEqual(None, data)
 
+    def test_no_widget_visible_for_user(self):
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.regular_user,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        video_url = self.video.get_video_url()
+        widget_url = reverse('widget:rpc',args=['show_widget'])
+        sent_data = {
+            'is_remote': u'false',
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(widget_url,  sent_data)
+        self.assertTrue(response.status_code < 300)
+        data  =  json.loads(response.content)
+        # we expect an empty object
+        self.assertEqual(None, data)
+        # log in as the video ownwer
+        self.client.login(username=self.regular_user.username,
+                    password=self.regular_user.username)
+
+        response = self.client.post(widget_url,  sent_data)
+        self.assertTrue(response.status_code < 300)
+        data  =  json.loads(response.content)
+        self.assertTrue(data)
+        self.assertTrue(len(data.keys()) > 0)
+
+    def test_no_widget_visible_for_team_member(self):
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        video_url = self.video.get_video_url()
+        widget_url = reverse('widget:rpc',args=['show_widget'])
+        sent_data = {
+            'is_remote': u'false',
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(widget_url,  sent_data)
+        self.assertTrue(response.status_code < 300)
+        data  =  json.loads(response.content)
+        # we expect an empty object
+        self.assertEqual(None, data)
+        # log in as the video ownwer
+
+        self.client.login(
+            username=self.team1_member.user.username,
+            password=self.team1_member.user.username )
+
+        response = self.client.post(widget_url,  sent_data)
+        self.assertTrue(response.status_code < 300)
+        data  =  json.loads(response.content)
+        self.assertTrue(data)
+        self.assertTrue(len(data.keys()) > 0)        
+
         
         
 

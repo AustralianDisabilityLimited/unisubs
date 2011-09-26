@@ -40,7 +40,8 @@ from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
 from utils.forms import StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
-from utils.forms import ReCaptchaField, url_exists
+from utils.forms import ReCaptchaField
+from utils.http import url_exists
 
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
@@ -333,7 +334,7 @@ class UserTestResultForm(forms.ModelForm):
         return obj
 
 class VideoForm(forms.Form):
-    # url validation is whithin the clean method
+    # url validation is within the clean method
     video_url = forms.URLField(verify_exists=False)
     
     def __init__(self, user=None, *args, **kwargs):
@@ -344,7 +345,6 @@ class VideoForm(forms.Form):
         self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
     def clean_video_url(self):
-
         video_url = self.cleaned_data['video_url']
         
         if video_url:

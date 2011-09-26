@@ -139,7 +139,8 @@ unisubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
             state.LANGUAGE,
             null,
             state.LANGUAGE_PK,
-            state.BASE_LANGUAGE_PK));
+            state.BASE_LANGUAGE_PK),
+        this.playController_.getVideoSource().getVideoURL());
 };
 
 /**

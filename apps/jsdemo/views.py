@@ -49,8 +49,10 @@ def jsdemo(request, file_name):
                     'what': 'what, what'
                     }
                 })
+    embed_base = settings.STATIC_URL_BASE if settings.COMPRESS_MEDIA else '/'
+    embed_url = "{0}embed.js".format(embed_base)
     return render_to_response(
         'jsdemo/{0}.html'.format(file_name), 
-        widget.add_js_files({}, False, js_dependencies()),
+        widget.add_js_files({'embed_url': embed_url}, False, js_dependencies()),
         context_instance=RequestContext(request))
 

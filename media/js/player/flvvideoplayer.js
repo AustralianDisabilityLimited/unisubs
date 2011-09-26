@@ -130,6 +130,9 @@ unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
         this.playerSize);
+    unisubs.style.setSize(
+        this.player_,
+        this.playerSize);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];

@@ -417,7 +417,7 @@ class EmailConfirmationManager(models.Manager):
             "current_site": current_site,
             "confirmation_key": confirmation_key,
         }
-        subject = u'Confirm email address for %s' % current_site.name
+        subject = u'Please confirm your email address for %s' % current_site.name
         message = render_to_string(
             "auth/email_confirmation_message.txt", context)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,

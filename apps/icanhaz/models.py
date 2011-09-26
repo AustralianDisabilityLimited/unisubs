@@ -213,14 +213,13 @@ class VideoVisibilityPolicy(models.Model):
             self.created  = datetime.datetime.now()
         if not self.site_secret_key:
             self.site_secret_key = VideoVisibilityPolicy.objects.gen_secret(self)
-            print self.site_secret_key
         if skips_timestamp is False:
             self.modified = datetime.datetime.now()
         super(VideoVisibilityPolicy, self).save(*args, **kwargs)
         if updates_metadata:
             video_changed_tasks(self.video.pk)
 
-    def delete(self, *args, **kwargs):
+    def delete(self, updates_metadata=True, *args, **kwargs):
         if updates_metadata:
             video_changed_tasks(self.video.pk)
         super(VideoVisibilityPolicy, self).delete(*args, **kwargs)

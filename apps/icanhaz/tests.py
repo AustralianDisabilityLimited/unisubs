@@ -368,12 +368,39 @@ class WidgetTest(BasicDataTest):
 
 class WidgetRPCTest(BasicDataTest):
 
-    def test_visibility_in_widget(self):
+    def test_visibility(self):
         video_url = self.video.get_video_url()
         widget_url = reverse('widget:rpc',args=['show_widget'])
-        response = self.client.post(widget_url,  {"video_url":video_url,})
+        data = {
+            'is_remote': u'false',
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(widget_url,  data)
         self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
+        self.assertTrue(video_url in data["video_urls"])
+
+    def test_no_widget_for_hidden(self):
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        video_url = self.video.get_video_url()
+        widget_url = reverse('widget:rpc',args=['show_widget'])
+        data = {
+            'is_remote': u'false',
+            'video_url': u'"%s"' % video_url
+        }
+        response = self.client.post(widget_url,  data)
+        self.assertTrue(response.status_code < 300)
+        data  =  json.loads(response.content)
+        # we expect an empty object
+        self.assertEqual(None, data)
+
+        
         
 
 def refresh(obj):

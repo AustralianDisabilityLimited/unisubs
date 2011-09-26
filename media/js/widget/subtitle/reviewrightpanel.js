@@ -31,7 +31,6 @@ unisubs.subtitle.ReviewRightPanel = function(serverModel,
     unisubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);
-    this.showSaveExit_ = false;
 };
 goog.inherits(unisubs.subtitle.ReviewRightPanel, unisubs.RightPanel);
 

@@ -46,15 +46,9 @@ unisubs.player.MediaSource.prototype.createControlledPlayer = function() {};
 unisubs.player.MediaSource.prototype.getVideoURL = function() {};
 
 /**
- *
- * @param {Array} videoSpecs This is an array in which each element is either 
- *   a string (for a url) or an object with properties "url" and "config".
- * @return {?unisubs.player.MediaSource} video source, or null if none found.
+ * @param {Array.<unisubs.player.MediaSource>} videoSources
  */
-unisubs.player.MediaSource.bestVideoSource = function(videoSpecs) {
-    var videoSources = goog.array.map(videoSpecs, function(spec) {
-        return unisubs.player.MediaSource.videoSourceForSpec_(spec);
-    });
+unisubs.player.MediaSource.bestHTML5VideoSource_ = function(videoSources) {
     var vt = unisubs.player.Html5VideoType;
     var preferenceOrdering = [vt.OGG, vt.WEBM, vt.H264];
     for (var i = 0; i < preferenceOrdering.length; i++) {
@@ -65,14 +59,37 @@ unisubs.player.MediaSource.bestVideoSource = function(videoSpecs) {
                 return videoSource;
         }
     }
+    return null;
+};
+
+/**
+ *
+ * @param {Array} videoSpecs This is an array in which each element is either 
+ *   a string (for a url) or an object with properties "url" and "config".
+ * @return {?unisubs.player.MediaSource} video source, or null if none found.
+ */
+unisubs.player.MediaSource.bestVideoSource = function(videoSpecs) {
+    var videoSources = goog.array.map(videoSpecs, function(spec) {
+        return unisubs.player.MediaSource.videoSourceForSpec_(spec);
+    });
+    var videoSource = null;
+    if (!goog.userAgent.IE) {
+        // not providing IE the opportunity to display HTML5 video yet,
+        // since IE9 support appears buggy
+        // (see https://unisubs.sifterapp.com/projects/12298/issues/442336/comments)
+        videoSource = unisubs.player.MediaSource.bestHTML5VideoSource_(
+            videoSources);
+        if (videoSource != null)
+            return videoSource;
+    }
     // browser does not support any available html5 formats. Return a flash format.
-    var videoSource = goog.array.find(
+    videoSource = goog.array.find(
         videoSources,
         function(v) { return !(v instanceof unisubs.player.Html5VideoSource); });
     if (videoSource != null)
         return videoSource;
-    // if we got this far, first return mp4 for player fallback. then return anything.
-    var videoSource = unisubs.player.MediaSource.html5VideoSource_(
+    // if we got this far, first return mp4 for flowplayer fallback. then return anything.
+    videoSource = unisubs.player.MediaSource.html5VideoSource_(
         videoSources, vt.H264);
     if (videoSource != null)
         return videoSource;

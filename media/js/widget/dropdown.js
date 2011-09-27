@@ -118,9 +118,6 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
 
     goog.dom.append(
         this.languageList_, 
-        $d('li', 'unisubs-hintTranslate',
-           $d('span', 'unisubs-asterisk', '*'),
-           ' = Missing sections translated by Google Translate'),
         this.subtitlesOff_);
 
     if (this.shouldShowRequestLink_) {

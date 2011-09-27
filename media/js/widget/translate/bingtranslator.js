@@ -17,32 +17,36 @@
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 
-goog.require("goog.json");
-goog.require("goog.net.Jsonp");
 goog.provide('unisubs.translate.BingTranslator');
 goog.provide('unisubs.translate.BingTranslator.Transaction');
 
-unisubs.translate.BingTranslator.TRANSACTION_ID = 0;
+/**
+ * @private
+ */
+unisubs.translate.BingTranslator.Transaction.transactionId_ = 0;
 
 /**
  * @constructor
  */
 unisubs.translate.BingTranslator.Transaction = function() {
-    ++unisubs.translate.BingTranslator.TRANSACTION_ID;
-    this.id = unisubs.translate.BingTranslator.TRANSACTION_ID;
-    this.actions = [];
-    this.withError = false;
+    ++unisubs.translate.BingTranslator.Transaction.transactionId_;
+    this.id = unisubs.translate.BingTranslator.Transaction.transactionId_;
+    this.actions_ = [];
+    this.withError_ = false;
 };
 
 unisubs.translate.BingTranslator.Transaction.prototype.add = function(toTranslate, fromLang, toLang, widgets, callback){
     if (toTranslate.length > 0){
-        this.actions.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
+        this.actions_.push([toTranslate, fromLang, toLang, this.getCallback_(widgets, callback)]);
     }
 };
 
-unisubs.translate.BingTranslator.Transaction.prototype.onError = function(response){
-    if (!this.withError){
-        this.withError = true;
+/**
+ * @private
+ */
+unisubs.translate.BingTranslator.Transaction.prototype.onError_ = function(response){
+    if (!this.withError_){
+        this.withError_ = true;
         alert('Cannot complete automated translation. Error: "'+response['responseDetails']+'".');
     }
 };
@@ -70,15 +74,15 @@ unisubs.translate.BingTranslator.Transaction.prototype.getCallback_ = function(w
 
             callback(encoded, widgets);
         } else {
-            transaction.onError(response);
+            transaction.onError_(response);
             callback([], widgets, response['responseDetails']);
         }
     };
 };
 
 unisubs.translate.BingTranslator.Transaction.prototype.start = function(){
-    for (var i=0, len=this.actions.length; i<len; i++){
-        unisubs.translate.BingTranslator.translate.apply(null, this.actions[i]);
+    for (var i=0, len=this.actions_.length; i<len; i++) {
+        unisubs.translate.BingTranslator.translate.apply(null, this.actions_[i]);
     }
 };
 
@@ -88,32 +92,38 @@ unisubs.translate.BingTranslator.Transaction.prototype.start = function(){
  * @type {string}
  * @private
  */
-unisubs.translate.BingTranslator.bingAppId_ = 'B97A24C0E08728B33D41E853C50D405E50E46563';
+unisubs.translate.BingTranslator.BING_APP_ID_ = 'B97A24C0E08728B33D41E853C50D405E50E46563';
 
 /**
  * Uri for jsonp handler
+ * @const
  * @type {goog.Uri}
+ * @private
  */
-unisubs.translate.BingTranslator.baseUri_ = new goog.Uri("http://api.microsofttranslator.com/V2/Ajax.svc/TranslateArray");
+unisubs.translate.BingTranslator.BASE_URI_ = new goog.Uri("http://api.microsofttranslator.com/V2/Ajax.svc/TranslateArray");
 
 /**
  * Jsonp handler for Bing Translator API
  * @type {goog.net.Jsonp}
+ * @private
  */
-unisubs.translate.BingTranslator.jsonp = new goog.net.Jsonp(unisubs.translate.BingTranslator.baseUri_, 'oncomplete');
+unisubs.translate.BingTranslator.jsonp_ = new goog.net.Jsonp(unisubs.translate.BingTranslator.BASE_URI_, 'oncomplete');
 
 /**
  * Maximum length of the request to Bing
+ * @const
  * @type {number}
+ * @private
  */
-unisubs.translate.BingTranslator.queryMaxLen = 10000;
+unisubs.translate.BingTranslator.QUERY_MAX_LENGTH_ = 10000;
 
 /**
  * Look up the Bing language code for the given language code.
  * @param {string} lang Language code to look up
  * @return {string}
+ * @private
  */
-unisubs.translate.BingTranslator.findLang = function(lang) {
+unisubs.translate.BingTranslator.findLang_ = function(lang) {
     if (lang === 'zh-cn') {
         return 'zh-CHS';
     } else if (lang === 'zh-tw') {
@@ -132,11 +142,11 @@ unisubs.translate.BingTranslator.findLang = function(lang) {
  */
 unisubs.translate.BingTranslator.translate = function(texts, fromLang, toLang, callback) {
     var textArrayString = goog.json.serialize(texts);
-    var from = fromLang ? unisubs.translate.BingTranslator.findLang(fromLang) : '';
-    var to = unisubs.translate.BingTranslator.findLang(toLang);
+    var from = fromLang ? unisubs.translate.BingTranslator.findLang_(fromLang) : '';
+    var to = unisubs.translate.BingTranslator.findLang_(toLang);
 
-    unisubs.translate.BingTranslator.jsonp.send({
-        'appId': unisubs.translate.BingTranslator.bingAppId_,
+    unisubs.translate.BingTranslator.jsonp_.send({
+        'appId': unisubs.translate.BingTranslator.BING_APP_ID_,
         'texts': textArrayString,
         'from': from,
         'to': to
@@ -150,8 +160,9 @@ unisubs.translate.BingTranslator.translate = function(texts, fromLang, toLang, c
  * Find the effective length of the request for the given strings to translate.
  * @param {Array.<string>} texts Strings to translate
  * @return {number}
+ * @private
  */
-unisubs.translate.BingTranslator.effectiveTextLength = function(texts) {
+unisubs.translate.BingTranslator.effectiveTextLength_ = function(texts) {
     return (200                       // request overhead
             + (4 * texts.length) + 2  // json encoding overhead
             + texts.join('').length); // length of strings
@@ -166,17 +177,17 @@ unisubs.translate.BingTranslator.effectiveTextLength = function(texts) {
  */
 unisubs.translate.BingTranslator.translateWidgets =
 function(needTranslating, fromLang, toLang, callback) {
-    var ml = unisubs.translate.BingTranslator.queryMaxLen;
-    var translate = unisubs.translate.BingTranslator.translate;
-    var effectiveLen = unisubs.translate.BingTranslator.effectiveTextLength;
+    var ml = unisubs.translate.BingTranslator.QUERY_MAX_LENGTH_;
+    var effectiveLen = unisubs.translate.BingTranslator.effectiveTextLength_;
 
     // ml = 1000; // for debugging multiple requests
 
     /**
-     * Array of subtitles to translate in one request(max length < BingTranslator.queryMaxLen)
+     * Array of subtitles to translate in one request(max length < BingTranslator.QUERY_MAX_LENGTH_)
      * @type {Array.<string>}
      */
     var toTranslate = [];
+
     /**
      * Widgets with subtitles to translate in one request
      * @type {Array.<unisubs.translate.TranslationWidget>}

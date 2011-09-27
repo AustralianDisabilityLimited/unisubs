@@ -1282,6 +1282,12 @@ span.unisubs-videoplayer {
    display: block !important;
 }
 
+span.unisubs-videoplayer object,
+span.unisubs-videoplayer embed {
+    min-height: 1px !important;
+    min-width: 1px !important;
+}
+
 .unisubs-videoDiv {
 
 }

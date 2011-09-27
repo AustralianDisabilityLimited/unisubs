@@ -30,7 +30,6 @@ from utils.translation import get_user_languages_from_request
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.conf import settings
-from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 from utils.celery_search_index import update_search_index
 from utils.multi_query_set import MultiQuerySet
@@ -130,8 +129,7 @@ class VideosApiClass(object):
 
     @add_request_to_kwargs
     def load_latest_page(self, page, request, user):
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-created')
+        sqs = VideoIndex.public().order_by('-created')
             
         return render_page(page, sqs, request=request)
 
@@ -162,15 +160,13 @@ class VideosApiClass(object):
         for lang in user_langs:
             rest_langs.remove(lang)
 
-        relevant = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(video_language_exact__in=user_langs) \
+        relevant = VideoIndex.public().filter(video_language_exact__in=user_langs) \
             .filter_or(languages_exact__in=user_langs) \
             .order_by('-requests_count')
 
         # Rest of the videos, which most probably would not be much useful
         # for the volunteer
-        rest = SearchQuerySet().result_class(VideoSearchResult) \
-            .exclude(languages_exact__in=user_langs) \
+        rest = VideoIndex.public().exclude(languages_exact__in=user_langs) \
             .exclude(video_language_exact__in=user_langs) \
             .order_by('-requests_count')
 

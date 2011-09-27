@@ -4,10 +4,14 @@ import json
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from teams.models import Team, TeamMember
+from teams.models import Team, TeamMember, TeamVideo
 from auth.models import CustomUser as User
 from videos.models import Video
+from videos.search_indexes import VideoIndex
 from apps.icanhaz.models import VideoVisibilityPolicy
+
+# FIXME move the reset solr to a common test util packages
+from apps.teams.tests.teamstestsutils import reset_solr
 
 
 
@@ -458,10 +462,46 @@ class WidgetRPCTest(BasicDataTest):
         self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
         self.assertTrue(data)
-        self.assertTrue(len(data.keys()) > 0)        
+        self.assertTrue(len(data.keys()) > 0)
 
+
+
+class TestListingVisibilities(BasicDataTest):
+
+    def setUp(self):
+        super(TestListingVisibilities, self).setUp()
+        self.tv, created = TeamVideo.objects.get_or_create(
+            team=self.team1,
+            video=self.video,
+            added_by=self.team1_member.user)
+
+    def _in_solr(self, video):
+        sqs = VideoIndex.public()
+        has_video = False
+        vids = [x.video_id for x in sqs]
+        return video.video_id in vids
         
+    def test_hidden_video_no_solr(self):
+        reset_solr()
+        self.assertTrue(self._in_solr( self.video))
+
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        self.video = refresh(self.video)
+        reset_solr()
+        self.assertFalse(self._in_solr( self.video))
         
+
+    def test_team_video_hidden_for_non_members(self):
+        pass
+
+    def test_team_video_visible_for_members(self):
+        pass
 
 def refresh(obj):
     return obj.__class__.objects.get(pk=obj.pk)

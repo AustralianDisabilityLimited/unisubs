@@ -156,7 +156,9 @@ class VideoVisibilityManager(models.Manager):
             return video.policy.site_secret_key
         return video.video_id
     
-
+    def video_is_public(self, video):
+        return self.site_policy_for_video(video) == VideoVisibilityPolicy.SITE_DEFAULT_POLICY
+    
     def site_policy_for_video(self, video):
         return (video.policy and video.policy.site_visibility_policy) or VideoVisibilityPolicy.SITE_DEFAULT_POLICY
 

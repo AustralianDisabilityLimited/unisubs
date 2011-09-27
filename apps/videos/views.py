@@ -56,7 +56,6 @@ from utils.decorators import never_in_prod
 from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
-from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
 from icanhaz.models import VideoVisibilityPolicy
@@ -104,8 +103,7 @@ def volunteer_page(request):
     # Get the user comfort languages list 
     user_langs = get_user_languages_from_request(request)
 
-    relevant = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language_exact__in=user_langs) \
+    relevant = VideoIndex.public().filter(video_language_exact__in=user_langs) \
         .filter_or(languages_exact__in=user_langs) \
         .order_by('-requests_count')
 

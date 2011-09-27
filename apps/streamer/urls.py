@@ -24,5 +24,6 @@ urlpatterns = patterns(
     url(r'^overlayytdemo$', 'overlayytdemo'),
     url(r'^overlayooyalademo$', 'overlayooyalademo'),
     url(r'^overlaywistiademo$', 'overlaywistiademo'),
-    url(r'^overlaybrightcovedemo$', 'overlaybrightcovedemo')
+    url(r'^overlaybrightcovedemo$', 'overlaybrightcovedemo'),
+    url(r'^overlayscdemo$', 'overlayscdemo'),
 )

@@ -113,6 +113,8 @@ ALL_LANGUAGES['ay'] = gettext_noop(u'Aymara')
 ALL_LANGUAGES['ps'] = gettext_noop(u'Pashto')
 ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
 ALL_LANGUAGES['kw'] = gettext_noop(u'Cornish')
+ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
+ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -184,6 +186,7 @@ JS_CORE = \
      'js/player/flashvideoplayer.js',
      'js/player/html5mediaplayer.js',
      'js/player/html5videoplayer.js',
+     'js/player/html5audioplayer.js',
      'js/player/youtubevideoplayer.js',
      'js/player/ytiframevideoplayer.js',
      'js/player/youtubebasemixin.js',
@@ -278,7 +281,7 @@ JS_DIALOG = \
      'js/widget/controls/videocontrols.js',
      'js/widget/controls/volumecontrol.js',
      'js/widget/controls/volumeslider.js',
-     'js/widget/translate/googletranslator.js',
+     'js/widget/translate/bingtranslator.js',
      'js/widget/translate/dialog.js',
      'js/widget/translate/translationpanel.js',
      'js/widget/translate/translationlist.js',
@@ -305,17 +308,22 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/youtube.js",
     "js/widgetizer/html5.js",
     "js/widgetizer/jwplayer.js",
-    "js/widgetizer/youtubeiframe.js"])
+    "js/widgetizer/youtubeiframe.js",
+    "js/widgetizer/wistia.js"])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
 
 JS_STREAMER = list(JS_WIDGETIZER_CORE)
 JS_STREAMER.extend([
+        'js/player/ooyalaplayer.js', 
+        'js/player/wistiavideoplayer.js', 
+        'js/player/brightcoveliteplayer.js', 
         'js/streamer/streamerdecorator.js', 
         'js/streamer/streamercontroller.js', 
         'js/streamer/streambox.js', 
         'js/streamer/streamsub.js', 
+        'js/streamer/overlaycontroller.js',
         'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
@@ -331,12 +339,12 @@ JS_BASE_DEPENDENCIES = [
     'js/closure-library/closure/goog/base.js',
     'js/closure-dependencies.js',
     'js/swfobject.js',
-    'flowplayer/flowplayer-3.2.2.min.js',
+    'flowplayer/flowplayer-3.2.6.min.js',
 ]
 
 JS_MODERATION_DASHBOARD =  [
     "js/jquery-1.4.3.js",
-    "js/jquery-ui-1.8.13.custom.min.js",
+    "js/jquery-ui-1.8.16.custom.min.js",
     "js/jgrowl/jquery.jgrowl.js",
     "js/jalerts/jquery.alerts.js",
     "js/jquery.form.js",
@@ -378,9 +386,6 @@ MEDIA_ROOT  = rel('user-data')+'/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/'
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'a9yr_yzp2vmj-2q1zq)d2+b^w(7fqu2o&jh18u9dozjbd@-$0!'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -452,7 +457,6 @@ INSTALLED_APPS = (
     'messages',
     'statistic',
     'search',
-    'api',
     'utils',
     'targetter',
     'livesettings',
@@ -516,7 +520,7 @@ OPENID_AX = [{"type_uri": "http://axschema.org/contact/email", "count": 1, "requ
              {"type_uri": "fullname", "count": 1 , "required": False, "alias": "fullname"}]
 
 FACEBOOK_API_KEY = ''
-FACEBOOK_API_SECRET = ''
+FACEBOOK_SECRET_KEY = ''
 
 VIMEO_API_KEY = None
 VIMEO_API_SECRET = None
@@ -642,6 +646,13 @@ MEDIA_BUNDLES = {
          ),
         },
 
+    "jquery-ui":{
+        "type":"css",
+        "files":(
+               "css/jquery-ui/jquery-ui-1.8.16.custom.css",
+         ),
+        },
+
     "home":{
         "type":"css",
         "files":(
@@ -677,6 +688,7 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "files": ["js/config.js"] + JS_WIDGETIZER,
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
@@ -687,6 +699,7 @@ MEDIA_BUNDLES = {
         "files": ["js/config.js"] + JS_STREAMER,
         "extra_defines": {"unisubs.STREAMER": "true"},
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsStreamerLoaded",
             "render_bootloader": True
         }
@@ -697,6 +710,7 @@ MEDIA_BUNDLES = {
         "files": ["js/config.js"] + JS_WIDGETIZER,
         "extra_defines": {"unisubs.REPORT_ANALYTICS": "false"},
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
@@ -707,6 +721,7 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "debug": True,
         "bootloader": { 
+            "template": "widget/widgetizerbootloader.js",
             "gatekeeper": "UnisubsWidgetizerLoaded",
             "render_bootloader": True
         }
@@ -745,7 +760,7 @@ MEDIA_BUNDLES = {
         "optimizations": "WHITESPACE_ONLY",
         "files":[
               "js/jquery-1.4.3.js",
-              "js/jquery-ui-1.8.13.custom.min.js",
+              "js/jquery-ui-1.8.16.custom.min.js",
               "js/jgrowl/jquery.jgrowl.js",
               "js/jalerts/jquery.alerts.js",
               "js/jquery.form.js",
@@ -759,6 +774,14 @@ MEDIA_BUNDLES = {
         "optimizations": "SIMPLE_OPTIMIZATIONS",
         "closure_deps": "",
         "include_flash_deps": False,
+        },
+    "js-jqueryui-datepicker":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "files":[
+              "js/jquery-ui-1.8.16.custom.datepicker.min.js",
+            ],
+        "include_js_base_dependencies": False,
         },
     "js-testing-base":{
         "type":"js",

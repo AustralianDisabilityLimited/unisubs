@@ -50,7 +50,8 @@ def to_static_root(*paths):
     return os.path.join(settings.STATIC_ROOT, *paths)
 JS_LIB = os.path.join(settings.PROJECT_ROOT, "media")
 CLOSURE_LIB = os.path.join(JS_LIB, "js", "closure-library")
-FLOWPLAYER_JS = os.path.join(settings.PROJECT_ROOT, "media/flowplayer/flowplayer-3.2.2.min.js")
+FLOWPLAYER_JS = os.path.join(
+    settings.PROJECT_ROOT, "media/flowplayer/flowplayer-3.2.6.min.js")
 COMPILER_PATH = os.path.join(settings.PROJECT_ROOT,  "closure", "compiler.jar")
 
 
@@ -95,7 +96,7 @@ NO_UNIQUE_URL = (
 )
 
 def call_command(command):
-    process = subprocess.Popen( command.split(' '),
+    process = subprocess.Popen(command.split(' '),
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
     return process.communicate()
@@ -270,7 +271,10 @@ class Command(BaseCommand):
         context = { 'gatekeeper' : bootloader_settings['gatekeeper'],
                     'script_src': "{0}/js/{1}-inner.js".format(
                 get_cache_base_url(), bundle_name) }
-        rendered = render_to_string("widget/bootloader.js", context)
+        template_name = "widget/bootloader.js"
+        if "template" in bootloader_settings:
+            template_name = bootloader_settings["template"]
+        rendered = render_to_string(template_name, context)
         file_name = os.path.join(
             self.temp_dir, "js", "{0}.js".format(bundle_name))
         uncompiled_file_name = os.path.join(

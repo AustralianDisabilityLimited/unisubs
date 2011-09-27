@@ -25,7 +25,7 @@ goog.provide('unisubs.player.Html5AudioPlayer');
  */
 unisubs.player.Html5AudioPlayer = function(mediaSource, opt_forDialog) {
     unisubs.player.Html5MediaPlayer.call(this, mediaSource);    
-    this.forDialog_ == !!opt_forDialog;
+    this.forDialog_ = !!opt_forDialog;
 };
 goog.inherits(unisubs.player.Html5AudioPlayer,
               unisubs.player.Html5MediaPlayer);
@@ -36,11 +36,16 @@ unisubs.player.Html5AudioPlayer.prototype.createDom = function() {
     var containingDiv = $d('div', 'unisubs-audio-player', this.mediaElem);
     this.setElementInternal(containingDiv);
     // FIXME: duplicated in FlashAudioPlayer
-    goog.style.setSize(
+    unisubs.style.setSize(
         containingDiv,
         this.forDialog_ ? 
             unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
-            (new goog.math.Size(480, 150)));
+            unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE);
+    unisubs.style.setSize(
+        this.mediaElem,
+        this.forDialog_ ? 
+            unisubs.player.AbstractVideoPlayer.DIALOG_SIZE :
+            unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE);
 };
 
 unisubs.player.Html5AudioPlayer.prototype.createAudioElement_ = function($d) {
@@ -48,7 +53,7 @@ unisubs.player.Html5AudioPlayer.prototype.createAudioElement_ = function($d) {
     if (!this.forDialog_) {
         params['controls'] = 'true';
     }
-    return $d('audio', params, $d('source', {'src': this.}));
+    return $d('audio', params, $d('source', {'src': this.mediaSource.getVideoURL() }));
 };
 
 unisubs.player.Html5AudioPlayer.prototype.stopLoadingInternal = function() {

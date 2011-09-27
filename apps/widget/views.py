@@ -63,6 +63,17 @@ def widget_public_demo(request):
     return render_to_response('widget/widget_public_demo.html', context,
                               context_instance=RequestContext(request))
 
+def widgetizerbootloader(request):
+    context = { 
+        "gatekeeper": "UnisubsWidgetizerLoaded",
+        "script_src": widget.full_path("js/widgetizer/dowidgetize.js") 
+        }
+    return render_to_response(
+        "widget/widgetizerbootloader.js",
+        context,
+        mimetype='text/javascript',
+        context_instance=RequestContext(request))
+
 def onsite_widget(request):
     """Used for subtitle dialog"""
     context = widget.add_config_based_js_files(
@@ -95,6 +106,7 @@ def onsite_widget(request):
     general_settings = {}
     add_general_settings(request, general_settings)
     context['general_settings'] = json.dumps(general_settings)
+    context['COMPRESS_MEDIA'] = settings.COMPRESS_MEDIA
     return render_to_response('widget/onsite_widget.html',
                               context,
                               context_instance=RequestContext(request))

@@ -25,8 +25,7 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 
 from utils import render_to, render_to_json
-from utils.jsonresponse import _json_response
-from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm
+from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -335,19 +334,25 @@ def edit_logo(request, slug):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
-@render_to('teams/add_video.html')
-@login_required
-def add_video(request, slug):
-    team = Team.get(slug, request.user)
-    
+
+def _check_add_video_permission(request, team):
     if not team.is_member(request.user):
         raise Http404
-    
+
     if not team.can_add_video(request.user):
         messages.error(request, _(u'You can\'t add video.'))
         return {
             'team': team
         }
+
+@render_to('teams/add_video.html')
+@login_required
+def add_video(request, slug):
+    team = Team.get(slug, request.user)
+
+    resp = _check_add_video_permission(request, team)
+    if resp:
+        return resp
     
     initial = {
         'video_url': request.GET.get('url', ''),
@@ -366,6 +371,25 @@ def add_video(request, slug):
         'form': form,
         'team': team
     }
+
+@render_to('teams/add_videos.html')
+@login_required
+def add_videos(request, slug):
+    team = Team.get(slug, request.user)
+
+    resp = _check_add_video_permission(request, team)
+    if resp:
+        return resp
+
+    form = AddTeamVideosFromFeedForm(team, request.user, request.POST or None)
+
+    if form.is_valid():
+        team_videos = form.save()
+        messages.success(request, form.success_message() % {'count': len(team_videos)})
+        return redirect(team)
+
+    return { 'form': form, 'team': team, }
+
 
 @login_required
 def edit_videos(request, slug):
@@ -390,13 +414,13 @@ def edit_videos(request, slug):
 @render_to('teams/team_video.html')
 def team_video(request, team_video_pk):
     team_video = get_object_or_404(TeamVideo, pk=team_video_pk)
-    
+
     if not team_video.can_edit(request.user):
         raise Http404
-    
+
+    meta = team_video.video.metadata()
     form = EditTeamVideoForm(request.POST or None, request.FILES or None,
-                             instance=team_video,
-                             user=request.user)
+                             instance=team_video, user=request.user, initial=meta)
 
     if form.is_valid():
         form.save()
@@ -404,7 +428,7 @@ def team_video(request, team_video_pk):
         return redirect(team_video)
 
     context = widget.add_onsite_js_files({})
-    
+
     context.update({
         'team': team_video.team,
         'team_video': team_video,

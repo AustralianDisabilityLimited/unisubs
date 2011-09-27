@@ -1,0 +1,21 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+<script src="http://player.ooyala.com/player.js?callback=receiveOoyalaEvent&playerId=playerrrr&width=480&height=360&embedCode=pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH&version=2"></script>
+<!-- Event log. -->
+<fieldset class="goog-debug-panel">
+  <legend>Event Log</legend>
+  <div id="log" style="height: 300px; overflow-y: auto"></div>
+</fieldset>
+<div id="perf"></div>  
+<script type="text/javascript">
+    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+    var logger = goog.debug.Logger.getLogger('player');
+    var logConsole = new goog.debug.DivConsole(document.getElementById('log'));
+    logConsole.setCapturing(true);
+
+    function receiveOoyalaEvent(playerId, eventName, eventArgs) {
+        logger.info(playerId + ": " + eventName);
+    }
+</script>
+
+{% endblock %}

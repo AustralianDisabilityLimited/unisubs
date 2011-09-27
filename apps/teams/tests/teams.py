@@ -17,7 +17,7 @@ from auth.models import CustomUser as User
 from django.contrib.contenttypes.models import ContentType
 from apps.teams import tasks
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.core.management import call_command
 from django.core import mail
 from apps.videos import metadata_manager 
@@ -739,7 +739,9 @@ class TeamsTest(TestCase):
             "languages-TOTAL_FORMS": u"1",
             "languages-0-completed": u"on",
             "thumbnail": u"",
-            "description": u"and description"
+            "description": u"and description",
+            "author": u"Test Author",
+            "creation_date": u"2011-01-01",
         }
         url = reverse("teams:team_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url, data)
@@ -747,6 +749,9 @@ class TeamsTest(TestCase):
         tv = team.teamvideo_set.get(pk=1)
         self.assertEqual(tv.title, u"change title")
         self.assertEqual(tv.description, u"and description")
+        meta = tv.video.metadata()
+        self.assertEqual(meta.get('author'), 'Test Author')
+        self.assertEqual(meta.get('creation_date'), date(2011, 1, 1))
 
         #-----------delete video -------------
         url = reverse("teams:remove_video", kwargs={"team_video_pk": tv.pk})

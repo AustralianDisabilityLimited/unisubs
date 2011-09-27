@@ -11,11 +11,13 @@
 {% block css %}
     {{ block.super }}
      {% include_bundle "widget-css"%}
+     {% include_bundle "jquery-ui"%}
 {% endblock %}
 
 {% block scripts %}
     {{ block.super }}
     {% include_bundle "unisubs-onsite-compiled" %}
+    {% include_bundle "js-jqueryui-datepicker"%}
 {% endblock %}
 
 {% block settings_content %}

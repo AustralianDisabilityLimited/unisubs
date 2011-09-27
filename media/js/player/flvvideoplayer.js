@@ -65,10 +65,11 @@ unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
         this.swfEmbedded_ = true;
         var videoDiv = this.getDomHelper().createDom('div');
         videoDiv.id = unisubs.randomString();
+        this.elementID_ = videoDiv.id;
         this.getElement().appendChild(videoDiv);
         this.setDimensionsKnownInternal();
         var flashEmbedParams = {
-            'src': unisubs.staticURL() + 'flowplayer/flowplayer-3.2.2.swf',
+            'src': unisubs.staticURL() + 'flowplayer/flowplayer-3.2.7.swf',
             'width': this.playerSize.width + '',
             'height': this.playerSize.height + '',
             'wmode': 'opaque'
@@ -83,7 +84,7 @@ unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
                 that.swfFinishedLoading_();
             }
         };
-        this.addPlugins_(config);
+        this.addPluginsInternal(config);
         this.player_ = $f(
             videoDiv.id, flashEmbedParams, config);
     }
@@ -93,7 +94,7 @@ unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
     this.progressTimer_.start();
 };
 
-unisubs.player.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
+unisubs.player.FlvVideoPlayer.prototype.addPluginsInternal = function(playerConfig) {
     var plugins;
     if (this.forDialog_)
         plugins = { 'controls' : null };
@@ -107,8 +108,9 @@ unisubs.player.FlvVideoPlayer.prototype.addPlugins_ = function(playerConfig) {
                 });
         }
     }
-    if (plugins)
+    if (plugins) {
         playerConfig['plugins'] = plugins;
+    }
 };
 
 unisubs.player.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
@@ -129,12 +131,18 @@ unisubs.player.FlvVideoPlayer.prototype.exitDocument = function() {
 unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
     unisubs.style.setSize(
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
-        this.playerSize)
+        this.playerSize);
+    unisubs.style.setSize(
+        goog.dom.getElement(this.elementID_),
+        this.playerSize);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];
     var that = this;
     this.getClip_()['onStart'](function() {
+        that.onPlay_();
+    });
+    this.getClip_()['onBegin'](function() {
         that.onPlay_();
     });
     this.getClip_()['onResume'](function() {
@@ -162,8 +170,9 @@ unisubs.player.FlvVideoPlayer.prototype.refreshStatus_ = function() {
 };
 
 unisubs.player.FlvVideoPlayer.prototype.timeUpdateTick_ = function(e) {
-    if (this.getDuration() > 0)
+    if (this.getDuration() > 0) {
         this.sendTimeUpdateInternal();
+    }
 };
 
 unisubs.player.FlvVideoPlayer.prototype.onPlay_ = function() {

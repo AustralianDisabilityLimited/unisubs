@@ -1,8 +1,12 @@
 {% extends "settings.html" %}
 
-{% load thumbnail i18n doorman %}
+{% load thumbnail i18n doorman auth_tags %}
 
 {% block title %}{% trans "Edit My Profile" %} | Universal Subtitles{% endblock %}
+
+{% block email_confirmation_block %}
+    {% email_confirmation_notification 'true' %}
+{% endblock %}
 
 {% block scripts %}
     {{ block.super }}

@@ -26,6 +26,13 @@ from django.contrib import admin
 admin.autodiscover()
 admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
 
+# Monkeypatch the Celery admin to show a column for task run time in the list view.
+from djcelery.admin import TaskMonitor
+from djcelery.models import TaskState
+admin.site.unregister([TaskState])
+TaskMonitor.list_display += ('runtime',)
+admin.site.register(TaskState, TaskMonitor)
+
 from doorman import feature_is_on
 
 js_info_dict = {
@@ -78,7 +85,6 @@ urlpatterns = patterns(
     url(r'^search/', include('search.urls', 'search')),
     url(r'^email-testing/', include('emails_example.urls', 'emails_example')),    
     url(r'^counter/$', 'videos.views.counter', name="counter"),
-    url(r'^api/', include('api.urls', 'api')),
     url(r'^uslogging/', include('uslogging.urls', 'uslogging')),
     url(r'^services/$', 'django.views.generic.simple.direct_to_template', 
         {'template': 'services.html'}, 'services_page'),
@@ -125,6 +131,14 @@ try:
 except ImportError:
     pass
 
+try:
+    from api import urls
+    urlpatterns += patterns('',
+        url(r'^api/', include('api.urls', 'api')),
+    )
+except ImportError:
+    pass
+
 if feature_is_on('MODERATION'):
     urlpatterns += patterns("",
         (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
@@ -132,6 +146,8 @@ if feature_is_on('MODERATION'):
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+         {'document_root': settings.STATIC_ROOT, 'show_indexes': True}),
+        (r'^user-data/(?P<path>.*)$', 'django.views.static.serve',
          {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
         (r'raw_template/(?P<template>.*)', 'django.views.generic.simple.direct_to_template'),
     )

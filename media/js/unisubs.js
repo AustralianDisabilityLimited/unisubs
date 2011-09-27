@@ -193,6 +193,10 @@ unisubs.LoginPopupType = {
         '/socialauth/gmail_login/?next=/widget/close_window/',
         'scrollbars=yes,location=0,status=0,resizable=yes'
     ],
+    FACEBOOK: [
+        '/widget/facebook_login/?next=/widget/close_window/',
+        'location=0,status=0,width=1000,height=450'
+    ],
     NATIVE: [
         '/auth/login/?next=/widget/close_window/',
         'scrollbars=yes,location=0,status=0,resizable=yes'

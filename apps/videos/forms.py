@@ -40,7 +40,8 @@ from videos.tasks import video_changed_tasks
 from utils.translation import get_languages_list
 from utils.forms import StripRegexField, FeedURLField
 from videos.feed_parser import FeedParser, FeedParserError
-from utils.forms import ReCaptchaField, url_exists
+from utils.forms import ReCaptchaField
+from utils.http import url_exists
 
 
 ALL_LANGUAGES = [(val, _(name)) for val, name in settings.ALL_LANGUAGES]
@@ -223,13 +224,15 @@ class SubtitlesUploadBaseForm(forms.Form):
         return None
 
     def _find_appropriate_language(self, video, language_code):
+        created = False
         language = video.subtitle_language(language_code)
         if not language:
+            created = True
             language = SubtitleLanguage(
                 video=video, is_original=False, is_forked=True)
         language.language = language_code
         language.save()
-        return language
+        return language, created
 
     def save_subtitles(self, parser, video=None, language=None, update_video=True):
         video = video or self.cleaned_data['video']
@@ -238,9 +241,13 @@ class SubtitlesUploadBaseForm(forms.Form):
             self._save_original_language(
                 video, self.cleaned_data['video_language'])
         
-        language = language or self._find_appropriate_language(video, self.cleaned_data['language'])
+        if language:
+            self._sl_created = False
+            language = language
+        else:
+            language, self._sl_created = self._find_appropriate_language(video, self.cleaned_data['language'])
         language = save_subtitle(video, language, parser, self.user, update_video)
-   
+
         return language
 
     def get_errors(self):
@@ -327,7 +334,7 @@ class UserTestResultForm(forms.ModelForm):
         return obj
 
 class VideoForm(forms.Form):
-    # url validation is whithin the clean method
+    # url validation is within the clean method
     video_url = forms.URLField(verify_exists=False)
     
     def __init__(self, user=None, *args, **kwargs):
@@ -338,7 +345,6 @@ class VideoForm(forms.Form):
         self.fields['video_url'].widget.attrs['class'] = 'main_video_form_field'
     
     def clean_video_url(self):
-
         video_url = self.cleaned_data['video_url']
         
         if video_url:
@@ -450,6 +456,15 @@ class AddFromFeedForm(forms.Form, AjaxForm):
         except FeedParserError, e:
             raise forms.ValidationError(e) 
     
+    def success_message(self):
+        if not self.video_limit_routreach:
+            return _(u"%(count)s videos have been added")
+        else:
+            return _(u"%(count)s videos have been added. "
+                     u"To add the remaining videos from this feed, "
+                     u"submit this feed again and make sure to "
+                     u'check "Save feed" box.')
+
     def save_feed_url(self, feed_url, last_entry_url):
         try:
             VideoFeed.objects.get(url=feed_url)
@@ -458,17 +473,18 @@ class AddFromFeedForm(forms.Form, AjaxForm):
             vf.user = self.user
             vf.last_link = last_entry_url
             vf.save()
-                                                
+
     def save(self):
         if self.cleaned_data.get('save_feed'):
             for feed_url, last_entry_url in self.feed_urls:
                 self.save_feed_url(feed_url, last_entry_url)
-            
+
+        videos = []
         for vt, info in self.video_types:
-            video, created = Video.get_or_create_for_url(vt=vt, user=self.user)
-            
-        return len(self.video_types)
-    
+            videos.append(Video.get_or_create_for_url(vt=vt, user=self.user))
+
+        return videos
+
 class FeedbackForm(forms.Form):
     email = forms.EmailField(required=False)
     message = forms.CharField(widget=forms.Textarea())

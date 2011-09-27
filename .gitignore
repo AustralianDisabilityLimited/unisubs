@@ -45,3 +45,7 @@ user-data/teams/*
 user-data/video/*
 apps/services
 media/unisubservices
+user-data/pictures
+.vagrant
+venv/
+unisubs-integration

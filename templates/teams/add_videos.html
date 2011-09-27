@@ -1,0 +1,39 @@
+{% extends "settings.html" %}
+
+{% load i18n teams_tags widget media_compressor %}
+
+{% block body_attrs %}id="teams"{% endblock %}
+
+{% block title %}
+    {% trans 'Team video' %} | Universal Subtitles
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+     {% include_bundle "widget-css"%}
+{% endblock %}
+
+{% block settings_content %}
+    <div class="hd">
+        <h2>{{ team }}</h2>
+        {% with "videos" as active %}
+            {% include 'teams/_edit_top_navigation.html' %}
+        {% endwith %}
+    </div>
+    <div class="padding">
+        <form method='post' action="." enctype="multipart/form-data">
+            <h3>{% trans 'Add videos' %}</h3>
+            <h4>
+                {% trans 'or' %}
+                <a href="{% url teams:add_video slug=team.slug %}">
+                    {% trans 'add a single video' %}
+                </a>
+            </h4>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="ft">
+                <button class="blue_button small"><span>{% trans 'Save' %}</span></button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

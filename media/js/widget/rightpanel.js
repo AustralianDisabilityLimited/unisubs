@@ -48,6 +48,16 @@ unisubs.RightPanel = function(serverModel,
     this.doneText_ = doneText;
     this.loginDiv_ = null;
     this.doneAnchor_ = null;
+
+    /**
+     * Whether to show the "Save and Exit" link in the panel. Should be overridden by
+     * sub classes as needed.
+     *
+     * @protected
+     * @type {boolean}
+     */
+    this.showSaveExit = true;
+
     /**
      * Non-null iff the mouse has just been pressed on one of the legend keys
      * and not released or moved away from the legend key yet.
@@ -238,15 +248,19 @@ unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.getHandler().listen(
         this.downloadLink_, 'click', this.downloadClicked_);
 
-    var saveAndExitAnchor = $d(
-        'div', 'unisubs-saveandexit',
-        $d('span', null, 'Need to stop and come back later? '),
-        $d('a', {'href': '#'},
-           $d('span', null, 'Save and Exit')));
-    goog.dom.append(stepsDiv, this.doneAnchor_, saveAndExitAnchor);
-    this.getHandler().listen(
-        saveAndExitAnchor, goog.events.EventType.CLICK,
-        this.saveAndExitClicked_);
+    goog.dom.append(stepsDiv, this.doneAnchor_);
+
+    if (this.showSaveExit) {
+        var saveAndExitAnchor = $d(
+            'div', 'unisubs-saveandexit',
+            $d('span', null, 'Need to stop and come back later? '),
+            $d('a', {'href': '#'},
+            $d('span', null, 'Save and Exit')));
+        goog.dom.append(stepsDiv, saveAndExitAnchor);
+        this.getHandler().listen(
+            saveAndExitAnchor, goog.events.EventType.CLICK,
+            this.saveAndExitClicked_);
+    }
 
     goog.dom.append(el, stepsDiv);
     this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);

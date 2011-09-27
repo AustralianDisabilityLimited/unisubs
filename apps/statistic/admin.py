@@ -29,14 +29,6 @@ class VideoViewCounterAdmin(admin.ModelAdmin):
 admin.site.register(SubtitleFetchCounters, SubtitleFetchCountersAdmin)    
 admin.site.register(VideoViewCounter, VideoViewCounterAdmin)
 
-#add logging statistic display for SQS API usage
-from statistic.log_methods import LogAdmin, LogFakeModel 
-from kombu_backends.amazonsqs import SQSLoggingConnection
-
-LogAdmin.register('SQS usage', SQSLoggingConnection.logger_backend)
-
-admin.site.register(LogFakeModel, LogAdmin)
-
 #add logging statistic for migration data from Redis to MySQL
 from statistic.pre_day_statistic import LoggerModelAdmin
 from statistic import st_widget_view_statistic

@@ -24,7 +24,11 @@ urlpatterns = patterns(
     url(r'^create/$', 'create_user', name='create_user'),
     url(r'^delete/$', 'delete_user', name='delete_user'),
     url(r'^login_post/$', 'login_post', name='login_post'),
+    url(r'^facebook_login/$', 'facebook_login', name='facebook_login'),
+    url(r'^facebook_login_done/(?P<next>[^/]+)/$', 'facebook_login_done', name='facebook_login_done'),
     url(r'^twitter_login/$', 'twitter_login', name='twitter_login'),
     url(r'^twitter_login_done/$', 'twitter_login_done', name='twitter_login_done'),
     url(r'^user_list/$', 'user_list', name='user_list'),
+    url(r'confirm_email/(?P<confirmation_key>\w+)/$', 'confirm_email', name='confirm_email'),
+    url(r'resend_confirmation_email/$', 'resend_confirmation_email', name='resend_confirmation_email'),
 )

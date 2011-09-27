@@ -234,6 +234,9 @@ class VideoVisibilityPolicy(models.Model):
     @property
     def belongs_to_team(self):
         return self.content_type == ContentType.objects.get_for_model(Team)
+
+    def owned_by(self, model):
+        return self.owner == model
     
     def __unicode__(self):
         return "Policy for %s - %s " % (self.video, self.site_visibility_policy, )

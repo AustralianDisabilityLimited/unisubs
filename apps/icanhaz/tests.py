@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from teams.models import Team, TeamMember, TeamVideo
+from teams.search_indexes import TeamVideoLanguagesIndex
 from auth.models import CustomUser as User
 from videos.models import Video
 from videos.search_indexes import VideoIndex
@@ -99,7 +100,6 @@ class BusinessLogic(BasicDataTest):
             self.superuser,
         )
         # super users should always be able to see them
-        print self.superuser2.is_superuser
         self.assertTrue(VideoVisibilityPolicy.objects.user_can_see(self.superuser2, self.video ))
         # regular users not 
         self.assertFalse(VideoVisibilityPolicy.objects.user_can_see(self.regular_user, self.video))
@@ -475,11 +475,15 @@ class TestListingVisibilities(BasicDataTest):
             video=self.video,
             added_by=self.team1_member.user)
 
-    def _in_solr(self, video):
-        sqs = VideoIndex.public()
-        has_video = False
-        vids = [x.video_id for x in sqs]
-        return video.video_id in vids
+    def _in_solr(self, video): 
+        return video.video_id in [x.video_id for x in VideoIndex.public()]
+
+    def _tv_in_solr(self, tv, user):
+        if tv.team.is_member(user):
+            results = TeamVideoLanguagesIndex.results_for_members()
+        else:
+            results = TeamVideoLanguagesIndex.results()
+        return tv.video.video_id in [x.video_id for x in results]
         
     def test_hidden_video_no_solr(self):
         reset_solr()
@@ -493,15 +497,52 @@ class TestListingVisibilities(BasicDataTest):
         )
         policy.save()
         self.video = refresh(self.video)
-        reset_solr()
+        #reset_solr()
         self.assertFalse(self._in_solr( self.video))
         
 
-    def test_team_video_hidden_for_non_members(self):
-        pass
+    def test_visibility_for_teams_members(self):
+        tv, created = TeamVideo.objects.get_or_create(video=self.video, team=self.team1)
+        tv.added_by = self.team1_member.user
+        reset_solr()
+        self.assertTrue(self._tv_in_solr(tv, self.regular_user))
 
-    def test_team_video_visible_for_members(self):
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
+            self.team1,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        self.video = refresh(self.video)
+        reset_solr()
+        self.assertFalse(self._tv_in_solr(tv, self.regular_user))
+        self.assertTrue(self._tv_in_solr(tv, self.team1_member.user))
+
+    def test_visibility_for_team_members(self):
+        
         pass
+        # FIXME:
+        # this test needs to have a situation discussed
+        # what happens if a user claims ownership of a video
+        # that was previously with a team, what if that onwer hides
+        # the video, what happens?
+        tv, created = TeamVideo.objects.get_or_create(video=self.video, team=self.team1)
+        tv.added_by = self.team1_member.user
+        reset_solr()
+        self.assertTrue(self._tv_in_solr(tv, self.regular_user))
+
+        policy = VideoVisibilityPolicy.objects.create_for_video(
+            self.video,
+            VideoVisibilityPolicy.SITE_VISIBILITY_PRIVATE_OWNER,
+            self.regular_user,
+            VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN,
+        )
+        policy.save()
+        self.video = refresh(self.video)
+        reset_solr()
+        self.assertFalse(self._tv_in_solr(tv, self.regular_user))
+        self.assertFalse(self._tv_in_solr(tv, self.team1_member.user))        
 
 def refresh(obj):
     return obj.__class__.objects.get(pk=obj.pk)

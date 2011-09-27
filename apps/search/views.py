@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-from haystack.query import SearchQuerySet
+
+
+from videos.search_indexes import VideoIndex
 from videos.models import Video
 from search.forms import SearchForm
 from search.rpc import SearchApiClass
@@ -35,5 +37,5 @@ def index(request):
         return HttpResponseRedirect('%s#/?%s' % (reverse('search:index'), urlencode(request.GET)))
             
     return {
-        'form': SearchForm(sqs=SearchQuerySet().models(Video))
+        'form': SearchForm(sqs=VideoIndex.public())
     }

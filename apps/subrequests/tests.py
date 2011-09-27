@@ -10,8 +10,7 @@ from django.test import TestCase
 from auth.models import CustomUser as User
 from videos.tasks import video_changed_tasks
 from videos.models import Video, SubtitleLanguage
-from haystack.query import SearchQuerySet
-from videos.search_indexes import VideoSearchResult
+from videos.search_indexes import VideoSearchResult, VideoIndex
 
 from subrequests.models import SubtitleRequest
 
@@ -62,8 +61,7 @@ class TestSubtitleRequest(TestCase):
             self.assertEqual(subreq.description, self.DEFAULTS['description'])
             self.assertEqual(subreq.track, self.DEFAULTS['track'])
 
-        searched_videos = SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(requests_exact__in=self.langs[:2])
+        searched_videos = TeamVideoIndex.public().filter(requests_exact__in=self.langs[:2])
 
         # There must be one video in search results with video in the provided
         # languages which are bing created in the test

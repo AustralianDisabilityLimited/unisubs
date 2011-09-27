@@ -47,9 +47,9 @@ from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
 from teams.rpc import TeamsApi
+from teams.search_indexes import TeamVideoLanguagesIndex
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
-from haystack.query import SearchQuerySet
 
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
@@ -123,7 +123,7 @@ def detail(request, slug, is_debugging=False, languages=None):
     if bool(is_debugging):
         languages = request.GET.get('langs', '').split(',')
 
-    qs_list, mqs = team.get_videos_for_languages_haystack(languages)
+    qs_list, mqs = team.get_videos_for_languages_haystack(languages, request.user)
 
     extra_context = widget.add_onsite_js_files({})
     extra_context.update({
@@ -199,9 +199,11 @@ def detail_old(request, slug, is_debugging=False, languages=None):
 
 def completed_videos(request, slug):
     team = Team.get(slug, request.user)
-    
-    qs = SearchQuerySet().models(TeamVideo).filter(team_id=team.id) \
-        .filter(is_complete=True).order_by('-video_complete_date')
+    if team.is_member(request.user):
+        qs  = TeamVideoLanguagesIndex.results_for_members()
+    else:
+        qs = TeamVideoLanguagesIndex.results()
+    qs = qs.filter(team_id=team.id).filter(is_complete=True).order_by('-video_complete_date')
 
     extra_context = widget.add_onsite_js_files({})    
     extra_context.update({

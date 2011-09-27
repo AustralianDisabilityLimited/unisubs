@@ -18,7 +18,7 @@
 
 from django.test import TestCase
 from django.core.management import call_command
-from haystack.query import SearchQuerySet
+
 from videos.models import Video
 from search.forms import SearchForm
 from search.rpc import SearchApiClass
@@ -26,7 +26,7 @@ from auth.models import CustomUser as User
 from utils.rpc import RpcMultiValueDict
 from django.core.urlresolvers import reverse
 from videos.tasks import video_changed_tasks
-
+from videos.search_indexes import VideoIndex
 def reset_solr():
     # cause the default site to load
     from haystack import site
@@ -109,7 +109,7 @@ class TestSearch(TestCase):
         result = rpc.search(rdata, self.user, testing=True)['sqs']
         
         self.assertTrue(len(result))
-        for video in SearchQuerySet().models(Video):
+        for video in VideoIndex.public():
             if video.video_language == 'en':
                 self.assertTrue(video.object in [item.object for item in result])
         
@@ -117,7 +117,7 @@ class TestSearch(TestCase):
         result = rpc.search(rdata, self.user, testing=True)['sqs']
         
         self.assertTrue(len(result))
-        for video in SearchQuerySet().models(Video):
+        for video in VideoIndex.public():
             if video.languages and 'en' in video.languages:
                 self.assertTrue(video.object in [item.object for item in result])        
             
@@ -136,7 +136,7 @@ class TestSearch(TestCase):
         
     def test_search(self):
         reset_solr()
-        sqs = SearchQuerySet().models(Video)
+        sqs = VideoIndex.public()
         qs = Video.objects.exclude(title='')
         self.assertTrue(qs.count())
         
@@ -147,7 +147,7 @@ class TestSearch(TestCase):
     def test_search1(self):
         for title in self.titles:
             video = Video.objects.all()[0]
-            sqs = SearchQuerySet().models(Video)
+            sqs = VideoIndex.public()
             video.title = title
             video.save()
             reset_solr()

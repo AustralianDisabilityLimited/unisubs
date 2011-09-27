@@ -27,7 +27,6 @@ from apps.teams.templatetags.moderation import render_moderation_togggle_button,
 from apps.videos.models import SubtitleVersion, Video
 from apps.teams.models import Team, TeamVideo
 from apps.teams.moderation_forms import ModerationListSearchForm
-from haystack.query import SearchQuerySet
 
 from apps.teams.moderation import _update_search_index
 
@@ -144,7 +143,8 @@ def batch_reject_version(request, team, before_rev=None, lang_id=None):
     return s
 
 def _get_moderation_results(request, team):
-    sqs = SearchQuerySet().models(TeamVideo).filter(needs_moderation=True).filter(team_id=team.pk)
+    sqs = TeamVideoLanguagesIndex.results_for_members()\
+        .filter(needs_moderation=True).filter(team_id=team.pk)
     form = ModerationListSearchForm(request)
     result_list = []
     if form.is_valid():

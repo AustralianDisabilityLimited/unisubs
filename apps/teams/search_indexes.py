@@ -1,6 +1,7 @@
 import json
 import datetime
 from haystack.indexes import *
+from haystack.query import SearchQuerySet
 from haystack import site
 from teams import models
 from apps.teams.moderation import WAITING_MODERATION
@@ -44,6 +45,8 @@ class TeamVideoLanguagesIndex(SearchIndex):
     # we'll serialize data from versions here -> links and usernames
     # that will be on the appgove all for that language
     moderation_version_info = CharField(indexed=False)
+
+    members_only = BooleanField()
     
     def prepare(self, obj):
         self.prepared_data = super(TeamVideoLanguagesIndex, self).prepare(obj)
@@ -79,7 +82,8 @@ class TeamVideoLanguagesIndex(SearchIndex):
             [sl.language for sl in completed_sls]
         self.prepared_data['video_completed_lang_urls'] = \
             [sl.get_absolute_url() for sl in completed_sls]
-
+        policy = obj.video.policy
+        self.prepared_data['members_only'] = bool(policy and policy.owned_by(obj.team))
         
         self.prepares_moderation_info( obj, self.prepared_data)
         return self.prepared_data
@@ -118,6 +122,14 @@ class TeamVideoLanguagesIndex(SearchIndex):
         self.prepared_data['moderation_version_info'] = json.dumps(moderation_version_info)
 
 
+        
+    @classmethod
+    def results_for_members(self):
+        return SearchQuerySet().models(models.TeamVideo)
+        
+    @classmethod
+    def results(self):
+        return SearchQuerySet().models(models.TeamVideo).filter(members_only=False)
                 
             
 site.register(models.TeamVideo, TeamVideoLanguagesIndex)

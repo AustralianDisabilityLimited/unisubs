@@ -69,7 +69,7 @@ unisubs.translate.BingTranslator.Transaction.prototype.getCallback_ = function(w
         if (response) {
             var encoded = [];
             for (var i=0, len=response.length; i<len; i++) {
-                encoded.push(response[i].TranslatedText);
+                encoded.push(response[i]['TranslatedText']);
             }
 
             callback(encoded, widgets);

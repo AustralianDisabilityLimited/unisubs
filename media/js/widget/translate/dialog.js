@@ -135,12 +135,12 @@ unisubs.translate.Dialog.prototype.disposeInternal = function() {
     this.serverModel_.dispose();
 };
 /**
- * Tries translate subtitles with GoogleTranslator
+ * Tries translate subtitles with BingTranslator
  */
-unisubs.translate.Dialog.prototype.translateViaGoogle = function(){
+unisubs.translate.Dialog.prototype.translateViaBing = function(){
     //I don't know how better call this. I think it should be incapsulated in translationList_,
     //but have chain of function calls can confuse.
-    this.translationPanel_.getTranslationList().translateViaGoogle(
+    this.translationPanel_.getTranslationList().translateViaBing(
         this.standardSubState_.LANGUAGE, this.subtitleState_.LANGUAGE);
 };
 

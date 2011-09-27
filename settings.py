@@ -281,7 +281,7 @@ JS_DIALOG = \
      'js/widget/controls/videocontrols.js',
      'js/widget/controls/volumecontrol.js',
      'js/widget/controls/volumeslider.js',
-     'js/widget/translate/googletranslator.js',
+     'js/widget/translate/bingtranslator.js',
      'js/widget/translate/dialog.js',
      'js/widget/translate/translationpanel.js',
      'js/widget/translate/translationlist.js',

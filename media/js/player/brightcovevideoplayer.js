@@ -170,7 +170,7 @@ unisubs.player.BrightcoveVideoPlayer.prototype.onBrightcoveTemplateLoaded_ =
 {
     if (playerAPIID == this.playerElemID_) {
         this.setDimensionsKnownInternal();
-        this.player_ = goog.dom.$(this.playerElemID_);
+        this.player_ = goog.dom.getElement(this.playerElemID_);
         this.bcPlayer_ = brightcove["getExperience"](this.playerElemID_);
         var experienceModule = this.bcPlayer_.getModule(APIModules.EXPERIENCE);
         experienceModule.addEventListener(BCExperienceEvent.TEMPLATE_READY, 

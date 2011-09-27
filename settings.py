@@ -318,6 +318,7 @@ JS_STREAMER = list(JS_WIDGETIZER_CORE)
 JS_STREAMER.extend([
         'js/player/ooyalaplayer.js', 
         'js/player/wistiavideoplayer.js', 
+        'js/player/brightcoveliteplayer.js', 
         'js/streamer/streamerdecorator.js', 
         'js/streamer/streamercontroller.js', 
         'js/streamer/streambox.js', 

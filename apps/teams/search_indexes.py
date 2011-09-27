@@ -6,6 +6,7 @@ from haystack import site
 from teams import models
 from apps.teams.moderation import WAITING_MODERATION
 from apps.videos.models import SubtitleLanguage
+from icanhaz.models import VideoVisibilityPolicy
 from django.conf import settings
 from django.utils.translation import ugettext as _
 
@@ -46,7 +47,12 @@ class TeamVideoLanguagesIndex(SearchIndex):
     # that will be on the appgove all for that language
     moderation_version_info = CharField(indexed=False)
 
-    members_only = BooleanField()
+    # visivility can be:
+    # is_public=True anyone can see
+    # is_public=False and owned_by_team_id=None -> a regular user owns, no teams can list this video
+    # is_public=False and owned_by_team_id=X -> only team X can see this video
+    is_public = BooleanField()
+    owned_by_team_id = IntegerField()
     
     def prepare(self, obj):
         self.prepared_data = super(TeamVideoLanguagesIndex, self).prepare(obj)
@@ -83,7 +89,12 @@ class TeamVideoLanguagesIndex(SearchIndex):
         self.prepared_data['video_completed_lang_urls'] = \
             [sl.get_absolute_url() for sl in completed_sls]
         policy = obj.video.policy
-        self.prepared_data['members_only'] = bool(policy and policy.owned_by(obj.team))
+        owned_by = None
+        if policy and policy.belongs_to_team:
+            owned_by = policy.object_id
+        
+        self.prepared_data['is_public'] =  VideoVisibilityPolicy.objects.video_is_public(obj.video)
+        self.prepared_data["owned_by_team_id"] = owned_by
         
         self.prepares_moderation_info( obj, self.prepared_data)
         return self.prepared_data
@@ -124,12 +135,12 @@ class TeamVideoLanguagesIndex(SearchIndex):
 
         
     @classmethod
-    def results_for_members(self):
-        return SearchQuerySet().models(models.TeamVideo)
+    def results_for_members(self, team):
+        return SearchQuerySet().models(models.TeamVideo).filter(owned_by_team_id=team.pk)
         
     @classmethod
     def results(self):
-        return SearchQuerySet().models(models.TeamVideo).filter(members_only=False)
+        return SearchQuerySet().models(models.TeamVideo).filter(is_public=True)
                 
             
 site.register(models.TeamVideo, TeamVideoLanguagesIndex)

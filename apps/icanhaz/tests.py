@@ -480,7 +480,7 @@ class TestListingVisibilities(BasicDataTest):
 
     def _tv_in_solr(self, tv, user):
         if tv.team.is_member(user):
-            results = TeamVideoLanguagesIndex.results_for_members()
+            results = TeamVideoLanguagesIndex.results_for_members(tv.team)
         else:
             results = TeamVideoLanguagesIndex.results()
         return tv.video.video_id in [x.video_id for x in results]
@@ -518,15 +518,9 @@ class TestListingVisibilities(BasicDataTest):
         reset_solr()
         self.assertFalse(self._tv_in_solr(tv, self.regular_user))
         self.assertTrue(self._tv_in_solr(tv, self.team1_member.user))
+        self.assertFalse(self._tv_in_solr(tv, self.team2_member.user))
 
-    def test_visibility_for_team_members(self):
-        
-        pass
-        # FIXME:
-        # this test needs to have a situation discussed
-        # what happens if a user claims ownership of a video
-        # that was previously with a team, what if that onwer hides
-        # the video, what happens?
+    def test_visibility_when_owned_by_user(self):
         tv, created = TeamVideo.objects.get_or_create(video=self.video, team=self.team1)
         tv.added_by = self.team1_member.user
         reset_solr()
@@ -540,9 +534,9 @@ class TestListingVisibilities(BasicDataTest):
         )
         policy.save()
         self.video = refresh(self.video)
-        reset_solr()
+        self.assertFalse(self._tv_in_solr(tv, self.team1_member.user))
+        self.assertFalse(self._tv_in_solr(tv, self.team2_member.user))
         self.assertFalse(self._tv_in_solr(tv, self.regular_user))
-        self.assertFalse(self._tv_in_solr(tv, self.team1_member.user))        
 
 def refresh(obj):
     return obj.__class__.objects.get(pk=obj.pk)

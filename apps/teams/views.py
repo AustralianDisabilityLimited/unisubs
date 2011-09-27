@@ -199,7 +199,7 @@ def detail_old(request, slug, is_debugging=False, languages=None):
 def completed_videos(request, slug):
     team = Team.get(slug, request.user)
     if team.is_member(request.user):
-        qs  = TeamVideoLanguagesIndex.results_for_members()
+        qs  = TeamVideoLanguagesIndex.results_for_members(team)
     else:
         qs = TeamVideoLanguagesIndex.results()
     qs = qs.filter(team_id=team.id).filter(is_complete=True).order_by('-video_complete_date')

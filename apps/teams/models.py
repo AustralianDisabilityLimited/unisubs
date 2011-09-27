@@ -277,7 +277,7 @@ class Team(models.Model):
     def _base_sqs(self, is_member=False):
         from teams.search_indexes import TeamVideoLanguagesIndex
         if is_member:
-            return TeamVideoLanguagesIndex.results_for_members().filter(team_id=self.id)
+            return TeamVideoLanguagesIndex.results_for_members(self).filter(team_id=self.id)
         else:
             return TeamVideoLanguagesIndex.results().filter(team_id=self.id)
 

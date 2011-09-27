@@ -143,7 +143,7 @@ def batch_reject_version(request, team, before_rev=None, lang_id=None):
     return s
 
 def _get_moderation_results(request, team):
-    sqs = TeamVideoLanguagesIndex.results_for_members()\
+    sqs = TeamVideoLanguagesIndex.results_for_members(team)\
         .filter(needs_moderation=True).filter(team_id=team.pk)
     form = ModerationListSearchForm(request)
     result_list = []

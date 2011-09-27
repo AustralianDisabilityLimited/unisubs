@@ -94,9 +94,9 @@ unisubs.translate.TranslationList.prototype.translateCallback_ = function(transl
 };
 
 /**
- * Find widgets for all not translated subtitles and translate them with GoogleTranslator
+ * Find widgets for all not translated subtitles and translate them with BingTranslator
  */
-unisubs.translate.TranslationList.prototype.translateViaGoogle = function(fromLang, toLang) {
+unisubs.translate.TranslationList.prototype.translateViaBing = function(fromLang, toLang) {
     /**
      * Translation widgets that does not contain any user's translation
      * @type {Array.<unisubs.translate.TranslationWidget>}
@@ -114,9 +114,9 @@ unisubs.translate.TranslationList.prototype.translateViaGoogle = function(fromLa
     });
     
     /**
-     * @type {unisubs.translate.GoogleTranslator.translateWidgets}
+     * @type {unisubs.translate.BingTranslator.translateWidgets}
      */
-    var translateWidgets = unisubs.translate.GoogleTranslator.translateWidgets;
+    var translateWidgets = unisubs.translate.BingTranslator.translateWidgets;
 
     needTranslating.length && translateWidgets(needTranslating, fromLang, toLang, 
         this.translateCallback_);

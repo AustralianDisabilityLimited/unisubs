@@ -62,15 +62,15 @@ unisubs.translate.TranslationRightPanel.prototype.appendExtraHelpInternal =
     this.changeTimingLink_ =
         $d('a', {'href':'#'}, 'Change subtitle timing');
 
-    var isGoogleTranslateable = unisubs.translate.GoogleTranslator.isTranslateable(
+    var isBingTranslateable = unisubs.translate.BingTranslator.isTranslateable(
         this.dialog_.getStandardLanguage(),
         this.dialog_.getSubtitleLanguage());
     
     var ul =  $d('ul', 'unisubs-translationOptions');
     
-    if (isGoogleTranslateable) {
+    if (isBingTranslateable) {
         ul.appendChild($d('li', 'unisubs-autoTranslate', this.autoTranslateLink_, 
-            $d('span', null, ' (using google)')));
+            $d('span', null, ' (using bing)')));
     }
     
     ul.appendChild(
@@ -96,7 +96,7 @@ unisubs.translate.TranslationRightPanel.prototype.enterDocument = function() {
 
 unisubs.translate.TranslationRightPanel.prototype.autoTranslateClicked_ = function(e){
     e.preventDefault();
-    this.dialog_.translateViaGoogle();
+    this.dialog_.translateViaBing();
 }
 
 unisubs.translate.TranslationRightPanel.prototype.changeTimingClicked_ = 

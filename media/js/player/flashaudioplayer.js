@@ -34,6 +34,9 @@ unisubs.player.FlashAudioPlayer.prototype.createDom = function() {
         unisubs.player.AbstractVideoPlayer.DEFAULT_SIZE;
 };
 
+/**
+ * @override
+ */
 unisubs.player.FlashAudioPlayer.prototype.getDuration = function() {
     // see http://flowplayer.org/forum/8/37767
     // http://code.google.com/p/flowplayer-core/issues/detail?id=187

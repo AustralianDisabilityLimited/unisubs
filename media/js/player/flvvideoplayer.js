@@ -65,6 +65,7 @@ unisubs.player.FlvVideoPlayer.prototype.enterDocument = function() {
         this.swfEmbedded_ = true;
         var videoDiv = this.getDomHelper().createDom('div');
         videoDiv.id = unisubs.randomString();
+        this.elementID_ = videoDiv.id;
         this.getElement().appendChild(videoDiv);
         this.setDimensionsKnownInternal();
         var flashEmbedParams = {
@@ -107,8 +108,9 @@ unisubs.player.FlvVideoPlayer.prototype.addPluginsInternal = function(playerConf
                 });
         }
     }
-    if (plugins)
+    if (plugins) {
         playerConfig['plugins'] = plugins;
+    }
 };
 
 unisubs.player.FlvVideoPlayer.prototype.sizeFromConfig_ = function() {
@@ -131,13 +133,16 @@ unisubs.player.FlvVideoPlayer.prototype.swfFinishedLoading_ = function() {
         goog.dom.getFirstElementChild(this.player_['getParent']()), 
         this.playerSize);
     unisubs.style.setSize(
-        this.player_,
+        goog.dom.getElement(this.elementID_),
         this.playerSize);
     this.swfLoaded_ = true;
     goog.array.forEach(this.commands_, function(c) { c(); });
     this.commands_ = [];
     var that = this;
     this.getClip_()['onStart'](function() {
+        that.onPlay_();
+    });
+    this.getClip_()['onBegin'](function() {
         that.onPlay_();
     });
     this.getClip_()['onResume'](function() {

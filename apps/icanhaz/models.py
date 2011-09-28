@@ -199,7 +199,6 @@ class VideoVisibilityPolicy(models.Model):
     WIDGET_DEFAULT_POLICY = WIDGET_VISIBILITY_PUBLIC
     WIDGET_VISIBILITY_POLICIES = (
         (WIDGET_VISIBILITY_PUBLIC, _("public")),
-        (WIDGET_VISIBILITY_HIDDEN_WITH_KEY, _("spoofable, but does not take to the site page for the video")),
         (WIDGET_VISIBILITY_HIDDEN, _("no embeding allowed")),
         (WIDGET_VISIBILITY_WHITELISTED , "to specified domains only"),
     )

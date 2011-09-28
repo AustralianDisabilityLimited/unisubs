@@ -345,9 +345,9 @@ class Rpc(BaseRpc):
         # we have a default user message, since the UI lets users save non
         # changed subs, but the backend will realize and will not save that
         # version. In those cases, we want to show the defatul user message.
-        user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+        user_message = "Your changes have been saved. It will take a minute or so for your subtitles to appear."
         if new_version is not None and new_version.version_no == 0:
-            user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+            user_message = "Your changes have been saved. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
             if user_can_moderate(language.video, user) is False:
                 user_message = """This video is moderated by %s. 

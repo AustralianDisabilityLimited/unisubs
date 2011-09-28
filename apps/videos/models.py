@@ -865,7 +865,7 @@ class SubtitleVersion(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField(editable=False)
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User, default=User.get_anonymous)
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True, editable=False)
     text_change = models.FloatField(null=True, blank=True, editable=False)

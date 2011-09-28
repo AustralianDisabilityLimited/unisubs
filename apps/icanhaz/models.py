@@ -98,7 +98,8 @@ class VideoVisibilityManager(models.Manager):
             return True
         elif visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_HIDDEN:
             return False
-        elif visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_WHITELISTED:
+        elif visibility == VideoVisibilityPolicy.WIDGET_VISIBILITY_WHITELISTED and \
+                video.policy.embed_allowed_domains is not None:
             domain = urlparse.urlparse(referer).netloc
             return  domain in video.policy.embed_allowed_domains
         

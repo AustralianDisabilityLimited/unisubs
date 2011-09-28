@@ -204,3 +204,17 @@ p.notice {
 #teams .big_list li span.count {
   display: block;
 }
+
+#teams .add-video h4 {
+  margin: -4px 0 12px;
+}
+
+#teams .add-video #id_save_feed {
+  display: inline;
+  width: 24px;
+  margin: 0;
+}
+
+#teams .add-video span.helptext {
+  display: block;
+}

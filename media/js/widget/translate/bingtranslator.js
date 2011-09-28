@@ -230,10 +230,10 @@ unisubs.translate.BingTranslator.isTranslateable = function() {
          * @private
          */
         unisubs.translate.BingTranslator.Languages_ = new goog.structs.Set([
-            'ar', 'cs', 'da', 'de', 'en', 'et', 'fi', 'fr', 'nl', 'el', 'he',
-            'ht', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'no', 'pl', 'pt',
-            'ro', 'es', 'ru', 'sk', 'sl', 'sv', 'th', 'tr', 'uk', 'vi',
-            'zh-cn', 'zh-tw', '']);
+            'ar', 'bg', 'ca', 'zh-cn', 'zh-tw', 'cs', 'da', 'nl', 'en', 'et',
+            'fi', 'fr', 'de', 'el', 'ht', 'he', 'hi', 'hu', 'id', 'it', 'ja',
+            'ko', 'lv', 'lt', 'no', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'es',
+            'sv', 'th', 'tr', 'uk', 'vi', '']);
     }
     return unisubs.translate.BingTranslator.Languages_.containsAll(arguments);
 };

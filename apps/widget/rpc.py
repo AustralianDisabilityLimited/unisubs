@@ -94,7 +94,7 @@ class Rpc(BaseRpc):
                 video_id,
                 referer=request.META.get('referer'),
                 user=request.user):
-                return None
+                return {"error_msg": _("Video embedding disabled by owner")}
         try:    
             video_urls = video_cache.get_video_urls(video_id)
         except models.Video.DoesNotExist:

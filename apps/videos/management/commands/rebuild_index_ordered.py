@@ -20,7 +20,7 @@ def _get_app_labels(apps):
 
 PRIORITY_APPS = list(OrderedSet(_get_app_labels(['teams'])))
 REMAINING_APPS = list(OrderedSet(a for a in _get_app_labels(settings.INSTALLED_APPS)
-                                 if a not in PRIORITY_APPS))
+                            if a not in PRIORITY_APPS))
 
 
 class Command(BaseCommand):

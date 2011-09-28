@@ -83,7 +83,8 @@ unisubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSta
 unisubs.widget.DropDown.prototype.createDom = function() {
     unisubs.widget.DropDown.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.getElement().className = 'unisubs-dropdown';
+    goog.dom.classes.add(
+        this.getElement(), "cleanslate", "unisubs-dropdown");
 
     var languageListContainer = this.createLanguageList_($d);
     this.createActionList_($d);

@@ -3130,37 +3130,35 @@ background-position: right 10px !important;
 background: #666 url("../images/gradient_light.png") 0 0px repeat-x !important;
 }
 
-
-
-
-
-.unisubs-dropdown {
+div.unisubs-dropdown {
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 12px !important;
-	position: absolute !important;
-	z-index: 500 !important;
-	border: 1px solid #000 !important;
-	border-top: 0 !important;
-	width: 480px !important;
-	min-width: 500px !important;
-	background: #000 !important;
-	-moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
-	-webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
-	box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
+   position: absolute !important;
+   z-index: 500 !important;
+   border: 1px solid #000 !important;
+   border-top: 0 !important;
+   width: 480px !important;
+   min-width: 500px !important;
+   background: #000 !important;
+   -moz-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
+   -webkit-box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
+   box-shadow: 0 1px 0px #a7c3c9, inset 0 1px 0px #d1dd6f !important;
 }
 
 
 .unisubs-dropdown .unisubs-languageList ul {
-	padding: 0 !important;
-	margin: 0 !important;
-	width: 290px !important;
-	background: #fff !important;
-	height: 300px !important;
-	float: left !important;
-	overflow-y: auto !important;
+   padding: 0 !important;
+   margin: 0 !important;
+   width: 290px !important;
+   background: #fff !important;
+   height: 315px !important;
+   float: left !important;
+   overflow-y: auto !important;
 }
 
 .unisubs-dropdown .unisubs-languageList ul li {
+   display: list-item !important;
+   line-height: 16px !important;
    list-style: none !important;
    border-bottom: 1px solid #ddd !important;
    margin: 0 !important;
@@ -3240,7 +3238,7 @@ padding-left: 3px !important;
 
 
 .unisubs-dropdown .unisubs-actions{
-margin-left: 290px
+   margin-left: 290px !important;
 }
 
 
@@ -3249,7 +3247,9 @@ margin: 0 !important;
 padding: 5px 0 5px !important;
 }
 
-.unisubs-dropdown .unisubs-actions ul li{
+.unisubs-dropdown .unisubs-actions ul li {
+   display: list-item !important;
+   line-height: 14px !important;
 margin: 0 !important;
 padding: 0 !important;
 list-style: none !important;

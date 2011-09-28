@@ -75,9 +75,14 @@ unisubs.widget.VideoTab.prototype.showLoading = function() {
     goog.dom.setTextContent(this.spanElem_, "Loading");
 };
 
-unisubs.widget.VideoTab.prototype.showError = function() {
+/**
+* Shows the error message on the video tab and never attaches
+* any interaction handlers on the widget.
+* @param {str=} msg An optional message explaining what went wrong
+**/
+unisubs.widget.VideoTab.prototype.showError = function(msg) {
     this.imageElem_.src = this.logoURL_;
-    goog.dom.setTextContent(this.spanElem_, "Subs Unavailable");
+    goog.dom.setTextContent(this.spanElem_, msg || "Subs Unavailable");
     this.getHandler().listen(
         this.anchorElem_,
         'click',

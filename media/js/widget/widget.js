@@ -202,9 +202,9 @@ unisubs.widget.Widget.prototype.showWidgetError_ = function() {
 };
 
 unisubs.widget.Widget.prototype.initializeState_ = function(result) {
-    if (!result) {
+    if (!result || result["error_msg"]) {
         // this happens, for example, for private youtube videos.
-        this.videoTab_.showError();
+        this.videoTab_.showError(result["error_msg"]);
         return;
     }
     if (!this.isVideoSourceImmediatelyUsable_()) {

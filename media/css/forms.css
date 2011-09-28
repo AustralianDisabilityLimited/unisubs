@@ -560,52 +560,41 @@ input#email_friend_id_subject, input#email_friend_id_math_captcha_field {
     text-shadow: none;
 }
 
-.open-id{
-  background: url(../images/social_login.png) 0 0px no-repeat;
+#login .provider {
   display: block;
-  width: 113px;
+  width: 102px;
   float: left;
   padding-top: 33px;
   height: 0;
   overflow: hidden;
+}
+
+#twitter{
+  background: url(../images/social_login.png) 0px 0px no-repeat;
+  }
+
+#facebook{
+  background: url(../images/social_login.png) -102px 0px no-repeat;
+  }
+
+#google{
+  background: url(../images/social_login.png) -204px 0px no-repeat;
+  }
+
+#open-id{
+  background: url(../images/social_login.png) -306px 0px no-repeat;
   }
 
 input.open-id{
-  background: url(../images/social_login.png) 0 0px no-repeat;
+  background: url(../images/social_login.png) -306px 0px no-repeat;
   display: block;
-  width: 113px;
+  width: 102px;
   float: left;
   padding: 33px 0 0 0;
   height: 0 !important;
   overflow: hidden;
   margin-top: 10px;
   }
-  
-
-
-
-.twitter{
-  background: url(../images/social_login.png) -120px 0px no-repeat;
-  display: block;
-  width: 113px;
-  float: left;
-  padding-top: 33px;
-  height: 0;
-  overflow: hidden;
-  }
-
-
-
-.google{
-  background: url(../images/social_login.png) -222px 0px no-repeat;
-  display: block;
-  width: 113px;
-  float: left;
-  padding-top: 33px;
-  height: 0;
-  overflow: hidden;
-  }
-
   
 #bulk_create {
 	margin: 15px 0 0 0;

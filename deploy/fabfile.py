@@ -1,19 +1,19 @@
 # Universal Subtitles, universalsubtitles.org
-# 
+#
 # Copyright (C) 2010 Participatory Culture Foundation
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see 
+# along with this program.  If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from __future__ import with_statement
@@ -33,10 +33,10 @@ DEV_HOST = 'dev.universalsubtitles.org:2191'
 #: - solr, celeryd and memcached for staging and production
 ADMIN_HOST = 'pcf-us-admin.pculture.org:2191'
 
-def _create_env(username, hosts, s3_bucket, 
+def _create_env(username, hosts, s3_bucket,
                 installation_dir, static_dir, name,
-                memcached_bounce_cmd, 
-                admin_dir, celeryd_host, celeryd_proj_root, 
+                memcached_bounce_cmd,
+                admin_dir, celeryd_host, celeryd_proj_root,
                 separate_uslogging_db=False,
                 celeryd_bounce_cmd="",
                 web_dir=None):
@@ -45,7 +45,7 @@ def _create_env(username, hosts, s3_bucket,
     env.hosts = []
     env.s3_bucket = s3_bucket
     env.web_dir = web_dir or '/var/www/{0}'.format(installation_dir)
-    env.static_dir = static_dir 
+    env.static_dir = static_dir
     env.installation_name = name
     env.memcached_bounce_cmd = memcached_bounce_cmd
     env.admin_dir = admin_dir
@@ -55,19 +55,19 @@ def _create_env(username, hosts, s3_bucket,
     env.celeryd_proj_root = celeryd_proj_root
 
 def staging(username):
-    _create_env(username              = username, 
-                hosts                 = ['pcf-us-staging1.pculture.org:2191', 
+    _create_env(username              = username,
+                hosts                 = ['pcf-us-staging1.pculture.org:2191',
                                          'pcf-us-staging2.pculture.org:2191',
                                          'pcf-us-staging3.pculture.org:2191'],
                 s3_bucket             = 's3.staging.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles.staging',
-                static_dir            = '/var/static/staging', 
+                static_dir            = '/var/static/staging',
                 name                  = 'staging',
                 memcached_bounce_cmd  = '/etc/init.d/memcached-staging restart',
                 admin_dir             = '/usr/local/universalsubtitles.staging',
                 celeryd_host          = ADMIN_HOST,
                 celeryd_proj_root     = 'universalsubtitles.staging',
-                separate_uslogging_db = True, 
+                separate_uslogging_db = True,
                 celeryd_bounce_cmd    = "/etc/init.d/celeryd.staging restart")
 
 def dev(username):
@@ -75,9 +75,9 @@ def dev(username):
                 hosts                 = ['dev.universalsubtitles.org:2191'],
                 s3_bucket             = None,
                 installation_dir      = 'universalsubtitles.dev',
-                static_dir            = '/var/www/universalsubtitles.dev', 
-                name                  = 'dev', 
-                memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
+                static_dir            = '/var/www/universalsubtitles.dev',
+                name                  = 'dev',
+                memcached_bounce_cmd  = '/etc/init.d/memcached restart',
                 admin_dir             = None,
                 celeryd_host          = DEV_HOST,
                 celeryd_proj_root     = 'universalsubtitles.dev',
@@ -86,17 +86,17 @@ def dev(username):
 
 def unisubs(username):
     _create_env(username              = username,
-                hosts                 = ['pcf-us-cluster1.pculture.org:2191', 
+                hosts                 = ['pcf-us-cluster1.pculture.org:2191',
                                         'pcf-us-cluster2.pculture.org:2191'],
                 s3_bucket             = 's3.www.universalsubtitles.org',
                 installation_dir      = 'universalsubtitles',
                 static_dir            = '/var/static/production',
                 name                  =  None,
-                memcached_bounce_cmd  = '/etc/init.d/memcached restart', 
+                memcached_bounce_cmd  = '/etc/init.d/memcached restart',
                 admin_dir             = '/usr/local/universalsubtitles',
                 celeryd_host          = ADMIN_HOST,
                 celeryd_proj_root     = 'universalsubtitles',
-                separate_uslogging_db = True, 
+                separate_uslogging_db = True,
                 celeryd_bounce_cmd    = "/etc/init.d/celeryd restart")
 
 
@@ -134,9 +134,9 @@ def run_command(command):
 
 def migrate_fake(app_name):
     """Unfortunately, one must do this when moving an app to South for the first time.
-    
+
     See http://south.aeracode.org/docs/convertinganapp.html and
-    http://south.aeracode.org/ticket/430 for more details. Perhaps this will be changed 
+    http://south.aeracode.org/ticket/430 for more details. Perhaps this will be changed
     in a subsequent version, but now we're stuck with this solution.
     """
     env.host_string = DEV_HOST
@@ -178,7 +178,7 @@ def _execute_on_all_hosts(cmd):
         cmd(env.admin_dir)
 
 def switch_branch(branch_name):
-    _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))    
+    _execute_on_all_hosts(lambda dir: _switch_branch(dir, branch_name))
 
 def _remove_pip_package(base_dir, package_name):
     with cd(os.path.join(base_dir, 'unisubs', 'deploy')):
@@ -209,7 +209,7 @@ def clear_permissions():
     for host in env.web_hosts:
         env.host_string = host
         _clear_permissions('{0}/unisubs'.format(env.web_dir))
-    
+
 
 def _git_pull():
     run('git checkout --force')
@@ -231,7 +231,7 @@ def _reload_app_server(dir=None):
 
 def reload_app_servers():
     _execute_on_all_hosts(_reload_app_server)
-    
+
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
@@ -293,7 +293,7 @@ def update_solr_schema():
         with cd(os.path.join(dir, 'unisubs')):
             _git_pull()
             run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
-                    python_exe, 
+                    python_exe,
                     'production' if env.installation_name is None else 'staging'))
             run('{0} manage.py reload_solr_core --settings=unisubs_settings'.format(python_exe))
     else:
@@ -324,7 +324,7 @@ def _update_static(dir):
         _git_pull()
         _clear_permissions(media_dir)
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
-        
+
 def update_static():
     env.host_string = DEV_HOST
     if env.s3_bucket is not None:
@@ -349,7 +349,7 @@ def _promote_django_admins(dir, email=None, new_password=None, userlist_path=Non
         if new_password is not None:
             args += "--pass=%s" % (new_password)
         if userlist_path is not None:
-            args += "--userlist-path=%s" % (userlist_path)    
+            args += "--userlist-path=%s" % (userlist_path)
         cmd_str ='{0} manage.py promote_admins {1} --settings=unisubs_settings'.format(python_exe, args)
         run(cmd_str)
 
@@ -369,7 +369,7 @@ def promote_django_admins(email=None, new_password=None, userlist_path=None):
 def update_translations():
     """
     What it does:
-    
+
     - Pushes new strings in english and new languages to transifex.
     - Pulls all changes from transifex, for all languages
     - Adds only the *.mo and *.po files to the index area
@@ -377,7 +377,7 @@ def update_translations():
     - Pushes to origon.
 
     Caveats:
-    
+
     - If any of these steps fail, it will stop execution
     - At some point, this is pretty much about syncing two reps, so conflicts can appear
     - This assumes that we do not edit translation .po files on the file system.
@@ -397,7 +397,7 @@ def test_services():
     test_celeryd()
     print '=== TEST SERVICES ==='
     for host in env.web_hosts:
-        env.host_string = host    
+        env.host_string = host
         with cd(os.path.join(env.web_dir, 'unisubs')):
             run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
                 env.web_dir))
@@ -410,7 +410,7 @@ def test_memcached():
         host_set.add((ADMIN_HOST, env.admin_dir,))
     for host in host_set:
         random_string = ''.join(
-            [alphanum[random.randint(0, len(alphanum)-1)] 
+            [alphanum[random.randint(0, len(alphanum)-1)]
              for i in xrange(12)])
         env.host_string = host[0]
         with cd(os.path.join(host[1], 'unisubs')):
@@ -430,12 +430,12 @@ def generate_docs():
     env.host_string = DEV_HOST
     with cd(os.path.join(env.static_dir, 'unisubs')):
         run('%s/env/bin/sphinx-build %s/unisubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
-    
+
 try:
     from local_env import *
     def local (username):
         _create_env(**local_env_data)
 
 except ImportError:
-    pass 
+    pass
 

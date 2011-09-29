@@ -100,6 +100,10 @@ fi
 
 alias cu='cd /opt/unisubs'
 alias so='source venv/bin/activate'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 export PATH=~/bin:$PATH
 function pm {
     python manage.py $* --settings=dev_settings

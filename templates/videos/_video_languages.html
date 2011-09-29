@@ -23,7 +23,7 @@
                 {% endif %}
             {% endwith %}
         {% endfor %}
-        {% if languages.count > 7 %}
+        {% if video.languages_count > 7 %}
           <a href="{{ video.get_absolute_url }}#video-menu" class="more_link">→ View all</a>
         {% endif %}
     </div>

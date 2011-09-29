@@ -786,10 +786,14 @@ class SubtitleLanguage(models.Model):
             old_version = None
             version_no = 0
 
-        version = SubtitleVersion(
-                language=to_language, version_no=version_no,
-                datetime_started=datetime.now(), user=user,
-                note=u'Uploaded', is_forked=True, time_change=1, text_change=1, result_of_rollback=result_of_rollback)
+        kwargs = dict(
+            language=to_language, version_no=version_no,
+            datetime_started=datetime.now(),
+            note=u'Uploaded', is_forked=True, time_change=1, 
+            text_change=1, result_of_rollback=result_of_rollback)
+        if user:
+            kwargs['user'] = user
+        version = SubtitleVersion(**kwargs)
         version.save()
 
         if old_version:

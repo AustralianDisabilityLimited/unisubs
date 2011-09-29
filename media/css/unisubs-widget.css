@@ -2813,7 +2813,7 @@ a.unisubs-openid span{
    margin-right: 0 !important;
 }
 
-.unisubs-openid {
+.unisubs-modal-login .unisubs-openid {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
@@ -2823,7 +2823,7 @@ a.unisubs-openid span{
    background: url("../images/social_login.png") -306px 0px no-repeat !important;
 }
 
-.unisubs-twitter{
+.unisubs-modal-login .unisubs-twitter{
    background: url("../images/social_login.png") 0px 0px no-repeat !important;
    margin-top: 4px !important;
    height: 0 !important;
@@ -2832,7 +2832,7 @@ a.unisubs-openid span{
    width: 96px !important;
 }
 
-.unisubs-google {
+.unisubs-modal-login .unisubs-google {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
@@ -2842,7 +2842,7 @@ a.unisubs-openid span{
    background: url("../images/social_login.png") -204px 0px no-repeat !important;
 }
 
-.unisubs-facebook {
+.unisubs-modal-login .unisubs-facebook {
    height: 0 !important;
    padding: 34px 0 0 0 !important;
    overflow: hidden !important;

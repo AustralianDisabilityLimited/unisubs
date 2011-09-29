@@ -314,6 +314,7 @@ class Command(BaseCommand):
         context = widget.add_offsite_js_files(
             {'current_site': Site.objects.get_current(),
              'STATIC_URL': get_cache_base_url() +"/",
+             'COMPRESS_MEDIA': settings.COMPRESS_MEDIA,
              "js_file": get_cache_base_url() +"/js/unisubs-offsite-compiled.js" })
         rendered = render_to_string(
             'widget/{0}'.format(file_name), context)
@@ -332,7 +333,8 @@ class Command(BaseCommand):
         file_name = os.path.join(JS_LIB, 'js/config.js')
 
         context = {'current_site': Site.objects.get_current(),
-                   'STATIC_URL': get_cache_base_url()+ "/"}
+                   'STATIC_URL': get_cache_base_url()+ "/",
+                   'COMPRESS_MEDIA': settings.COMPRESS_MEDIA }
         rendered = render_to_string(
             'widget/config.js', context)
         with open(file_name, 'w') as f:

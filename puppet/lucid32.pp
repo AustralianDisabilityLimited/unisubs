@@ -21,6 +21,9 @@ class lucid32 {
     group => "vagrant"; } ->
   class { 'unisubs::db': } ->
   class { 'solr': }
+  class { 'unisubs::closure':
+    projectdir => $projectdir
+  }
   class { 'nginx': }
 }
 

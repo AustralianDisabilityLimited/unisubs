@@ -163,6 +163,11 @@
                   <a href="{% url admin:videos_video_change video.pk %}" target="blank"> {% trans 'Edit in Admin Interface' %}</a>
                 </li>
                 <li>{% feature_video video %}</li>
+                <li>
+                    {% if user %}
+                        {% render_visibility_button video user %}
+                    {% endif %}
+                </li>
               </ul>
             {% endif %}
 

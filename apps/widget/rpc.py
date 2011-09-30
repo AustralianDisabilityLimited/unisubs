@@ -383,13 +383,15 @@ You will not see your subtitles in our widget when you leave this page, they wil
 
     def _create_version_from_session(self, session, user=None, forked=False):
         latest_version = session.language.version(public_only=False)
-        return models.SubtitleVersion(
-            language=session.language,
-            version_no=(0 if latest_version is None 
-                        else latest_version.version_no + 1),
-            is_forked=(session.base_language is None or forked == True),
-            datetime_started=session.datetime_started,
-            user=user)
+        kwargs = dict(language=session.language,
+                      version_no=(0 if latest_version is None 
+                                  else latest_version.version_no + 1),
+                      is_forked=(session.base_language is 
+                                 None or forked == True),
+                      datetime_started=session.datetime_started)
+        if user is not None:
+            kwargs['user'] = user
+        return models.SubtitleVersion(**kwargs)
 
     def fetch_subtitles(self, request, video_id, language_pk):
         cache = video_cache.get_subtitles_dict(

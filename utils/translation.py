@@ -1,12 +1,14 @@
-from django.utils.translation import get_language, ugettext as _
+import time
 from django.conf import settings
 from django.core.cache import cache
 from django.utils import simplejson as json
-import time
 from django.utils.http import cookie_date
-from translation_names import LANGUAGE_NAMES, ORIGINAL_LANGUAGE_NAMES
+from django.utils.translation import get_language, ugettext as _, ugettext_lazy
+from translation_names import ORIGINAL_LANGUAGE_NAMES
 
 SUPPORTED_LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
+SUPPORTED_LANGUAGES_DICT_LAZY = dict((k, ugettext_lazy(v))
+                                     for k, v in settings.ALL_LANGUAGES)
 
 def get_simple_languages_list(with_empty=False):
     cache_key = 'simple-langs-cache-%s' % get_language() 

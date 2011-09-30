@@ -58,6 +58,17 @@ unisubs.style.setPropertyInString = function(cssString, property, value) {
     }
 };
 
+unisubs.style.makeStylesImportant = function(elem) {
+    var css = goog.style.parseStyleAttribute(elem.style.cssText);
+    goog.object.forEach(
+        css,
+        function(value, key) {
+            if (value.indexOf("important") == -1) {
+                unisubs.style.setProperty(elem, key, value);
+            }
+        });
+};
+
 /**
  * Sets the width/height values of an element.  If an argument is numeric,
  * or a goog.math.Size is passed, it is assumed to be pixels and will add

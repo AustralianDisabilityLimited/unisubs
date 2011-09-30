@@ -128,6 +128,8 @@ unisubs.translate.BingTranslator.findLang_ = function(lang) {
         return 'zh-CHS';
     } else if (lang === 'zh-tw') {
         return 'zh-CHT';
+    } else if (lang === 'nb') {
+        return 'no';
     } else {
         return lang;
     }
@@ -232,7 +234,7 @@ unisubs.translate.BingTranslator.isTranslateable = function() {
         unisubs.translate.BingTranslator.Languages_ = new goog.structs.Set([
             'ar', 'bg', 'ca', 'zh-cn', 'zh-tw', 'cs', 'da', 'nl', 'en', 'et',
             'fi', 'fr', 'de', 'el', 'ht', 'he', 'hi', 'hu', 'id', 'it', 'ja',
-            'ko', 'lv', 'lt', 'no', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'es',
+            'ko', 'lv', 'lt', 'nb', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'es',
             'sv', 'th', 'tr', 'uk', 'vi', '']);
     }
     return unisubs.translate.BingTranslator.Languages_.containsAll(arguments);

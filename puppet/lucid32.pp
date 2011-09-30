@@ -2,6 +2,10 @@ class lucid32 {
   $projectdir = "/opt/unisubs"
   $venv = "/opt/unisubs/venv"
 
+  group { "vagrant": ensure => "present"; } ->
+  user { "vagrant": ensure => "present"; } ->
+  class { 'environ': }
+
   group { "puppet": ensure => "present"; }  ->
   class { 'aptitude': } ->
   class { 'java': } ->
@@ -17,6 +21,9 @@ class lucid32 {
     group => "vagrant"; } ->
   class { 'unisubs::db': } ->
   class { 'solr': }
+  class { 'unisubs::closure':
+    projectdir => $projectdir
+  }
   class { 'nginx': }
 }
 

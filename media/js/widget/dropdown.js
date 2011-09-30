@@ -83,7 +83,8 @@ unisubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSta
 unisubs.widget.DropDown.prototype.createDom = function() {
     unisubs.widget.DropDown.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.getElement().className = 'unisubs-dropdown';
+    goog.dom.classes.add(
+        this.getElement(), "cleanslate", "unisubs-dropdown");
 
     var languageListContainer = this.createLanguageList_($d);
     this.createActionList_($d);
@@ -128,12 +129,15 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
 };
 
 unisubs.widget.DropDown.prototype.addLanguageListRequestLink_ = function($d) {
+// still not showing request stuff, lol.
+/*
     this.languageListRequestLink_ = 
         $d('a', {'href': '#', 'className': 'requestsubs'}, "request subtitles");
     var li = $d('li', 'request',
                 "Don't see the language you want? Please ",
                 this.languageListRequestLink_, "!");
     goog.dom.append(this.languageList_, li);
+*/
 };
 
 unisubs.widget.DropDown.prototype.addVideoLanguagesLinks_ = function($d) {
@@ -236,7 +240,8 @@ unisubs.widget.DropDown.prototype.updateActions_ = function() {
 
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
-    this.videoActions_.appendChild(this.requestSubtitlesLink_);
+// still not showing request link
+//    this.videoActions_.appendChild(this.requestSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    
     this.videoActions_.appendChild(this.downloadSubtitlesLink_);

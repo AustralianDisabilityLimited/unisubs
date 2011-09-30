@@ -245,6 +245,18 @@ class AddTeamVideosFromFeedForm(AddFromFeedForm):
 
         return team_videos
 
+    def success_message(self):
+        if not self.video_limit_routreach:
+            return _(u"%(count)s videos have been added. "
+                     u"It will take a minute or so for them to appear.")
+        else:
+            return _(u"%(count)s videos have been added. "
+                     u"It will take a minute or so for them to appear. "
+                     u"To add the remaining videos from this feed, "
+                     u"submit this feed again and make sure to "
+                     u'check "Save feed" box.')
+
+
 
 class CreateTeamForm(BaseVideoBoundForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)

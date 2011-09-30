@@ -53,10 +53,11 @@ def embed(request, version_no=''):
     context = widget.embed_context()
     if bool(version_no) is False:
         version_no = ""
-    return render_to_response('widget/embed{0}.js'.format(version_no), 
-                              context,
-                              context_instance=RequestContext(request),
-                              mimetype='text/javascript')
+    return render_to_response(
+        'widget/embed{0}.js'.format(version_no), 
+        context,
+        context_instance=RequestContext(request),
+        mimetype='text/javascript')
 
 def widget_public_demo(request):
     context = widget.add_onsite_js_files({})
@@ -106,10 +107,11 @@ def onsite_widget(request):
     general_settings = {}
     add_general_settings(request, general_settings)
     context['general_settings'] = json.dumps(general_settings)
-    context['COMPRESS_MEDIA'] = settings.COMPRESS_MEDIA
-    return render_to_response('widget/onsite_widget.html',
+    response = render_to_response('widget/onsite_widget.html',
                               context,
                               context_instance=RequestContext(request))
+    response['X-XSS-Protection'] = '0'
+    return response
 
 def onsite_widget_resume(request):
     context = widget.add_config_based_js_files(

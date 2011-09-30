@@ -167,7 +167,7 @@ unisubs.widget.PlayController.prototype.finished_ = function() {
         "Improve this Translation" : "Improve these Subtitles";
     this.videoTab_.updateNudge(
         message, 
-        goog.bind(this.subtitleController_.openSubtitleDialog,
+        goog.bind(this.subtitleController_.improveSubtitles,
                   this.subtitleController_));
     this.videoTab_.showNudge(true);
     this.nudgeShown_ = true;

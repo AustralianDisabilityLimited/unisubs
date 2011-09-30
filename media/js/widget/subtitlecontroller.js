@@ -69,7 +69,7 @@ unisubs.widget.SubtitleController = function(
         listen(
             dropDown,
             s.IMPROVE_SUBTITLES,
-            this.improveSubtitles_).
+            this.improveSubtitles).
        listen(
             dropDown,
             s.REQUEST_SUBTITLES,
@@ -132,7 +132,7 @@ unisubs.widget.SubtitleController.prototype.videoAnchorClickedImpl_ = function()
         this.dropDown_.toggleShow();
 };
 
-unisubs.widget.SubtitleController.prototype.improveSubtitles_ = function() {
+unisubs.widget.SubtitleController.prototype.improveSubtitles = function() {
     var state  = this.playController_.getSubtitleState();
     this.dialogOpener_.openDialogOrRedirect(
         new unisubs.widget.OpenDialogArgs(

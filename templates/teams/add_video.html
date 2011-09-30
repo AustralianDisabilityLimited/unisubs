@@ -23,12 +23,12 @@
     <div class="padding">
         <form method='post' action="." enctype="multipart/form-data" class="add-video">
             <h3>{% trans 'Add video' %}</h3>
-            <h4>
-                {% trans 'or' %}
-                <a href="{% url teams:add_videos slug=team.slug %}">
-                    {% trans 'add multiple videos' %}
-                </a>
-            </h4>
+            {# <h4> #}
+            {#     {% trans 'or' %} #}
+            {#     <a href="{% url teams:add_videos slug=team.slug %}"> #}
+            {#         {% trans 'add multiple videos' %} #}
+            {#     </a> #}
+            {# </h4> #}
             {% csrf_token %}
             {{ form.as_p }}
             <div class="ft">

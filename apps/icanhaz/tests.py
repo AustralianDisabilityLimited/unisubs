@@ -401,8 +401,7 @@ class WidgetRPCTest(BasicDataTest):
         response = self.client.post(widget_url,  data)
         self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
-        # we expect an empty object
-        self.assertEqual(None, data)
+        self.assertIn("error_msg", data.keys())
 
     def test_no_widget_visible_for_user(self):
         policy = VideoVisibilityPolicy.objects.create_for_video(
@@ -421,8 +420,7 @@ class WidgetRPCTest(BasicDataTest):
         response = self.client.post(widget_url,  sent_data)
         self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
-        # we expect an empty object
-        self.assertEqual(None, data)
+        self.assertIn("error_msg", data.keys())
         # log in as the video ownwer
         self.client.login(username=self.regular_user.username,
                     password=self.regular_user.username)
@@ -450,8 +448,8 @@ class WidgetRPCTest(BasicDataTest):
         response = self.client.post(widget_url,  sent_data)
         self.assertTrue(response.status_code < 300)
         data  =  json.loads(response.content)
-        # we expect an empty object
-        self.assertEqual(None, data)
+
+        self.assertIn("error_msg", data.keys())
         # log in as the video ownwer
 
         self.client.login(

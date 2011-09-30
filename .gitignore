@@ -49,3 +49,4 @@ user-data/pictures
 .vagrant
 venv/
 unisubs-integration
+deploy/fabric.log

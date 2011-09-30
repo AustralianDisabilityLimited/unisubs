@@ -84,10 +84,11 @@ class VideoVisibilityManager(models.Manager):
                 return policy.owner.can_see_video(user, video)
 
     def can_show_widget(self, video_identifier, referer=None, user=None):
-        if hasattr(video_identifier, "pk") is False:
-            video = Video.objects.get(video_id=video_identifier)
-        else:
+        if isinstance(video_identifier, Video):
             video = video_identifier
+        else:    
+            video = Video.objects.get(video_id=video_identifier)
+            
         if not video.policy:
            return True
         visibility = video.policy.widget_visibility_policy

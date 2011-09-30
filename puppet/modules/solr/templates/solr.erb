@@ -34,13 +34,19 @@ case "$1" in
         start-stop-daemon --stop --pidfile $PID_FILE
 
         # Give the server time to shut down gracefully.
-        echo -n '.'; sleep 1
-        echo -n '.'; sleep 1
-        echo -n '.'; sleep 1
-        echo -n '.'; sleep 1
-        echo -n '.'; sleep 1
+        while true; do
+            ps aux | grep `cat $PID_FILE` | grep -v grep >/dev/null || break
+            echo -n '.'; sleep 1
+        done
 
         start-stop-daemon -d $SOLR_DIR -c $CURRENT_USER --start --background --pidfile $PID_FILE --make-pidfile --exec $DAEMON -- $DAEMON_OPTS
+
+        # Wait for the server to come back up.
+        while true; do
+            curl -si 'http://localhost:8983/solr' >/dev/null && break
+            echo -n '.'; sleep 1
+        done
+
         echo "$NAME."
         ;;
 

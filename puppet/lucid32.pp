@@ -20,11 +20,15 @@ class lucid32 {
     owner => "vagrant",
     group => "vagrant"; } ->
   class { 'unisubs::db': } ->
-  class { 'solr': }
+  class { 'solr': 
+    require => Package["curl"],
+  }
   class { 'unisubs::closure':
     projectdir => $projectdir
   }
   class { 'nginx': }
+
+  package { 'curl': ensure => "present", }
 }
 
 class { "lucid32": }

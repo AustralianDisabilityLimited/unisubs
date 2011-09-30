@@ -63,7 +63,7 @@ unisubs.style.makeStylesImportant = function(elem) {
     goog.object.forEach(
         css,
         function(value, key) {
-            if (value.indexOf("!important") == -1) {
+            if (value.indexOf("important") == -1) {
                 unisubs.style.setProperty(elem, key, value);
             }
         });

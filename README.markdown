@@ -16,18 +16,17 @@ To run the development version:
 
     Now the entire project will be in the unisubs directory.
 
-2. Install VirtualBox if you don't have it yet. Then type:
+2. Install VirtualBox and vagrant if you don't have them yet. Then type:
 
         vagrant up
 
-   This is going to create a vm and provision it. It should take 10-15 minutes.
-   Remember what mom said: a watched pot never boils.
+    This is going to create a vm and provision it. It should take 10-15 minutes. Remember what mom said: a watched pot never boils.
 
 3. Switch over to your vagrant vm with:
 
         vagrant ssh
 
-   Then run following commands:
+    Then run following commands:
 
         cd /opt/unisubs
         source venv/bin/activate
@@ -35,12 +34,10 @@ To run the development version:
         python manage.py migrate --fake --settings=dev_settings
         sudo ./deploy/update_solr_schema_vagrant.sh
 
-4. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This is
-   necessary for Twitter and Facebook oauth to work correctly.
+4. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This is necessary for Twitter and Facebook oauth to work correctly.
 
 5. In your vagrant vm (the one you switched to in step 3), run the site with:
 
         ./dev-runserver.sh
 
     You can access the site at <http://unisubs.example.com:8000>.
-

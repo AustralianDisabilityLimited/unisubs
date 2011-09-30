@@ -4,6 +4,7 @@ Deployment Guide
 
 For staging:
 
+    fab staging:<username> add_disabled
     fab staging:<username> refresh_db
 
 The basic sequence::

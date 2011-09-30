@@ -666,6 +666,7 @@ class ViewsTest(WebUseTest):
     
     def setUp(self):
         self._make_objects()
+        cache.clear()
         
     def _test_video_url_make_primary(self):
         #TODO: fix this test

@@ -563,8 +563,8 @@ def team_video_delete(sender, instance, **kwargs):
     tv_search_index = site.get_index(TeamVideo)
     tv_search_index.backend.remove(instance)
 
-post_save.connect(team_video_save, TeamVideo)
-post_delete.connect(team_video_delete, TeamVideo)
+post_save.connect(team_video_save, TeamVideo, dispatch_uid="teams.teamvideo.team_video_save")
+post_delete.connect(team_video_delete, TeamVideo, dispatch_uid="teams.teamvideo.team_video_delete")
 
 class TeamVideoLanguage(models.Model):
     team_video = models.ForeignKey(TeamVideo, related_name='languages')

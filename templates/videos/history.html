@@ -250,9 +250,7 @@
                         {% render_approval_toolbar user last_version %}
                         {% endswitch_feature %}
                         <a id="edit_subtitles_button" href="{{edit_url}}" class="blue_button small {% if not video.is_subtitled  %}add-translation-behavior{% endif %}">{% if not video.is_subtitled %}{% trans 'Add Translation' %}{% else %}{% trans 'Edit Subtitles' %}{% endif %}</a>
-                        {% if user %}
-                            {% render_visibility_button video user %}
-                        {% endif %}
+
                         {% if last_version.subtitles %}
                         <div class="sort_button">
                             <div class='arrow'>

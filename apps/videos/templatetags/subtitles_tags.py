@@ -15,11 +15,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
-
+from django.core.urlresolvers import reverse
 from django import template
-from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
 from django.utils.translation import ugettext_lazy as _, ungettext
 from django.utils import translation
+
+from videos.forms import SubtitlesUploadForm, PasteTranscriptionForm, CreateVideoUrlForm
+from icanhaz.models import VideoVisibilityPolicy
 
 register = template.Library()
 
@@ -93,3 +95,17 @@ def video_url_panel(context):
 @register.simple_tag
 def video_url_count(video):
     return video.videourl_set.count()
+
+
+@register.simple_tag
+def language_url(request, lang):
+    """
+    Returns the absolute url for that subtitle language.
+    Takens into consideration both if the lang is the original one
+    and if the video is private or public.
+    """
+    vid = VideoVisibilityPolicy.objects.id_for_video(lang.video)
+    if lang.is_original:
+        return  reverse('videos:history', args=[vid])
+    else:
+        return  reverse('videos:translation_history', args=[vid, lang.language, lang.pk])

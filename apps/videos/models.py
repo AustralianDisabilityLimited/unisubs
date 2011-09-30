@@ -498,6 +498,17 @@ class Video(models.Model):
                 in self.subtitlelanguage_set.all()
                 if sl.is_complete_and_synced()]
 
+    @property
+    def policy(self):
+        
+        if not hasattr(self, "_cached_policy"):
+            from icanhaz.models import VideoVisibilityPolicy
+            try:
+                self._cached_policy =  VideoVisibilityPolicy.objects.get(video=self)
+            except VideoVisibilityPolicy.DoesNotExist:
+                self._cached_policy =  None
+        return self._cached_policy
+    
 
     @property
     def is_moderated(self):
@@ -756,7 +767,7 @@ class SubtitleLanguage(models.Model):
                 exclude = [exclude]            
             qs = qs.exclude(pk__in=[u.pk for u in exclude if u])
         return qs
-
+    
     def translations(self):
         return SubtitleLanguage.objects.filter(video=self.video, is_original=False, is_forked=False)
 
@@ -1495,6 +1506,7 @@ class VideoUrl(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
+        
         return ('videos:video_url', [self.video.video_id, self.pk])
     
     def unique_error_message(self, model_class, unique_check):

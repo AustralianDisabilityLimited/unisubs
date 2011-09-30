@@ -13,7 +13,7 @@ class Migration(DataMigration):
             return
         
         try:
-            from videos.models import Video, SubtitleLanguage
+            from orm.videos.models import Video, SubtitleLanguage
         except ImportError:
             return
         

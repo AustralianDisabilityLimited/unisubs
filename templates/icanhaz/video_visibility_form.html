@@ -1,0 +1,25 @@
+{% if message %}
+<span class="{% if not success %}error{%else%}success{%endif%} message">{{message}}
+{% if secret_url %}
+Anyone can view the video at {{secret_url|urlize}}
+{% endif %}</span>{% endif %}
+<form method="POST" action="{% url icanhaz:get-visibility-form video_id=video.video_id %}" class="video-vis">
+{% csrf_token %}
+<div class="left-col">
+  <h3>Settings for the video edit page</h3>
+  <label>Who can see/edit this video</label>
+       {{form.site_visibility_policy }}
+      {{form.site_visibility_policy.error }}
+  <br/><label>Who can change this settins</label>
+       {{form.owner}}
+       {{form.owner.error}}
+</div>
+<div class="right-col">
+    <h3>Settings for widget embed</h3>
+  <label>How can embeds be done</label>
+       {{form.widget_visibility_policy }}
+       {{form.widget_visibility_policy.error }}
+
+</div>
+<input type="submit" name="Send">
+</form>

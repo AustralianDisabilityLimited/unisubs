@@ -16,26 +16,10 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from django.conf.urls.defaults import patterns, url
 
-from videos.search_indexes import VideoIndex
-from videos.models import Video
-from search.forms import SearchForm
-from search.rpc import SearchApiClass
-from utils.rpc import RpcRouter
-from utils import render_to
-from django.http import HttpResponseRedirect
-from django.utils.http import urlencode
-from django.core.urlresolvers import reverse
 
-rpc_router = RpcRouter('search:rpc_router', {
-    'SearchApi': SearchApiClass()
-})
+urlpatterns = patterns('icanhaz.views',
+    url('^(?P<video_id>[\w]+)/visibility-form/show/', 'get_visibility_form', name='get-visibility-form'),
+)
 
-@render_to('search/search.html')
-def index(request):
-    if request.GET:
-        return HttpResponseRedirect('%s#/?%s' % (reverse('search:index'), urlencode(request.GET)))
-            
-    return {
-        'form': SearchForm(sqs=VideoIndex.public())
-    }

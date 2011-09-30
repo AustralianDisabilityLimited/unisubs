@@ -45,8 +45,10 @@ goog.inherits(unisubs.widget.VideoTab, goog.ui.Component);
 
 unisubs.widget.VideoTab.prototype.createDom = function() {
     unisubs.widget.VideoTab.superClass_.createDom.call(this);
-    this.getElement().className = 'unisubs-videoTab unisubs-videoTab-' + 
-        (this.forAnchoring_ ? 'anchoring' : 'static');
+    goog.dom.classes.add(
+        this.getElement(), 
+        "cleanslate", "unisubs-videoTab", 'unisubs-videoTab-' + 
+            (this.forAnchoring_ ? 'anchoring' : 'static'));
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.imageElem_ = $d('img', {'alt': 'small logo'});
     this.spanElem_ = $d('span', 'unisubs-tabTextchoose');
@@ -55,8 +57,8 @@ unisubs.widget.VideoTab.prototype.createDom = function() {
            this.imageElem_, this.spanElem_);
     this.nudgeSpanElem_ = $d('span', 'unisubs-tabTextfinish', 'NUDGE TEXT');
     this.nudgeElem_ = $d('a', {'href':'#'}, this.nudgeSpanElem_);
-    this.getElement().appendChild(this.anchorElem_);
-    this.getElement().appendChild(this.nudgeElem_);
+    goog.dom.append(this.getElement(),
+                    this.anchorElem_, this.nudgeElem_);
 };
 
 unisubs.widget.VideoTab.prototype.enterDocument = function() {
@@ -75,9 +77,14 @@ unisubs.widget.VideoTab.prototype.showLoading = function() {
     goog.dom.setTextContent(this.spanElem_, "Loading");
 };
 
-unisubs.widget.VideoTab.prototype.showError = function() {
+/**
+* Shows the error message on the video tab and never attaches
+* any interaction handlers on the widget.
+* @param {str=} msg An optional message explaining what went wrong
+**/
+unisubs.widget.VideoTab.prototype.showError = function(msg) {
     this.imageElem_.src = this.logoURL_;
-    goog.dom.setTextContent(this.spanElem_, "Subs Unavailable");
+    goog.dom.setTextContent(this.spanElem_, msg || "Subs Unavailable");
     this.getHandler().listen(
         this.anchorElem_,
         'click',

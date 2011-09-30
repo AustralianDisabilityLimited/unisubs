@@ -7,6 +7,7 @@ from auth.models import CustomUser as User
 from utils.celery_search_index import CelerySearchIndex
 from django.conf import settings
 from haystack.query import SearchQuerySet
+from icanhaz.models import VideoVisibilityPolicy
 import datetime
 
 #SUFFIX = u'+++++'
@@ -69,7 +70,7 @@ class LanguagesField(MultiValueField):
         
         return [LanguageField.convert(v) for v in list(value)]
 
-class VideoIndex(CelerySearchIndex):
+class VideoIndex(CelerySearchIndex):    
     text = CharField(document=True, use_template=True)
     title = CharField(model_attr='title_display', boost=2)
     languages = LanguagesField(faceted=True)
@@ -95,6 +96,10 @@ class VideoIndex(CelerySearchIndex):
     month_views = IntegerField()
     year_views = IntegerField()
     total_views = IntegerField(model_attr='widget_views_count')
+
+    # non public videos won't show up in any of the site's listing
+    # not even for the owner
+    is_public = BooleanField()
     
     IN_ROW = getattr(settings, 'VIDEO_IN_ROW', 6)
     
@@ -116,32 +121,40 @@ class VideoIndex(CelerySearchIndex):
         self.prepared_data['month_views'] = obj.views['month']
         self.prepared_data['year_views'] = obj.views['year']
         self.prepared_data['today_views'] = obj.views['today']
+        self.prepared_data['is_public'] = VideoVisibilityPolicy.objects.video_is_public(obj)
         return self.prepared_data
     
     def _setup_save(self, model):
         pass
-    
+
+
     def _teardown_save(self, model):
         pass
 
     def index_queryset(self):
         return self.model.objects.order_by('-id')
-    
+
+    @classmethod
+    def public(self):
+        """
+        All regular queries should go through this method, as it makes
+        sure we never display videos that should be hidden
+        """
+        return SearchQuerySet().result_class(VideoSearchResult) \
+            .models(Video).filter(is_public=True)
+            
     @classmethod
     def get_featured_videos(cls):
-        return SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
+        return  VideoIndex.public().filter(featured__gt=datetime.datetime(datetime.MINYEAR, 1, 1)) \
             .order_by('-featured')
     
     @classmethod
     def get_popular_videos(cls, sort='-week_views'):
-        return SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by(sort)
+        return  VideoIndex.public().order_by(sort)
     
     @classmethod
     def get_latest_videos(cls):
-        return SearchQuerySet().result_class(VideoSearchResult) \
-            .models(Video).order_by('-created')
+        return VideoIndex.public().order_by('-created')
 
 class VideoSearchResult(SearchResult):
     title_for_url = Video.__dict__['title_for_url']

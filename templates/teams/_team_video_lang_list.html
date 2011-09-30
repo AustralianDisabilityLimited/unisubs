@@ -10,7 +10,7 @@
 
 {% if sub_statuses.total %}
 {% trans "and" %}
-<a href="{{ search_record.video_absolute_url }}">
+<a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">
     {% blocktrans count sub_statuses.total as total %}
     {{ total }} other.
     {% plural %}

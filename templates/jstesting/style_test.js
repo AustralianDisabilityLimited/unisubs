@@ -68,4 +68,13 @@ function testSetVisibility() {
                  testElem.style.cssText.replace(/ /g, ''));
 }
 
+function testSetImportant() {
+    testElem.style.top = "15px";
+    testElem.style.left = "20px";
+    unisubs.style.setProperty(testElem, "width", "80px");
+    unisubs.style.makeStylesImportant(testElem);
+    assertStyleEquals("left:20px!important;top:15px!important;width:80px!important",
+                 testElem.style.cssText.replace(/ /g, ''));
+}
+
 {% endblock %}

@@ -191,6 +191,11 @@ class Team(models.Model):
         if not user.is_authenticated():
             return False
         return self.can_add_video(user)
+
+    def can_see_video(self, user, team_video=None):
+        if not user.is_authenticated():
+            return False
+        return self.is_member(user)
     
     def can_add_video(self, user):
         if not user.is_authenticated():
@@ -269,13 +274,17 @@ class Team(models.Model):
         sq_expression = self._sq_expression(sq_list)
         return sqs if sq_expression is None else sqs.exclude(sq_expression)
 
-    def _base_sqs(self):
-        from haystack.query import SearchQuerySet
-        return SearchQuerySet().models(TeamVideo).filter(team_id=self.id)
+    def _base_sqs(self, is_member=False):
+        from teams.search_indexes import TeamVideoLanguagesIndex
+        if is_member:
+            return TeamVideoLanguagesIndex.results_for_members(self).filter(team_id=self.id)
+        else:
+            return TeamVideoLanguagesIndex.results().filter(team_id=self.id)
 
-    def get_videos_for_languages_haystack(self, languages):
+    def get_videos_for_languages_haystack(self, languages, user=None):
         from utils.multi_query_set import MultiQuerySet
 
+        is_member = self.members.filter(user=user).exists()
         languages.extend([l[:l.find('-')] for l in 
                            languages if l.find('-') > -1])
         languages = list(set(languages))
@@ -289,18 +298,18 @@ class Team(models.Model):
                     pairs_0.append(self._lang_pair((l1, l0), "0"))
 
         qs_list = []
-        qs_list.append(self._filter(self._base_sqs(), pairs_m))
-        qs_list.append(self._exclude(self._filter(self._base_sqs(), pairs_0), 
+        qs_list.append(self._filter(self._base_sqs(is_member), pairs_m))
+        qs_list.append(self._exclude(self._filter(self._base_sqs(is_member), pairs_0), 
                                      pairs_m))
         qs_list.append(self._exclude(
-                self._base_sqs().filter(
+                self._base_sqs(is_member).filter(
                     original_language__in=languages), 
                 pairs_m + pairs_0).order_by('has_lingua_franca'))
         qs_list.append(self._exclude(
-                self._filter(self._base_sqs(), langs),
+                self._filter(self._base_sqs(is_member), langs),
                 pairs_m + pairs_0).exclude(original_language__in=languages))
         qs_list.append(self._exclude(
-                self._base_sqs(), 
+                self._base_sqs(is_member), 
                 langs + pairs_m + pairs_0).exclude(
                 original_language__in=languages))
         mqs = MultiQuerySet(*[qs for qs in qs_list if qs is not None])

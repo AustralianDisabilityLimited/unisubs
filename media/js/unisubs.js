@@ -357,8 +357,9 @@ unisubs.repositionToLowerLeft = function(anchorElement, movableElement) {
             goog.math.Coordinate.difference(absolutePos, moveableParentTopLeft);
     }
 
-    return goog.positioning.positionAtCoordinate(
+    goog.positioning.positionAtCoordinate(
         absolutePos, movableElement, goog.positioning.Corner.TOP_LEFT);
+    unisubs.style.makeStylesImportant(movableElement);
 };
 
 /**

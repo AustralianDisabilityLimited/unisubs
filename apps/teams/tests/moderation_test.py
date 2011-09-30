@@ -618,7 +618,6 @@ if feature_is_on('MODERATION'):
             self.assertEquals(self.team.get_pending_moderation().count(), 2)
 
         def _dump_mod(self, team):
-            from haystack.query import SearchQuerySet
             print "Search for team %s" % team
             form, results = _get_moderation_results(RequestMockup(self.user), team)
             print "\tresults, len %s:" % len(results)
@@ -635,7 +634,6 @@ if feature_is_on('MODERATION'):
             We then put antother video for another team under moderation. Then we check that each
             team's dashboard will only show it's own video on the dashboard.
             """
-            from haystack.query import SearchQuerySet
             from apps.teams.moderation_views import _get_moderation_results
 
 

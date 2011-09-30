@@ -18,8 +18,8 @@
 
 from utils.rpc import add_request_to_kwargs
 from search.forms import SearchForm
-from videos.search_indexes import VideoSearchResult
-from haystack.query import SearchQuerySet
+from videos.search_indexes import VideoSearchResult, VideoIndex
+
 from videos.models import Video
 from django.template.loader import render_to_string
 from videos.rpc import render_page
@@ -28,8 +28,7 @@ from django.template import RequestContext
 class SearchApiClass(object):
     
     def search(self, rdata, user, testing=False):
-        sqs = SearchQuerySet().result_class(VideoSearchResult) \
-                .models(Video)
+        sqs = VideoIndex.public()
         
         rdata['q'] = rdata['q'] or u' '
         q = rdata.get('q')
@@ -43,7 +42,7 @@ class SearchApiClass(object):
         if form.is_valid():
             qs = form.search_qs(sqs)
         else:
-            qs = SearchQuerySet().none()    
+            qs = VideoIndex.public().none()    
 
         #result = [item.object for item in qs]
         #qs1 = Video.objects.filter(title__contains=rdata['q'])

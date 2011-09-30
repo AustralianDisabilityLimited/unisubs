@@ -1,9 +1,9 @@
 {% load i18n teams_tags %}
-<a href="{{ search_record.video_absolute_url }}" class="thumbnail_medium">
+<a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}" class="thumbnail_medium">
     <img height="100" src="{{ search_record.thumbnail }}">
 </a>
 <div class="info">
-  <h4><a href="{{ search_record.video_absolute_url }}">{{ search_record.title }}</a></h4>
+  <h4><a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title }}</a></h4>
   <div class="completed_translations">
     <strong>{% trans "Completed Languages" %}:</strong> 
     {% for l in display_languages %}
@@ -11,6 +11,6 @@
     {% endfor %}
   </div>
   <div class="team-video-buttons-container">
-    <a class="blue_button small" href="{{ search_record.video_absolute_url }}">{% trans "Video Page" %}</a>
+    <a class="blue_button small" href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{% trans "Video Page" %}</a>
   </div>
 </div>

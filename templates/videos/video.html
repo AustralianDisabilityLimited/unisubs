@@ -117,7 +117,9 @@
         {% widget widget_params %}
     </div>
     <div class="grid_6 omega right_column">
-        {% include '_sharing_widget.html' %}
+      {% if shows_widget_sharing %}
+      {% include '_sharing_widget.html' %}
+      {% endif %}
     </div>
     <div class="section">
         <div class="grid_3 left_nav_wrapper alpha">
@@ -161,6 +163,11 @@
                   <a href="{% url admin:videos_video_change video.pk %}" target="blank"> {% trans 'Edit in Admin Interface' %}</a>
                 </li>
                 <li>{% feature_video video %}</li>
+                <li>
+                    {% if user %}
+                        {% render_visibility_button video user %}
+                    {% endif %}
+                </li>
               </ul>
             {% endif %}
 

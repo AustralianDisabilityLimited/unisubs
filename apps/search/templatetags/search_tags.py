@@ -20,7 +20,6 @@ from django import template
 from django.db.models.query import QuerySet
 from django.db.models import Model
 from search.forms import SearchForm
-from haystack.query import SearchQuerySet
 from videos.models import Video
 
 register = template.Library()

@@ -1,12 +1,19 @@
 import json
 import datetime
+
+from django.conf import settings
+from django.utils.translation import ugettext as _
+
 from haystack.indexes import *
+from haystack.query import SearchQuerySet
+from haystack.backends import SQ
 from haystack import site
+
 from teams import models
 from apps.teams.moderation import WAITING_MODERATION
 from apps.videos.models import SubtitleLanguage
-from django.conf import settings
-from django.utils.translation import ugettext as _
+from icanhaz.models import VideoVisibilityPolicy
+
 
 LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
 
@@ -44,6 +51,13 @@ class TeamVideoLanguagesIndex(SearchIndex):
     # we'll serialize data from versions here -> links and usernames
     # that will be on the appgove all for that language
     moderation_version_info = CharField(indexed=False)
+
+    # possible values for visibility:
+    # is_public=True anyone can see
+    # is_public=False and owned_by_team_id=None -> a regular user owns, no teams can list this video
+    # is_public=False and owned_by_team_id=X -> only team X can see this video
+    is_public = BooleanField()
+    owned_by_team_id = IntegerField(null=True)
     
     def prepare(self, obj):
         self.prepared_data = super(TeamVideoLanguagesIndex, self).prepare(obj)
@@ -79,7 +93,13 @@ class TeamVideoLanguagesIndex(SearchIndex):
             [sl.language for sl in completed_sls]
         self.prepared_data['video_completed_lang_urls'] = \
             [sl.get_absolute_url() for sl in completed_sls]
-
+        policy = obj.video.policy
+        owned_by = None
+        if policy and policy.belongs_to_team:
+            owned_by = policy.object_id
+        
+        self.prepared_data['is_public'] =  VideoVisibilityPolicy.objects.video_is_public(obj.video)
+        self.prepared_data["owned_by_team_id"] = owned_by
         
         self.prepares_moderation_info( obj, self.prepared_data)
         return self.prepared_data
@@ -118,6 +138,18 @@ class TeamVideoLanguagesIndex(SearchIndex):
         self.prepared_data['moderation_version_info'] = json.dumps(moderation_version_info)
 
 
+        
+    @classmethod
+    def results_for_members(self, team):
+        base_qs = SearchQuerySet().models(models.TeamVideo)
+        public = SQ(is_public=True)
+        mine = SQ(is_public=False,  owned_by_team_id=team.pk)
+        return base_qs.filter(public | mine)            
+
+        
+    @classmethod
+    def results(self):
+        return SearchQuerySet().models(models.TeamVideo).filter(is_public=True)
                 
             
 site.register(models.TeamVideo, TeamVideoLanguagesIndex)

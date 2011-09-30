@@ -16,11 +16,14 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+import re
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.views.generic.list_detail import object_list
+from django.core.exceptions import SuspiciousOperation
+from django.utils.functional import  wraps
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, Action, SubtitleLanguage, SubtitleVersion,  \
     VideoUrl, AlreadyEditingException
 from videos.forms import VideoForm, FeedbackForm, EmailFriendForm, UserTestResultForm, \
@@ -53,10 +56,10 @@ from utils.decorators import never_in_prod
 from utils.translation import get_user_languages_from_request
 from django.utils.http import urlquote_plus
 from videos.tasks import video_changed_tasks
-from haystack.query import SearchQuerySet
 from videos.search_indexes import VideoSearchResult, VideoIndex
 import datetime
-
+from icanhaz.models import VideoVisibilityPolicy
+from videos.decorators import get_video_revision, get_video_from_code
 from doorman import feature_is_on
 
 from apps.teams.moderation import user_can_moderate, get_pending_count
@@ -100,8 +103,7 @@ def volunteer_page(request):
     # Get the user comfort languages list 
     user_langs = get_user_languages_from_request(request)
 
-    relevant = SearchQuerySet().result_class(VideoSearchResult) \
-        .models(Video).filter(video_language_exact__in=user_langs) \
+    relevant = VideoIndex.public().filter(video_language_exact__in=user_langs) \
         .filter_or(languages_exact__in=user_langs) \
         .order_by('-requests_count')
 
@@ -189,8 +191,12 @@ def create_from_feed(request):
 
 create_from_feed.csrf_exempt = True
 
-def video(request, video_id, video_url=None, title=None):
-    video = get_object_or_404(Video, video_id=video_id)
+
+
+
+
+@get_video_from_code
+def video(request, video, video_url=None, title=None):
     if video_url:
         video_url = get_object_or_404(VideoUrl, pk=video_url)
     
@@ -212,6 +218,7 @@ def video(request, video_id, video_url=None, title=None):
     context['translations'] = translations
 
     context["user_can_moderate"] = user_can_moderate(video, request.user)
+    context['shows_widget_sharing'] = VideoVisibilityPolicy.objects.can_show_widget(video, request.META.get('HTTP_REFERER', ''))    
     if context["user_can_moderate"]:
         # FIXME: use  amore efficient count
         for l in translations:
@@ -224,6 +231,7 @@ def video(request, video_id, video_url=None, title=None):
     
     return render_to_response('videos/video.html', context,
                               context_instance=RequestContext(request))
+
 
 def video_list(request):
     qs = Video.objects.filter(is_subtitled=True)
@@ -243,6 +251,7 @@ def video_list(request):
                        template_object_name='video',
                        extra_context=extra_context)
 
+@get_video_revision
 def actions_list(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     qs = Action.objects.filter(video=video)
@@ -363,14 +372,14 @@ def demo(request):
     return render_to_response('demo.html', context,
                               context_instance=RequestContext(request))
 
-def legacy_history(request ,video_id, lang=None):
+@get_video_from_code
+def legacy_history(request ,video, lang=None):
     """
     In the old days we allowed only one translation per video.
     Therefore video urls looked like /vfjdh2/en/
     Now that this constraint is removed we need to redirect old urls
     to the new view, that needs 
     """
-    video = get_object_or_404(Video, video_id=video_id)
     try:
         language = video.subtitle_language(lang)
         if language is None:
@@ -383,9 +392,9 @@ def legacy_history(request ,video_id, lang=None):
             'lang_id': language.pk,
             'lang': language.language,
             }))
-    
-def history(request, video_id, lang=None, lang_id=None):
-    video = get_object_or_404(Video, video_id=video_id)
+
+@get_video_from_code
+def history(request, video, lang=None, lang_id=None):
     video.update_view_counter()
 
     context = widget.add_onsite_js_files({})
@@ -444,6 +453,7 @@ def history(request, video_id, lang=None, lang_id=None):
     context['widget_params'] = _widget_params(request, video, version_no=None, language=language)
     context['language'] = language
     context['edit_url'] = language.get_widget_url()
+    context['shows_widget_sharing'] = VideoVisibilityPolicy.objects.can_show_widget(video, request.META.get('HTTP_REFERER', ''))
     
     _add_share_panel_context_for_history(context, video, lang)
     return object_list(request, queryset=qs, allow_empty=True,
@@ -470,8 +480,9 @@ def _widget_params(request, video, version_no=None, language=None, video_url=Non
 
     return base_widget_params(request, params)
 
-def revision(request, pk):
-    version = get_object_or_404(SubtitleVersion, pk=pk)
+@get_video_revision
+def revision(request,  version):
+ 
     context = widget.add_onsite_js_files({})
     context['video'] = version.video
     context['version'] = version
@@ -492,8 +503,9 @@ def revision(request, pk):
                               context_instance=RequestContext(request))     
     
 @login_required
-def rollback(request, pk):
-    version = get_object_or_404(SubtitleVersion, pk=pk)
+@get_video_revision
+def rollback(request, version):
+
     is_writelocked = version.language.is_writelocked
     if is_writelocked:
         messages.error(request, u'Can not rollback now, because someone is editing subtitles.')
@@ -506,11 +518,13 @@ def rollback(request, pk):
         return redirect(version.language.get_absolute_url()+'#revisions')
     return redirect(version)
 
-def diffing(request, first_pk, second_pk):
-    first_version = get_object_or_404(SubtitleVersion, pk=first_pk)
+@get_video_revision
+def diffing(request, first_version, second_pk):
     language = first_version.language
     second_version = get_object_or_404(SubtitleVersion, pk=second_pk, language=language)
-    
+    if first_version.video != second_version.video:
+        # this is either a bad bug, or someone evil
+        raise "Revisions for diff videos"
     video = first_version.language.video
     if second_version.datetime_started > first_version.datetime_started:
         first_version, second_version = second_version, first_version
@@ -733,3 +747,4 @@ def reset_metadata(request, video_id):
     video = get_object_or_404(Video, video_id=video_id)
     video_changed_tasks.delay(video.id)
     return HttpResponse('ok')
+

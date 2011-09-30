@@ -1,14 +1,19 @@
 import json
 import datetime
+
+from django.conf import settings
+from django.utils.translation import ugettext as _
+
 from haystack.indexes import *
 from haystack.query import SearchQuerySet
+from haystack.backends import SQ
 from haystack import site
+
 from teams import models
 from apps.teams.moderation import WAITING_MODERATION
 from apps.videos.models import SubtitleLanguage
 from icanhaz.models import VideoVisibilityPolicy
-from django.conf import settings
-from django.utils.translation import ugettext as _
+
 
 LANGUAGES_DICT = dict(settings.ALL_LANGUAGES)
 
@@ -47,12 +52,12 @@ class TeamVideoLanguagesIndex(SearchIndex):
     # that will be on the appgove all for that language
     moderation_version_info = CharField(indexed=False)
 
-    # visivility can be:
+    # possible values for visibility:
     # is_public=True anyone can see
     # is_public=False and owned_by_team_id=None -> a regular user owns, no teams can list this video
     # is_public=False and owned_by_team_id=X -> only team X can see this video
     is_public = BooleanField()
-    owned_by_team_id = IntegerField()
+    owned_by_team_id = IntegerField(null=True)
     
     def prepare(self, obj):
         self.prepared_data = super(TeamVideoLanguagesIndex, self).prepare(obj)
@@ -136,7 +141,11 @@ class TeamVideoLanguagesIndex(SearchIndex):
         
     @classmethod
     def results_for_members(self, team):
-        return SearchQuerySet().models(models.TeamVideo).filter(owned_by_team_id=team.pk)
+        base_qs = SearchQuerySet().models(models.TeamVideo)
+        public = SQ(is_public=True)
+        mine = SQ(is_public=False,  owned_by_team_id=team.pk)
+        return base_qs.filter(public | mine)            
+
         
     @classmethod
     def results(self):

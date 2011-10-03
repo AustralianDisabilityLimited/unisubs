@@ -17,11 +17,86 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from __future__ import with_statement
-from fabric.api import run, put, sudo, env, cd, local
+
+import os, sys, string, random
+import fabric.colors as colors
+from fabric.api import run, sudo, env, cd, local as _local
 from fabric.context_managers import settings
-import string
-import random
-import os
+from fabric.utils import fastprint
+
+
+# Output Management -----------------------------------------------------------
+PASS_THROUGH = ('sudo password: ', 'Sorry, try again.')
+class CustomFile(file):
+    def __init__(self, *args, **kwargs):
+        self.log = ""
+        return super(CustomFile, self).__init__(*args, **kwargs)
+
+    def _record(self, s):
+        self.log = self.log[-255:] + s.lower()
+
+        if any(pt in self.log for pt in PASS_THROUGH):
+            sys.__stdout__.write('\n' + self.log.rsplit('\n', 1)[-1])
+            self.log = ""
+
+    def write(self, s, *args, **kwargs):
+        self._record(s)
+        return super(CustomFile, self).write(s, *args, **kwargs)
+
+
+_out_log = CustomFile('fabric.log', 'w')
+class Output(object):
+    def __init__(self, message=""):
+        self.message = message
+
+    def __enter__(self):
+        if self.message:
+            fastprint(colors.white(self.message.ljust(60) + " -> ", bold=True))
+
+        sys.stdout = _out_log
+        sys.stderr = _out_log
+
+        if self.message:
+            fastprint("\n\n")
+            fastprint(colors.yellow("+" + "-" * 78 + "+\n", bold=True))
+            fastprint(colors.yellow("| " + self.message.ljust(76) + " |\n", bold=True))
+            fastprint(colors.yellow("+" + "-" * 78 + "+\n", bold=True))
+
+        return self
+
+    def __exit__(self, type, value, tb):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+        if type is None:
+            fastprint(colors.green("OK\n", bold=True))
+        else:
+            fastprint(colors.red("FAILED\n", bold=True))
+            fastprint(colors.red(
+                "\nThere was an error.  "
+                "See ./fabric.log for the full transcript of this run.\n",
+                bold=True))
+
+    def fastprint(self, s):
+        sys.stdout = sys.__stdout__
+        fastprint(s)
+        sys.stdout = _out_log
+
+    def fastprintln(self, s):
+        self.fastprint(s + '\n')
+
+
+def local(*args, **kwargs):
+    '''Override Fabric's local() to facilitate output logging.'''
+    capture = kwargs.get('capture')
+
+    kwargs['capture'] = True
+    out = _local(*args, **kwargs)
+
+    if capture:
+        return out
+    else:
+        print out
+
 
 #:This environment is responsible for:
 #:
@@ -101,47 +176,57 @@ def unisubs(username):
 
 
 def syncdb():
-    env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'unisubs')):
-        _git_pull()
-        run('{0}/env/bin/python manage.py syncdb '
-            '--settings=unisubs_settings'.format(env.static_dir))
-        if env.separate_uslogging_db:
+    with Output("Syncing database"):
+        env.host_string = DEV_HOST
+        with cd(os.path.join(env.static_dir, 'unisubs')):
+            _git_pull()
             run('{0}/env/bin/python manage.py syncdb '
-                '--database=uslogging --settings=unisubs_settings'.format(
-                    env.static_dir))
+                '--settings=unisubs_settings'.format(env.static_dir))
+            if env.separate_uslogging_db:
+                run('{0}/env/bin/python manage.py syncdb '
+                    '--database=uslogging --settings=unisubs_settings'.format(
+                        env.static_dir))
 
 def migrate(app_name=''):
-    env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'unisubs')):
-        _git_pull()
-        if env.separate_uslogging_db:
-            run('{0}/env/bin/python manage.py migrate sentry '
-                '--database=uslogging --settings=unisubs_settings'.format(
-                    env.static_dir))
-            run('{0}/env/bin/python manage.py migrate uslogging '
-                '--database=uslogging --settings=unisubs_settings'.format(
-                    env.static_dir))
-        run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
-                env.static_dir, app_name))
+    with Output("Performing migrations"):
+        env.host_string = DEV_HOST
+        with cd(os.path.join(env.static_dir, 'unisubs')):
+            _git_pull()
+            if env.separate_uslogging_db:
+                run('{0}/env/bin/python manage.py migrate sentry '
+                    '--database=uslogging --settings=unisubs_settings'.format(
+                        env.static_dir))
+                run('{0}/env/bin/python manage.py migrate uslogging '
+                    '--database=uslogging --settings=unisubs_settings'.format(
+                        env.static_dir))
+            run('yes no | {0}/env/bin/python manage.py migrate {1} --settings=unisubs_settings'.format(
+                    env.static_dir, app_name))
 
 def run_command(command):
-    env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'unisubs')):
-        _git_pull()
-        run('{0}/env/bin/python manage.py {1} '
-            '--settings=unisubs_settings'.format(env.static_dir, command))
+    '''Run a python manage.py command'''
+    cmdname = command.split(' ', 1)[0]
+    with Output("Running python manage.py {0} ...".format(cmdname)):
+        env.host_string = DEV_HOST
+        with cd(os.path.join(env.static_dir, 'unisubs')):
+            _git_pull()
+            run('{0}/env/bin/python manage.py {1} '
+                '--settings=unisubs_settings'.format(env.static_dir, command))
 
 def migrate_fake(app_name):
-    """Unfortunately, one must do this when moving an app to South for the first time.
+    '''Fake a migration to 0001 for the specified app
+
+    Unfortunately, one must do this when moving an app to South for the first
+    time.
 
     See http://south.aeracode.org/docs/convertinganapp.html and
-    http://south.aeracode.org/ticket/430 for more details. Perhaps this will be changed
-    in a subsequent version, but now we're stuck with this solution.
-    """
-    env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'unisubs')):
-        run('yes no | {0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs_settings'.format(env.static_dir, app_name))
+    http://south.aeracode.org/ticket/430 for more details. Perhaps this will be
+    changed in a subsequent version, but now we're stuck with this solution.
+
+    '''
+    with Output("Faking migration for {0}".format(app_name)):
+        env.host_string = DEV_HOST
+        with cd(os.path.join(env.static_dir, 'unisubs')):
+            run('yes no | {0}/env/bin/python manage.py migrate {1} 0001 --fake --settings=unisubs_settings'.format(env.static_dir, app_name))
 
 def refresh_db():
     env.host_string = env.web_hosts[0]
@@ -195,7 +280,8 @@ def _update_environment(base_dir):
         sudo('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
 
 def update_environment():
-    _execute_on_all_hosts(lambda dir: _update_environment(dir))
+    with Output("Updating virtualenv"):
+        _execute_on_all_hosts(lambda dir: _update_environment(dir))
 
 def _clear_permissions(dir):
     sudo('chgrp pcf-web -R {0}'.format(dir))
@@ -206,9 +292,10 @@ def clear_environment_permissions():
         lambda dir: _clear_permissions(os.path.join(dir, 'env')))
 
 def clear_permissions():
-    for host in env.web_hosts:
-        env.host_string = host
-        _clear_permissions('{0}/unisubs'.format(env.web_dir))
+    with Output("Clearing permissions"):
+        for host in env.web_hosts:
+            env.host_string = host
+            _clear_permissions('{0}/unisubs'.format(env.web_dir))
 
 
 def _git_pull():
@@ -263,7 +350,6 @@ def update_web():
     for host in env.web_hosts:
         env.host_string = host
         with cd('{0}/unisubs'.format(env.web_dir)):
-            python_exe = '{0}/env/bin/python'.format(env.web_dir)
             _git_pull()
             with settings(warn_only=True):
                 run("find . -name '*.pyc' -print0 | xargs -0 rm")
@@ -275,39 +361,49 @@ def update_web():
         _reload_app_server()
 
 def bounce_memcached():
-    """
-    Purges old data from memcached should be done by the end of each deploy
-    """
-    if env.admin_dir:
-        env.host_string = ADMIN_HOST
-    else:
-        env.host_string = DEV_HOST
-    sudo(env.memcached_bounce_cmd)
+    '''Bounce the memcached server (purging the cache)
+
+    Should be done by the end of each deploy
+
+    '''
+    with Output("Bouncing memcached"):
+        if env.admin_dir:
+            env.host_string = ADMIN_HOST
+        else:
+            env.host_string = DEV_HOST
+        sudo(env.memcached_bounce_cmd)
 
 def update_solr_schema():
-    if env.admin_dir:
-        # staging and production
-        env.host_string = ADMIN_HOST
-        dir = env.admin_dir
-        python_exe = '{0}/env/bin/python'.format(env.admin_dir)
-        with cd(os.path.join(dir, 'unisubs')):
-            _git_pull()
-            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
-                    python_exe,
-                    'production' if env.installation_name is None else 'staging'))
-            run('{0} manage.py reload_solr_core --settings=unisubs_settings'.format(python_exe))
-    else:
-        # dev
-        env.host_string = DEV_HOST
-        dir = env.web_dir
-        python_exe = '{0}/env/bin/python'.format(env.web_dir)
-        with cd(os.path.join(dir, 'unisubs')):
-            _git_pull()
-            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
-            run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
-        sudo('service tomcat6 restart')
+    '''Update the Solr schema and rebuild the index.
 
-    run('screen -d -m sh -c "{0} {1} rebuild_index_ordered --noinput --settings=unisubs_settings | mail -s Solr_index_rebuilt_on_{2}  universalsubtitles-dev@pculture.org"'.format(python_exe, os.path.join(dir, 'unisubs', 'manage.py'), env.host_string))
+    The rebuilding will be done asynchronously with screen and an email will
+    be sent when it finishes.
+
+    '''
+    with Output("Updating Solr schema"):
+        if env.admin_dir:
+            # staging and production
+            env.host_string = ADMIN_HOST
+            dir = env.admin_dir
+            python_exe = '{0}/env/bin/python'.format(env.admin_dir)
+            with cd(os.path.join(dir, 'unisubs')):
+                _git_pull()
+                run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/{1}/conf/schema.xml'.format(
+                        python_exe,
+                        'production' if env.installation_name is None else 'staging'))
+                run('{0} manage.py reload_solr_core --settings=unisubs_settings'.format(python_exe))
+        else:
+            # dev
+            env.host_string = DEV_HOST
+            dir = env.web_dir
+            python_exe = '{0}/env/bin/python'.format(env.web_dir)
+            with cd(os.path.join(dir, 'unisubs')):
+                _git_pull()
+                run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/main/conf/schema.xml'.format(python_exe))
+                run('{0} manage.py build_solr_schema --settings=unisubs_settings > /etc/solr/conf/testing/conf/schema.xml'.format(python_exe))
+            sudo('service tomcat6 restart')
+
+        run('screen -d -m sh -c "{0} {1} rebuild_index_ordered --noinput --settings=unisubs_settings | mail -s Solr_index_rebuilt_on_{2}  universalsubtitles-dev@pculture.org"'.format(python_exe, os.path.join(dir, 'unisubs', 'manage.py'), env.host_string))
 
 def _bounce_celeryd():
     if env.admin_dir:
@@ -326,15 +422,15 @@ def _update_static(dir):
         run('{0} manage.py  compile_media --settings=unisubs_settings'.format(python_exe))
 
 def update_static():
-    env.host_string = DEV_HOST
-    if env.s3_bucket is not None:
-        with cd(os.path.join(env.static_dir, 'unisubs')):
-            _update_static(env.static_dir)
-            media_dir = '{0}/unisubs/media/'.format(env.static_dir)
-            python_exe = '{0}/env/bin/python'.format(env.static_dir)
-            run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
-    else:
-        _update_static(env.web_dir)
+    with Output("Updating static media"):
+        env.host_string = DEV_HOST
+        if env.s3_bucket is not None:
+            with cd(os.path.join(env.static_dir, 'unisubs')):
+                _update_static(env.static_dir)
+                python_exe = '{0}/env/bin/python'.format(env.static_dir)
+                run('{0} manage.py  send_to_s3 --settings=unisubs_settings'.format(python_exe))
+        else:
+            _update_static(env.web_dir)
 
 def update():
     update_static()
@@ -387,55 +483,55 @@ def update_translations():
     run ('cd {0} && sh update_translations.sh'.format(os.path.dirname(__file__)))
 
 def test_celeryd():
-    print '=== TEST CELERYD SCHEDULLER ==='
-    env.host_string = env.celeryd_host
-    output = run('ps aux | grep "%s/unisubs/manage\.py.*celeryd.*-B" | grep -v grep' % env.celeryd_proj_root)
-    assert len(output.split('\n'))
+    with Output("Testing Celery scheduler"):
+        env.host_string = env.celeryd_host
+        output = run('ps aux | grep "%s/unisubs/manage\.py.*celeryd.*-B" | grep -v grep' % env.celeryd_proj_root)
+        assert len(output.split('\n'))
 
 def test_services():
     test_memcached()
     test_celeryd()
-    print '=== TEST SERVICES ==='
-    for host in env.web_hosts:
-        env.host_string = host
-        with cd(os.path.join(env.web_dir, 'unisubs')):
-            run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
-                env.web_dir))
+    with Output("Testing other services"):
+        for host in env.web_hosts:
+            env.host_string = host
+            with cd(os.path.join(env.web_dir, 'unisubs')):
+                run('{0}/env/bin/python manage.py test_services --settings=unisubs_settings'.format(
+                    env.web_dir))
 
 def test_memcached():
-    print '=== TEST MEMCACHED ==='
-    alphanum = string.letters+string.digits
-    host_set = set([(h, env.web_dir,) for h in env.web_hosts])
-    if env.admin_dir:
-        host_set.add((ADMIN_HOST, env.admin_dir,))
-    for host in host_set:
-        random_string = ''.join(
-            [alphanum[random.randint(0, len(alphanum)-1)]
-             for i in xrange(12)])
-        env.host_string = host[0]
-        with cd(os.path.join(host[1], 'unisubs')):
-            run('../env/bin/python manage.py set_memcached {0} --settings=unisubs_settings'.format(
-                random_string))
-        other_hosts = host_set - set([host])
-        for other_host in other_hosts:
-            env.host_string = other_host[0]
-            output = ''
-            with cd(os.path.join(other_host[1], 'unisubs')):
-                output = run('../env/bin/python manage.py get_memcached --settings=unisubs_settings')
-            if output.find(random_string) == -1:
-                raise Exception('Machines {0} and {1} are using different memcached instances'.format(
-                        host[0], other_host[0]))
+    with Output("Testing memcached"):
+        alphanum = string.letters+string.digits
+        host_set = set([(h, env.web_dir,) for h in env.web_hosts])
+        if env.admin_dir:
+            host_set.add((ADMIN_HOST, env.admin_dir,))
+        for host in host_set:
+            random_string = ''.join(
+                [alphanum[random.randint(0, len(alphanum)-1)]
+                for i in xrange(12)])
+            env.host_string = host[0]
+            with cd(os.path.join(host[1], 'unisubs')):
+                run('../env/bin/python manage.py set_memcached {0} --settings=unisubs_settings'.format(
+                    random_string))
+            other_hosts = host_set - set([host])
+            for other_host in other_hosts:
+                env.host_string = other_host[0]
+                output = ''
+                with cd(os.path.join(other_host[1], 'unisubs')):
+                    output = run('../env/bin/python manage.py get_memcached --settings=unisubs_settings')
+                if output.find(random_string) == -1:
+                    raise Exception('Machines {0} and {1} are using different memcached instances'.format(
+                            host[0], other_host[0]))
 
 def generate_docs():
-    env.host_string = DEV_HOST
-    with cd(os.path.join(env.static_dir, 'unisubs')):
-        run('%s/env/bin/sphinx-build %s/unisubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
+    with Output("Generating documentation"):
+        env.host_string = DEV_HOST
+        with cd(os.path.join(env.static_dir, 'unisubs')):
+            run('%s/env/bin/sphinx-build %s/unisubs/docs/ %s/media/docs/' % (env.static_dir, env.static_dir, env.static_dir))
 
 try:
     from local_env import *
     def local (username):
         _create_env(**local_env_data)
-
 except ImportError:
     pass
 

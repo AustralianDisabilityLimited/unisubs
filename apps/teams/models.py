@@ -369,6 +369,40 @@ class Team(models.Model):
             'qs': qs,
             }
 
+    @property
+    def default_project(self):
+        return  Project.objects.get_or_create(
+            team=self,
+            name=Project.DEFAULT_NAME,
+        )[0]
+    
+
+    
+class Project(models.Model):
+    #: All tvs belong to a project, wheather the team has enabled them or not
+    # the default project is just a convenience UI that pretends to be part of
+    # the team
+    DEFAULT_NAME = "_root"
+    
+    team = models.ForeignKey(Team)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(blank=True)
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True, max_length=2048)
+    guidelines = models.TextField(blank=True, null=True, max_length=2048)
+
+    def __unicode__(self):
+        return u"%s for team %s" % (self.name, self.team)
+
+    def save(self, *args, **kwargs):
+        self.modified = datetime.now()
+        super(Project, self).save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("team", "name",)
+    
+    
 class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
     video = models.ForeignKey(Video)
@@ -746,3 +780,4 @@ def invite_send_message(sender, instance, created, **kwargs):
         msg.save()
     
 post_save.connect(invite_send_message, Invite)
+

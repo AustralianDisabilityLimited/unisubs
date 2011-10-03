@@ -43,11 +43,12 @@ class MultiQuerySet(object):
             else:
                 items += list(qs[offset:stop])
                 if len(items) >= total_len:
-                    return items
+                    break
                 else:
                     offset = 0
                     stop = total_len - len(items)
                     continue
+        return items[:total_len]
 
 class MultyQuerySet(object):
     """

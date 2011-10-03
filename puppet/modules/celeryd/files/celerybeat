@@ -176,7 +176,8 @@ start_beat () {
         source $VIRTUALENV/bin/activate
     fi
     $CELERYBEAT $CELERYBEAT_OPTS $DAEMON_OPTS --detach \
-                --pidfile="$CELERYBEAT_PID_FILE"
+                --pidfile="$CELERYBEAT_PID_FILE" \
+                --settings=$DJANGO_SETTINGS_MODULE
 }
 
 
@@ -191,6 +192,13 @@ case "$1" in
     ;;
   reload|force-reload)
     echo "Use start+stop"
+    ;;
+  status)
+    if [ -f "$CELERYBEAT_PID_FILE" ]; then
+        echo ' * celerybeat is running'
+    else
+        exit 1
+    fi
     ;;
   restart)
     echo "Restarting celery periodic task scheduler"

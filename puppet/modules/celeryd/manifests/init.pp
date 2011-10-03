@@ -65,24 +65,21 @@ class celeryd($project_dir, $settings_module, $venv) {
     owner   => '0',
     group   => '0',
     mode    => '0755',
-    source => 'puppet:///modules/celeryd/celeryd';
+    source => 'puppet:///modules/celeryd/celeryevcam';
   }
 
   service { "celeryd":
     require => [File['/etc/init.d/celeryd'], File['/var/log/celery'], File['/var/run/celery'], User['celery']],
     ensure => "running",
+    hasstatus => true,
     hasrestart => true;
   }
 
   service { "celerybeat":
     require => [Service['celeryd']],
     ensure => "running",
-    hasrestart => true;    
+    hasstatus => true,
+    hasrestart => false;
   }
 
-  service { "celeryevcam":
-    require => [File['/etc/init.d/celeryevcam'], User['celery']],
-    ensure => "running",
-    hasrestart => true;
-  }
 }

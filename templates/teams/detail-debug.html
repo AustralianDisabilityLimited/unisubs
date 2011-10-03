@@ -75,7 +75,7 @@
       </tr>
       {% for x in qs %}
       <tr>
-        <td><a href="{{x.video_absolute_url}}">{{x.title}}</a></td>
+        <td><a href="{% url teams:team_video team_video_pk=x.team_video_pk %}">{{x.title}}</a></td>
         <td>{{x.original_language}}</td>
         <td>{{x.has_lingua_franca}}</td>
         <td><a href="javascript:void(0);" onclick="showIndexedText('{{x.text|escapejs}}');">link</a></td>

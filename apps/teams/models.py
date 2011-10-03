@@ -52,6 +52,7 @@ class TeamManager(models.Manager):
         else:
             return self.get_query_set().filter(is_visible=True)
 
+
 class Team(models.Model):
     APPLICATION = 1
     INVITATION_BY_MANAGER = 2
@@ -92,6 +93,8 @@ class Team(models.Model):
     is_moderated = models.BooleanField(default=False)
     header_html_text = models.TextField(blank=True, default='', help_text=_(u"HTML that appears at the top of the teams page."))
     last_notification_time = models.DateTimeField(editable=False, default=datetime.datetime.now)
+
+    projects_enabled = models.BooleanField(default=False)
     
     objects = TeamManager()
     

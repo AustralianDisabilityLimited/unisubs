@@ -20,7 +20,8 @@ To run the development version:
 
         vagrant up
 
-    This is going to create a vm and provision it. It should take 10-15 minutes. Remember what mom said: a watched pot never boils.
+    This is going to create a vm and provision it. It should take 10-15 minutes.
+    Remember what mom said: a watched pot never boils.
 
 3. Switch over to your vagrant vm with:
 
@@ -34,10 +35,31 @@ To run the development version:
         python manage.py migrate --fake --settings=dev_settings
         sudo ./deploy/update_solr_schema_vagrant.sh
 
-4. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This is necessary for Twitter and Facebook oauth to work correctly.
+4. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This
+   is necessary for Twitter and Facebook oauth to work correctly.
 
 5. In your vagrant vm (the one you switched to in step 3), run the site with:
 
         ./dev-runserver.sh
 
     You can access the site at <http://unisubs.example.com:8000>.
+
+## Optional
+
+You can optionally set up a few other pieces of the development environment that
+we haven't automated yet.
+
+### RabbitMQ and Celery
+
+Add the following to `settings_local.py` to use RabbitMQ and Celery for async
+tasks:
+
+    CELERY_ALWAYS_EAGER = False
+    CELERY_RESULT_BACKEND = "amqp"
+    BROKER_BACKEND = 'amqplib'
+    BROKER_HOST = "localhost"
+    BROKER_PORT = 5672
+    BROKER_USER = "usrmquser"
+    BROKER_PASSWORD = "usrmqpassword"
+    BROKER_VHOST = "ushost"
+

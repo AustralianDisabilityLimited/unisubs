@@ -3,7 +3,6 @@ import datetime
 
 from django.conf import settings
 from django.utils.translation import ugettext as _
-
 from haystack.indexes import *
 from haystack.query import SearchQuerySet
 from haystack.backends import SQ
@@ -32,7 +31,10 @@ class TeamVideoLanguagesIndex(SearchIndex):
     original_language_display = CharField(indexed=False)
     has_lingua_franca = BooleanField()
     absolute_url = CharField(indexed=False)
-    video_absolute_url = CharField(indexed=False)
+    # never store an absolute url with solr
+    # since the url changes according to the user
+    # one cannot construct the url at index time
+    # video_absolute_url = CharField(indexed=False)
     thumbnail = CharField(indexed=False)
     title = CharField(indexed=True)
     description = CharField(indexed=False)
@@ -81,7 +83,6 @@ class TeamVideoLanguagesIndex(SearchIndex):
                       obj.video.subtitlelanguage_set.all() if 
                       sl.is_dependable()]))
         self.prepared_data['absolute_url'] = obj.get_absolute_url()
-        self.prepared_data['video_absolute_url'] = obj.video.get_absolute_url()
         self.prepared_data['thumbnail'] = obj.get_thumbnail()
         self.prepared_data['title'] = unicode(obj)
         self.prepared_data['description'] = obj.description

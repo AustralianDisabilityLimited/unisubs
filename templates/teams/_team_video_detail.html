@@ -3,7 +3,7 @@
     <img height="100" src="{{ search_record.thumbnail }}">
 </a>
 <div class="info">
-    <h4><a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title }} meme</a></h4>
+    <h4><a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title }}</a></h4>
     <div class="clearfix">
       <div  class="completed_translations">{% team_video_lang_list search_record %}</div>
     </div>

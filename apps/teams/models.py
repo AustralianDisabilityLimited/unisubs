@@ -35,6 +35,7 @@ from django.http import Http404
 from django.contrib.sites.models import Site
 from teams.tasks import update_one_team_video
 from apps.videos.models import SubtitleLanguage
+from utils.panslugify import pan_slugify
 from haystack.query import SQ
 from haystack import site
 import datetime 
@@ -399,15 +400,25 @@ class Project(models.Model):
     description = models.TextField(blank=True, null=True, max_length=2048)
     guidelines = models.TextField(blank=True, null=True, max_length=2048)
 
+    slug = models.SlugField(default=DEFAULT_NAME)
+    order = models.PositiveIntegerField(default=0)
+
     def __unicode__(self):
         return u"%s for team %s" % (self.name, self.team)
 
-    def save(self, *args, **kwargs):
+    def save(self, slug=None,*args, **kwargs):
         self.modified = datetime.datetime.now()
+        if self.slug is None:
+            self.slug = pan_slugify(self.name)
+        elif slug:
+            self.slug = pan_slugify(slug)
         super(Project, self).save(*args, **kwargs)
 
     class Meta:
-        unique_together = ("team", "name",)
+        unique_together = (
+                ("team", "name",),
+                ("team", "slug",),
+        )
     
     
 class TeamVideo(models.Model):

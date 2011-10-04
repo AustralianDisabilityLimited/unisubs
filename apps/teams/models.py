@@ -374,17 +374,20 @@ class Team(models.Model):
 
     @property
     def default_project(self):
-        return  Project.objects.get_or_create(
-            team=self,
-            name=Project.DEFAULT_NAME,
-        )[0]
+        try:
+            return Project.objects.get(team=self)
+        except Project.DoesNotExist:
+            p = Project(team=self,name=Project.DEFAULT_NAME)
+            p.save()
+            return p
+
     
 
     
 class Project(models.Model):
     #: All tvs belong to a project, wheather the team has enabled them or not
     # the default project is just a convenience UI that pretends to be part of
-    # the team
+    # the team . If this ever gets changed, you need to change migrations/0044
     DEFAULT_NAME = "_root"
     
     team = models.ForeignKey(Team)
@@ -399,7 +402,7 @@ class Project(models.Model):
         return u"%s for team %s" % (self.name, self.team)
 
     def save(self, *args, **kwargs):
-        self.modified = datetime.now()
+        self.modified = datetime.datetime.now()
         super(Project, self).save(*args, **kwargs)
 
     class Meta:

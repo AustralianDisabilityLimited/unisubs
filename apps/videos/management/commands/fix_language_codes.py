@@ -44,4 +44,4 @@ class Command(BaseCommand):
         self._fix(UserLanguage, "language")
         self._fix(SubtitleFetchCounters, "language")
         self._fix(SubtitleRequest, "language")
-
+        self._fix(SubtitleLanguage, "language")

@@ -424,7 +424,7 @@ class TeamVideo(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     completed_languages = models.ManyToManyField(SubtitleLanguage, blank=True)
 
-    project = models.ForeignKey(Project, null=True, blank=True)
+    project = models.ForeignKey(Project)
 
     
     class Meta:

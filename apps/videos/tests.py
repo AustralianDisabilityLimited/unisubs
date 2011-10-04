@@ -108,6 +108,13 @@ Here is sub 2.
 And, sub 3.
 '''
 
+class GenericTest(TestCase):
+    def test_languages(self):
+        from settings import ALL_LANGUAGES
+        langs = [l[1] for l in ALL_LANGUAGES]
+        langs_set = set(langs)
+        self.assertEqual(len(langs), len(langs_set))        
+
 class SubtitleParserTest(TestCase):
 
     def _assert_sub(self, sub, start_time, end_time, sub_text):

@@ -50,3 +50,4 @@ user-data/pictures
 venv/
 unisubs-integration
 deploy/fabric.log
+*.orig

@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib import admin
-from teams.models import Team, TeamMember, TeamVideo
+from teams.models import Team, TeamMember, TeamVideo, Task
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
@@ -106,6 +106,18 @@ class TeamVideoAdmin(admin.ModelAdmin):
     team_link.short_description = _('Team')
     team_link.allow_tags = True
 
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'type', 'team', 'team_video', 'assignee',
+                    'created', 'completed')
+    list_filter = ('type', 'created', 'modified', 'completed')
+    search_fields = ('assignee__username', 'team__name', 'assignee__first_name',
+                     'assignee__last_name', 'team_video__title',
+                     'team_video__video__title')
+    raw_id_fields = ('team_video', 'team', 'assignee')
+    ordering = ('-created',)
+
+
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)
+admin.site.register(Task, TaskAdmin)

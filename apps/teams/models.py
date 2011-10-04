@@ -43,6 +43,7 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 from apps.teams.moderation_const import WAITING_MODERATION
 
+
 class TeamManager(models.Manager):
     
     def for_user(self, user):
@@ -789,3 +790,25 @@ def invite_send_message(sender, instance, created, **kwargs):
     
 post_save.connect(invite_send_message, Invite)
 
+
+class Task(models.Model):
+    TYPE_CHOICES = (
+        (1, 'Subtitle'),
+        (2, 'Translate'),
+        (3, 'Review'),
+        (4, 'Approve'),
+    )
+    TYPE_NAMES = dict(TYPE_CHOICES)
+    TYPE_IDS = dict([choice[::-1] for choice in TYPE_CHOICES])
+
+    team = models.ForeignKey(Team)
+    team_video = models.ForeignKey(TeamVideo)
+    assignee = models.ForeignKey(User, blank=True, null=True)
+    type = models.PositiveIntegerField(choices=TYPE_CHOICES)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    completed = models.DateTimeField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u'%d' % self.id

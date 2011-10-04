@@ -284,7 +284,7 @@ class Team(models.Model):
     def get_videos_for_languages_haystack(self, languages, user=None):
         from utils.multi_query_set import MultiQuerySet
 
-        is_member = self.members.filter(user=user).exists()
+        is_member = user and user.is_authenticated() and self.members.filter(user=user).exists()
         languages.extend([l[:l.find('-')] for l in 
                            languages if l.find('-') > -1])
         languages = list(set(languages))

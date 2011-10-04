@@ -36,6 +36,23 @@ class Command(BaseCommand):
         self._fix_lang(model_class, field, 'urd', 'ur')
         self._fix_lang(model_class, field, 'pan', 'pa')
 
+    def _fix_subtitle_languages(self, old_value, new_value):
+        langs = SubtitleLanguage.objects.filter(
+            language=new_value, standard_language__isnull=False)
+        for lang in langs:
+            video = lang.video
+            other_langs = video.subtitlelanguage_set.filter(
+                language=old_value,
+                standard_language=lang.standard_language)
+            if not other_langs.exists():
+                continue
+            other_lang = other_langs[0]
+            if lang.percent_done > other_lang.percent_done:
+                other_lang.delete()
+            else:
+                lang.delete()
+            print("Had to delete a SL for video id {0}".format(video.video_id))
+
     def handle(self, *args, **kwargs):
         """ This is super-temporary, for fixing 
         https://unisubs.sifterapp.com/projects/12298/issues/445909/comments """
@@ -44,4 +61,6 @@ class Command(BaseCommand):
         self._fix(UserLanguage, "language")
         self._fix(SubtitleFetchCounters, "language")
         self._fix(SubtitleRequest, "language")
-
+        self._fix_subtitle_languages('urd', 'ur')
+        self._fix_subtitle_languages('pan', 'pa')
+        self._fix(SubtitleLanguage, "language")

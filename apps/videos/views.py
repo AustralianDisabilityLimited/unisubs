@@ -388,7 +388,7 @@ def legacy_history(request ,video, lang=None):
         raise Http404()
     
     return HttpResponseRedirect(reverse("videos:translation_history", kwargs={
-            'video_id': video_id,
+            'video_id': video.video_id,
             'lang_id': language.pk,
             'lang': language.language,
             }))

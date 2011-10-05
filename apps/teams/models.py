@@ -284,7 +284,7 @@ class Team(models.Model):
     def get_videos_for_languages_haystack(self, languages, user=None):
         from utils.multi_query_set import MultiQuerySet
 
-        is_member = self.members.filter(user=user).exists()
+        is_member = user and user.is_authenticated() and self.members.filter(user=user).exists()
         languages.extend([l[:l.find('-')] for l in 
                            languages if l.find('-') > -1])
         languages = list(set(languages))
@@ -313,9 +313,9 @@ class Team(models.Model):
                 langs + pairs_m + pairs_0).exclude(
                 original_language__in=languages))
         mqs = MultiQuerySet(*[qs for qs in qs_list if qs is not None])
-        # this is way more efficient than making a count from all the 
+        # this is way more efficient than making a count from all the
         # constituent querysets.
-        mqs.set_count(TeamVideo.objects.filter(team=self).count())
+        mqs.set_count(self._base_sqs(is_member).count())
 
         return qs_list, mqs
 

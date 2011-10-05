@@ -185,7 +185,8 @@ start_evcam () {
         source $VIRTUALENV/bin/activate
     fi
     $CELERYEV $CELERYEV_OPTS $DAEMON_OPTS --detach \
-              --pidfile="$CELERYEV_PID_FILE"
+              --pidfile="$CELERYEV_PID_FILE" \
+              --settings=$DJANGO_SETTINGS_MODULE
 }
 
 

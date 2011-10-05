@@ -18,6 +18,7 @@ class solr::package {
   exec { "fix_solr_owner":
     path => "/usr/local/bin:/usr/bin:/bin",
     command => "chown -R solr:solr /opt/solr/example",
+    unless => 'test "solr:solr" = "`stat -c%U:%G /opt/solr/example`"',
     require => [Exec["solr_tgz"], User["solr"], Group["solr"]],
   }
 }

@@ -802,12 +802,91 @@ def invite_send_message(sender, instance, created, **kwargs):
 post_save.connect(invite_send_message, Invite)
 
 
+class Workflow(models.Model):
+    PERM_CHOICES = (
+        (10, 'Disabled'),
+        (20, 'Public'),
+        (30, 'Team Members'),
+        (40, 'Managers'),
+        (50, 'Admins'),
+        (60, 'Owner'),
+    )
+    PERM_NAMES = dict(PERM_CHOICES)
+    PERM_IDS = dict([choice[::-1] for choice in PERM_CHOICES])
+
+    team = models.ForeignKey(Team)
+
+    project = models.ForeignKey(Project, blank=True, null=True)
+    team_video = models.ForeignKey(TeamVideo, blank=True, null=True)
+
+    perm_subtitle = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='subtitle permissions')
+    perm_translate = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='translate permissions')
+    perm_review = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='review permission')
+    perm_approve = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='approve permissions')
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    modified = models.DateTimeField(auto_now=True, editable=False)
+
+    @classmethod
+    def get_for_video(cls, team_video, workflows=None):
+        '''Return the most specific Workflow object for the given video.
+
+        If workflows is given, it should be a QuerySet or List of all Workflows
+        for the TeamVideo's team.  This will let you look it up yourself once
+        and use it in many of these calls to avoid hitting the DB each time.
+
+        If workflows is not given it will be looked up with one DB query.
+
+        '''
+        if not workflows:
+            workflows = list(Workflow.objects.filter(team=team_video.team))
+
+        if not workflows:
+            return None
+
+        video_specific = [w for w in workflows if w.team_video == team_video]
+        if video_specific:
+            return video_specific[0]
+
+        project_specific = [w for w in workflows
+                            if w.team_video.project == team_video.project]
+        if project_specific:
+            return project_specific[0]
+
+        return workflows[0]
+
+    @classmethod
+    def add_to_videos(cls, team_videos):
+        '''Add the appropriate Workflow objects to each TeamVideo as .workflow.
+
+        This will only perform one DB query, and it will add the most specific
+        workflow possible to each TeamVideo.
+        '''
+        if not team_videos:
+            return []
+
+        workflows = list(Workflow.objects.filter(team=team_videos[0].team))
+
+        for team_video in team_videos:
+            team_video.workflow = Workflow.get_for_video(team_video, workflows)
+
+
+    def get_specific_target(self):
+        return self.team_video or self.project or self.team
+
+    def __unicode__(self):
+        return u'Workflow for %s' % self.get_specific_target()
+
+    class Meta:
+        unique_together = ('team', 'project', 'team_video')
+
+
 class Task(models.Model):
     TYPE_CHOICES = (
-        (1, 'Subtitle'),
-        (2, 'Translate'),
-        (3, 'Review'),
-        (4, 'Approve'),
+        (10, 'Subtitle'),
+        (20, 'Translate'),
+        (30, 'Review'),
+        (40, 'Approve'),
     )
     TYPE_NAMES = dict(TYPE_CHOICES)
     TYPE_IDS = dict([choice[::-1] for choice in TYPE_CHOICES])
@@ -817,9 +896,10 @@ class Task(models.Model):
     assignee = models.ForeignKey(User, blank=True, null=True)
     type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    modified = models.DateTimeField(auto_now=True, editable=False)
     completed = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return u'%d' % self.id
+

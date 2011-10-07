@@ -121,6 +121,8 @@ urlpatterns = patterns(
      {'template': 'alpha-test01-mp4.htm'}, 'test-mp4-page'),
      url(r'^sitemap\.xml$', sitemap_index, {'sitemaps': sitemaps}, name="sitemap-index"),
      url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_view, {'sitemaps': sitemaps}, name="sitemap"),
+     (r'^prototypes/', include('prototypes.urls', namespace='prototypes', 
+                            app_name='prototypes')),
 )
 
 try:

@@ -973,7 +973,7 @@ class Task(models.Model):
 
     team = models.ForeignKey(Team)
     team_video = models.ForeignKey(TeamVideo)
-    team_video_language = models.ForeignKey(TeamVideoLanguage, blank=True, null=True)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True, db_index=True)
     assignee = models.ForeignKey(User, blank=True, null=True)
 
     deleted = models.BooleanField(default=False)
@@ -997,5 +997,6 @@ class Task(models.Model):
                  'team_video': self.team_video.id if self.team_video else None,
                  'type': Task.TYPE_NAMES[self.type],
                  'assignee': self.assignee.id if self.assignee else None,
+                 'language': self.language if self.language else None,
                  'completed': True if self.completed else False, }
 

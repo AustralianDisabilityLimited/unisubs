@@ -611,7 +611,7 @@ class TeamsTest(TestCase):
         self.failUnlessEqual(response.status_code, 200)
                 
         #---------- edit ------------
-        url = reverse("teams:edit", kwargs={"slug": team.slug})
+        url = reverse("teams:settings", kwargs={"slug": team.slug})
         response = self.client.get(url)
 
         self.failUnlessEqual(response.status_code, 200)
@@ -633,7 +633,7 @@ class TeamsTest(TestCase):
             "description": u"",
             "logo": open(path.join(settings.MEDIA_ROOT, "test/71600102.jpg"), "rb")
         }
-        url = reverse("teams:edit", kwargs={"slug": team.slug})
+        url = reverse("teams:settings", kwargs={"slug": team.slug})
         response = self.client.post(url, data)
         self.failUnlessEqual(response.status_code, 302)
         video = Video.objects.get(videourl__type=VIDEO_TYPE_YOUTUBE, videourl__videoid='tGsHDUdw8As')
@@ -650,13 +650,13 @@ class TeamsTest(TestCase):
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 200)
 
-        url = reverse("teams:edit", kwargs={"slug": "volunteer1"})
+        url = reverse("teams:settings", kwargs={"slug": "volunteer1"})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 404)
 
         self.client.logout()
         
-        url = reverse("teams:edit", kwargs={"slug": "volunteer"})
+        url = reverse("teams:settings", kwargs={"slug": "volunteer"})
         response = self.client.get(url)
         self.failUnlessEqual(response.status_code, 302)
         

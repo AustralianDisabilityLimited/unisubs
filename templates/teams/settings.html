@@ -1,0 +1,220 @@
+{% extends "settings.html" %}
+{% load i18n teams_tags paginator doorman media_compressor verbatim_templatetag %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(function($){
+            $('#id_logo').change(function(){
+                $('.edit-team').ajaxSubmit({
+                    url: '{% url teams:edit_logo team.slug %}',
+                    dataType: 'json',
+                    success: function(response){
+                        if (response.error){
+                            $('#logo-errors').html('<ul class="errorlist"><li>'+response.error.logo+'</li></ul>');
+                        }else{
+                            $('#logo-errors').html('');  
+                            $('.team-logo').attr('src', response.url);
+                        }
+                    },
+                    beforeSubmit: function(arr, $form, options) { 
+                        $('#logo-errors').html('Saving...');            
+                    }                    
+                });
+            });            
+        });
+    </script>
+ {% include_bundle "js-teams-settings-panel" 0 %}
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
+{% endblock %}
+
+
+
+{% block body_attrs %}id="new-teams"{% endblock %}
+
+{% block title %}
+    {{ team }} {% trans 'Settings' %} | Universal Subtitles
+{% endblock %}
+
+{% block settings_content %}
+    <div class="hd">
+        <h2>{{ team.name }}</h2>
+        {% with "settings" as active %}
+            {% include 'teams/_edit_top_navigation.html' %}
+        {% endwith %}
+    </div>
+    <div class="sub-settings-panel">
+    </div>
+    <div class="painel-holder">
+      <div class="tab painel-basic" style="display:none">
+      {% if basic_settings_form %}
+      <form method='post' action="." class="edit-team" enctype="multipart/form-data">
+      <div class="grid_9">
+          {% csrf_token %}
+          <div class="grid_5 alpha">
+              <h3>{% trans 'Details About Your Team' %}</h3>
+                  {% if basic_settings_form.non_field_errors %}
+                  <p>
+                      {{ basic_settings_form.non_field_errors }}
+                  </p>
+                  {% endif %}
+                  <p>
+                      {{ basic_settings_form.name.errors }}
+                      {{ basic_settings_form.name.label_tag }}
+                      {{ basic_settings_form.name }}
+                  </p>
+               {% if request.user.is_staff %}
+                  <p>
+                      {{ basic_settings_form.header_html_text.errors }}
+                      {{ basic_settings_form.header_html_text.label_tag }}
+                      {{ basic_settings_form.header_html_text }}
+                      {{ basic_settings_form.header_html_text.help_text }}
+                  </p>
+               {% endif %}
+                  <p>
+                      {{ basic_settings_form.description.errors }}
+                      {{ basic_settings_form.description.label_tag }}
+                      {{ basic_settings_form.description }}
+                      {{ basic_settings_form.description.help_text }}
+                  </p>
+              <h3>{% trans 'Team Logo' %}</h3>
+              {% if basic_settings_form.logo.errors %}
+              <p class="error_list" id="logo-errors">
+                  {{ basic_settings_form.logo.errors }}
+              </p>
+              {% endif %}
+              {% if team.logo_thumbnail %}
+              <p class="avatar-container">
+                  <img class="team-logo" src="{{ team.logo_thumbnail }}"/>
+              </p>
+              {% endif %}
+              <p style="float: left; clear: both; height: 15px; padding-bottom: 25px;">
+                  <input type="file" id="id_logo" name="logo" size="6"/>
+                  <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
+                      <span><span class="plus"></span>{% trans 'Upload logo' %}</span>
+                  </button>
+              </p>                         
+               <h3>{% trans 'Team Intro Video' %}</h3>
+               <p>
+                  {% if team.video %}
+                      {% trans 'Current video' %}: <a href="{{ team.video.get_absolute_url }}">{{ team.video }}</a>
+                  {% endif %}
+                  {{ basic_settings_form.video_url.errors }}
+                  {{ basic_settings_form.video_url }} 
+                  {{ basic_settings_form.video_url.help_text }}                        
+               </p>
+               <h3>{% trans 'Application message' %}</h3>
+               <p>
+                  {{ basic_settings_form.application_text.errors }}
+                  {{ basic_settings_form.application_text }}
+                  {{ basic_settings_form.application_text.help_text }}
+               </p>
+               <h3>{% trans 'Page content' %}</h3>
+               <p>
+                   {{ basic_settings_form.page_content.errors }}
+                   {{ basic_settings_form.page_content }}
+                   {% trans "You can use" %} <a target="blank" href="http://daringfireball.net/projects/markdown/syntax">{% trans "markdown" %}</a>. 
+                   {% trans "This will replace Description. " %}
+               </p>                                                        
+          </div>
+          <div class="grid_3 omega">
+              <h3>{% trans 'Team Member Settings' %}</h3>
+                <p>
+                    <label>
+                        {% trans 'Who can join this team?' %}
+                    </label>
+                    {{ basic_settings_form.membership_policy.errors }}
+                    {{ basic_settings_form.membership_policy }}  
+                </p>
+                <p>
+                    <label>
+                        {% trans 'Is moderated?' %}
+                    </label>
+                    {{ basic_settings_form.is_moderated.errors }}
+                    {{ basic_settings_form.is_moderated }}  
+                </p>                  
+                <p>
+                    <label>
+                        {% trans 'Who can add videos to this team?' %}
+                    </label>
+                    {{ basic_settings_form.video_policy.errors }}
+                    {{ basic_settings_form.video_policy }}  
+                </p>
+                <h3>{% trans 'Team Privacy Settings' %}</h3>
+                <p class="checkbox">
+                    {{ basic_settings_form.is_visible.errors }}
+                    {{ basic_settings_form.is_visible }}
+                    {{ basic_settings_form.is_visible.label_tag }}
+                </p>
+          </div>
+      </div>
+      <div class="ft">
+          <button class="blue_button small"><span>{% trans 'Save Changes' %}</span></button>
+      </div>
+      </form>
+      {% else %}
+         {% trans 'You are not a manager of this team.' %}
+      {% endif %}  
+      </div>
+      
+      <div class="tab painel-projects" style="display:none">
+        projects
+        </div>
+<script>
+$(window).load(function(){
+    {% include "teams/settings-panel.js" %}
+});
+</script>
+
+<!-- templates -->
+<script id="IMAGE_PRELOADER" type="text/html">
+  <img  width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+</script>
+{% comment %}  Whatever is inside the verbatim tag does not run through
+django's var subtitution, so the final template is render as it's written bellow.
+This is needed, since it's for the js templating
+{% endcomment %}
+{% verbatim %}
+
+<script id="subMenuItem" type="text/html">
+  <a  class="blue_button small">{{ label }}</a>
+</script>
+
+<script id="projectPanel" type="text/html">
+  <div class="panel-project">
+    <a  class="blue_button small project-add">Add Project</a>
+    <ul class="projects listing">
+    </ul>
+  </div>
+</script>
+
+<script id="projectEditPanel" type="text/html">
+  <div class="project-edit-panel">
+    <form action="#">
+      <label for="name">Name</label>
+      <input type="text" name="name" value="{{name}}"/>
+      
+      <label for="name">Description</label>
+      <textarea  name="description"/>{{description}}</textarea>
+      <input type="hidden" value='{{pk}}' name="pk"/>  
+      <input type="hidden" value='{{order}}' name="order"/>  
+      <input type="hidden" value='{{slug}}' name="slug"/>  
+      <a class="red_button project-delete">Delete</a>a
+      <a class="blue_button project-save">Save</a>
+    </form>
+</div>
+</script>
+
+<script id="projectListItem" type="text/html">
+  <li>
+    <p>{{name}}</p>
+    <ul class="actions">
+      <li>
+        <a class="action-edit" href="#">Edit</a>
+      </li>
+    </ul>
+  </li>
+</script>
+
+{% endverbatim %}
+{% endblock %}

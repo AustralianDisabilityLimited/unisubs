@@ -157,10 +157,7 @@ class Team(models.Model):
     def get_site_url(self):
         return 'http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
     
-    @models.permalink
-    def get_edit_url(self):
-        return ('teams:edit', [self.slug])
-    
+
     def is_manager(self, user):
         if not user.is_authenticated():
             return False
@@ -383,8 +380,26 @@ class Team(models.Model):
             p.save()
             return p
 
+    def save(self, *args, **kwargs):
+        creating = self.pk is None
+        super(Team, self).save(*args, **kwargs)
+        if creating:
+            # make sure we create a default project
+            self.default_project
+
     
 
+class ProjectManager(models.Manager):
+
+    def for_team(self, team_identifier):
+        if hasattr(team_identifier,"pk"):
+            team = team_identifier
+        elif isinstance(team_identifier, int):
+            team = Team.objects.get(pk=team_identifier)
+        elif isinstance(team_identifier, str):
+            team = Team.objects.get(slug=team_identifier)
+        print "will exclude"    , team
+        return Project.objects.filter(team=team).exclude(name=Project.DEFAULT_NAME)
     
 class Project(models.Model):
     #: All tvs belong to a project, wheather the team has enabled them or not
@@ -396,13 +411,15 @@ class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(blank=True)
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=False)
     description = models.TextField(blank=True, null=True, max_length=2048)
     guidelines = models.TextField(blank=True, null=True, max_length=2048)
 
     slug = models.SlugField(default=DEFAULT_NAME)
     order = models.PositiveIntegerField(default=0)
 
+    objects = ProjectManager()
+    
     def __unicode__(self):
         return u"%s for team %s" % (self.name, self.team)
 
@@ -606,6 +623,12 @@ class TeamVideo(models.Model):
 
     def get_pending_moderation(self):
         return self.team.get_pending_moderation(self.video)
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, "project"):
+            self.project = self.team.default_project
+        super(TeamVideo, self).save(*args, **kwargs)
+        
 
 def team_video_save(sender, instance, created, **kwargs):
     update_one_team_video.delay(instance.id)

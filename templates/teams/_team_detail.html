@@ -4,7 +4,7 @@
     {% if team|is_team_member:user %}
         {% render_team_leave team %}
         <p style="clear: both; padding-top: 10px;">
-            <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
+            <a href="{% url teams:settings slug=team.slug %}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
         </p>
     {% else %}
         {% if team.is_open %}

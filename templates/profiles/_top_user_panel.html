@@ -42,7 +42,7 @@
                         <h4>{% trans "Team Management" %}</h4>
                         {% for t in user_teams %}
                         <li  {% if team == t %}class="active"{% endif %}>
-                            <a href="{{ t.get_edit_url }}">{{ t }}</a>
+                            <a href="{% url teams:settings slug=t.slug %}">{{ t }}</a>
                         </li>
                         {% endfor %}
                     </div>

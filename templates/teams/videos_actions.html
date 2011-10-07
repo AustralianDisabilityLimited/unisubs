@@ -13,7 +13,7 @@
     <h2>
         <a href="{{ team.get_absolute_url }}">{{ team }}</a>  
         {% if team|is_team_manager:user %}
-            (<a href="{{ team.get_edit_url }}">{% trans 'Edit Team' %}</a>)
+            (<a href="{% url teams:settings slug=team.slug %}">{% trans 'Edit Team' %}</a>)
         {% endif %}   
     </h2>
 </div>

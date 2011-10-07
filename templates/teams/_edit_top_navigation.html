@@ -2,7 +2,7 @@
 <a href="{{ team.get_absolute_url }}" class="heading_button">{% trans 'View Team' %}</a>
 <ul class="inline_tabs">
     <li {% if active == "settings" %} class="active"{% endif %}>
-        <a href="{{ team.get_edit_url }}">{% trans 'Settings' %}</a>
+        <a href="{% url teams:settings slug=team.slug %}">{% trans 'Settings' %}</a>
     </li>
     <li {% if active == "members" %} class="active"{% endif %}>
         <a href="{% url teams:edit_members team.slug %}">{% trans 'Members' %}<span class="badgy_out"><span class="badgy">{{ team.member_count }}</span></span></a>
@@ -17,5 +17,5 @@
     {% endswitch_feature %}
     <li {% if active == "application" %} class="active"{% endif %}>
         <a href="{% url teams:applications team.slug %}">{% trans 'Applicants' %}<span class="badgy_out"><span class="badgy">{{ team.applications_count }}</span></span></a>
-    </li>         
+    </li>
 </ul>

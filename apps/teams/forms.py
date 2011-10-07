@@ -23,7 +23,8 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import forms
-from teams.models import Team, TeamMember, TeamVideo
+from teams.models import Team, TeamMember, TeamVideo, Task
+from auth.models import CustomUser as User
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -342,3 +343,44 @@ class EditTeamFormAdmin(EditTeamForm):
                   'membership_policy', 'is_moderated', 'video_policy', 
                   'is_visible', 'video_url', 'application_text', 
                   'page_content')
+
+
+class TaskAssignForm(forms.Form):
+    task = forms.ModelChoiceField(queryset=Task.objects.all())
+    assignee = forms.ModelChoiceField(queryset=User.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        return super(TaskAssignForm, self).__init__(*args, **kwargs)
+
+
+    def clean_task(self):
+        task = self.cleaned_data['task']
+
+        # TODO: check that self.user has permission to assign the task
+
+        return task
+
+    def clean(self):
+        d = self.cleaned_data
+
+        task = d['task']
+        assignee = d['assignee']
+
+        # TODO: check that the assignee can be assigned to the given task
+
+        return d
+class TaskDeleteForm(forms.Form):
+    task = forms.ModelChoiceField(queryset=Task.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        return super(TaskDeleteForm, self).__init__(*args, **kwargs)
+
+
+    def clean_task(self):
+        task = self.cleaned_data['task']
+
+        # TODO: check that self.user has permission to delete the task
+
+        return task

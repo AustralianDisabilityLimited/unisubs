@@ -35,6 +35,7 @@ from utils.rpc import RpcRouter
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
 from teams.models import Team, TeamMember, Application, Project
+from teams.forms import TaskAssignForm, TaskDeleteForm
 from teams.project_forms import ProjectForm
 
 class TeamsApiClass(object):
@@ -149,13 +150,17 @@ class TeamsApiV2Class(object):
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given user, or unassign it if given null/None.'''
 
-        task = Task.objects.get(pk=task_id)
-        assignee = User.objects.get(pk=assignee_id) if assignee_id else None
+        form = TaskAssignForm(user, data={'task': task_id, 'assignee': assignee_id})
+        if form.is_valid():
+            task = Task.objects.get(pk=task_id)
+            assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
-        task.assignee = assignee
-        task.save()
+            task.assignee = assignee
+            task.save()
 
-        return task.to_dict()
+            return task.to_dict()
+        else:
+            return { 'success': False, 'errors': form.errors }
 
     def task_delete(self, task_id, user):
         '''Mark a task as deleted.
@@ -164,12 +169,16 @@ class TeamsApiV2Class(object):
         flagged and won't appear in further task listings.
 
         '''
-        task = Task.objects.get(pk=task_id)
+        form = TaskDeleteForm(user, data={'task': task_id})
+        if form.is_valid():
+            task = Task.objects.get(pk=task_id)
 
-        task.deleted = True
-        task.save()
+            task.deleted = True
+            task.save()
 
-        return task.to_dict()
+            return task.to_dict()
+        else:
+            return { 'success': False, 'errors': form.errors }
 
 
     def task_translate_assign(self, team_video_id, language, assignee_id, user):

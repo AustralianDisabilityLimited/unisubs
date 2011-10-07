@@ -942,6 +942,27 @@ class Workflow(models.Model):
         return u'Workflow for %s' % self.get_specific_target()
 
 
+    # Convenience functions for checking if a step of the workflow is enabled.
+    def _step_enabled(self, step):
+        return step != Workflow.PERM_IDS['Disabled']
+
+    @property
+    def subtitle_enabled(self):
+        return self._step_enabled(self.perm_subtitle)
+
+    @property
+    def translate_enabled(self):
+        return self._step_enabled(self.perm_translate)
+
+    @property
+    def review_enabled(self):
+        return self._step_enabled(self.perm_review)
+
+    @property
+    def approve_enabled(self):
+        return self._step_enabled(self.perm_approve)
+
+
     def to_dict(self):
         '''Return a dictionary representing this workflow.
 
@@ -1000,3 +1021,51 @@ class Task(models.Model):
                  'language': self.language if self.language else None,
                  'completed': True if self.completed else False, }
 
+
+    @property
+    def workflow(self):
+        '''Return the most specific workflow for this task's TeamVideo.'''
+        return Workflow.get_for_team_video(self.team_video)
+
+
+    def complete(self):
+        '''Mark as complete and return the next task in the process if applicable.'''
+        self.completed = datetime.datetime.now()
+
+        result = { 'Subtitle': self._complete_subtitle,
+                   'Translate': self._complete_translate,
+                   'Review': self._complete_review,
+                   'Approve': self._complete_review,
+                 }[Task.TASK_NAMES[self.type]]()
+
+        self.save()
+        return result
+
+    def _complete_subtitle(self):
+        # Normally we would create the next task in the sequence here, but since
+        # we don't create translation tasks ahead of time for efficieny reasons
+        # we simply do nothing.
+        return None
+
+    def _complete_translate(self):
+        if self.workflow.review_enabled:
+            task = Task(team=self.team, team_video=self.team_video,
+                        language=self.language, type=Task.TYPE_IDS['Review'])
+        else:
+            # The review step may be disabled.
+            # If so, we move directly to the approve step.
+            task = Task(team=self.team, team_video=self.team_video,
+                        language=self.language, type=Task.TYPE_IDS['Approve'])
+
+        task.save()
+        return task
+
+    def _complete_review(self):
+        if self.workflow.approve_enabled:
+            task = Task(team=self.team, team_video=self.team_video,
+                        language=self.language, type=Task.TYPE_IDS['Approve'])
+        task.save()
+        return task
+
+    def _complete_approve(self):
+        pass

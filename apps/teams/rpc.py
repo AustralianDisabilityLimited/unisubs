@@ -122,6 +122,42 @@ class TeamsApiV2Class(object):
         return task.to_dict()
 
 
+    def task_translate_assign(self, team_video_id, language, assignee_id, user):
+        '''Assign a translation task to the given user (or None).
+
+        This is special-cased from the normal assignment function because we
+        don't create translation tasks in advance -- it would be too wasteful.
+        The translation task will be created if it does not already exist.
+
+        '''
+        tv = TeamVideo.objects.get(pk=team_video_id)
+        task = Task.objects.get_or_create(team=tv.team, team_video=tv,
+                language=language, type=Task.TYPE_IDS['Translate'])
+        assignee = User.objects.get(pk=assignee_id) if assignee_id else None
+
+        task.assignee = assignee
+        task.save()
+
+        return task.to_dict()
+
+    def task_translate_delete(self, team_video_id, language, user):
+        '''Mark a translation task as deleted.
+
+        This is special-cased from the normal delete function because we don't
+        create translation tasks in advance -- it would be too wasteful.  The
+        translation task will be created if it does not already exist.
+
+        '''
+        tv = TeamVideo.objects.get(pk=team_video_id)
+        task = Task.objects.get_or_create(team=tv.team, team_video=tv,
+                language=language, type=Task.TYPE_IDS['Translate'])
+
+        task.deleted = True
+        task.save()
+
+        return task.to_dict()
+
+
     def workflow_get(self, team_id, project_id, team_video_id, user):
         if team_video_id:
             target_id, target_type = team_video_id, 'team_video'

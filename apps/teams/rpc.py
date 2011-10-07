@@ -131,7 +131,7 @@ class TeamsApiV2Class(object):
 
         '''
         tv = TeamVideo.objects.get(pk=team_video_id)
-        task = Task.objects.get_or_create(team=tv.team, team_video=tv,
+        task, created = Task.objects.get_or_create(team=tv.team, team_video=tv,
                 language=language, type=Task.TYPE_IDS['Translate'])
         assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
@@ -149,7 +149,7 @@ class TeamsApiV2Class(object):
 
         '''
         tv = TeamVideo.objects.get(pk=team_video_id)
-        task = Task.objects.get_or_create(team=tv.team, team_video=tv,
+        task, created = Task.objects.get_or_create(team=tv.team, team_video=tv,
                 language=language, type=Task.TYPE_IDS['Translate'])
 
         task.deleted = True
@@ -189,7 +189,6 @@ class TeamsApiV2Class(object):
         workflow.save()
 
         return workflow.to_dict()
-
 
 
 TeamsApiV2 = TeamsApiV2Class()

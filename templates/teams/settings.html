@@ -30,17 +30,12 @@
 
 
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="new-teams"{% endblock %}
 
 {% block title %}
     {{ team }} {% trans 'Settings' %} | Universal Subtitles
 {% endblock %}
 
-
-===================== new block 
-
-
-======================= end new block
 {% block settings_content %}
     <div class="hd">
         <h2>{{ team.name }}</h2>
@@ -175,20 +170,21 @@ $(window).load(function(){
 <script id="IMAGE_PRELOADER" type="text/html">
   <img  width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
 </script>
+{% comment %}  Whatever is inside the verbatim tag does not run through
+django's var subtitution, so the final template is render as it's written bellow.
+This is needed, since it's for the js templating
+{% endcomment %}
 {% verbatim %}
+
 <script id="subMenuItem" type="text/html">
-  
   <a  class="blue_button small">{{ label }}</a>
 </script>
 
-<script id="projectPanel" type="text/html">w
+<script id="projectPanel" type="text/html">
   <div class="panel-project">
     <a  class="blue_button small project-add">Add Project</a>
-    <table class="project_list">
-      <tbody>
-        
-      </tbody>
-    </table>
+    <ul class="projects listing">
+    </ul>
   </div>
 </script>
 
@@ -209,11 +205,15 @@ $(window).load(function(){
 </div>
 </script>
 
-<script id="projectRow" type="text/html">
-  <tr>
-    <td>{{name}} {{slug}}</td>
-    <td>Edit</td>
-  </tr>
+<script id="projectListItem" type="text/html">
+  <li>
+    <p>{{name}}</p>
+    <ul class="actions">
+      <li>
+        <a class="action-edit" href="#">Edit</a>
+      </li>
+    </ul>
+  </li>
 </script>
 
 {% endverbatim %}

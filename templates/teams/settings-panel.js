@@ -113,27 +113,22 @@ var ProjectPainel  = AsyncPainel.$extend({
     },
     addProject: function(pModel){
         var isNew = true;
-        console.log("pl", pModel.pk)
         _.each(this.projects, function(m){
             if (pModel.pk == m.pk ){
                 isNew = false;
             }
-            
         });
-        console.log(isNew )
         if (isNew){
             this.projects.push(pModel);
-            console.log("pusging with pk", pModel.pk)
         }
-        
     },
     renderProjectList: function(){
-        var projectListing = $("table", this.el);
-        $("tr", projectListing).remove();
+        var projectListing = $(".projects.listing", this.el);
+        $("li", projectListing).remove();
         console.log(this.projects)
         console.log(this.projects.length)
         _.each(this.projects, function(x){
-            var el = ich.projectRow(x);
+            var el = ich.projectListItem(x);
             projectListing.append(el);
         })
     },

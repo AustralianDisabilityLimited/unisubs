@@ -819,17 +819,36 @@ class Workflow(models.Model):
     project = models.ForeignKey(Project, blank=True, null=True)
     team_video = models.ForeignKey(TeamVideo, blank=True, null=True)
 
-    perm_subtitle = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='subtitle permissions')
-    perm_translate = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='translate permissions')
-    perm_review = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='review permission')
-    perm_approve = models.PositiveIntegerField(choices=PERM_CHOICES, verbose_name='approve permissions')
+    perm_subtitle = models.PositiveIntegerField(choices=PERM_CHOICES,
+            verbose_name='subtitle permissions', default=PERM_IDS['Public'])
+    perm_translate = models.PositiveIntegerField(choices=PERM_CHOICES,
+            verbose_name='translate permissions', default=PERM_IDS['Public'])
+    perm_review = models.PositiveIntegerField(choices=PERM_CHOICES,
+            verbose_name='review permission', default=PERM_IDS['Managers'])
+    perm_approve = models.PositiveIntegerField(choices=PERM_CHOICES,
+            verbose_name='approve permissions', default=PERM_IDS['Owner'])
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(auto_now=True, editable=False)
 
+    class Meta:
+        unique_together = ('team', 'project', 'team_video')
+
+
     @classmethod
-    def get_for_video(cls, team_video, workflows=None):
-        '''Return the most specific Workflow object for the given video.
+    def _get_target_team_id(cls, id, type):
+        if type == 'team_video':
+            return TeamVideo.objects.get(pk=id).team.id
+        elif type == 'project':
+            return Project.objects.get(pk=id).team.id
+        else:
+            return id
+
+    @classmethod
+    def get_for_target(cls, id, type, workflows=None):
+        '''Return the most specific Workflow for the given target.
+
+        If target object does not exist, None is returned.
 
         If workflows is given, it should be a QuerySet or List of all Workflows
         for the TeamVideo's team.  This will let you look it up yourself once
@@ -838,37 +857,82 @@ class Workflow(models.Model):
         If workflows is not given it will be looked up with one DB query.
 
         '''
+
         if not workflows:
-            workflows = list(Workflow.objects.filter(team=team_video.team))
+            team_id = Workflow._get_target_team_id(id, type)
+            workflows = list(Workflow.objects.filter(team=team_id))
 
         if not workflows:
             return None
 
-        video_specific = [w for w in workflows if w.team_video == team_video]
-        if video_specific:
-            return video_specific[0]
+        if type == 'team_video':
+            try:
+                return [w for w in workflows
+                        if w.team_video and w.team_video.id == id][0]
+            except IndexError:
+                # If there's no video-specific workflow for this video, there
+                # might be a workflow for its project, so we'll start looking
+                # for that instead.
+                try:
+                    team_video = TeamVideo.objects.get(pk=id)
+                    id, type = team_video.project.id, 'project'
+                except TeamVideo.DoesNotExist:
+                    return None
 
-        project_specific = [w for w in workflows
-                            if w.team_video.project == team_video.project]
-        if project_specific:
-            return project_specific[0]
+        if type == 'project':
+            try:
+                return [w for w in workflows
+                        if w.project and w.project.id == id and not w.team_video][0]
+            except IndexError:
+                # If there's no project-specific workflow for this project,
+                # there might be one for its team, so we'll fall through.
+                pass
 
-        return workflows[0]
+        return [w for w in workflows
+                if (not w.project) and (not w.team_video)][0]
+
 
     @classmethod
-    def add_to_videos(cls, team_videos):
+    def get_for_team_video(cls, team_video, workflows=None):
+        '''Return the most specific Workflow for the given team_video.
+
+        If workflows is given, it should be a QuerySet or List of all Workflows
+        for the TeamVideo's team.  This will let you look it up yourself once
+        and use it in many of these calls to avoid hitting the DB each time.
+
+        If workflows is not given it will be looked up with one DB query.
+
+        '''
+        return Workflow.get_for_target(team_video.id, 'team_video', workflows)
+
+    @classmethod
+    def get_for_project(cls, project, workflows=None):
+        '''Return the most specific Workflow for the given project.
+
+        If workflows is given, it should be a QuerySet or List of all Workflows
+        for the Project's team.  This will let you look it up yourself once
+        and use it in many of these calls to avoid hitting the DB each time.
+
+        If workflows is not given it will be looked up with one DB query.
+
+        '''
+        return Workflow.get_for_target(project.id, 'project', workflows)
+
+    @classmethod
+    def add_to_team_videos(cls, team_videos):
         '''Add the appropriate Workflow objects to each TeamVideo as .workflow.
 
         This will only perform one DB query, and it will add the most specific
         workflow possible to each TeamVideo.
+
         '''
         if not team_videos:
             return []
 
         workflows = list(Workflow.objects.filter(team=team_videos[0].team))
 
-        for team_video in team_videos:
-            team_video.workflow = Workflow.get_for_video(team_video, workflows)
+        for tv in team_videos:
+            tv.workflow = Workflow.get_for_team_video(team_video, workflows)
 
 
     def get_specific_target(self):
@@ -877,8 +941,22 @@ class Workflow(models.Model):
     def __unicode__(self):
         return u'Workflow for %s' % self.get_specific_target()
 
-    class Meta:
-        unique_together = ('team', 'project', 'team_video')
+
+    def to_dict(self):
+        '''Return a dictionary representing this workflow.
+
+        Useful for converting to JSON.
+
+        '''
+        return { 'id': self.id,
+                 'team': self.team.id if self.team else None,
+                 'project': self.project.id if self.project else None,
+                 'team_video': self.team_video.id if self.team_video else None,
+                 'permissions': {
+                    'perm_subtitle': Workflow.PERM_NAMES[self.perm_subtitle],
+                    'perm_translate': Workflow.PERM_NAMES[self.perm_translate],
+                    'perm_review': Workflow.PERM_NAMES[self.perm_review],
+                    'perm_approve': Workflow.PERM_NAMES[self.perm_approve], }, }
 
 
 class Task(models.Model):
@@ -896,10 +974,26 @@ class Task(models.Model):
     assignee = models.ForeignKey(User, blank=True, null=True)
     type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 
+    deleted = models.BooleanField(default=False)
+
     created = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(auto_now=True, editable=False)
     completed = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return u'%d' % self.id
+
+
+    def to_dict(self):
+        '''Return a dictionary representing this task.
+
+        Useful for converting to JSON.
+
+        '''
+        return { 'id': self.id,
+                 'team': self.team.id if self.team else None,
+                 'team_video': self.team_video.id if self.team_video else None,
+                 'type': Task.TYPE_NAMES[self.type],
+                 'assignee': self.assignee.id if self.assignee else None,
+                 'completed': True if self.completed else False, }
 

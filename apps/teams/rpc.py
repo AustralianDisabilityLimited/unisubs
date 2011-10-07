@@ -22,7 +22,8 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from teams.models import Team, TeamMember, Application
+from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
+from auth.models import CustomUser as User
 from django.utils.translation import ugettext as _
 from utils.rpc import Error, Msg
 from utils.rpc import RpcRouter
@@ -83,11 +84,80 @@ class TeamsApiClass(object):
 
 TeamsApi = TeamsApiClass()
 
+
 class TeamsApiV2Class(object):
     def test_api(self, message, user):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
 
+
+    def tasks_list(self, team_id, filters, user):
+        tasks = Task.objects.filter(team=team_id, deleted=False)
+
+        if 'type' in filters:
+            tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
+        if 'completed' in filters:
+            tasks = tasks.filter(completed__isnull=not filters['completed'])
+        if 'assignee' in filters:
+            tasks = tasks.filter(assignee=filters['assignee'])
+        if 'team_video' in filters:
+            tasks = tasks.filter(team_video=filters['team_video'])
+
+        return {'tasks': [t.to_dict() for t in tasks]}
+
+    def task_assign(self, task_id, assignee_id, user):
+        task = Task.objects.get(pk=task_id)
+        assignee = User.objects.get(pk=assignee_id) if assignee_id else None
+
+        task.assignee = assignee
+        task.save()
+
+        return task.to_dict()
+
+    def task_delete(self, task_id, user):
+        task = Task.objects.get(pk=task_id)
+
+        task.deleted = True
+        task.save()
+
+        return task.to_dict()
+
+
+    def workflow_get(self, team_id, project_id, team_video_id, user):
+        if team_video_id:
+            target_id, target_type = team_video_id, 'team_video'
+        elif project_id:
+            target_id, target_type = project_id, 'project'
+        else:
+            target_id, target_type = team_id, 'team'
+
+        return Workflow.get_for_target(target_id, target_type).to_dict()
+
+    def workflow_set_step(self, team_id, project_id, team_video_id, step, perm, user):
+        try:
+            workflow = Workflow.objects.get(team=team_id, project=project_id,
+                                            team_video=team_video_id)
+        except Workflow.DoesNotExist:
+            # We special case this because Django won't let us create new models
+            # with the IDs, we need to actually pass in the Model objects for
+            # the ForeignKey fields.
+            #
+            # Most of the time we won't need to do these three extra queries.
+
+            team = Team.objects.get(pk=team_id)
+            project = Project.objects.get(pk=project_id) if project_id else None
+            team_video = TeamVideo.objects.get(pk=team_video_id) if team_video_id else None
+
+            workflow = Workflow(team=team, project=project, team_video=team_video)
+
+        setattr(workflow, 'perm_%s' % step, Workflow.PERM_IDS[perm])
+        workflow.save()
+
+        return workflow.to_dict()
+
+
+
 TeamsApiV2 = TeamsApiV2Class()
+
 rpc_router = RpcRouter('teams:rpc_router', {
     'TeamsApi': TeamsApi,
     'TeamsApiV2': TeamsApiV2,

@@ -22,11 +22,14 @@ var AsyncPanel = Class.$extend({
 
 var ProjectModel = Class.$extend({
     __init__: function(data){
+        this.teamSlug = TEAM_SLUG;
+        this.update(data);
+    },
+    update: function(data){
         this.name = data.name;
         this.slug = data.slug;
         this.description = data.description;
         this.pk = data.pk;
-        this.teamSlug = TEAM_SLUG;
     }
 });
 
@@ -70,8 +73,8 @@ var ProjectEditPanel = Class.$extend({
         if (res && res.success){
             $.jGrowl(res.msg);
             if (res.obj){
-                var model = new ProjectModel(res.obj);
-                this.el.trigger(ON_PROJECT_SAVED, model);
+                this.model.update(res.obj);
+                this.el.trigger(ON_PROJECT_SAVED, this.model);
                 
             }
             // show errors

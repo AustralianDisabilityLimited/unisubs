@@ -30,7 +30,7 @@
 
 
 
-{% block body_attrs %}id="new-teams"{% endblock %}
+{% block body_attrs %}class="new-teams"{% endblock %}
 
 {% block title %}
     {{ team }} {% trans 'Settings' %} | Universal Subtitles
@@ -43,125 +43,23 @@
             {% include 'teams/_edit_top_navigation.html' %}
         {% endwith %}
     </div>
-    <div class="sub-settings-panel">
-    </div>
+
     <div class="painel-holder grid_9 alpha">
-      <div class="tab painel-basic" style="display:none">
-      {% if basic_settings_form %}
-      <form method='post' action="." class="edit-team" enctype="multipart/form-data">
-      <div class="grid_9">
-          {% csrf_token %}
-          <div class="grid_5 alpha">
-              <h3>{% trans 'Details About Your Team' %}</h3>
-                  {% if basic_settings_form.non_field_errors %}
-                  <p>
-                      {{ basic_settings_form.non_field_errors }}
-                  </p>
-                  {% endif %}
-                  <p>
-                      {{ basic_settings_form.name.errors }}
-                      {{ basic_settings_form.name.label_tag }}
-                      {{ basic_settings_form.name }}
-                  </p>
-               {% if request.user.is_staff %}
-                  <p>
-                      {{ basic_settings_form.header_html_text.errors }}
-                      {{ basic_settings_form.header_html_text.label_tag }}
-                      {{ basic_settings_form.header_html_text }}
-                      {{ basic_settings_form.header_html_text.help_text }}
-                  </p>
-               {% endif %}
-                  <p>
-                      {{ basic_settings_form.description.errors }}
-                      {{ basic_settings_form.description.label_tag }}
-                      {{ basic_settings_form.description }}
-                      {{ basic_settings_form.description.help_text }}
-                  </p>
-              <h3>{% trans 'Team Logo' %}</h3>
-              {% if basic_settings_form.logo.errors %}
-              <p class="error_list" id="logo-errors">
-                  {{ basic_settings_form.logo.errors }}
-              </p>
-              {% endif %}
-              {% if team.logo_thumbnail %}
-              <p class="avatar-container">
-                  <img class="team-logo" src="{{ team.logo_thumbnail }}"/>
-              </p>
-              {% endif %}
-              <p style="float: left; clear: both; height: 15px; padding-bottom: 25px;">
-                  <input type="file" id="id_logo" name="logo" size="6"/>
-                  <button  class="green_button small upload-picture" style="z-index: 1; padding-left: 10px;">
-                      <span><span class="plus"></span>{% trans 'Upload logo' %}</span>
-                  </button>
-              </p>                         
-               <h3>{% trans 'Team Intro Video' %}</h3>
-               <p>
-                  {% if team.video %}
-                      {% trans 'Current video' %}: <a href="{{ team.video.get_absolute_url }}">{{ team.video }}</a>
-                  {% endif %}
-                  {{ basic_settings_form.video_url.errors }}
-                  {{ basic_settings_form.video_url }} 
-                  {{ basic_settings_form.video_url.help_text }}                        
-               </p>
-               <h3>{% trans 'Application message' %}</h3>
-               <p>
-                  {{ basic_settings_form.application_text.errors }}
-                  {{ basic_settings_form.application_text }}
-                  {{ basic_settings_form.application_text.help_text }}
-               </p>
-               <h3>{% trans 'Page content' %}</h3>
-               <p>
-                   {{ basic_settings_form.page_content.errors }}
-                   {{ basic_settings_form.page_content }}
-                   {% trans "You can use" %} <a target="blank" href="http://daringfireball.net/projects/markdown/syntax">{% trans "markdown" %}</a>. 
-                   {% trans "This will replace Description. " %}
-               </p>                                                        
-          </div>
-          <div class="grid_3 omega">
-              <h3>{% trans 'Team Member Settings' %}</h3>
-                <p>
-                    <label>
-                        {% trans 'Who can join this team?' %}
-                    </label>
-                    {{ basic_settings_form.membership_policy.errors }}
-                    {{ basic_settings_form.membership_policy }}  
-                </p>
-                <p>
-                    <label>
-                        {% trans 'Is moderated?' %}
-                    </label>
-                    {{ basic_settings_form.is_moderated.errors }}
-                    {{ basic_settings_form.is_moderated }}  
-                </p>                  
-                <p>
-                    <label>
-                        {% trans 'Who can add videos to this team?' %}
-                    </label>
-                    {{ basic_settings_form.video_policy.errors }}
-                    {{ basic_settings_form.video_policy }}  
-                </p>
-                <h3>{% trans 'Team Privacy Settings' %}</h3>
-                <p class="checkbox">
-                    {{ basic_settings_form.is_visible.errors }}
-                    {{ basic_settings_form.is_visible }}
-                    {{ basic_settings_form.is_visible.label_tag }}
-                </p>
-          </div>
-      </div>
-      <div class="ft">
-          <button class="blue_button small"><span>{% trans 'Save Changes' %}</span></button>
-      </div>
-      </form>
-      {% else %}
-         {% trans 'You are not a manager of this team.' %}
-      {% endif %}  
-      </div>
-      
       <div class="tab painel-projects" style="display:none">
-        projects
-        </div>
+      </div>
+      {% include "teams/_basic_settings.html" %}
+
+    </div>
+
+    <div class=" grid_3 omega ">
+      <ul class="view-filter sub-settings-panel">
+      </ul>
+    </div>
+      
+    
 <script>
 $(window).load(function(){
+    //findme
     {% include "teams/settings-panel.js" %}
 });
 </script>
@@ -177,12 +75,12 @@ This is needed, since it's for the js templating
 {% verbatim %}
 
 <script id="subMenuItem" type="text/html">
-  <a  class="blue_button small">{{ label }}</a>
+  <li><a >{{label}}</a></li>
 </script>
 
 <script id="projectPanel" type="text/html">
   <div class="panel-project">
-    <a  class="blue_button small project-add">Add Project</a>
+    <a  class="button project-add">Add Project</a>
     <ul class="projects listing">
     </ul>
   </div>

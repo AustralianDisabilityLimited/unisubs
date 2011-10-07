@@ -22,11 +22,14 @@ var AsyncPanel = Class.$extend({
 
 var ProjectModel = Class.$extend({
     __init__: function(data){
+        this.teamSlug = TEAM_SLUG;
+        this.update(data);
+    },
+    update: function(data){
         this.name = data.name;
         this.slug = data.slug;
         this.description = data.description;
         this.pk = data.pk;
-        this.teamSlug = TEAM_SLUG;
     }
 });
 
@@ -84,8 +87,8 @@ var ProjectEditPanel = Class.$extend({
         if (res && res.success){
             $.jGrowl(res.msg);
             if (res.obj){
-                var model = new ProjectModel(res.obj);
-                this.el.trigger(ON_PROJECT_SAVED, model);
+                this.model.update(res.obj);
+                this.el.trigger(ON_PROJECT_SAVED, this.model);
                 
             }
             // show errors
@@ -104,6 +107,18 @@ var ProjectEditPanel = Class.$extend({
     
 });
 
+var ProjectListItem = Class.$extend({
+    __init__:function(model){
+        var vel = this.el = ich.projectListItem(model);
+        this.model = model;
+        $("a", this.el).click(function(e){
+            e.preventDefault();
+            vel.trigger("onEditRequested", model)
+            return false;
+        })
+    },
+
+})
 var ProjectSelectionButton = Class.$extend({
     __init__: function(pModel){
         this.model = pModel;
@@ -116,6 +131,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onProjectListLoaded = _.bind(this.onProjectListLoaded, this);
         this.onNewProjectClicked = _.bind(this.onNewProjectClicked, this);
         this.onProjectSaved = _.bind(this.onProjectSaved, this);
+        this.onEditRequested = _.bind(this.onEditRequested, this);
         this.el = ich.projectPanel();
         $("a.project-add", this.el).click(this.onNewProjectClicked);
         scope = this;
@@ -138,9 +154,17 @@ var ProjectPanel  = AsyncPanel.$extend({
         var projectListing = $(".projects.listing", this.el);
         $("li", projectListing).remove();
         _.each(this.projects, function(x){
-            var el = ich.projectListItem(x);
-            projectListing.append(el);
-        })
+            var item = new ProjectListItem(x)
+            projectListing.append(item.el);
+            item.el.bind("onEditRequested", this.onEditRequested)
+        }, this);
+    },
+    onEditRequested: function(e, model){
+        e.preventDefault();
+        this.projectEditPanel  = new ProjectEditPanel(model);
+        this.el.prepend(this.projectEditPanel.el);
+        this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
+        return false;
     },
     onProjectListLoaded: function(data){
         _.each(data, function(x){

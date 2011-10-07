@@ -30,6 +30,20 @@ var ProjectModel = Class.$extend({
     }
 });
 
+var TaskModel = Class.$extend({
+    __init__: function(data) {
+        this.pk = data.pk;
+        this.language = data.language;
+        this.languageDisplay = data.language_display;
+        this.teamVideo = data.team_video;
+        this.teamVideoDisplay = data.team_video_display;
+        this.assignee = data.assignee;
+        this.completed = data.completed;
+        this.type = data.completed;
+        this.teamSlug = TEAM_SLUG;
+    }
+});
+
 var ProjectEditPanel = Class.$extend({
      __init__: function(pModel){
          this.model = pModel;
@@ -151,6 +165,41 @@ var ProjectPanel  = AsyncPanel.$extend({
     }
 });
 
+var TasksPanel  = AsyncPanel.$extend({
+    __init__: function() {
+        this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
+        this.el = ich.tasksPanel();
+        this.tasks = [];
+        TeamsApiV2.tasks_list(TEAM_SLUG, {}, this.onTasksListLoaded);
+    },
+    addTask: function(tModel){
+        var isNew = true;
+        _.each(this.tasks, function(m){
+            if (tModel.pk == m.pk ){
+                isNew = false;
+            }
+        });
+        if (isNew) {
+            this.tasks.push(tModel);
+        }
+    },
+    renderTasksList: function(){
+        var tasksListing = $(".tasks.listing", this.el);
+
+        $("li", tasksListing).remove();
+
+        _.each(this.tasks, function(t) {
+            tasksListing.append(ich.tasksListItem(t));
+        });
+    },
+    onTasksListLoaded: function(data) {
+        _.each(data, function(t) {
+            this.addTask(new TaskModel(t));
+        }, this);
+        this.renderTasksList();
+    }
+});
+
 var TabMenuItem = Class.$extend({
     __init__: function (data){
         this.el = ich.subMenuItem(data)[0];
@@ -224,10 +273,10 @@ function boostrapTabs(){
         {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
         {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:null},
         {label:"Display Settings", panelSelector:".panel-display", klass:null},
-        {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel}
-        
-    ]
-    var viewer = new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR)) ;
+        {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel},
+        {label:"Tasks", panelSelector:".panel-tasks", klass:TasksPanel}
+    ];
+    var viewer = new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR));
     viewer.openDefault();
     
 }

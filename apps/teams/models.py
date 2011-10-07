@@ -38,6 +38,7 @@ from apps.videos.models import SubtitleLanguage
 from utils.panslugify import pan_slugify
 from haystack.query import SQ
 from haystack import site
+from utils.translation import SUPPORTED_LANGUAGES_DICT
 import datetime 
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -992,7 +993,7 @@ class Workflow(models.Model):
         Useful for converting to JSON.
 
         '''
-        return { 'id': self.id,
+        return { 'pk': self.id,
                  'team': self.team.id if self.team else None,
                  'project': self.project.id if self.project else None,
                  'team_video': self.team_video.id if self.team_video else None,
@@ -1036,12 +1037,15 @@ class Task(models.Model):
         Useful for converting to JSON.
 
         '''
-        return { 'id': self.id,
+        return { 'pk': self.id,
                  'team': self.team.id if self.team else None,
                  'team_video': self.team_video.id if self.team_video else None,
+                 'team_video_display': unicode(self.team_video) if self.team_video else None,
                  'type': Task.TYPE_NAMES[self.type],
                  'assignee': self.assignee.id if self.assignee else None,
                  'language': self.language if self.language else None,
+                 'language_display': SUPPORTED_LANGUAGES_DICT[self.language]
+                                     if self.language else None,
                  'completed': True if self.completed else False, }
 
 

@@ -123,7 +123,7 @@ class TeamsApiV2Class(object):
 
 
 
-    def tasks_list(self, team_id, filters, user):
+    def tasks_list(self, team_slug, filters, user):
         '''List tasks for the given team, optionally filtered.
 
         `filters` should be an object/dict with zero or more of the following keys:
@@ -134,7 +134,7 @@ class TeamsApiV2Class(object):
         * team_video: team video ID as an integer
 
         '''
-        tasks = Task.objects.filter(team=team_id, deleted=False)
+        tasks = Task.objects.filter(team__slug=team_slug, deleted=False)
 
         if 'type' in filters:
             tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
@@ -145,7 +145,7 @@ class TeamsApiV2Class(object):
         if 'team_video' in filters:
             tasks = tasks.filter(team_video=filters['team_video'])
 
-        return {'tasks': [t.to_dict() for t in tasks]}
+        return [t.to_dict() for t in tasks]
 
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given user, or unassign it if given null/None.'''
@@ -220,19 +220,20 @@ class TeamsApiV2Class(object):
         return task.to_dict()
 
 
-    def workflow_get(self, team_id, project_id, team_video_id, user):
+    def workflow_get(self, team_slug, project_id, team_video_id, user):
         if team_video_id:
             target_id, target_type = team_video_id, 'team_video'
         elif project_id:
             target_id, target_type = project_id, 'project'
         else:
-            target_id, target_type = team_id, 'team'
+            team = Team.objects.get(slug=team_slug)
+            target_id, target_type = team.id, 'team'
 
         return Workflow.get_for_target(target_id, target_type).to_dict()
 
-    def workflow_set_step(self, team_id, project_id, team_video_id, step, perm, user):
+    def workflow_set_step(self, team_slug, project_id, team_video_id, step, perm, user):
         try:
-            workflow = Workflow.objects.get(team=team_id, project=project_id,
+            workflow = Workflow.objects.get(team__slug=team_slug, project=project_id,
                                             team_video=team_video_id)
         except Workflow.DoesNotExist:
             # We special case this because Django won't let us create new models
@@ -241,7 +242,7 @@ class TeamsApiV2Class(object):
             #
             # Most of the time we won't need to do these three extra queries.
 
-            team = Team.objects.get(pk=team_id)
+            team = Team.objects.get(slug=team_slug)
             project = Project.objects.get(pk=project_id) if project_id else None
             team_video = TeamVideo.objects.get(pk=team_video_id) if team_video_id else None
 

@@ -100,7 +100,7 @@ This is needed, since it's for the js templating
       <a class="red_button project-delete">Delete</a>a
       <a class="blue_button project-save">Save</a>
     </form>
-</div>
+  </div>
 </script>
 
 <script id="projectListItem" type="text/html">
@@ -112,6 +112,34 @@ This is needed, since it's for the js templating
       </li>
     </ul>
   </li>
+</script>
+
+<script id="tasksPanel" type="text/html">
+    <div class="panel-tasks">
+        <ul class="tasks listing">
+        </ul>
+    </div>
+</script>
+
+<script id="tasksListItem" type="text/html">
+    <li>
+        <p>
+            {{ teamVideoDisplay }}<br/>
+            <span>
+                {{ #languageDisplay}}
+                    {{ languageDisplay }} subtitles
+                {{ /languageDisplay}}
+                {{ ^languageDisplay}}
+                    Transcription Needed
+                {{ /languageDisplay}}
+            </span>
+        </p>
+        <ul class="actions">
+            <li>
+                <a class="action-edit" href="#">Edit</a>
+            </li>
+        </ul>
+    </li>
 </script>
 
 {% endverbatim %}

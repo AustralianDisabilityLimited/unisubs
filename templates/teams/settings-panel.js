@@ -1,13 +1,13 @@
 
 var ACTIVE_CLASS  =- "current";
-var PAINEL_MARKER = "painel-";
+var PANEL_MARKER = "panel-";
 
 var MENU_SELECTOR = ".sub-settings-panel";
-var CONTAINER_SELECTOR = ".painel-holder";
+var CONTAINER_SELECTOR = ".panel-holder";
 var TEAM_SLUG = "{{team.slug}}";
 var ON_PROJECT_SAVED = "onProjectSaved";
 
-var AsyncPainel = Class.$extend({
+var AsyncPanel = Class.$extend({
     load: function (url){
         var oldEl = $(this.el).children().remove();
         $(this.el).innerHTML(icanhaz.IMAGE_PRELOADER);
@@ -97,7 +97,7 @@ var ProjectSelectionButton = Class.$extend({
     }
 });
 
-var ProjectPainel  = AsyncPainel.$extend({
+var ProjectPanel  = AsyncPanel.$extend({
     __init__: function(){
         this.onProjectListLoaded = _.bind(this.onProjectListLoaded, this);
         this.onNewProjectClicked = _.bind(this.onNewProjectClicked, this);
@@ -199,7 +199,7 @@ var TabViewer = Class.$extend({
             this.currentItem.showPanel(false);
             this.currentItem.markActive(false);
             if (this.currentKlass){
-                this.currentKlass.hide();
+                this.currentKlass.el.hide();
             }
         }
         _.each(this.menuItems, function(x){
@@ -221,10 +221,10 @@ var TabViewer = Class.$extend({
     
 function boostrapTabs(){
     var buttons = [
-        {label:"Basic Settings", painelSelector:".painel-basic", klass:null},
-        {label:"Guidelines and messages", painelSelector:".painel-guidelines", klass:null},
-        {label:"Display Settings", painelSelector:".painel-display", klass:null},
-        {label:"Projects", painelSelector:".painel-projects", klass:ProjectPainel}
+        {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
+        {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:null},
+        {label:"Display Settings", panelSelector:".panel-display", klass:null},
+        {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel}
         
     ]
     var viewer = new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR)) ;

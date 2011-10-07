@@ -233,12 +233,14 @@ class AddTeamVideosFromFeedForm(AddFromFeedForm):
         videos = super(AddTeamVideosFromFeedForm, self).save(*args, **kwargs)
 
         team_videos = []
+        project = self.team.default_project
         for video, video_created in videos:
             try:
                 tv = TeamVideo.objects.get(video=video, team=self.team)
                 tv_created = False
             except TeamVideo.DoesNotExist:
-                tv = TeamVideo(video=video, team=self.team, added_by=self.user)
+                tv = TeamVideo(video=video, team=self.team, added_by=self.user,
+                               project=project)
                 tv.save()
                 tv_created = True
             team_videos.append((tv, tv_created))

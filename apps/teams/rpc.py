@@ -24,9 +24,18 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
 from auth.models import CustomUser as User
+
+from django.shortcuts import get_object_or_404
+
 from django.utils.translation import ugettext as _
+from django.forms.models import model_to_dict
 from utils.rpc import Error, Msg
 from utils.rpc import RpcRouter
+
+from icanhaz.projects_decorators import raise_forbidden_project
+from icanhaz.projects import can_edit_project
+from teams.models import Team, TeamMember, Application, Project
+from teams.project_forms import ProjectForm
 
 class TeamsApiClass(object):
 
@@ -85,9 +94,32 @@ class TeamsApiClass(object):
 TeamsApi = TeamsApiClass()
 
 
+def _user_can_edit_project(team_slug, project_pk, user):
+    """
+    Ideally we could use the decorator at projects_decorators,
+    but since the magic rpc already messes with the argument order
+    and namins, we'd end up using args and kwargs, therefore loosing
+    all the fun. damn rpc.
+    """
+    team = get_object_or_404(Team, slug=team_slug)
+    project = None
+    if project_pk is not None:
+        project = get_object_or_404(Project, team=team, pk=project_pk)
+
+    if not can_edit_project(user, team, project):
+        return raise_forbidden_project(request)
+    return team, project
+
+def _project_to_dict(p):
+    d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk"])
+    d.update({"pk":p.pk})
+    return d
+    
+    
 class TeamsApiV2Class(object):
     def test_api(self, message, user):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
+
 
 
     def tasks_list(self, team_id, filters, user):
@@ -191,6 +223,43 @@ class TeamsApiV2Class(object):
         return workflow.to_dict()
 
 
+    def project_list(self, team_slug,  project_pk, user):
+        team, project = _user_can_edit_project(team_slug, project_pk, user)
+        project_objs = []
+        for p in Project.objects.for_team(team):
+            project_objs.append(_project_to_dict(p))
+        return project_objs
+
+    def project_edit(self, team_slug, project_pk, name,
+                     slug, description, order, user):
+        team, project = _user_can_edit_project(team_slug, project_pk, user)
+        # insert a new project as the last one
+        if bool(order):
+            num_projects = team.project_set.exclude(pk=project_pk).count()
+            order = num_projects    
+        form = ProjectForm(instance=project, data=dict(
+                name=name, 
+                description=description,
+                slug=slug, 
+                pk=project and project.pk,
+                order=order,
+                ))
+        if form.is_valid():
+            p = form.save(commit=False)
+            p.team = team
+            p.save()
+            return dict(
+                success = True,
+                msg = _("The project %s has been saved" % (p.name)),
+                obj = _project_to_dict(p)
+            )
+        else:
+             return dict(
+                 success=False,
+                 msg = "Please correct the errors bellow",
+                 errors = form.errors
+                 )   
+                
 
 TeamsApiV2 = TeamsApiV2Class()
 

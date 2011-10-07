@@ -34,7 +34,7 @@ urlpatterns = patterns('teams.views',
     url(r'^router/api/$', rpc_router.api, name='rpc_api'),
     url('^invite/accept/(?P<invite_pk>\d+)/$', 'accept_invite', name='accept_invite'),
     url('^invite/deny/(?P<invite_pk>\d+)/$', 'accept_invite', {'accept': False}, name='deny_invite'),
-    url('^edit/(?P<slug>[-\w]+)/$', 'edit', name='edit'),
+    url('^edit/(?P<slug>[-\w]+)/$', 'team_settings', name='settings'),
     url('^complete/(?P<slug>[-\w]+)/$', 'completed_videos', name='completed_videos'),
     url('^join_team/(?P<slug>[-\w]+)/$', 'join_team', name='join_team'),
     url('^leave_team/(?P<slug>[-\w]+)/$', 'leave_team', name='leave_team'),                       
@@ -54,6 +54,7 @@ urlpatterns = patterns('teams.views',
     url('^(?P<slug>[-\w]+)/(?P<is_debugging>debug/)?$', 'detail', name='detail'),
     url('^(?P<slug>[-\w]+)/members/$', 'detail_members', name='detail_members'),
     url('^(?P<slug>[-\w]+)/videos_actions/$', 'videos_actions', name='videos_actions'),
+
 )
 
 urlpatterns += patterns('',

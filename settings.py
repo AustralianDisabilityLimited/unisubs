@@ -800,6 +800,16 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "files": JS_MODERATION_DASHBOARD,
     },
+    "js-teams-settings-panel":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "closure_deps": "js/closure-dependencies.js",
+        "files": (
+            "js/libs/ICanHaz.js",
+            "js/libs/classy.js",
+            "js/libs/underscore.js",
+         )
+    },
     "debug-embed-js": {
         "type": "js",
         "optimizations": "WHITESPACE_ONLY",

@@ -18,6 +18,18 @@
     }, 
     {
         "pk": 1, 
+        "model": "teams.project", 
+        "fields": {
+            "name": "_root", 
+            "description": "Team for testing", 
+            "created": "2010-11-11 10:52:09", 
+            "modified": "2010-11-11 10:52:09", 
+            "team": 1,
+            "slug": "_root"
+        }
+    }, 
+    {
+        "pk": 1, 
         "model": "teams.teammember", 
         "fields": {
             "user": 9998, 
@@ -54,7 +66,8 @@
             "team": 1, 
             "thumbnail": "", 
             "added_by": 9998,
-            "created": "2010-11-11 10:52:09"
+            "created": "2010-11-11 10:52:09",
+            "project": 1
         }
     },
     {
@@ -68,7 +81,8 @@
             "team": 1, 
             "thumbnail": "", 
             "added_by": 9998,
-            "created": "2010-11-11 10:52:09"
+            "created": "2010-11-11 10:52:09",
+            "project": 1
         }
     },
     {
@@ -82,7 +96,8 @@
             "team": 1, 
             "thumbnail": "", 
             "added_by": 9998,
-            "created": "2010-11-11 10:52:09"
+            "created": "2010-11-11 10:52:09",
+            "project": 1
         }
     }            
 ]

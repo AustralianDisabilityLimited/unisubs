@@ -31,6 +31,7 @@ from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.conf import settings
 from django.views.generic.list_detail import object_list
@@ -276,16 +277,16 @@ def create(request):
         if form.is_valid():
             team = form.save(user)
             messages.success(request, _('Your team has been created. Review or edit its information below.'))
-            return redirect(team.get_edit_url())
+            return redirect(reverse("teams:settings", kwargs={"slug":team.slug}))
     else:
         form = CreateTeamForm(request.user)
     return {
         'form': form
     }
 
-@render_to('teams/edit.html')
+@render_to('teams/settings.html')
 @login_required
-def edit(request, slug):
+def team_settings(request, slug):
     team = Team.get(slug, request.user)
 
     if not team.is_member(request.user):
@@ -304,14 +305,16 @@ def edit(request, slug):
         if form.is_valid():
             form.save()
             messages.success(request, _(u'Your changes have been saved'))
-            return redirect(team.get_edit_url())
+            return redirect(reverse("teams:settings", kwargs={"slug":team.slug}))
     else:
         if request.user.is_staff:
             form = EditTeamFormAdmin(instance=team)
         else:
             form = EditTeamForm(instance=team)
+
+    print form        
     return {
-        'form': form,
+        'basic_settings_form': form,
         'team': team
     }
 

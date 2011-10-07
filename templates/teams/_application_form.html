@@ -35,7 +35,7 @@
 <script type="text/javascript">
         $('#application-form-container button').click(function(){
             var $t = $('#application-form-container textarea');
-            TeamsApi.create_application($(this).attr('team_id'), $t.val(), function(response){
+        TeamsApi.create_application($(this).attr('team_id'), $t.val(), function(response){
                 if (response.error){
                     $.jGrowl.error(response.error);
                 }else{

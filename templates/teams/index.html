@@ -95,7 +95,7 @@
                         {% endif %}
                     {% endif %}
                     {% if team|is_team_member:user and team|is_team_manager:user%}
-                        <a href="{{ team.get_edit_url }}" class="blue_button small">{% trans 'Edit' %}</a>
+                        <a href="{% url teams:settings slug=team.slug %}" class="blue_button small">{% trans 'Edit' %}</a>
                     {% endif %}
                     {% if team|is_team_member:user %}
                         {% render_team_leave team %}

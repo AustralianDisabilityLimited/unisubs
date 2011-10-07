@@ -40,10 +40,22 @@ var TaskModel = Class.$extend({
         this.languageDisplay = data.language_display;
         this.teamVideo = data.team_video;
         this.teamVideoDisplay = data.team_video_display;
+        this.teamVideoUrl = data.team_video_url;
         this.assignee = data.assignee;
         this.completed = data.completed;
-        this.type = data.completed;
+        this.type = data.type;
         this.teamSlug = TEAM_SLUG;
+        this.steps = function() {
+            var step = { 'Subtitle': 0,
+                         'Translate': 1,
+                         'Review': 2,
+                         'Approve': 3
+            }[this.type];
+
+            return _.map(_.range(0, 4), function(i) {
+                return { 'done': i < step ? true : false };
+            });
+        };
     }
 });
 

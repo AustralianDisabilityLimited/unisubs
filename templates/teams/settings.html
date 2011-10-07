@@ -124,7 +124,8 @@ This is needed, since it's for the js templating
 <script id="tasksListItem" type="text/html">
     <li>
         <p>
-            {{ teamVideoDisplay }}<br/>
+            <a href="{{ teamVideoUrl }}">{{ teamVideoDisplay }}</a>
+            <br/>
             <span>
                 {{ #languageDisplay}}
                     {{ languageDisplay }} subtitles
@@ -133,6 +134,16 @@ This is needed, since it's for the js templating
                     Transcription Needed
                 {{ /languageDisplay}}
             </span>
+        </p>
+        <p class="done">
+            {{ #steps }}
+                {{ #done }}
+                    &#x2611;
+                {{ /done }}
+                {{ ^done }}
+                    &#x2610;
+                {{ /done }}
+            {{ /steps }}
         </p>
         <ul class="actions">
             <li>

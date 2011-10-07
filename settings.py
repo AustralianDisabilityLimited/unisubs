@@ -812,3 +812,5 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
+    INSTALLED_APPS += ("api",)

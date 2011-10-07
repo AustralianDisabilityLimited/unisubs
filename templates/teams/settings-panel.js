@@ -1,14 +1,13 @@
 
-var ACTIVE_CLASS  =- "active";
-var INACTIVE_CLASS  =- "inactive";
-var PAINEL_MARKER = "painel-";
+var ACTIVE_CLASS  =- "current";
+var PANEL_MARKER = "panel-";
 
 var MENU_SELECTOR = ".sub-settings-panel";
-var CONTAINER_SELECTOR = ".painel-holder";
+var CONTAINER_SELECTOR = ".panel-holder";
 var TEAM_SLUG = "{{team.slug}}";
 var ON_PROJECT_SAVED = "onProjectSaved";
 
-var AsyncPainel = Class.$extend({
+var AsyncPanel = Class.$extend({
     load: function (url){
         var oldEl = $(this.el).children().remove();
         $(this.el).innerHTML(icanhaz.IMAGE_PRELOADER);
@@ -55,7 +54,6 @@ var ProjectEditPanel = Class.$extend({
     onSaveClicked: function(e){
         e.preventDefault();
         var values = this.getValuesFromForm($("form", this.el));
-        console.log(values);
         TeamsApiV2.project_edit(
             TEAM_SLUG,
             values.pk,
@@ -80,7 +78,7 @@ var ProjectEditPanel = Class.$extend({
         }else{
             $.jGrowl.error(data.result.message);
             if(data.result && data.result.errors){
-                console.log(data.result.errors)
+
             }
         }
     },
@@ -99,7 +97,7 @@ var ProjectSelectionButton = Class.$extend({
     }
 });
 
-var ProjectPainel  = AsyncPainel.$extend({
+var ProjectPanel  = AsyncPanel.$extend({
     __init__: function(){
         this.onProjectListLoaded = _.bind(this.onProjectListLoaded, this);
         this.onNewProjectClicked = _.bind(this.onNewProjectClicked, this);
@@ -125,8 +123,6 @@ var ProjectPainel  = AsyncPainel.$extend({
     renderProjectList: function(){
         var projectListing = $(".projects.listing", this.el);
         $("li", projectListing).remove();
-        console.log(this.projects)
-        console.log(this.projects.length)
         _.each(this.projects, function(x){
             var el = ich.projectListItem(x);
             projectListing.append(el);
@@ -146,7 +142,6 @@ var ProjectPainel  = AsyncPainel.$extend({
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
         return false;
     },
-
     onProjectSaved: function(e, p){
         this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
         this.projectEditPanel.el.remove();
@@ -159,6 +154,7 @@ var ProjectPainel  = AsyncPainel.$extend({
 var TabMenuItem = Class.$extend({
     __init__: function (data){
         this.el = ich.subMenuItem(data)[0];
+        this.buttonEl = $("a", this.el)[0];
         this.klass = data.klass;
         this.panelEl = $(data.painelSelector);
     },
@@ -166,7 +162,7 @@ var TabMenuItem = Class.$extend({
         if (isActive){
             $(this.el).addClass(ACTIVE_CLASS);
         }else{
-            $(this.el).removeClass(INACTIVE_CLASS);
+            $(this.el).removeClass(ACTIVE_CLASS);
         }
     },
     showPanel: function(shows){
@@ -175,13 +171,13 @@ var TabMenuItem = Class.$extend({
             if(this.klass){
                 return  new this.klass();
             }
-            
         }else{
             $(this.panelEl).hide();
         }
         return null;
     }
-})
+});
+
 var TabViewer = Class.$extend({
     __init__: function(buttons, menuContainer, panelContainer){
         this.menuItems = _.map(buttons, function(x){
@@ -193,7 +189,9 @@ var TabViewer = Class.$extend({
         $(menuContainer).click(_.bind(this.onClick, this));
         this.panelContainer = panelContainer;
     },
-
+    openDefault: function(){
+        $(this.menuItems[0].buttonEl).trigger("click");
+    },
     onClick: function(e){
         e.preventDefault();
         var scope = this;
@@ -201,14 +199,17 @@ var TabViewer = Class.$extend({
             this.currentItem.showPanel(false);
             this.currentItem.markActive(false);
             if (this.currentKlass){
-                this.currentKlass.hide();
+                this.currentKlass.el.hide();
             }
         }
         _.each(this.menuItems, function(x){
-            if (x.el == e.target){
+            if (x.buttonEl == e.target){
                 x.markActive(true);
                 this.currentKlass = x.showPanel(true);
-                this.panelContainer.append(this.currentKlass.el);
+                if (this.currentKlass){
+                    this.panelContainer.append(this.currentKlass.el);
+                }
+                
                 scope.currentItem = x;
             }
 
@@ -220,13 +221,15 @@ var TabViewer = Class.$extend({
     
 function boostrapTabs(){
     var buttons = [
-        {label:"Basic Settings", painelSelector:".painel-basic", klass:null},
-        {label:"Guidelines and messages", painelSelector:".painel-guidelines", klass:null},
-        {label:"Display Settings", painelSelector:".painel-display", klass:null},
-        {label:"Projects", painelSelector:".painel-projects", klass:ProjectPainel}
+        {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
+        {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:null},
+        {label:"Display Settings", panelSelector:".panel-display", klass:null},
+        {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel}
         
     ]
-    new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR)) ;
+    var viewer = new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR)) ;
+    viewer.openDefault();
+    
 }
 
 boostrapTabs();

@@ -969,10 +969,12 @@ class Task(models.Model):
     TYPE_NAMES = dict(TYPE_CHOICES)
     TYPE_IDS = dict([choice[::-1] for choice in TYPE_CHOICES])
 
+    type = models.PositiveIntegerField(choices=TYPE_CHOICES)
+
     team = models.ForeignKey(Team)
     team_video = models.ForeignKey(TeamVideo)
+    team_video_language = models.ForeignKey(TeamVideoLanguage, blank=True, null=True)
     assignee = models.ForeignKey(User, blank=True, null=True)
-    type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 
     deleted = models.BooleanField(default=False)
 

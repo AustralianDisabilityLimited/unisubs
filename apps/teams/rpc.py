@@ -91,6 +91,16 @@ class TeamsApiV2Class(object):
 
 
     def tasks_list(self, team_id, filters, user):
+        '''List tasks for the given team, optionally filtered.
+
+        `filters` should be an object/dict with zero or more of the following keys:
+
+        * type: a string describing the type of task. 'Subtitle', 'Translate', etc.
+        * completed: true or false
+        * assignee: user ID as an integer
+        * team_video: team video ID as an integer
+
+        '''
         tasks = Task.objects.filter(team=team_id, deleted=False)
 
         if 'type' in filters:
@@ -105,6 +115,8 @@ class TeamsApiV2Class(object):
         return {'tasks': [t.to_dict() for t in tasks]}
 
     def task_assign(self, task_id, assignee_id, user):
+        '''Assign a task to the given user, or unassign it if given null/None.'''
+
         task = Task.objects.get(pk=task_id)
         assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
@@ -114,6 +126,12 @@ class TeamsApiV2Class(object):
         return task.to_dict()
 
     def task_delete(self, task_id, user):
+        '''Mark a task as deleted.
+
+        The task will not be physically deleted from the database, but will be
+        flagged and won't appear in further task listings.
+
+        '''
         task = Task.objects.get(pk=task_id)
 
         task.deleted = True
@@ -123,7 +141,7 @@ class TeamsApiV2Class(object):
 
 
     def task_translate_assign(self, team_video_id, language, assignee_id, user):
-        '''Assign a translation task to the given user (or None).
+        '''Assign a translation task to the given user, or unassign it if given null/None.
 
         This is special-cased from the normal assignment function because we
         don't create translation tasks in advance -- it would be too wasteful.
@@ -146,6 +164,9 @@ class TeamsApiV2Class(object):
         This is special-cased from the normal delete function because we don't
         create translation tasks in advance -- it would be too wasteful.  The
         translation task will be created if it does not already exist.
+
+        The task will not be physically deleted from the database, but will be
+        flagged and won't appear in further task listings.
 
         '''
         tv = TeamVideo.objects.get(pk=team_video_id)

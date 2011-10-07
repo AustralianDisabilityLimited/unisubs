@@ -1,4 +1,4 @@
-{% extends "settings.html" %}
+{% extends "base.html" %}
 {% load i18n teams_tags paginator doorman media_compressor verbatim_templatetag %}
 
 {% block scripts %}
@@ -36,7 +36,7 @@
     {{ team }} {% trans 'Settings' %} | Universal Subtitles
 {% endblock %}
 
-{% block settings_content %}
+{% block main_content %}
     <div class="hd">
         <h2>{{ team.name }}</h2>
         {% with "settings" as active %}
@@ -45,7 +45,7 @@
     </div>
     <div class="sub-settings-panel">
     </div>
-    <div class="painel-holder">
+    <div class="painel-holder grid_9 alpha">
       <div class="tab painel-basic" style="display:none">
       {% if basic_settings_form %}
       <form method='post' action="." class="edit-team" enctype="multipart/form-data">

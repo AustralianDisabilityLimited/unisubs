@@ -206,14 +206,39 @@ var ProjectPanel  = AsyncPanel.$extend({
     }
 });
 
+var TaskListItem = Class.$extend({
+    __init__: function(model, parent) {
+        // Rebind functions
+        this.onAssignClick = _.bind(this.onAssignClick, this);
+        this.onTaskDeleted = _.bind(this.onTaskDeleted, this);
+
+        // Store data
+        this.model = model;
+
+        // Render template
+        this.el = ich.tasksListItem(this.model);
+
+        // Bind events
+        $("a.action-delete", this.el).click(this.onAssignClick);
+    },
+
+    onAssignClick: function(e) {
+        TeamsApiV2.task_delete(this.model.pk, this.onTaskDeleted);
+    },
+    onTaskDeleted: function() {
+        this.el.remove();
+        this.parent.removeTask(this);
+    }
+});
 var TasksPanel  = AsyncPanel.$extend({
     __init__: function() {
-        // Bind functions
+        // Rebind functions
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
         this.onTasksLanguagesListLoaded = _.bind(this.onTasksLanguagesListLoaded, this);
         this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
         this.onTypeFilterClick = _.bind(this.onTypeFilterClick, this);
         this.getFilters = _.bind(this.getFilters, this);
+        this.removeTask = _.bind(this.removeTask, this);
 
         // Render template
         this.el = ich.tasksPanel();
@@ -235,8 +260,8 @@ var TasksPanel  = AsyncPanel.$extend({
 
         $('li', tasksListing).remove();
 
-        _.each(this.tasks, function(t) {
-            tasksListing.append(ich.tasksListItem(t));
+        _.each(this.tasks, function(task) {
+            tasksListing.append(task.el);
         });
     },
     renderTasksLanguagesList: function() {
@@ -252,8 +277,8 @@ var TasksPanel  = AsyncPanel.$extend({
 
     onTasksListLoaded: function(data) {
         this.tasks = _.map(data, function(t) {
-            return new TaskModel(t);
-        });
+            return new TaskListItem(new TaskModel(t), this);
+        }, this);
         this.renderTasksList();
     },
     onTasksLanguagesListLoaded: function(data) {
@@ -280,6 +305,10 @@ var TasksPanel  = AsyncPanel.$extend({
         $(e.target).addClass('selected');
 
         TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
+    },
+
+    removeTask: function(task) {
+        this.tasks = _.without(this.tasks, task);
     }
 });
 

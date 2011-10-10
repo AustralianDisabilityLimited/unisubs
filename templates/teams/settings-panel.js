@@ -1,4 +1,3 @@
-
 var ACTIVE_CLASS  =- "current";
 var PANEL_MARKER = "panel-";
 
@@ -209,10 +208,23 @@ var ProjectPanel  = AsyncPanel.$extend({
 
 var TasksPanel  = AsyncPanel.$extend({
     __init__: function() {
+        // Bind functions
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
+        this.onTasksLanguagesListLoaded = _.bind(this.onTasksLanguagesListLoaded, this);
+        this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
+
+        // Render template
         this.el = ich.tasksPanel();
+
+        // Bind events
+        $("select#id_task_language", this.el).change(this.onLanguageFilterChange);
+
+        // Initialize data
         this.tasks = [];
         TeamsApiV2.tasks_list(TEAM_SLUG, {}, this.onTasksListLoaded);
+
+        this.languages = [];
+        TeamsApiV2.tasks_languages_list(TEAM_SLUG, this.onTasksLanguagesListLoaded);
     },
     addTask: function(tModel){
         var isNew = true;
@@ -234,11 +246,28 @@ var TasksPanel  = AsyncPanel.$extend({
             tasksListing.append(ich.tasksListItem(t));
         });
     },
+    renderTasksLanguagesList: function(){
+        var tasksLanguagesList = $("select#id_task_language", this.el);
+
+        _.each(this.languages, function(l) {
+            tasksLanguagesList.append(ich.tasksLanguageOption(l));
+        });
+    },
     onTasksListLoaded: function(data) {
+        this.tasks = [];
         _.each(data, function(t) {
             this.addTask(new TaskModel(t));
         }, this);
         this.renderTasksList();
+    },
+    onTasksLanguagesListLoaded: function(data) {
+        this.languages = data;
+        this.renderTasksLanguagesList();
+    },
+    onLanguageFilterChange: function(e) {
+        e.preventDefault();
+        var filter = $('select#id_task_language').val();
+        TeamsApiV2.tasks_list(TEAM_SLUG, {language: filter}, this.onTasksListLoaded);
     }
 });
 

@@ -31,6 +31,7 @@ from django.utils.translation import ugettext as _
 from django.forms.models import model_to_dict
 from utils.rpc import Error, Msg
 from utils.rpc import RpcRouter
+from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
@@ -123,6 +124,17 @@ class TeamsApiV2Class(object):
 
 
 
+    def tasks_languages_list(self, team_slug, user):
+        languages = filter(None, Task.objects.filter(team__slug=team_slug,
+                                                     deleted=False)
+                                 .values_list('language', flat=True)
+                                 .distinct())
+
+        return [{'language': l,
+                 'language_display': SUPPORTED_LANGUAGES_DICT[l]}
+                for l in languages]
+
+
     def tasks_list(self, team_slug, filters, user):
         '''List tasks for the given team, optionally filtered.
 
@@ -144,6 +156,8 @@ class TeamsApiV2Class(object):
             tasks = tasks.filter(assignee=filters['assignee'])
         if 'team_video' in filters:
             tasks = tasks.filter(team_video=filters['team_video'])
+        if 'language' in filters and filters['language']:
+            tasks = tasks.filter(language=filters['language'])
 
         return [t.to_dict() for t in tasks]
 

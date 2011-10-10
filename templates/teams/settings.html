@@ -114,7 +114,17 @@ This is needed, since it's for the js templating
   </li>
 </script>
 
+<script id="tasksLanguageOption" type="text/html">
+    <option value="{{ language }}">{{ language_display }}</option>
+</script>
+
 <script id="tasksPanel" type="text/html">
+    <form action="" method="post" id="tasks_language_filter">
+        <label for="id_task_language">Language needed:</label>
+        <select id="id_task_language" name="language">
+            <option value=""></option>
+        </select>
+    </form>
     <div class="panel-tasks">
         <ul class="tasks listing">
         </ul>

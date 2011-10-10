@@ -212,12 +212,15 @@ var TasksPanel  = AsyncPanel.$extend({
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
         this.onTasksLanguagesListLoaded = _.bind(this.onTasksLanguagesListLoaded, this);
         this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
+        this.onTypeFilterClick = _.bind(this.onTypeFilterClick, this);
+        this.getFilters = _.bind(this.getFilters, this);
 
         // Render template
         this.el = ich.tasksPanel();
 
         // Bind events
-        $("select#id_task_language", this.el).change(this.onLanguageFilterChange);
+        $('#tasks_language_filter select#id_task_language', this.el).change(this.onLanguageFilterChange);
+        $('#tasks_type_filter .type', this.el).click(this.onTypeFilterClick);
 
         // Initialize data
         this.tasks = [];
@@ -227,30 +230,18 @@ var TasksPanel  = AsyncPanel.$extend({
         TeamsApiV2.tasks_languages_list(TEAM_SLUG, this.onTasksLanguagesListLoaded);
     },
 
-    addTask: function(tModel){
-        var isNew = true;
-        _.each(this.tasks, function(m){
-            if (tModel.pk == m.pk ){
-                isNew = false;
-            }
-        });
-        if (isNew) {
-            this.tasks.push(tModel);
-        }
-    },
+    renderTasksList: function() {
+        var tasksListing = $('.tasks.listing', this.el);
 
-    renderTasksList: function(){
-        var tasksListing = $(".tasks.listing", this.el);
-
-        $("li", tasksListing).remove();
+        $('li', tasksListing).remove();
 
         _.each(this.tasks, function(t) {
             tasksListing.append(ich.tasksListItem(t));
         });
     },
-    renderTasksLanguagesList: function(){
-        var langs = $("select#id_task_language", this.el);
-        $("option", langs).remove();
+    renderTasksLanguagesList: function() {
+        var langs = $('select#id_task_language', this.el);
+        $('option', langs).remove();
 
         langs.append(ich.tasksLanguageOption({language: "", language_display: ""}));
 
@@ -260,20 +251,35 @@ var TasksPanel  = AsyncPanel.$extend({
     },
 
     onTasksListLoaded: function(data) {
-        this.tasks = [];
-        _.each(data, function(t) {
-            this.addTask(new TaskModel(t));
-        }, this);
+        this.tasks = _.map(data, function(t) {
+            return new TaskModel(t);
+        });
         this.renderTasksList();
     },
     onTasksLanguagesListLoaded: function(data) {
         this.languages = data;
         this.renderTasksLanguagesList();
     },
+
+    getFilters: function() {
+        var language = $('#tasks_language_filter select#id_task_language', this.el).val();
+        var type = $('#tasks_type_filter .type.selected input', this.el).val();
+
+        return {language: language, type: type};
+    },
+
     onLanguageFilterChange: function(e) {
         e.preventDefault();
-        var filter = $('select#id_task_language').val();
-        TeamsApiV2.tasks_list(TEAM_SLUG, {language: filter}, this.onTasksListLoaded);
+        TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
+    },
+    onTypeFilterClick: function(e) {
+        e.preventDefault();
+
+        $('select#id_task_language').val('');
+        $('#tasks_type_filter .type').removeClass('selected');
+        $(e.target).addClass('selected');
+
+        TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
     }
 });
 

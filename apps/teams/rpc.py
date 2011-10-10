@@ -148,7 +148,7 @@ class TeamsApiV2Class(object):
         '''
         tasks = Task.objects.filter(team__slug=team_slug, deleted=False)
 
-        if 'type' in filters:
+        if 'type' in filters and filters['type']:
             tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
         if 'completed' in filters:
             tasks = tasks.filter(completed__isnull=not filters['completed'])

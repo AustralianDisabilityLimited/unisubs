@@ -120,7 +120,31 @@ This is needed, since it's for the js templating
 
 <script id="tasksPanel" type="text/html">
     <div class="panel-tasks">
-        <form action="" method="post" id="tasks_language_filter">
+        <form id="tasks_type_filter">
+            <ul class="types">
+                <li class="type selected">
+                    All Pending
+                    <input type="hidden" name="type" value="" />
+                </li>
+                <li class="type">
+                    Review
+                    <input type="hidden" name="type" value="Review" />
+                </li>
+                <li class="type">
+                    Approve
+                    <input type="hidden" name="type" value="Approve" />
+                </li>
+                <li class="type">
+                    Translate
+                    <input type="hidden" name="type" value="Translate" />
+                </li>
+                <li class="type">
+                    Subtitle
+                    <input type="hidden" name="type" value="Subtitle" />
+                </li>
+            </ul>
+        </form>
+        <form id="tasks_language_filter">
             <label for="id_task_language">Language needed:</label>
             <select id="id_task_language" name="language">
             </select>

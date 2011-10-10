@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-02 01:31-0500\n"
-"PO-Revision-Date: 2011-10-02 06:49+0000\n"
+"POT-Creation-Date: 2011-10-09 01:31-0500\n"
+"PO-Revision-Date: 2010-11-30 05:45+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,243 +81,235 @@ msgstr ""
 msgid "Swahili"
 msgstr ""
 
-#: settings.py:58 utils/translation_names.py:167
-msgid "Urdu"
-msgstr ""
-
-#: settings.py:59 utils/translation_names.py:123
-msgid "Punjabi"
-msgstr ""
-
-#: settings.py:60 utils/translation_names.py:30
+#: settings.py:58 utils/translation_names.py:30
 msgid "Breton"
 msgstr ""
 
-#: settings.py:61 utils/translation_names.py:25
+#: settings.py:59 utils/translation_names.py:25
 msgid "Belarusian"
 msgstr ""
 
-#: settings.py:62
+#: settings.py:60
 msgid "Berber"
 msgstr ""
 
-#: settings.py:63 utils/translation_names.py:64
+#: settings.py:61 utils/translation_names.py:64
 msgid "Hausa"
 msgstr ""
 
-#: settings.py:64 utils/translation_names.py:117
+#: settings.py:62 utils/translation_names.py:117
 msgid "Oromo"
 msgstr ""
 
-#: settings.py:65 utils/translation_names.py:180
+#: settings.py:63 utils/translation_names.py:180
 msgid "Zulu"
 msgstr ""
 
-#: settings.py:66 utils/translation_names.py:144
+#: settings.py:64 utils/translation_names.py:144
 msgid "Somali"
 msgstr ""
 
-#: settings.py:67 utils/translation_names.py:178
+#: settings.py:65 utils/translation_names.py:178
 msgid "Yoruba"
 msgstr ""
 
-#: settings.py:68
+#: settings.py:66
 msgid "Igbo"
 msgstr ""
 
-#: settings.py:69 utils/translation_names.py:7
+#: settings.py:67 utils/translation_names.py:7
 msgid "Afrikaans"
 msgstr ""
 
-#: settings.py:70
+#: settings.py:68
 msgid "Kinyarwanda"
 msgstr ""
 
-#: settings.py:71 utils/translation_names.py:11
+#: settings.py:69 utils/translation_names.py:11
 msgid "Amharic"
 msgstr ""
 
-#: settings.py:72 utils/translation_names.py:137
+#: settings.py:70 utils/translation_names.py:137
 msgid "Shona"
 msgstr ""
 
-#: settings.py:73 utils/translation_names.py:22
+#: settings.py:71 utils/translation_names.py:22
 msgid "Bambara"
 msgstr ""
 
-#: settings.py:74 utils/translation_names.py:8
+#: settings.py:72 utils/translation_names.py:8
 msgid "Akan"
 msgstr ""
 
-#: settings.py:75
+#: settings.py:73
 msgid "Ibibio"
 msgstr ""
 
-#: settings.py:76
+#: settings.py:74
 msgid "Fula"
 msgstr ""
 
-#: settings.py:77 utils/translation_names.py:99
+#: settings.py:75 utils/translation_names.py:99
 msgid "Malagasy"
 msgstr ""
 
-#: settings.py:78 utils/translation_names.py:93
+#: settings.py:76 utils/translation_names.py:93
 msgid "Lingala"
 msgstr ""
 
-#: settings.py:79
+#: settings.py:77
 msgid "Chewa"
 msgstr ""
 
-#: settings.py:80
+#: settings.py:78
 msgid "Xhosa"
 msgstr ""
 
-#: settings.py:81
+#: settings.py:79
 msgid "Kongo"
 msgstr ""
 
-#: settings.py:82 utils/translation_names.py:158
+#: settings.py:80 utils/translation_names.py:158
 msgid "Tigrinya"
 msgstr ""
 
-#: settings.py:83
+#: settings.py:81
 msgid "Luo"
 msgstr ""
 
-#: settings.py:84
+#: settings.py:82
 msgid "Luba-Kasai"
 msgstr ""
 
-#: settings.py:85
+#: settings.py:83
 msgid "Gikuyu"
 msgstr ""
 
-#: settings.py:86
+#: settings.py:84
 msgid "Mossi"
 msgstr ""
 
-#: settings.py:87
+#: settings.py:85
 msgid "Sotho"
 msgstr ""
 
-#: settings.py:88
+#: settings.py:86
 msgid "Luhya"
 msgstr ""
 
-#: settings.py:89
+#: settings.py:87
 msgid "Tswana"
 msgstr ""
 
-#: settings.py:90
+#: settings.py:88
 msgid "Kanuri"
 msgstr ""
 
-#: settings.py:91
+#: settings.py:89
 msgid "Umbundu"
 msgstr ""
 
-#: settings.py:92
+#: settings.py:90
 msgid "Northern Sotho"
 msgstr ""
 
-#: settings.py:93
+#: settings.py:91
 msgid "Mandinka"
 msgstr ""
 
-#: settings.py:94
+#: settings.py:92
 msgid "Kyrgyz"
 msgstr ""
 
-#: settings.py:95 utils/translation_names.py:105
+#: settings.py:93 utils/translation_names.py:105
 msgid "Marathi"
 msgstr ""
 
-#: settings.py:96 utils/translation_names.py:101
+#: settings.py:94 utils/translation_names.py:101
 msgid "Malayalam"
 msgstr ""
 
-#: settings.py:97 utils/translation_names.py:116
+#: settings.py:95 utils/translation_names.py:116
 msgid "Oriya"
 msgstr ""
 
-#: settings.py:98 utils/translation_names.py:63
+#: settings.py:96 utils/translation_names.py:63
 msgid "Gujarati"
 msgstr ""
 
-#: settings.py:99 utils/translation_names.py:17
+#: settings.py:97 utils/translation_names.py:17
 msgid "Assamese"
 msgstr ""
 
-#: settings.py:100
+#: settings.py:98
 msgid "Filipino"
 msgstr ""
 
-#: settings.py:101
+#: settings.py:99
 msgid "Sinhala"
 msgstr ""
 
-#: settings.py:102
+#: settings.py:100
 msgid "Chinese, Yue"
 msgstr ""
 
-#: settings.py:103 utils/translation_names.py:115
+#: settings.py:101 utils/translation_names.py:115
 msgid "Occitan"
 msgstr ""
 
-#: settings.py:104
+#: settings.py:102
 msgid "Creole, Haitian"
 msgstr ""
 
-#: settings.py:105 utils/translation_names.py:112
+#: settings.py:103 utils/translation_names.py:112
 msgid "Nepali"
 msgstr ""
 
-#: settings.py:106
+#: settings.py:104
 msgid "Ewe"
 msgstr ""
 
-#: settings.py:107 utils/translation_names.py:100
+#: settings.py:105 utils/translation_names.py:100
 msgid "Malay"
 msgstr ""
 
-#: settings.py:108 utils/translation_names.py:177
+#: settings.py:106 utils/translation_names.py:177
 msgid "Yiddish"
 msgstr ""
 
-#: settings.py:109 utils/translation_names.py:32
+#: settings.py:107 utils/translation_names.py:32
 msgid "Burmese"
 msgstr ""
 
-#: settings.py:110 utils/translation_names.py:157
+#: settings.py:108 utils/translation_names.py:157
 msgid "Tibetan"
 msgstr ""
 
-#: settings.py:111 utils/translation_names.py:18
+#: settings.py:109 utils/translation_names.py:18
 msgid "Asturian"
 msgstr ""
 
-#: settings.py:112 utils/translation_names.py:20
+#: settings.py:110 utils/translation_names.py:20
 msgid "Aymara"
 msgstr ""
 
-#: settings.py:113 utils/translation_names.py:119
+#: settings.py:111 utils/translation_names.py:119
 msgid "Pashto"
 msgstr ""
 
-#: settings.py:114
+#: settings.py:112
 msgid "Lakota"
 msgstr ""
 
-#: settings.py:115 utils/translation_names.py:40
+#: settings.py:113 utils/translation_names.py:40
 msgid "Cornish"
 msgstr ""
 
-#: settings.py:116 utils/translation_names.py:86
+#: settings.py:114 utils/translation_names.py:86
 msgid "Klingon"
 msgstr ""
 
-#: settings.py:117 utils/translation_names.py:102
+#: settings.py:115 utils/translation_names.py:102
 msgid "Maltese"
 msgstr ""
 
@@ -5997,6 +5989,10 @@ msgstr ""
 msgid "Portuguese"
 msgstr ""
 
+#: utils/translation_names.py:123
+msgid "Punjabi"
+msgstr ""
+
 #: utils/translation_names.py:125
 msgid "Raeto Romance"
 msgstr ""
@@ -6143,6 +6139,10 @@ msgstr ""
 
 #: utils/translation_names.py:166
 msgid "Ukrainian"
+msgstr ""
+
+#: utils/translation_names.py:167
+msgid "Urdu"
 msgstr ""
 
 #: utils/translation_names.py:168

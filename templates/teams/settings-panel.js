@@ -56,6 +56,12 @@ var TaskModel = Class.$extend({
                 return { 'done': i < step ? true : false };
             });
         };
+        this.stepDisplay = {
+            'Subtitle': 'Needs Subtitles',
+            'Translate': 'Needs Translation',
+            'Review': 'Needs Review',
+            'Approve': 'Needs Approval'
+        }[this.type];
     }
 });
 

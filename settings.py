@@ -808,6 +808,7 @@ MEDIA_BUNDLES = {
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",
             "js/libs/underscore.js",
+            "js/jquery.mod.js",
          )
     },
     "debug-embed-js": {

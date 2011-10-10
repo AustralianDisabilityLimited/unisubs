@@ -312,7 +312,6 @@ def team_settings(request, slug):
         else:
             form = EditTeamForm(instance=team)
 
-    print form        
     return {
         'basic_settings_form': form,
         'team': team

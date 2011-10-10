@@ -256,6 +256,7 @@ var TasksLanguagesList = Class.$extend({
     __init__: function(languages, parent) {
         // Rebind functions
         this.render = _.bind(this.render, this);
+        this.getValue = _.bind(this.getValue, this);
         this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
 
         // Store data
@@ -280,8 +281,53 @@ var TasksLanguagesList = Class.$extend({
         $(this.el).change(this.onLanguageFilterChange);
     },
 
+    getValue: function() {
+        return this.el.val();
+    },
+
     onLanguageFilterChange: function(e) {
         e.preventDefault();
+        this.parent.reloadTasks();
+    }
+});
+var TasksTypesList = Class.$extend({
+    __init__: function(parent) {
+        // Rebind functions
+        this.render = _.bind(this.render, this);
+        this.onTypeClick = _.bind(this.onTypeClick, this);
+        this.getValue = _.bind(this.getValue, this);
+
+        // Store data
+        this.parent = parent;
+
+        // Render template
+        this.render();
+    },
+
+    render: function() {
+        // Create element
+        this.el = ich.tasksTypesList({});
+
+        // Bind events
+        $('li.type', this.el).click(this.onTypeClick);
+    },
+
+    getValue: function() {
+        return $('.selected input', this.el).val();
+    },
+
+    onTypeClick: function(e) {
+        e.preventDefault();
+
+        if ($(e.target).hasClass('selected')) {
+            return;
+        }
+
+        // Clear language dropdown and mark the target as selected.
+        $('select#id_task_language').val('');
+        $('.type', this.el).removeClass('selected');
+        $(e.target).addClass('selected');
+
         this.parent.reloadTasks();
     }
 });
@@ -291,7 +337,7 @@ var TasksPanel  = AsyncPanel.$extend({
         // Rebind functions
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
         this.onTasksLanguagesListLoaded = _.bind(this.onTasksLanguagesListLoaded, this);
-        this.onTypeFilterClick = _.bind(this.onTypeFilterClick, this);
+
         this.getFilters = _.bind(this.getFilters, this);
         this.removeTask = _.bind(this.removeTask, this);
         this.reloadTasks = _.bind(this.reloadTasks, this);
@@ -299,8 +345,8 @@ var TasksPanel  = AsyncPanel.$extend({
         // Render template
         this.el = ich.tasksPanel();
 
-        // Bind events
-        $('#tasks_type_filter .type', this.el).click(this.onTypeFilterClick);
+        this.typesList = new TasksTypesList(this);
+        $('#tasks_type_filter', this.el).append(this.typesList.el);
 
         // Initialize data
         this.tasks = [];
@@ -312,6 +358,7 @@ var TasksPanel  = AsyncPanel.$extend({
     reloadTasks: function() {
         TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
     },
+
     renderTasksList: function() {
         var tasksListing = $('.tasks.listing', this.el);
 
@@ -319,16 +366,6 @@ var TasksPanel  = AsyncPanel.$extend({
 
         _.each(this.tasks, function(task) {
             tasksListing.append(task.el);
-        });
-    },
-    renderTasksLanguagesList: function() {
-        var langs = $('select#id_task_language', this.el);
-        $('option', langs).remove();
-
-        langs.append(ich.tasksLanguageOption({language: "", language_display: ""}));
-
-        _.each(this.languages, function(l) {
-            langs.append(ich.tasksLanguageOption(l));
         });
     },
 
@@ -344,20 +381,8 @@ var TasksPanel  = AsyncPanel.$extend({
     },
 
     getFilters: function() {
-        var language = $('#tasks_language_filter select#id_task_language', this.el).val();
-        var type = $('#tasks_type_filter .type.selected input', this.el).val();
-
-        return {language: language, type: type};
-    },
-
-    onTypeFilterClick: function(e) {
-        e.preventDefault();
-
-        $('select#id_task_language').val('');
-        $('#tasks_type_filter .type').removeClass('selected');
-        $(e.target).addClass('selected');
-
-        TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
+        return { language: this.languagesList.getValue(),
+                 type: this.typesList.getValue() };
     },
 
     removeTask: function(task) {

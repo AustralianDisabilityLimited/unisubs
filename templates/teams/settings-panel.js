@@ -216,15 +216,22 @@ var TaskListItem = Class.$extend({
         this.onTaskDeleted = _.bind(this.onTaskDeleted, this);
         this.onTaskAssigned = _.bind(this.onTaskAssigned, this);
 
+        this.render = _.bind(this.render, this);
+
         // Store data
         this.model = model;
 
         // Render template
-        this.el = ich.tasksListItem(this.model);
+        this.el = $("<li></li>");
+        this.render();
 
         // Bind events
         $("a.action-delete", this.el).click(this.onDeleteClick);
         $("a.action-assign", this.el).click(this.onAssignClick);
+    },
+
+    render: function() {
+        $(this.el).html(ich.tasksListItem(this.model));
     },
 
     onAssignClick: function(e) {
@@ -241,36 +248,70 @@ var TaskListItem = Class.$extend({
         this.parent.removeTask(this);
     },
     onTaskAssigned: function(data) {
-        this.model.assignee = data['assignee'];
-        this.model.assigneeDisplay = data['assignee_display'];
-        $('.assignee', this.el).text("Assigned to " + this.model.assigneeDisplay);
+        this.model = new TaskModel(data);
+        this.render();
     }
 });
+var TasksLanguagesList = Class.$extend({
+    __init__: function(languages, parent) {
+        // Rebind functions
+        this.render = _.bind(this.render, this);
+        this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
+
+        // Store data
+        this.languages = languages;
+        this.parent = parent;
+
+        // Render template
+        this.render();
+    },
+
+    render: function() {
+        // Clear old root element
+        this.el && this.el.remove();
+        this.el = ich.tasksLanguagesList({});
+
+        // Add each language option
+        _.each(this.languages, function(lang) {
+            this.el.append(ich.tasksLanguagesListOption(lang));
+        }, this);
+
+        // Bind events
+        $(this.el).change(this.onLanguageFilterChange);
+    },
+
+    onLanguageFilterChange: function(e) {
+        e.preventDefault();
+        this.parent.reloadTasks();
+    }
+});
+
 var TasksPanel  = AsyncPanel.$extend({
     __init__: function() {
         // Rebind functions
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
         this.onTasksLanguagesListLoaded = _.bind(this.onTasksLanguagesListLoaded, this);
-        this.onLanguageFilterChange = _.bind(this.onLanguageFilterChange, this);
         this.onTypeFilterClick = _.bind(this.onTypeFilterClick, this);
         this.getFilters = _.bind(this.getFilters, this);
         this.removeTask = _.bind(this.removeTask, this);
+        this.reloadTasks = _.bind(this.reloadTasks, this);
 
         // Render template
         this.el = ich.tasksPanel();
 
         // Bind events
-        $('#tasks_language_filter select#id_task_language', this.el).change(this.onLanguageFilterChange);
         $('#tasks_type_filter .type', this.el).click(this.onTypeFilterClick);
 
         // Initialize data
         this.tasks = [];
         TeamsApiV2.tasks_list(TEAM_SLUG, {}, this.onTasksListLoaded);
 
-        this.languages = [];
         TeamsApiV2.tasks_languages_list(TEAM_SLUG, this.onTasksLanguagesListLoaded);
     },
 
+    reloadTasks: function() {
+        TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
+    },
     renderTasksList: function() {
         var tasksListing = $('.tasks.listing', this.el);
 
@@ -298,8 +339,8 @@ var TasksPanel  = AsyncPanel.$extend({
         this.renderTasksList();
     },
     onTasksLanguagesListLoaded: function(data) {
-        this.languages = data;
-        this.renderTasksLanguagesList();
+        this.languagesList = new TasksLanguagesList(data, this);
+        $('#tasks_language_filter', this.el).append(this.languagesList.el);
     },
 
     getFilters: function() {
@@ -309,10 +350,6 @@ var TasksPanel  = AsyncPanel.$extend({
         return {language: language, type: type};
     },
 
-    onLanguageFilterChange: function(e) {
-        e.preventDefault();
-        TeamsApiV2.tasks_list(TEAM_SLUG, this.getFilters(), this.onTasksListLoaded);
-    },
     onTypeFilterClick: function(e) {
         e.preventDefault();
 

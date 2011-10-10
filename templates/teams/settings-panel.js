@@ -226,6 +226,7 @@ var TasksPanel  = AsyncPanel.$extend({
         this.languages = [];
         TeamsApiV2.tasks_languages_list(TEAM_SLUG, this.onTasksLanguagesListLoaded);
     },
+
     addTask: function(tModel){
         var isNew = true;
         _.each(this.tasks, function(m){
@@ -237,6 +238,7 @@ var TasksPanel  = AsyncPanel.$extend({
             this.tasks.push(tModel);
         }
     },
+
     renderTasksList: function(){
         var tasksListing = $(".tasks.listing", this.el);
 
@@ -247,12 +249,16 @@ var TasksPanel  = AsyncPanel.$extend({
         });
     },
     renderTasksLanguagesList: function(){
-        var tasksLanguagesList = $("select#id_task_language", this.el);
+        var langs = $("select#id_task_language", this.el);
+        $("option", langs).remove();
+
+        langs.append(ich.tasksLanguageOption({language: "", language_display: ""}));
 
         _.each(this.languages, function(l) {
-            tasksLanguagesList.append(ich.tasksLanguageOption(l));
+            langs.append(ich.tasksLanguageOption(l));
         });
     },
+
     onTasksListLoaded: function(data) {
         this.tasks = [];
         _.each(data, function(t) {
@@ -338,7 +344,7 @@ var TabViewer = Class.$extend({
         
     }
 });
-    
+
 function boostrapTabs(){
     var buttons = [
         {label:"Basic Settings", panelSelector:".panel-basic", klass:null},

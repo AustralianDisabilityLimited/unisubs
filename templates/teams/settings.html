@@ -119,13 +119,13 @@ This is needed, since it's for the js templating
 </script>
 
 <script id="tasksPanel" type="text/html">
-    <form action="" method="post" id="tasks_language_filter">
-        <label for="id_task_language">Language needed:</label>
-        <select id="id_task_language" name="language">
-            <option value=""></option>
-        </select>
-    </form>
     <div class="panel-tasks">
+        <form action="" method="post" id="tasks_language_filter">
+            <label for="id_task_language">Language needed:</label>
+            <select id="id_task_language" name="language">
+            </select>
+        </form>
+
         <ul class="tasks listing">
         </ul>
     </div>

@@ -41,6 +41,7 @@ var TaskModel = Class.$extend({
         this.teamVideoDisplay = data.team_video_display;
         this.teamVideoUrl = data.team_video_url;
         this.assignee = data.assignee;
+        this.assigneeDisplay = data.assignee_display;
         this.completed = data.completed;
         this.type = data.type;
         this.teamSlug = TEAM_SLUG;
@@ -210,7 +211,10 @@ var TaskListItem = Class.$extend({
     __init__: function(model, parent) {
         // Rebind functions
         this.onAssignClick = _.bind(this.onAssignClick, this);
+        this.onDeleteClick = _.bind(this.onDeleteClick, this);
+
         this.onTaskDeleted = _.bind(this.onTaskDeleted, this);
+        this.onTaskAssigned = _.bind(this.onTaskAssigned, this);
 
         // Store data
         this.model = model;
@@ -219,15 +223,27 @@ var TaskListItem = Class.$extend({
         this.el = ich.tasksListItem(this.model);
 
         // Bind events
-        $("a.action-delete", this.el).click(this.onAssignClick);
+        $("a.action-delete", this.el).click(this.onDeleteClick);
+        $("a.action-assign", this.el).click(this.onAssignClick);
     },
 
     onAssignClick: function(e) {
+        e.preventDefault();
+        // TODO: Find the UI for assigning tasks.
+        TeamsApiV2.task_assign(this.model.pk, 10001, this.onTaskAssigned);
+    },
+    onDeleteClick: function(e) {
+        e.preventDefault();
         TeamsApiV2.task_delete(this.model.pk, this.onTaskDeleted);
     },
-    onTaskDeleted: function() {
+    onTaskDeleted: function(data) {
         this.el.remove();
         this.parent.removeTask(this);
+    },
+    onTaskAssigned: function(data) {
+        this.model.assignee = data['assignee'];
+        this.model.assigneeDisplay = data['assignee_display'];
+        $('.assignee', this.el).text("Assigned to " + this.model.assigneeDisplay);
     }
 });
 var TasksPanel  = AsyncPanel.$extend({

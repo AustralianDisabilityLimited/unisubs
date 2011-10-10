@@ -168,6 +168,15 @@ This is needed, since it's for the js templating
                     Transcription Needed
                 {{ /languageDisplay}}
             </span>
+            <br/>
+            <span class="assignee">
+                {{ #assigneeDisplay }}
+                    Assigned to {{ assigneeDisplay }}
+                {{ /assigneeDisplay }}
+                {{ ^assigneeDisplay }}
+                    Unassigned
+                {{ /assigneeDisplay }}
+            </span>
         </p>
         <p class="done">
             {{ #steps }}

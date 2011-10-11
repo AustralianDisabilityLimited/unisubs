@@ -89,15 +89,18 @@ This is needed, since it's for the js templating
 <script id="projectEditPanel" type="text/html">
   <div class="project-edit-panel modal-window-bg">
     <form action="#">
+      <h3> Change project {{name}}</h3>
       <label for="name">Name</label>
-      <input type="text" name="name" value="{{name}}"/>
+      <input type="text" name="name" class="clearfix" value="{{name}}"/>
       
       <label for="name">Description</label>
-      <textarea  name="description">{{description}}</textarea>
+
+      <textarea  name="description" class="clearfix" >{{description}}</textarea>
       <input type="hidden" value='{{pk}}' name="pk"/>  
       <input type="hidden" value='{{order}}' name="order"/>  
       <input type="hidden" value='{{slug}}' name="slug"/>  
-      <a class="red_button project-delete">Delete</a>a
+      <div class="clearfix"/>
+      <a class="red_button project-delete">Delete</a>
       <a class="blue_button project-save">Save</a>
     </form>
   </div>
@@ -146,6 +149,19 @@ This is needed, since it's for the js templating
         </li>
     </ul>
 </script>
+
+
+<script id="confirmationDialog" type="text/html">
+    <div class="modal-window-bg">
+      <h3>{{title}}</h3>
+      <div>{{body}}</div>
+      <p class="clearfix"></p>
+      <button class="red_button small submit_button cancel">{{cancelText}}</button>
+      <button class="blue_button small submit_button confirm">{{okText}}</button>
+    </div>
+</script>
+
+
 <script id="tasksListItem" type="text/html">
     <p>
         <a href="{{ teamVideoUrl }}">{{ teamVideoDisplay }}</a>

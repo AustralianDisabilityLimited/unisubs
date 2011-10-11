@@ -20,6 +20,9 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from utils.translation import get_user_languages_from_request
 
+def run_locally(request):
+    return {"RUN_LOCALLY": getattr(settings, "RUN_LOCALLY", False)} 
+
 def current_site(request):
     try:
         return { 'current_site': Site.objects.get_current() }

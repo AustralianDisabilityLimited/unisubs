@@ -83,3 +83,12 @@ class UsernameListField(ListField):
         'invalid': _(u'Enter valid usernames separated by commas. Username can contain only a-z, A-Z and 0-9.')
     }
     pattern = username_list_re
+
+
+def flatten_errorlists(errorlists):
+    '''Return a list of the errors (just the text) in any field.'''
+    errors = []
+    for el in errorlists.values():
+        errors += el
+
+    return errors

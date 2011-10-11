@@ -185,7 +185,15 @@ This is needed, since it's for the js templating
     <ul class="actions">
         <li>
             {{ #assignAllowed }}
-                <a class="action-assign" href="#">Assign</a>
+                <form action="" method="post">
+                    <a class="action-assign" href="#">Assign</a>
+                    <div class="assignee-choice" style="display: none;">
+                        {% endverbatim %}
+                            {{ assign_form.assignee }}
+                        {% verbatim %}
+                        <a class="action-assign-submit" href="#">Assign to User</a>
+                    </div>
+                </form>
             {{ /assignAllowed }}
 
             {{ #deleteAllowed }}

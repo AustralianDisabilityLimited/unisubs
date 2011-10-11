@@ -231,6 +231,7 @@ var TaskListItem = Class.$extend({
         // Rebind functions
         this.onPerformClick = _.bind(this.onPerformClick, this);
         this.onAssignClick = _.bind(this.onAssignClick, this);
+        this.onAssignSubmit = _.bind(this.onAssignSubmit, this);
         this.onDeleteClick = _.bind(this.onDeleteClick, this);
 
         this.onTaskDeleted = _.bind(this.onTaskDeleted, this);
@@ -253,6 +254,7 @@ var TaskListItem = Class.$extend({
         $("a.perform", this.el).click(this.onPerformClick);
         $("a.action-delete", this.el).click(this.onDeleteClick);
         $("a.action-assign", this.el).click(this.onAssignClick);
+        $("a.action-assign-submit", this.el).click(this.onAssignSubmit);
     },
 
     onPerformClick: function(e) {
@@ -261,8 +263,16 @@ var TaskListItem = Class.$extend({
     },
     onAssignClick: function(e) {
         e.preventDefault();
-        // TODO: Find the UI for assigning tasks.
-        TeamsApiV2.task_assign(this.model.pk, 1, this.onTaskAssigned);
+        $(e.target).hide();
+        $(e.target).siblings('.assignee-choice').fadeIn('fast');
+    },
+    onAssignSubmit: function(e) {
+        e.preventDefault();
+
+        var assignee_id = $(e.target).closest('form').find('select').val();
+        if (assignee_id !== "") {
+            TeamsApiV2.task_assign(this.model.pk, assignee_id, this.onTaskAssigned);
+        }
     },
     onDeleteClick: function(e) {
         e.preventDefault();
@@ -273,8 +283,12 @@ var TaskListItem = Class.$extend({
         this.parent.removeTask(this);
     },
     onTaskAssigned: function(data) {
-        this.model = new TaskModel(data);
-        this.render();
+        if (data && data.error) {
+            $.jGrowl(data.error);
+        } else {
+            this.model = new TaskModel(data);
+            this.render();
+        }
     }
 });
 var TasksLanguagesList = Class.$extend({

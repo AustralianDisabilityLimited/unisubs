@@ -348,9 +348,12 @@ class TaskAssignForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
     assignee = forms.ModelChoiceField(queryset=TeamMember.objects.all())
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
-        return super(TaskAssignForm, self).__init__(*args, **kwargs)
+    def __init__(self, team, member, *args, **kwargs):
+        super(TaskAssignForm, self).__init__(*args, **kwargs)
+
+        self.team = team
+        self.member = member
+        self.fields['assignee'].queryset = team.members.all()
 
 
     def clean_task(self):
@@ -361,14 +364,14 @@ class TaskAssignForm(forms.Form):
         return task
 
     def clean(self):
-        d = self.cleaned_data
-
-        task = d['task']
-        assignee = d['assignee']
+        if not self.member.can_assign_tasks():
+            raise forms.ValidationError(_(
+                u'You do not have permission to assign this task.'))
 
         # TODO: check that the assignee can be assigned to the given task
 
-        return d
+        return self.cleaned_data
+
 class TaskDeleteForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
 

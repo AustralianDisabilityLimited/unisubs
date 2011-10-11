@@ -28,8 +28,8 @@ from django.shortcuts import get_object_or_404
 
 from django.utils.translation import ugettext as _
 from django.forms.models import model_to_dict
-from utils.rpc import Error, Msg
-from utils.rpc import RpcRouter
+from utils.rpc import Error, Msg, RpcRouter
+from utils.forms import flatten_errorlists
 from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
@@ -160,10 +160,12 @@ class TeamsApiV2Class(object):
 
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given team member, or unassign it if null/None.'''
+        task = Task.objects.get(pk=task_id)
+        member = task.team.members.get(user=user)
 
-        form = TaskAssignForm(user, data={'task': task_id, 'assignee': assignee_id})
+        form = TaskAssignForm(task.team, member,
+                    data={'task': task_id, 'assignee': assignee_id})
         if form.is_valid():
-            task = Task.objects.get(pk=task_id)
             assignee = TeamMember.objects.get(pk=assignee_id) if assignee_id else None
 
             task.assignee = assignee
@@ -171,7 +173,7 @@ class TeamsApiV2Class(object):
 
             return task.to_dict()
         else:
-            return { 'success': False, 'errors': form.errors }
+            return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
     def task_delete(self, task_id, user):
         '''Mark a task as deleted.

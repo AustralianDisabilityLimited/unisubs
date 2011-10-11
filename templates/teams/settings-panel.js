@@ -78,6 +78,17 @@ var ProjectEditPanel = Class.$extend({
          $(".project-save", this.el).click(this.onSaveClicked);
          
     },
+    show: function(){
+        $(this.el).show();
+        $(this.el).mod("show");
+        
+    },
+    hide: function(){
+        $(this.el).mod("close", {"close-modal": function(){
+            $(this).remove();
+        }});
+        
+    },
     getValuesFromForm: function(form){
         var inputs = $(':input', form);
 
@@ -183,6 +194,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         e.preventDefault();
         this.projectEditPanel  = new ProjectEditPanel(model);
         this.el.prepend(this.projectEditPanel.el);
+        this.projectEditPanel.show();
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
         return false;
     },
@@ -202,7 +214,7 @@ var ProjectPanel  = AsyncPanel.$extend({
     },
     onProjectSaved: function(e, p){
         this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
-        this.projectEditPanel.el.remove();
+        this.projectEditPanel.hide();
         this.addProject(p);
         this.renderProjectList();
         

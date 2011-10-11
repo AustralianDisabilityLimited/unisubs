@@ -426,6 +426,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'context_processors.current_commit',
     'context_processors.custom',
     'context_processors.user_languages',
+    'context_processors.run_locally',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.i18n',
     'utils.context_processors.media',
@@ -808,6 +809,7 @@ MEDIA_BUNDLES = {
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",
             "js/libs/underscore.js",
+            "js/jquery.mod.js",
          )
     },
     "debug-embed-js": {
@@ -823,3 +825,7 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+#: if True will not try to load media (e.g. javascript files)
+# from third parties. If you're developing and have no net 
+# access, enable this setting on your local_settings.py
+RUN_LOCALLY = False

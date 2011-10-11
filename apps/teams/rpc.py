@@ -23,7 +23,6 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
-from auth.models import CustomUser as User
 
 from django.shortcuts import get_object_or_404
 
@@ -35,7 +34,6 @@ from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
-from teams.models import Team, TeamMember, Application, Project
 from teams.forms import TaskAssignForm, TaskDeleteForm
 from teams.project_forms import ProjectForm
 
@@ -123,7 +121,6 @@ class TeamsApiV2Class(object):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
 
 
-
     def tasks_languages_list(self, team_slug, user):
         languages = filter(None, Task.objects.filter(team__slug=team_slug,
                                                      deleted=False)
@@ -142,32 +139,32 @@ class TeamsApiV2Class(object):
 
         * type: a string describing the type of task. 'Subtitle', 'Translate', etc.
         * completed: true or false
-        * assignee: user ID as an integer
+        * assignee: team member ID as an integer
         * team_video: team video ID as an integer
 
         '''
         tasks = Task.objects.filter(team__slug=team_slug, deleted=False)
 
-        if 'type' in filters and filters['type']:
+        if filters.get('type'):
             tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
-        if 'completed' in filters:
+        if filters.get('completed'):
             tasks = tasks.filter(completed__isnull=not filters['completed'])
-        if 'assignee' in filters:
+        if filters.get('assignee'):
             tasks = tasks.filter(assignee=filters['assignee'])
-        if 'team_video' in filters:
+        if filters.get('team_video'):
             tasks = tasks.filter(team_video=filters['team_video'])
-        if 'language' in filters and filters['language']:
+        if filters.get('language'):
             tasks = tasks.filter(language=filters['language'])
 
         return [t.to_dict() for t in tasks]
 
     def task_assign(self, task_id, assignee_id, user):
-        '''Assign a task to the given user, or unassign it if given null/None.'''
+        '''Assign a task to the given team member, or unassign it if null/None.'''
 
         form = TaskAssignForm(user, data={'task': task_id, 'assignee': assignee_id})
         if form.is_valid():
             task = Task.objects.get(pk=task_id)
-            assignee = User.objects.get(pk=assignee_id) if assignee_id else None
+            assignee = TeamMember.objects.get(pk=assignee_id) if assignee_id else None
 
             task.assignee = assignee
             task.save()
@@ -203,10 +200,11 @@ class TeamsApiV2Class(object):
         The translation task will be created if it does not already exist.
 
         '''
+        # TODO: Check permissions here.
         tv = TeamVideo.objects.get(pk=team_video_id)
         task, created = Task.objects.get_or_create(team=tv.team, team_video=tv,
                 language=language, type=Task.TYPE_IDS['Translate'])
-        assignee = User.objects.get(pk=assignee_id) if assignee_id else None
+        assignee = TeamMember.objects.get(pk=assignee_id) if assignee_id else None
 
         task.assignee = assignee
         task.save()
@@ -266,7 +264,6 @@ class TeamsApiV2Class(object):
         workflow.save()
 
         return workflow.to_dict()
-
 
 
     def project_list(self, team_slug,  project_pk, user):

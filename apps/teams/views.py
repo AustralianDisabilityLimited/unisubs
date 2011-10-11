@@ -26,10 +26,10 @@
 
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm
-from teams.models import Team, TeamMember, Invite, Application, TeamVideo
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo, Task
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseForbidden
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -288,15 +288,16 @@ def create(request):
 @login_required
 def team_settings(request, slug):
     team = Team.get(slug, request.user)
+    member = team.members.get(user=request.user)
 
     if not team.is_member(request.user):
         raise Http404
-    
+
     if not team.is_manager(request.user):
         return {
             'team': team
         }
-    
+
     if request.method == 'POST':
         if request.user.is_staff:
             form = EditTeamFormAdmin(request.POST, request.FILES, instance=team)
@@ -314,7 +315,9 @@ def team_settings(request, slug):
 
     return {
         'basic_settings_form': form,
-        'team': team
+        'team': team,
+        'user_can_delete_tasks': member.can_delete_tasks(),
+        'user_can_assign_tasks': member.can_assign_tasks(),
     }
 
 @login_required
@@ -665,7 +668,12 @@ def leave_team(request, slug):
 
 @login_required
 def perform_task(request):
-    task = Task.objects.get(pk=request.POST.get(pk=task_id))
+    task = Task.objects.get(pk=request.POST.get('task_id'))
+
+    if not task.perform_allowed(request.user):
+        return HttpResponseForbidden(_(u'You are not allowed to perform this task.'))
+
+    # ... perform task ...
 
     return {}
 

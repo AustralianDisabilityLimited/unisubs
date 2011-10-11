@@ -325,7 +325,7 @@ class Team(models.Model):
     def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):
         from utils.multi_query_set import TeamMultyQuerySet
         languages.extend([l[:l.find('-')] for l in languages if l.find('-') > -1])
-    
+        
         langs_pairs = []
         
         for l1 in languages:
@@ -756,6 +756,17 @@ class TeamMember(models.Model):
     
     objects = TeamMemderManager()
 
+    def can_assign_tasks(self):
+        # TODO: Adjust once final roles are in place.
+        # return self.role in ('Manager', 'Admin', 'Owner')
+        return self.role == 'manager'
+
+    def can_delete_tasks(self):
+        # TODO: Adjust once final roles are in place.
+        # return self.role in ('Admin', 'Owner')
+        return self.role == 'manager'
+
+
     def promote_to_manager(self, saves=True):
         self.role = TeamMember.ROLE_MANAGER
         if saves:
@@ -1019,7 +1030,7 @@ class Task(models.Model):
     team = models.ForeignKey(Team)
     team_video = models.ForeignKey(TeamVideo)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True, db_index=True)
-    assignee = models.ForeignKey(User, blank=True, null=True)
+    assignee = models.ForeignKey(TeamMember, blank=True, null=True)
 
     deleted = models.BooleanField(default=False)
 
@@ -1044,7 +1055,7 @@ class Task(models.Model):
                  'team_video_url': self.team_video.get_absolute_url() if self.team_video else None,
                  'type': Task.TYPE_NAMES[self.type],
                  'assignee': self.assignee.id if self.assignee else None,
-                 'assignee_display': unicode(self.assignee) if self.assignee else None,
+                 'assignee_display': unicode(self.assignee.user) if self.assignee else None,
                  'language': self.language if self.language else None,
                  'language_display': SUPPORTED_LANGUAGES_DICT[self.language]
                                      if self.language else None,
@@ -1055,6 +1066,25 @@ class Task(models.Model):
     def workflow(self):
         '''Return the most specific workflow for this task's TeamVideo.'''
         return Workflow.get_for_team_video(self.team_video)
+
+
+    def perform_allowed(self, user, workflow=None):
+        '''Return True if the user is permitted to perform this task, False otherwise.'''
+        # workflow = workflow or self.workflow
+
+        # role_required = {'Subtitle': workflow.perm_subtitle,
+        #                  'Translate': workflow.perm_translate,
+        #                  'Review': workflow.perm_review,
+        #                  'Approve': workflow.perm_approve}[Task.TYPE_NAMES[self.type]]
+
+        # roles = [choice_name for choice_id, choice_name in Workflow.PERM_CHOICES]
+        # roles_allowed = roles[:roles.index(role_required)+1]
+        # user_role = user.role.type
+
+        # return user_role in roles_allowed
+
+        # TODO: Implement this once roles are in place.
+        return True
 
 
     def complete(self):

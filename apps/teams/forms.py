@@ -24,7 +24,6 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import forms
 from teams.models import Team, TeamMember, TeamVideo, Task
-from auth.models import CustomUser as User
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -347,7 +346,7 @@ class EditTeamFormAdmin(EditTeamForm):
 
 class TaskAssignForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
-    assignee = forms.ModelChoiceField(queryset=User.objects.all())
+    assignee = forms.ModelChoiceField(queryset=TeamMember.objects.all())
 
     def __init__(self, user, *args, **kwargs):
         self.user = user

@@ -4,8 +4,11 @@ var PANEL_MARKER = "panel-";
 var MENU_SELECTOR = ".sub-settings-panel";
 var CONTAINER_SELECTOR = ".panel-holder";
 var TEAM_SLUG = "{{team.slug}}";
-var PERFORM_TASK_URL = "{% url teams:perform_task %}";
 var ON_PROJECT_SAVED = "onProjectSaved";
+
+var PERFORM_TASK_URL = "{% url teams:perform_task %}";
+var USER_CAN_ASSIGN_TASK = {% if user_can_assign_tasks %}true{% else %}false{% endif %};
+var USER_CAN_DELETE_TASK = {% if user_can_delete_tasks %}true{% else %}false{% endif %};
 
 var AsyncPanel = Class.$extend({
     load: function (url){
@@ -47,6 +50,8 @@ var TaskModel = Class.$extend({
         this.type = data.type;
         this.teamSlug = TEAM_SLUG;
         this.performUrl = PERFORM_TASK_URL;
+        this.assignAllowed = USER_CAN_ASSIGN_TASK;
+        this.deleteAllowed = USER_CAN_DELETE_TASK;
         this.steps = function() {
             var step = { 'Subtitle': 0,
                          'Translate': 1,
@@ -239,15 +244,15 @@ var TaskListItem = Class.$extend({
         // Render template
         this.el = $("<li></li>");
         this.render();
+    },
+
+    render: function() {
+        $(this.el).html(ich.tasksListItem(this.model));
 
         // Bind events
         $("a.perform", this.el).click(this.onPerformClick);
         $("a.action-delete", this.el).click(this.onDeleteClick);
         $("a.action-assign", this.el).click(this.onAssignClick);
-    },
-
-    render: function() {
-        $(this.el).html(ich.tasksListItem(this.model));
     },
 
     onPerformClick: function(e) {
@@ -257,7 +262,7 @@ var TaskListItem = Class.$extend({
     onAssignClick: function(e) {
         e.preventDefault();
         // TODO: Find the UI for assigning tasks.
-        TeamsApiV2.task_assign(this.model.pk, 10001, this.onTaskAssigned);
+        TeamsApiV2.task_assign(this.model.pk, 1, this.onTaskAssigned);
     },
     onDeleteClick: function(e) {
         e.preventDefault();

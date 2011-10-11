@@ -152,44 +152,50 @@ This is needed, since it's for the js templating
         <br/>
         <span>
             {{ #languageDisplay}}
-            {{ languageDisplay }} subtitles
+                {{ languageDisplay }} subtitles
             {{ /languageDisplay}}
+
             {{ ^languageDisplay}}
-            Transcription Needed
+                Transcription Needed
             {{ /languageDisplay}}
         </span>
         <br/>
         <span class="assignee">
             {{ #assigneeDisplay }}
-            Assigned to {{ assigneeDisplay }}
+                Assigned to {{ assigneeDisplay }}
             {{ /assigneeDisplay }}
+
             {{ ^assigneeDisplay }}
-            Unassigned
+                Unassigned
             {{ /assigneeDisplay }}
         </span>
     </p>
     <p class="done">
         {{ #steps }}
-        {{ #done }}
-        &#x2611;
-        {{ /done }}
-        {{ ^done }}
-        &#x2610;
-        {{ /done }}
+            {{ #done }}
+                &#x2611;
+            {{ /done }}
+            {{ ^done }}
+                &#x2610;
+            {{ /done }}
         {{ /steps }}
+
         {{ stepDisplay }}
     </p>
     <ul class="actions">
         <li>
             {{ #assignAllowed }}
-            <a class="action-assign" href="#">Assign</a>
+                <a class="action-assign" href="#">Assign</a>
             {{ /assignAllowed }}
 
             {{ #deleteAllowed }}
-            <a class="action-delete" href="#">Delete</a>
+                <a class="action-delete" href="#">Delete</a>
             {{ /deleteAllowed }}
 
             <form action="{{ performUrl }}" method="post">
+                {% endverbatim %}
+                    {% csrf_token %}
+                {% verbatim %}
                 <input type="hidden" name="task_id" value="{{ pk }}" />
                 <a class="perform" href="#">Perform Task</a>
             </form>

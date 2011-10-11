@@ -1068,8 +1068,11 @@ class Task(models.Model):
         return Workflow.get_for_team_video(self.team_video)
 
 
-    def perform_allowed(self, user, workflow=None):
-        '''Return True if the user is permitted to perform this task, False otherwise.'''
+    def perform_allowed(self, member, workflow=None):
+        '''Return True if the member is permitted to perform this task, False otherwise.'''
+        if not member:
+            return False
+
         # workflow = workflow or self.workflow
 
         # role_required = {'Subtitle': workflow.perm_subtitle,
@@ -1084,7 +1087,10 @@ class Task(models.Model):
         # return user_role in roles_allowed
 
         # TODO: Implement this once roles are in place.
-        return True
+        if not self.assignee:
+            return True
+        else:
+            return member == self.assignee
 
 
     def complete(self):

@@ -669,9 +669,13 @@ def leave_team(request, slug):
 @login_required
 def perform_task(request):
     task = Task.objects.get(pk=request.POST.get('task_id'))
+    member = task.team.members.get(user=request.user)
 
-    if not task.perform_allowed(request.user):
+    if not task.perform_allowed(member):
         return HttpResponseForbidden(_(u'You are not allowed to perform this task.'))
+
+    task.assignee = member
+    task.save()
 
     # ... perform task ...
 

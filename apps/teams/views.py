@@ -661,3 +661,11 @@ def leave_team(request, slug):
         messages.error(request, _(u'You are not member of this team.'))
     
     return redirect(request.META.get('HTTP_REFERER') or team)
+
+
+@login_required
+def perform_task(request):
+    task = Task.objects.get(pk=request.POST.get(pk=task_id))
+
+    return {}
+

@@ -196,6 +196,10 @@ This is needed, since it's for the js templating
         <li>
             <a class="action-assign" href="#">Assign</a>
             <a class="action-delete" href="#">Delete</a>
+            <form action="{{ performUrl }}" method="post">
+                <input type="hidden" name="task_id" value="{{ pk }}" />
+                <a class="perform" href="#">Perform Task</a>
+            </form>
         </li>
     </ul>
 </script>

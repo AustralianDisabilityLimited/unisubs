@@ -4,6 +4,7 @@ var PANEL_MARKER = "panel-";
 var MENU_SELECTOR = ".sub-settings-panel";
 var CONTAINER_SELECTOR = ".panel-holder";
 var TEAM_SLUG = "{{team.slug}}";
+var PERFORM_TASK_URL = "{% url teams:perform_task %}";
 var ON_PROJECT_SAVED = "onProjectSaved";
 
 var AsyncPanel = Class.$extend({
@@ -45,6 +46,7 @@ var TaskModel = Class.$extend({
         this.completed = data.completed;
         this.type = data.type;
         this.teamSlug = TEAM_SLUG;
+        this.performUrl = PERFORM_TASK_URL;
         this.steps = function() {
             var step = { 'Subtitle': 0,
                          'Translate': 1,
@@ -210,6 +212,7 @@ var ProjectPanel  = AsyncPanel.$extend({
 var TaskListItem = Class.$extend({
     __init__: function(model, parent) {
         // Rebind functions
+        this.onPerformClick = _.bind(this.onPerformClick, this);
         this.onAssignClick = _.bind(this.onAssignClick, this);
         this.onDeleteClick = _.bind(this.onDeleteClick, this);
 
@@ -226,6 +229,7 @@ var TaskListItem = Class.$extend({
         this.render();
 
         // Bind events
+        $("a.perform", this.el).click(this.onPerformClick);
         $("a.action-delete", this.el).click(this.onDeleteClick);
         $("a.action-assign", this.el).click(this.onAssignClick);
     },
@@ -234,6 +238,10 @@ var TaskListItem = Class.$extend({
         $(this.el).html(ich.tasksListItem(this.model));
     },
 
+    onPerformClick: function(e) {
+        e.preventDefault();
+        $(e.target).closest('form').submit();
+    },
     onAssignClick: function(e) {
         e.preventDefault();
         // TODO: Find the UI for assigning tasks.

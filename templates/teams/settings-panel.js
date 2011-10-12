@@ -73,21 +73,33 @@ var TaskModel = Class.$extend({
         this.deleteAllowed = USER_CAN_DELETE_TASK;
         this.steps = function() {
             var step = { 'Subtitle': 0,
-                         'Translate': 1,
-                         'Review': 2,
-                         'Approve': 3
+                         'Translate': 2,
+                         'Review': 4,
+                         'Approve': 6
             }[this.type];
+            if (this.assignee) {
+                step += 1
+            }
 
-            return _.map(_.range(0, 4), function(i) {
+            return _.map(_.range(0, 7), function(i) {
                 return { 'done': i < step ? true : false };
             });
         };
-        this.stepDisplay = {
-            'Subtitle': 'Needs Subtitles',
-            'Translate': 'Needs Translation',
-            'Review': 'Needs Review',
-            'Approve': 'Needs Approval'
-        }[this.type];
+        if (this.assignee) {
+            this.stepDisplay = {
+                'Subtitle': 'Subtitling in Progress',
+                'Translate': 'Translation in Progress',
+                'Review': 'Review in Progress',
+                'Approve': 'Approval in Progress'
+            }[this.type];
+        } else {
+            this.stepDisplay = {
+                'Subtitle': 'Needs Subtitles',
+                'Translate': 'Needs Translation',
+                'Review': 'Needs Review',
+                'Approve': 'Needs Approval'
+            }[this.type];
+        }
     }
 });
 

@@ -63,3 +63,11 @@ tasks:
     BROKER_PASSWORD = "usrmqpassword"
     BROKER_VHOST = "ushost"
 
+### Werkzeug Debugger
+
+If you want to use the awesome Werkzeug debugging runserver instead of the
+standard Django one, you just have to run (while the virtualenv is activated):
+
+    pip install werkzeug
+
+And then use `./dev-runserver.sh plus` to run it.

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block body_attrs %}class="dashboard"{% endblock %}
+
+{% block main_content %}
+
+    <h2>Dashboard</h2>
+
+    <div class="grid_6 alpha">
+        <h3>Activity</h3>
+        <ul class="stream actvity">
+            <li><a href="">Scissorhands</a> commented on your video, <a href="">Why I Married a Gringo"</a><span class="timestamp">40 minutes ago</span></li>
+            <li><a href="">Mr Jake</a> finished reviewing your Spanish translation for <a href="">Promo Video #1</a> (Some Team)<span class="timestamp">2 hours ago</span></li>
+            <li><a href="">Donna L</a> added a new video to Some Team: <a href="">Promo Video #3</a><span class="timestamp">13 hours ago</span></li>
+            <li><a href="">Technoviking</a> assigned you the Spanish translation for <a href="">Promo Video #1</a> (Some Team)<span class="timestamp">2 days ago</span></li>
+            <li><a href="">Scissorhands</a> commented on your video, <a href="">Why I Married a Gringo"</a><span class="timestamp">5 days ago</span></li>
+            <li><a href="">Mr Jake</a> finished reviewing your Spanish translation for <a href="">Promo Video #1</a> (Some Team)<span class="timestamp">1 week ago</span></li>
+            <li><a href="">Donna L</a> added a new video to Some Team: <a href="">Promo Video #3</a><span class="timestamp">3 months ago</span></li>
+            <li><a href="">Technoviking</a> assigned you the Spanish translation for <a href="">Promo Video #1</a> (Some Team)<span class="timestamp">6 months ago</span></li>
+        </ul>
+    </div>
+
+    <div class="grid_6 omega">
+        <h3>Saved Work</h3>
+        <ul class="listing">
+            <li>Spanish subtitles for <a href="">Promo Video #2</a> (Some Team)</li>
+        </ul>
+        
+        <h3>Assignments</h3>
+        <ul class="listing">
+            <li>Spanish subtitles for <a href="">Promo Video #3</a> (Some Team) from <a href="">Technoviking</a></li>
+        </ul>
+
+        <h3>Messages</h3>
+        <ul class="listing">
+            <li>No new messages</li>
+        </ul>
+    </div>
+
+{% endblock %} 

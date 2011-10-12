@@ -229,8 +229,7 @@ p.notice {
   float: left;
   width: 100%;
   padding: 0;
-  margin-bottom: 1em;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e3e3e3;
 }
 
   .new-teams .tabs li {
@@ -247,6 +246,28 @@ p.notice {
   .new-teams .tabs li.current a {
     color: #aaa;
   }
+
+.new-teams .omega {
+  width: 199px;
+  padding-left: 20px;
+  padding-bottom: 2em;
+  border-left: 1px solid #e3e3e3;
+  background-color: #fff;
+  background: -moz-linear-gradient(
+      left,
+      hsla(0, 0%, 96%, 1),
+      hsla(0, 0%, 100%, 1) 5%,
+      hsla(0, 0%, 100%, 1)
+  );
+  background: -webkit-gradient(
+      linear,
+      left top,
+      right top,
+      color-stop(0, hsla(0, 0%, 96%, 1)),
+      color-stop(.05, hsla(0, 0%, 100%, 1)),
+      color-stop(1, hsla(0, 0%, 100%, 1))
+  );
+}
 
 .new-teams .listing {
   padding: 0;
@@ -273,6 +294,15 @@ p.notice {
   .new-teams .listing h3 {
     font-size: 14px;
   }
+
+    .new-teams .listing h3 a {
+      text-decoration: none;
+    }
+
+    .new-teams .listing h3 a:hover {
+      border-width: 0 0 1px 0;
+      border-style: dotted;
+    }
 
   .new-teams .listing .thumb {
     position: absolute;
@@ -326,17 +356,37 @@ p.notice {
 
   .new-teams .view-filter li a {
     display: block;
-    padding: 1em;
-    background-color: #ecf0f1;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    padding: .5em 0 .5em 20px;
+    margin-left: -20px;
     text-decoration: none;
     color: #333;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #788b90;
   }
 
   .new-teams .view-filter li.current a {
-    background-color: #C4CED4;
+    background-color: #f5f5f5;
+    background: -moz-linear-gradient(
+      left,
+      hsla(192, 15%, 90%, 1),
+      hsla(192, 15%, 94%, 1) 5%,
+      hsla(192, 15%, 94%, 1)
+    );
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0, hsla(192, 15%, 90%, 1)),
+        color-stop(.05, hsla(192, 15%, 94%, 1)),
+        color-stop(1, hsla(192, 15%, 94%, 1))
+    );
+    padding: .75em 0 .75em 20px;
+    color: #586b70;
   }
 
 .new-teams .button {
@@ -356,4 +406,35 @@ p.notice {
 .new-teams .notation {
   font-size: .95em;
   color: #777;
+}
+
+
+/*~~~~~~~~~~ DASHBOARD ~~~~~~~~~~*/
+
+.dashboard h2 {
+  padding-bottom: .5em;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #ddd;
+}
+
+.stream, .listing {
+  padding: 0;
+  margin-bottom: 3em;
+}
+
+  .stream li {
+    position: relative;
+    padding: 1em 115px 1em 0;
+  }
+
+  .stream .timestamp {
+    display: block;
+    position: absolute;
+    top: 1em; right: 0;
+    width: 95px;
+    color: #788b90;
+  }
+
+.listing li {
+  padding: 1em 0;
 }

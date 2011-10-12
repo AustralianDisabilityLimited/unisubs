@@ -49,6 +49,7 @@ var TaskModel = Class.$extend({
         this.completed = data.completed;
         this.type = data.type;
         this.teamSlug = TEAM_SLUG;
+        this.performAllowed = data.perform_allowed;
         this.performUrl = PERFORM_TASK_URL;
         this.assignAllowed = USER_CAN_ASSIGN_TASK;
         this.deleteAllowed = USER_CAN_DELETE_TASK;

@@ -1045,7 +1045,7 @@ class Task(models.Model):
         return u'%d' % self.id
 
 
-    def to_dict(self):
+    def to_dict(self, member=None):
         '''Return a dictionary representing this task.
 
         Useful for converting to JSON.
@@ -1062,6 +1062,7 @@ class Task(models.Model):
                  'language': self.language if self.language else None,
                  'language_display': SUPPORTED_LANGUAGES_DICT[self.language]
                                      if self.language else None,
+                 'perform_allowed': self.perform_allowed(member) if member else None,
                  'completed': True if self.completed else False, }
 
 

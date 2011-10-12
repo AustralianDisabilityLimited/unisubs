@@ -205,7 +205,9 @@ This is needed, since it's for the js templating
                     {% csrf_token %}
                 {% verbatim %}
                 <input type="hidden" name="task_id" value="{{ pk }}" />
-                <a class="perform" href="#">Perform Task</a>
+                {{ #performAllowed }}
+                    <a class="perform" href="#">Perform Task</a>
+                {{ /performAllowed }}
             </form>
         </li>
     </ul>

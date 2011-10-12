@@ -144,6 +144,7 @@ class TeamsApiV2Class(object):
 
         '''
         tasks = Task.objects.filter(team__slug=team_slug, deleted=False)
+        member = Team.objects.get(slug=team_slug).members.get(user=user)
 
         if filters.get('type'):
             tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
@@ -156,7 +157,7 @@ class TeamsApiV2Class(object):
         if filters.get('language'):
             tasks = tasks.filter(language=filters['language'])
 
-        return [t.to_dict() for t in tasks]
+        return [t.to_dict(member) for t in tasks]
 
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given team member, or unassign it if null/None.'''
@@ -171,7 +172,7 @@ class TeamsApiV2Class(object):
             task.assignee = assignee
             task.save()
 
-            return task.to_dict()
+            return task.to_dict(member)
         else:
             return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
@@ -182,6 +183,7 @@ class TeamsApiV2Class(object):
         flagged and won't appear in further task listings.
 
         '''
+
         form = TaskDeleteForm(user, data={'task': task_id})
         if form.is_valid():
             task = Task.objects.get(pk=task_id)
@@ -210,8 +212,9 @@ class TeamsApiV2Class(object):
 
         task.assignee = assignee
         task.save()
+        member = task.team.members.get(user=user)
 
-        return task.to_dict()
+        return task.to_dict(member)
 
     def task_translate_delete(self, team_video_id, language, user):
         '''Mark a translation task as deleted.

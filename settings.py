@@ -825,7 +825,12 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+
 #: if True will not try to load media (e.g. javascript files)
 # from third parties. If you're developing and have no net 
 # access, enable this setting on your local_settings.py
 RUN_LOCALLY = False
+
+if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
+    INSTALLED_APPS += ("api",)
+

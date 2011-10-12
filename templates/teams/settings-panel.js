@@ -44,7 +44,6 @@ var BaseModel = Class.$extend({
         }, this);
     },
     isNew: function(){
-        console.log(this, this.pk, _.isNumber(this.pk))
         return ! _.isNumber(this.pk);
     },
     delete: function(){
@@ -113,7 +112,6 @@ var ProjectEditPanel = Class.$extend({
         
     },
     hide: function(){
-        console.log('hide' , this);
         $(this.el).mod("close", {"close-modal": function(){
             //$(this).remove();
         }});
@@ -149,7 +147,7 @@ var ProjectEditPanel = Class.$extend({
             $.jGrowl(res.msg);
             if (res.obj){
                 this.model.update(res.obj);
-                this.el.trigger(ON_PROJECT_SAVED, this.model);
+                this.el.trigger(ON_PROJECT_SAVED, this.model, res.isRemoval);
                 
             }
             // show errors
@@ -186,10 +184,17 @@ var ProjectEditPanel = Class.$extend({
         return false;
     },
     onDeletionConfimed: function(){
-        TeamsApiV2.delete_project(
+        var that = this;
+        TeamsApiV2.project_delete(
             TEAM_SLUG, 
             this.model.pk,
-            this.onProjectSaved
+            function(res){
+                if (res && res.success ){
+                    $.jGrowl(res.msg);
+                    
+                    that.el.trigger(ON_PROJECT_SAVED, [that.model, true]);
+                }
+            }
         );
     }
             
@@ -239,6 +244,12 @@ var ProjectPanel  = AsyncPanel.$extend({
             this.projects.push(pModel);
         }
     },
+    removeProject: function(pModel){
+        var index = _.indexOf(this.projects, pModel);
+        if (index != -1){
+            this.projects.splice(index, 1);
+        }
+    },
     renderProjectList: function(){
         var projectListing = $(".projects.listing", this.el);
         $("li", projectListing).remove();
@@ -267,10 +278,14 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onEditRequested(e, new ProjectModel());
         return false;
     },
-    onProjectSaved: function(e, p){
+    onProjectSaved: function(e, p, isRemoval){
         this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
         this.projectEditPanel.hide();
-        this.addProject(p);
+        if (isRemoval){
+            this.removeProject(p)
+        }else{
+            this.addProject(p);
+        }
         this.renderProjectList();
         
     }
@@ -570,12 +585,10 @@ var ConfirmationDialog = Class.$extend({
             this._createDom();
             $(".cancel", this.el).click(this.onCancel);
             $(".confirm", this.el).click(this.onConfirm);
-            console.log("binding");
         }
         $(this.el).mod("show");
     },
     onCancel: function(e){
-        console.log("cancel");
         if (e){
             e.preventDefault();
         }
@@ -585,7 +598,6 @@ var ConfirmationDialog = Class.$extend({
         this.hide();
     },
     onConfirm: function(e){
-        console.log("confirm");
         if (e){
             e.preventDefault();
         }

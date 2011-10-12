@@ -44,6 +44,7 @@ celerybeat-schedule
 user-data/teams/*
 user-data/video/*
 apps/services
+apps/servicesauth
 media/unisubservices
 user-data/pictures
 .vagrant

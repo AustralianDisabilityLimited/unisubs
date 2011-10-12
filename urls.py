@@ -134,6 +134,14 @@ except ImportError:
     pass
 
 try:
+    from servicesauth import urls
+    urlpatterns += patterns(
+        '',
+        (r'^unisubservicesauth/', include('servicesauth.urls', namespace='servicesauth')),)
+except ImportError:
+    pass
+
+try:
     from api import urls
     urlpatterns += patterns('',
         url(r'^api/', include('api.urls', 'api')),

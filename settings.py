@@ -831,6 +831,4 @@ FEATURE_FLAGS  = {
 # access, enable this setting on your local_settings.py
 RUN_LOCALLY = False
 
-if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
-    INSTALLED_APPS += ("api",)
 

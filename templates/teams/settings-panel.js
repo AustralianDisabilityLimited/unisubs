@@ -23,18 +23,36 @@ var AsyncPanel = Class.$extend({
     }
 });
 
-var ProjectModel = Class.$extend({
-    __init__: function(data){
-        this.teamSlug = TEAM_SLUG;
-        this.update(data);
+/**
+* Very barebones, just copies over data passed to the
+* constuctor with possible filter fuctions before assinging 
+* (e.g. for assignging default values or doing type conversion.
+* Also has some lightway semantics on isNew (a la backbone) and isDeleted
+**/
+var BaseModel = Class.$extend({
+    __init__:function(data, filters){
+        this.update(data, filters);
     },
-    update: function(data){
-        this.name = data.name;
-        this.slug = data.slug;
-        this.description = data.description;
-        this.pk = data.pk;
+    update: function(data, filters){
+        if (!data){
+            return
+        }
+        _.each(_.keys(data), function(key){
+            this[key] = filters && filters[key]? 
+                filters[key](data[key]) :
+                data[key];
+        }, this);
+    },
+    isNew: function(){
+        return ! _.isNumber(this.pk);
+    },
+    delete: function(){
+        delete this['pk'];
+        this.isDeleted=true
     }
 });
+
+var ProjectModel = BaseModel.$extend({});
 
 var TaskModel = Class.$extend({
     __init__: function(data) {
@@ -80,7 +98,12 @@ var ProjectEditPanel = Class.$extend({
          this.onSaveClicked = _.bind(this.onSaveClicked, this);
          this.onDeleteClicked = _.bind(this.onDeleteClicked, this);
          this.onChangeProjectReturned = _.bind(this.onChangeProjectReturned, this);
-         $(".project-delete", this.el).click(this.onDeleteClicked);
+         var deleteButtonEl = $(".project-delete", this.el);
+         if(this.model.isNew()){
+             deleteButtonEl.remove();
+         }else{
+              deleteButtonEl.click(this.onDeleteClicked);
+         }
          $(".project-save", this.el).click(this.onSaveClicked);
          
     },
@@ -91,7 +114,7 @@ var ProjectEditPanel = Class.$extend({
     },
     hide: function(){
         $(this.el).mod("close", {"close-modal": function(){
-            $(this).remove();
+            //$(this).remove();
         }});
         
     },
@@ -125,7 +148,7 @@ var ProjectEditPanel = Class.$extend({
             $.jGrowl(res.msg);
             if (res.obj){
                 this.model.update(res.obj);
-                this.el.trigger(ON_PROJECT_SAVED, this.model);
+                this.el.trigger(ON_PROJECT_SAVED, this.model, res.isRemoval);
                 
             }
             // show errors
@@ -138,9 +161,44 @@ var ProjectEditPanel = Class.$extend({
     },
     onDeleteClicked: function(e){
         e.preventDefault();
-        
+        var that = this;
+        this.confirmationDialog = new ConfirmationDialog(
+            "Delete project " + this.model.name,
+            "Are you sure? This cannot be undone. All videos belongoing to this project will be moved to the team as a whole",
+            "Yes, delete it!", 
+            function (e){
+                if (e) {
+                    e.preventDefault()
+                }
+                that.onDeletionConfimed();
+                return false;
+            },
+            "Nope, leave it alone",
+            function(e){
+                if (e) {
+                    e.preventDefault()
+                }
+                that.confirmationDialog.hide();
+                return false;
+            })
+        this.confirmationDialog.show();
         return false;
+    },
+    onDeletionConfimed: function(){
+        var that = this;
+        TeamsApiV2.project_delete(
+            TEAM_SLUG, 
+            this.model.pk,
+            function(res){
+                if (res && res.success ){
+                    $.jGrowl(res.msg);
+                    
+                    that.el.trigger(ON_PROJECT_SAVED, [that.model, true]);
+                }
+            }
+        );
     }
+            
     
 });
 
@@ -187,6 +245,12 @@ var ProjectPanel  = AsyncPanel.$extend({
             this.projects.push(pModel);
         }
     },
+    removeProject: function(pModel){
+        var index = _.indexOf(this.projects, pModel);
+        if (index != -1){
+            this.projects.splice(index, 1);
+        }
+    },
     renderProjectList: function(){
         var projectListing = $(".projects.listing", this.el);
         $("li", projectListing).remove();
@@ -211,17 +275,18 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.renderProjectList();
     },
     
-    onNewProjectClicked : function(e){
-        e.preventDefault();
-        this.projectEditPanel  = new ProjectEditPanel(new ProjectModel({}));
-        this.el.append(this.projectEditPanel.el);
-        this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
+    onNewProjectClicked : function(e, model){
+        this.onEditRequested(e, new ProjectModel());
         return false;
     },
-    onProjectSaved: function(e, p){
+    onProjectSaved: function(e, p, isRemoval){
         this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
         this.projectEditPanel.hide();
-        this.addProject(p);
+        if (isRemoval){
+            this.removeProject(p)
+        }else{
+            this.addProject(p);
+        }
         this.renderProjectList();
         
     }
@@ -457,6 +522,7 @@ var TabMenuItem = Class.$extend({
     }
 });
 
+
 var TabViewer = Class.$extend({
     __init__: function(buttons, menuContainer, panelContainer){
         this.menuItems = _.map(buttons, function(x){
@@ -498,6 +564,55 @@ var TabViewer = Class.$extend({
     }
 });
 
+var ConfirmationDialog = Class.$extend({
+    __init__: function(title, body, okText, okCallback, cancelText, cancelCallback){
+        this.title = title;
+        this.body = body;
+        this.okText = okText || "Yeah";;
+        this.okCallback = okCallback ;
+        this.cancelText = cancelText || "No";
+        this.cancelCallback = cancelCallback;
+        this.onCancel = _.bind(this.onCancel, this);
+        this.onConfirm = _.bind(this.onConfirm, this);
+        
+        
+    },
+    _createDom: function(){
+        this.el = ich.confirmationDialog(this);
+    },
+        
+    show: function(){
+        if(!this.el){
+            this._createDom();
+            $(".cancel", this.el).click(this.onCancel);
+            $(".confirm", this.el).click(this.onConfirm);
+        }
+        $(this.el).mod("show");
+    },
+    onCancel: function(e){
+        if (e){
+            e.preventDefault();
+        }
+        if (this.cancelCallback()){
+            this.cancelCallback();
+        }
+        this.hide();
+    },
+    onConfirm: function(e){
+        if (e){
+            e.preventDefault();
+        }
+        if (this.okCallback()){
+            this.okCallback();
+        }
+    },
+    hide: function(){
+        $(this.el).mod("close");
+        $(this.el).remove();
+    }
+
+
+});
 function boostrapTabs(){
     var buttons = [
         {label:"Basic Settings", panelSelector:".panel-basic", klass:null},

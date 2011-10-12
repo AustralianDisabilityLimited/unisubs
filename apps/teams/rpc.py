@@ -311,7 +311,7 @@ class TeamsApiV2Class(object):
     def project_delete(self, team_slug, project_pk, user):        
         team, project = _user_can_edit_project(team_slug, project_pk, user)
         videos_affected = project.teamvideo_set.all().update(project=team.default_project)
-        project.remove()
+        project.delete()
         return dict(
             videos_affected = videos_affected,
             success=True,

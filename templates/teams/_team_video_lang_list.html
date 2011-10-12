@@ -10,11 +10,12 @@
 
 {% if sub_statuses.total %}
 {% trans "and" %}
-<a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">
+{{search_record.team_video_pk}} {{KAKA}}
+<a href="{{video_url}}">
     {% blocktrans count sub_statuses.total as total %}
     {{ total }} other.
     {% plural %}
     {{ total }} others.
-    {% endblocktrans %}
+    {% endblocktrans %} MEME
 </a>
 {% endif %}

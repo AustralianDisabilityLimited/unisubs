@@ -3,10 +3,13 @@
 set -e
 
 # Link folders ----------------------------------------------------------------
-test -L venv               || ln -s ../extras/venv venv
-test -L media/static-cache || ln -s ../extras/static-cache media/static-cache
-test -L user-data/video    || ln -s ../extras/video user-data/video
-test -L user-data/pictures || ln -s ../extras/pictures user-data/pictures
+mkdir -p ../extras/static-cache
+mkdir -p ../extras/pictures
+mkdir -p ../extras/video
+test -L venv               || ln -s ../../extras/venv venv
+test -L media/static-cache || ln -s ../../extras/static-cache media/static-cache
+test -L user-data/video    || ln -s ../../extras/video user-data/video
+test -L user-data/pictures || ln -s ../../extras/pictures user-data/pictures
 
 # Install requirements --------------------------------------------------------
 source venv/bin/activate

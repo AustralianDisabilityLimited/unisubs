@@ -85,7 +85,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+export PYTHONDONTWRITEBYTECODE=1
 alias cu='cd /opt/unisubs'
+alias cv='cd /opt/unisubs'
 alias so='source venv/bin/activate'
 alias ..='cd ..'
 alias ...='cd ../..'

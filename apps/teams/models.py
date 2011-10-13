@@ -757,7 +757,7 @@ class TeamMember(models.Model):
     objects = TeamMemderManager()
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.user, self.team)
+        return u'%s' % self.user
 
     def can_assign_tasks(self):
         # TODO: Adjust once final roles are in place.

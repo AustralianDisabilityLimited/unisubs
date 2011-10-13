@@ -375,7 +375,7 @@ class Team(models.Model):
     @property
     def default_project(self):
         try:
-            return Project.objects.get(team=self)
+            return Project.objects.get(team=self, slug=Project.DEFAULT_NAME)
         except Project.DoesNotExist:
             p = Project(team=self,name=Project.DEFAULT_NAME)
             p.save()
@@ -416,7 +416,7 @@ class Project(models.Model):
     description = models.TextField(blank=True, null=True, max_length=2048)
     guidelines = models.TextField(blank=True, null=True, max_length=2048)
 
-    slug = models.SlugField(default=DEFAULT_NAME)
+    slug = models.SlugField(blank=True)
     order = models.PositiveIntegerField(default=0)
 
     objects = ProjectManager()
@@ -426,10 +426,8 @@ class Project(models.Model):
 
     def save(self, slug=None,*args, **kwargs):
         self.modified = datetime.datetime.now()
-        if self.slug is None:
-            self.slug = pan_slugify(self.name)
-        elif slug:
-            self.slug = pan_slugify(slug)
+        slug = slug if slug is not None else self.slug or self.name
+        self.slug = pan_slugify(slug)
         super(Project, self).save(*args, **kwargs)
 
     class Meta:

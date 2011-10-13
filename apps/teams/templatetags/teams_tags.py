@@ -23,8 +23,8 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
-from teams.models import Team, Invite
-from videos.models import Action
+from teams.models import Team, Invite, TeamVideo
+from videos.models import Action, Video
 from apps.widget import video_cache
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
@@ -161,13 +161,20 @@ def invite_friends_to_team(context, team):
     return context
 
 @register.inclusion_tag('teams/_team_video_lang_list.html', takes_context=True)  
-def team_video_lang_list(context, team_video_search_record, max_items=6):
+def team_video_lang_list(context, model_or_search_record, max_items=6):
     """
     max_items: if there are more items than max_items, they will be truncated to X more.
     """
+    
+    if isinstance(model_or_search_record, TeamVideo):
+        video_url = reverse("teams:team_video", kwargs={"team_video_pk":model_or_search_record.pk})
+    elif isinstance(model_or_search_record, Video):
+        video_url =  reverse("videos:video", kwargs={"video_id":model_or_search_record.video_id})
+    else:
+        video_url =  reverse("teams:team_video", kwargs={"team_video_pk":model_or_search_record.team_video_pk})
     return  {
-        'sub_statuses': video_cache.get_video_languages_verbose(team_video_search_record.video_id, max_items),
-        'search_record': team_video_search_record
+        'sub_statuses': video_cache.get_video_languages_verbose(model_or_search_record.video_id, max_items),
+        "video_url": video_url ,
         }
 
 @register.inclusion_tag('teams/_team_video_in_progress_list.html')

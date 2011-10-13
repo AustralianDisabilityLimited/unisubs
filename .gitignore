@@ -48,11 +48,8 @@ apps/servicesauth
 media/unisubservices
 user-data/pictures
 .vagrant
-venv/
-unisubs-integration
-deploy/fabric.log
-*.orig
-media/static-cache
-scratch
-user-data/video
 venv
+unisubs-integration
+/.ponyrc
+user-data/video
+media/static-cache

@@ -113,6 +113,7 @@ ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
 ALL_LANGUAGES['kw'] = gettext_noop(u'Cornish')
 ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
 ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
+ALL_LANGUAGES['hy'] = gettext_noop(u'Armenian')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -825,10 +826,10 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
+    INSTALLED_APPS += ("api",)
 
 #: if True will not try to load media (e.g. javascript files)
 # from third parties. If you're developing and have no net 
 # access, enable this setting on your local_settings.py
 RUN_LOCALLY = False
-
-

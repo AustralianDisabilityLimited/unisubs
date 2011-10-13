@@ -453,6 +453,3 @@ class Command(BaseCommand):
             
             data = open(to_path).read()
             assert(data.endswith(version_str))
-            
-        
-

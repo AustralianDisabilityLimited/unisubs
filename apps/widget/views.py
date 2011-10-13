@@ -51,6 +51,7 @@ def embed(request, version_no=''):
     Public clients will use the url : SITE_MEDIA/embed.js
     """
     context = widget.embed_context()
+
     if bool(version_no) is False:
         version_no = ""
     return render_to_response(

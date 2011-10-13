@@ -68,7 +68,11 @@ NO_UNIQUE_URL = (
 #    {
 #        "name": "embed.js",
 #        "no-cache": True 
-#    }, 
+#    },
+    {
+        "name": "js/unisubs-streamer.js",
+        "no-cache": True
+    }, 
     {
         "name": "js/unisubs-widgetizer.js",
         "no-cache": True
@@ -81,9 +85,6 @@ NO_UNIQUE_URL = (
     }, {
         "name": "js/unisubs-api.js",
         "no-cache": True
-    }, {
-        "name": "js/unisubs-extension.js",
-        "no-cache": False,
     }, {
         "name": "js/unisubs-statwidget.js",
         "no-cache": False,

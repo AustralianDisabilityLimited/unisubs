@@ -354,6 +354,34 @@ class TeamsTest(TestCase):
         response = self.client.get(url)
         return response.context['team_video_list']
     
+    def test_team_join_leave(self):
+        team = Team.objects.get(pk=1)
+        join_url = reverse('teams:join_team', args=[team.slug])
+        leave_url = reverse('teams:leave_team', args=[team.slug])
+        
+        self.client.login(**self.auth)
+        
+        #---------------------------------------
+        self.assertTrue(team.is_open())
+        TeamMember.objects.filter(team=team, user=self.user).delete()
+        self.assertFalse(team.is_member(self.user))
+        response = self.client.get(join_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(team.is_member(self.user))
+        
+        #---------------------------------------
+        response = self.client.get(leave_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(team.is_member(self.user))
+        
+        #---------------------------------------
+        team.membership_policy = Team.INVITATION_BY_MANAGER
+        team.save()
+        self.assertFalse(team.is_open())
+        response = self.client.get(join_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(team.is_member(self.user))
+        
     def test_add_video(self):
         self.client.login(**self.auth)
         
@@ -800,7 +828,7 @@ class TeamsTest(TestCase):
         self.failUnlessEqual(response.status_code, 404)
 
 from apps.teams.rpc import TeamsApiClass
-from utils.rpc import Error
+from utils.rpc import Error, Msg
 from django.contrib.auth.models import AnonymousUser
 
 class TestJqueryRpc(TestCase):
@@ -810,6 +838,51 @@ class TestJqueryRpc(TestCase):
         self.team.save()
         self.user = User.objects.all()[:1].get()
         self.rpc = TeamsApiClass()
+    
+    def test_promote_user(self):
+        other_user = User.objects.exclude(pk=self.user.pk)[:1].get()
+        user_tm = TeamMember(team=self.team, user=self.user)
+        user_tm.save()
+        other_user_tm = TeamMember(team=self.team, user=other_user)
+        other_user_tm.save()
+        
+        self.assertEqual(other_user_tm.role, TeamMember.ROLE_MEMBER)
+        self.assertEqual(user_tm.role, TeamMember.ROLE_MEMBER)
+        
+        response = self.rpc.promote_user(self.team.pk, other_user_tm.pk, TeamMember.ROLE_MANAGER, AnonymousUser())
+        if not isinstance(response, Error):
+            self.fail('Anonymouse user is not member of team')
+
+        response = self.rpc.promote_user(self.team.pk, other_user_tm.pk, TeamMember.ROLE_MANAGER, self.user)
+        if not isinstance(response, Error):
+            self.fail('User should be manager')
+            
+        user_tm.role = TeamMember.ROLE_MANAGER
+        user_tm.save()
+        
+        NEW_ROLE = TeamMember.ROLE_CONTRIBUTOR
+        response = self.rpc.promote_user(self.team.pk, other_user_tm.pk, NEW_ROLE, self.user)
+        self.assertTrue(isinstance(response, Msg))
+        other_user_tm = refresh_obj(other_user_tm)
+        self.assertEqual(other_user_tm.role, NEW_ROLE)
+        
+        response = self.rpc.promote_user(self.team.pk, user_tm.pk, TeamMember.ROLE_CONTRIBUTOR, self.user)
+        if not isinstance(response, Error):
+            self.fail('Can\'t promote yourself')        
+        
+        response = self.rpc.promote_user(self.team.pk, other_user_tm.pk, 'undefined role 123456', self.user)
+        if not isinstance(response, Error):
+            self.fail('Incorrect role')                
+
+        response = self.rpc.promote_user(self.team.pk, 123456, TeamMember.ROLE_MANAGER, self.user)
+        if not isinstance(response, Error):
+            self.fail('Undefined team member')    
+
+        undefined_team_pk = 123456
+        self.assertFalse(Team.objects.filter(pk=undefined_team_pk))
+        response = self.rpc.promote_user(undefined_team_pk, other_user_tm.pk, TeamMember.ROLE_MANAGER, self.user)
+        if not isinstance(response, Error):
+            self.fail('Undefined team')   
         
     def test_create_application(self):
         response = self.rpc.create_application(self.team.pk, '', AnonymousUser())

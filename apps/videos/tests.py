@@ -1040,7 +1040,7 @@ class VolunteerRpcTest(TestCase):
         self.assertEqual(3, len(rest))
 
 #Testings VideoType classes
-from videos.types.youtube import YoutubeVideoType
+from videos.types.youtube import YoutubeVideoType, save_subtitles_for_lang
 
 class YoutubeVideoTypeTest(TestCase):
     
@@ -1095,7 +1095,23 @@ class YoutubeVideoTypeTest(TestCase):
         vt = self.vt(self.shorter_url)
         self.assertTrue(vt)
         self.assertEqual(vt.video_id , self.shorter_url.split("/")[-1])
-
+    
+    def test_subtitles_saving(self):
+        youtube_url = 'http://www.youtube.com/watch?v=XDhJ8lVGbl8'
+        
+        vt = self.vt(youtube_url)
+        video, created = Video.get_or_create_for_url(youtube_url)
+        
+        lang = vt.get_subtitled_languages()[0]
+        
+        save_subtitles_for_lang(lang, video.pk, video.video_id)
+        
+        sl = video.subtitle_language(lang['lang_code'])
+        
+        subtitles = sl.latest_subtitles()
+        self.assertTrue(len(subtitles))
+        self.assertEqual(subtitles[-1].text, u'Thanks.')
+        
 # FIXME: this video is private on youtube, so this test fails.   
 #    def test_subtitle_saving(self):
 #        url = u'http://www.youtube.com/watch?v=63c5p_8hiho'

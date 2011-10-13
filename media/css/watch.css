@@ -21,6 +21,10 @@ body#watch h1 {
     text-shadow: 0 1px 0 #FFF;
 }
 
+body#watch #main_bar h1 {
+    margin: 0;
+}
+
 body#watch h1 a {
     text-decoration: none;
 }
@@ -345,6 +349,7 @@ ul.video_list li li.languages div.lang_arrow div.lang_menu {
 
 div.lang_menu div.hd {
     padding: 5px 0;
+    margin-bottom: 5px;
     background: -webkit-gradient(linear, left bottom, left top, from(#d3dee2), to(#eaeff1)) no-repeat;
     background: -moz-linear-gradient(bottom,  #d3dee2,  #eaeff1) no-repeat;
     -webkit-box-shadow: inset 0 1px 0 #FFF;
@@ -370,6 +375,16 @@ div.lang_menu div.bd span {
     font-size: 11px;
     padding: 4px 8px 4px 8px;
     margin: 3px;
+}
+
+div.lang_menu div.bd a.more_link, body#index div.lang_menu div.bd a.more_link {
+    display: block;
+    clear: both;
+    padding: 5px 3px 0;
+    font-size: 11px;
+    color: #747B81;
+    text-align: right;
+    font-weight: normal;
 }
 
 div.pages {

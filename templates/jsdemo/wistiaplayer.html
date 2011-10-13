@@ -1,0 +1,37 @@
+{% extends "jsdemo/base_demo.html" %}
+{% block body %}
+<object width="640" height="360" id="wistia_91175" 
+        classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+  <param name="movie" value="http://embed.wistia.com/flash/embed_player_v1.1.swf">
+  <param name="allowfullscreen" value="true">
+  <param name="allowscriptaccess" value="always">
+  <param name="wmode" value="opaque">
+  <param name="flashvars" value="videoUrl=http://embed.wistia.com/deliveries/392a82a625fba89deec7cbc7e15cce55e9598c81.bin&amp;stillUrl=http://embed.wistia.com/deliveries/34b67ab5b0ba1fa952ba293e13842a1f7a1317d4.bin&amp;unbufferedSeek=true&amp;controlsVisibleOnLoad=false&amp;autoPlay=false&amp;endVideoBehavior=default&amp;playButtonVisible=true&amp;embedServiceURL=http://distillery.wistia.com/x&amp;accountKey=wistia-production_97&amp;mediaID=wistia-production_91175&amp;mediaDuration=149.1">
+  <embed src="http://embed.wistia.com/flash/embed_player_v1.1.swf" 
+         width="640" height="360" name="wistia_91175" 
+         type="application/x-shockwave-flash" allowfullscreen="true" 
+         allowscriptaccess="always" wmode="opaque" 
+         flashvars="videoUrl=http://embed.wistia.com/deliveries/392a82a625fba89deec7cbc7e15cce55e9598c81.bin&amp;stillUrl=http://embed.wistia.com/deliveries/34b67ab5b0ba1fa952ba293e13842a1f7a1317d4.bin&amp;unbufferedSeek=true&amp;controlsVisibleOnLoad=false&amp;autoPlay=false&amp;endVideoBehavior=default&amp;playButtonVisible=true&amp;embedServiceURL=http://distillery.wistia.com/x&amp;accountKey=wistia-production_97&amp;mediaID=wistia-production_91175&amp;mediaDuration=149.1">
+  </embed>
+</object>
+<!-- Event log. -->
+<fieldset class="goog-debug-panel">
+  <legend>Event Log</legend>
+  <div id="log" style="height: 300px; overflow-y: auto"></div>
+</fieldset>
+<div id="perf"></div>  
+<script type="text/javascript">
+    goog.debug.LogManager.getRoot().setLevel(goog.debug.Logger.Level.ALL);
+    var logger = goog.debug.Logger.getLogger('player');
+    var logConsole = new goog.debug.DivConsole(document.getElementById('log'));
+    logConsole.setCapturing(true);
+
+    window.setInterval(
+    function() { 
+    var p2 = document.getElementsByName('wistia_91175')[0];
+    logger.info(p2.getCurrentTime());
+    },
+    1000);
+</script>
+
+{% endblock %}

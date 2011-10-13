@@ -41,7 +41,7 @@ class TeamsApiClass(object):
             return Error(_('Team does not exist'))
         
         try:
-            tm = TeamMember.objects.get(team=team, user=user)
+            TeamMember.objects.get(team=team, user=user)
             return Error(_(u'You are already a member of this team.'))
         except TeamMember.DoesNotExist:
             pass
@@ -73,6 +73,9 @@ class TeamsApiClass(object):
             tm = TeamMember.objects.get(pk=member_id, team=team)
         except TeamMember.DoesNotExist:
             return Error(_(u'Team member does not exist.'))
+        
+        if tm.user == user:
+            return Error(_(u'You can\'t promote yourself.'))
         
         tm.role = role
         tm.save()

@@ -44,3 +44,4 @@ goog.require('goog.dom.ViewportSizeMonitor');
 goog.require('goog.events.InputHandler');
 goog.require('goog.testing.events');
 goog.require("goog.net.Cookies");
+goog.require("goog.dom.annotate");

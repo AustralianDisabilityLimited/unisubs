@@ -26,6 +26,20 @@ goog.provide('unisubs');
 unisubs.REPORT_ANALYTICS = true;
 
 /**
+ * @define {boolean}
+ */
+unisubs.STREAMER = false;
+
+unisubs.usingStreamer = function() {
+    if (goog.DEBUG) {
+        return !!window.UNISUBS_STREAMER;
+    }
+    else {
+        return unisubs.STREAMER;
+    }
+};
+
+/**
  * If a widget is embedded in a different domain, this is set by
  * unisubs.widget.CrossDomainEmbed. It has two properties: siteURL
  * and staticURL. It is non-null iff the widget is embedded in a 

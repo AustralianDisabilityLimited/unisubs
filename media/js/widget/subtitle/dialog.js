@@ -142,12 +142,15 @@ unisubs.subtitle.Dialog.prototype.setState_ = function(state) {
     this.currentSubtitlePanel_ = nextSubPanel;
 
     var et = unisubs.RightPanel.EventType;
-    this.rightPanelListener_.listen(
-        rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_);
-    this.rightPanelListener_.listen(
-        rightPanel, et.DONE, this.handleDoneKeyPress_);
-    this.rightPanelListener_.listen(
-        rightPanel, et.GOTOSTEP, this.handleGoToStep_);
+    this.rightPanelListener_.
+        listen(
+            rightPanel, et.LEGENDKEY, this.handleLegendKeyPress_).
+        listen(
+            rightPanel, et.DONE, this.handleDoneKeyPress_).
+        listen(
+            rightPanel, et.SAVEANDEXIT, this.handleSaveAndExitKeyPress_).
+        listen(
+            rightPanel, et.GOTOSTEP, this.handleGoToStep_);
     if (state == s.SYNC || state == s.REVIEW) {
         rightPanel.showBackLink(
             state == s.SYNC ? "Back to Typing" : "Back to Sync");
@@ -249,6 +252,12 @@ unisubs.subtitle.Dialog.prototype.handleLegendKeyPress_ = function(event) {
         else
             this.togglePause_();
     }
+};
+unisubs.subtitle.Dialog.prototype.handleSaveAndExitKeyPress_ = function(event) {    
+    if (!this.doneButtonEnabled_) {
+        return;
+    }
+    this.saveWork(false);
 };
 unisubs.subtitle.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     if (!this.doneButtonEnabled_)

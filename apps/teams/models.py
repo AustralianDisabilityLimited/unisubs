@@ -109,7 +109,8 @@ class Team(models.Model):
             'msg': msg,
             'author': msg.author,
             'author_page': msg.author.get_absolute_url(),
-            'team_page': self.get_absolute_url()
+            'team_page': self.get_absolute_url(),
+            "STATIC_URL": settings.STATIC_URL,
         }
         return render_to_string('teams/_team_message.html', context)
     

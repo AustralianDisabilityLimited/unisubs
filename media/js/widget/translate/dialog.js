@@ -46,9 +46,13 @@ unisubs.translate.Dialog.prototype.createDom = function() {
         this.translationPanel_, true);
     var rightPanel = this.createRightPanel_();
     this.setRightPanelInternal(rightPanel);
-    this.getHandler().listen(
-        rightPanel, unisubs.RightPanel.EventType.DONE,
-        this.handleDoneKeyPress_);
+    this.getHandler().
+        listen(
+            rightPanel, unisubs.RightPanel.EventType.DONE,
+            this.handleDoneKeyPress_).
+        listen(
+            rightPanel, unisubs.RightPanel.EventType.SAVEANDEXIT,
+            this.handleSaveAndExitKeyPress_);
     goog.dom.classes.add(this.getContentElement(),
                          'unisubs-modal-widget-translate');
 };
@@ -76,6 +80,10 @@ unisubs.translate.Dialog.prototype.createRightPanel_ = function() {
         this,
         this.serverModel_, helpContents, extraHelp, [], false, "Done?", 
         "Submit final translation", "Resources for Translators");
+};
+unisubs.translate.Dialog.prototype.handleSaveAndExitKeyPress_ = function(e) {
+    e.preventDefault();
+    this.saveWork(true);
 };
 unisubs.translate.Dialog.prototype.handleDoneKeyPress_ = function(event) {
     this.saveWork(true);

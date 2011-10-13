@@ -50,7 +50,7 @@
 
   logconsole.setCapturing(true);
 
-  var EVENTS = goog.object.getValues(unisubs.video.AbstractVideoPlayer.EventType);
+  var EVENTS = goog.object.getValues(unisubs.player.AbstractVideoPlayer.EventType);
   ytlogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
   html5logger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
   flvlogger.fine(['Listening for: ', EVENTS.join(', '), '.'].join(''));
@@ -70,16 +70,16 @@
   // Set up the video players.
 
 /*
-  var ytSource = new unisubs.video.YoutubeVideoSource('w7vuupjsaVI');
+  var ytSource = new unisubs.player.YoutubeVideoSource('w7vuupjsaVI');
   var ytPlayer = ytSource.createPlayer();
   ytPlayer.decorate(goog.dom.$('ytvideo'));
 
-  var html5source = new unisubs.video.Html5VideoSource(
+  var html5source = new unisubs.player.Html5VideoSource(
       'http://videos.mozilla.org/firefox3/switch/switch.ogg');
   var html5player = html5source.createPlayer();
   html5player.decorate(goog.dom.$('html5video'));
 */
-  var flvSource = new unisubs.video.FlvVideoSource(
+  var flvSource = new unisubs.player.FlvVideoSource(
       'http://blip.tv/file/get/Thecraigshow-CraigVsKelly354.flv');
   var flvPlayer = flvSource.createPlayer();
   flvPlayer.decorate(goog.dom.$('flvvideo'));

@@ -21,7 +21,7 @@ goog.provide('unisubs.widget.WidgetDecorator');
 /**
  * @private
  * @constructor
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
 unisubs.widget.WidgetDecorator = function(videoPlayer) {
     this.videoPlayer_ = videoPlayer;
@@ -35,20 +35,20 @@ unisubs.widget.WidgetDecorator = function(videoPlayer) {
     else
         this.handler_.listen(
             this.videoPlayer_,
-            unisubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
+            unisubs.player.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
             this.videoDimensionsKnown_);
+    this.controller_ = new unisubs.widget.WidgetController(
+        this.videoPlayer_.getVideoSource().getVideoURL(),
+        this.videoPlayer_,
+        this.videoTab_);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': unisubs.isFromDifferentDomain()
     };
     if (this.videoPlayer_.getVideoSource() instanceof 
-        unisubs.video.Html5VideoSource)
+        unisubs.player.Html5VideoSource)
         args['additional_video_urls'] = 
             this.videoPlayer_.getVideoSource().getAlternateURLs();
-    this.controller_ = new unisubs.widget.WidgetController(
-        this.videoPlayer_.getVideoSource().getVideoURL(),
-        this.videoPlayer_,
-        this.videoTab_);
     unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.controller_.initializeState, 
@@ -61,7 +61,7 @@ unisubs.widget.WidgetDecorator = function(videoPlayer) {
 
 /**
  *
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer should already
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer should already
  *     be attached to page.
  */
 unisubs.widget.WidgetDecorator.decorate = function(videoPlayer) {

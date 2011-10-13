@@ -114,9 +114,6 @@ jQuery(function($){
 </head>
 <body {% block body_attrs %}{% endblock %}>
 {% csrf_token %}
-{% block feedback-button %}
-  <a href="https://universalsubtitles.tenderapp.com/" class="feedback_tab" target="_blank">{% trans "Feedback" %}</a>
-{% endblock %}
 
 {% comment %}
 <!--[if lte IE 6]>
@@ -163,7 +160,7 @@ jQuery(function($){
     {% endcomment %}
     <li><a href="http://blog.universalsubtitles.org/volunteer/">{% trans "Volunteer" %}</a></li>
     <li><a href="{% url services_page %}">{% trans "Services" %}</a></li>
-    <li><a href="{% url faq_page %}"><span>{% trans 'Help' %}</span></a></li>
+    <li><a href="#" id="help_link"><span>{% trans 'Help' %}</span></a></li>
     {% if user.is_authenticated %}
         <li id="me_menu">{% top_user_panel %}</li>
     {% else %}
@@ -212,5 +209,12 @@ jQuery(function($){
 
 <div style="float: right; font-size: 0.6em; padding: 3px;">commit: {{ LAST_COMMIT_GUID }}</div>
 {% block bottom_scripts %}{% endblock %}
+<script type="text/javascript" charset="utf-8">
+  Tender = {
+    hideToggle: true,
+    widgetToggles: [document.getElementById('help_link')]
+  }
+</script>
+<script src="https://universalsubtitles.tenderapp.com/tender_widget.js" type="text/javascript"></script>
 </body>
 </html>

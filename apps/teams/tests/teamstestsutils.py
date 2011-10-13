@@ -2,7 +2,7 @@ from django.core.management import call_command
 from widget.rpc import Rpc    
 
 def refresh_obj(m):
-    return m.__class__.objects.get(pk=m.pk)
+    return m.__class__._default_manager.get(pk=m.pk)
 
 def reset_solr():
     # cause the default site to load

@@ -5,23 +5,36 @@
 {% block body_attrs %}id="index"{% endblock %}
 
 {% block main_content %}
+<style>
+    p, textarea {
+        margin-bottom: 1.5em;
+    }
+    p.red {
+        margin-bottom: 0;
+    }
+    .example p {
+        padding: 1em 0 0;
+        text-align: left;
+    }
+    code {
+        font-family: monospace;
+    }
+</style>
 <h2 class="centered alpha_badge">
     {% trans 'Add collaborative subtitling to every video on your site' %}
 </h2>
 <div class="grid_6 alpha">
     <p class="larger">
-        {% trans 'Just add this line of code to your webpage, or to your blog/CMS theme (right before the &lt;/head&gt; tag)' %}
+        {% trans 'Just drop one line of code into your page:' %}
     </p>
-    <textarea class="embedder">
-        <script type="text/javascript" src="http://www.universalsubtitles.org/site_media/js/unisubs-widgetizer.js">
-        </script>
-    </textarea>
+    <textarea class="embedder"><script type="text/javascript" src="http://s3.www.universalsubtitles.org/js/unisubs-widgetizer.js"></script></textarea>
+    <p>
+        {% blocktrans %}
+            You can add it just before the <code>&lt;/head&gt;</code> or <code>&lt;/body&gt;</code> tag (<a href="https://github.com/pculture/unisubs/wiki/Widgetizer-script-usage-guide">see usage notes</a>).
+        {% endblocktrans %}
+    </p>
     <p class="larger">
         {% trans 'This lets you and visitors to your site' %}:
-    </p>
-    <p>
-        {% trans 'Not sure how?'%} <a href="/faq#q-adding">{% trans 'Learn more' %}</a>
-        / <a href="mailto:feedback@universalsubtitles.org">{% trans 'Contact us' %}</a>
     </p>
     <ul>
         <li>
@@ -61,21 +74,8 @@
 </div>
 <div class="yellow">
     <p class="red">
-        {% trans 'Note: this code is an experimental part of the Universal Subtitles service.' %} 
-        {% trans 'If you run into problems, please' %} 
-        <a href="mailto:feedback@universalsubtitles.org">{% trans 'contact us' %}</a>.  
-        {% trans 'Known issues:' %}
-    </p>
-    <ul>
-        <li>
-            {% trans 'Most Flash videos (e.g. Youtube) will be set to a default, small size' %}
-        </li>
-        <li>
-            {% trans "Blip.TV and some other sitesʼ videos will play in our custom player" %}
-        </li>
-    </ul>
-    <p>
-        {% trans 'Any other problems, especially styling problems on the page, contact us and include the site URL!' %}
+        {% trans 'This code is experimental. If you run into problems, please' %} 
+        <a href="https://universalsubtitles.tenderapp.com/discussions/technical-support">{% trans 'let us know' %}</a>.
     </p>
 </div>
 {% endblock %}

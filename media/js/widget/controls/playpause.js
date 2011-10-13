@@ -39,7 +39,7 @@ unisubs.controls.PlayPause.prototype.createDom = function() {
 };
 unisubs.controls.PlayPause.prototype.enterDocument = function() {
     unisubs.controls.PlayPause.superClass_.enterDocument.call(this);
-    var et = unisubs.video.AbstractVideoPlayer.EventType;
+    var et = unisubs.player.AbstractVideoPlayer.EventType;
     this.getHandler().
         listen(this.videoPlayer_, et.PLAY_CALLED, this.setPlaying_).
         listen(this.videoPlayer_, et.PAUSE_CALLED, this.setPaused_).

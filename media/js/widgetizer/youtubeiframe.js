@@ -75,7 +75,7 @@ unisubs.widgetizer.YoutubeIFrame.prototype.makeVideoSource_ = function(iframe, i
         config['width'] = iframe['width'];
         config['height'] = iframe['height'];
     }
-    return unisubs.video.YTIFrameVideoSource.forURL(url, config);
+    return unisubs.player.YTIFrameVideoSource.forURL(url, config);
 };
 
 unisubs.widgetizer.YoutubeIFrame.prototype.replaceIFrameElement_ = function(player, element) {
@@ -94,7 +94,7 @@ unisubs.widgetizer.YoutubeIFrame.prototype.unwidgetizedIFrames_ = function() {
     var youtubeIFrames = goog.array.filter(
         iframes,
         function(iframe) { 
-            return unisubs.video.YoutubeVideoSource.isYoutube(iframe['src']); 
+            return unisubs.player.YoutubeVideoSource.isYoutube(iframe['src']); 
         });
     return this.filterUnwidgetized(youtubeIFrames);
 };

@@ -479,13 +479,13 @@ text-shadow:
   color: #fff !important;
   background: url("../images/widget_right_bg.gif") 0 0 repeat-y !important;
   border: 0 !important;	
-  }
+}
   
 
 
 .unisubs-modal-widget-translate .unisubs-right .unisubs-done{
-  margin-top: 75px !important;	
-  }
+  margin-top: 67px !important;	
+}
 
 
 
@@ -670,18 +670,24 @@ height: 713px !important;
 
 .unisubs-steps{
   position:absolute !important;
-  bottom: 30px !important;
+  bottom: 46px !important;
   width: 420px !important;
-  height: 112px !important;
+  height: 122px !important;
   margin-left: 2px !important;
 	text-shadow: 0 0 0 !important;
   }
 
 
+.unisubs-saveandexit {
+   font-size: 15px;
+   padding: 0 24px;
+   text-align: center;
+}
+
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	.unisubs-steps{
-		bottom: 47px !important;
+		bottom: 63px !important;
 	}
 }
 
@@ -689,7 +695,7 @@ height: 713px !important;
 
 .unisubs-restart, a.unisubs-download-subs {
   padding-left: 33px !important;
-  margin: 10px 0 30px 0px !important;
+  margin: 10px 0 20px 0px !important;
   font-size: 11px !important;
   float: right !important;
   text-decoration: none !important;
@@ -966,9 +972,9 @@ margin-right: 20px !important;
   line-height: 2em !important;
   text-align: center !important;
   position: absolute !important;
-  top: -50px !important;
+  top: -40px !important;
   left: 34px
-  }
+}
 
 
 .unisubs-needLogin a{
@@ -3242,6 +3248,7 @@ margin: 0 !important;
 padding: 0 !important;
 list-style: none !important;
 text-shadow: 0 0 0 !important;
+border: none !important;
 }
 
 
@@ -3297,6 +3304,7 @@ color: #42bce9 !important;
 .unisubs-dropdown .unisubs-requestSubtitles{
 /*background: url("../images/dropdown_icons.png") 19px -29px no-repeat !important;*/
 color: #42bce9 !important;
+display:none !important;
 }
 
 .unisubs-dropdown .unisubs-improveSubtitles{

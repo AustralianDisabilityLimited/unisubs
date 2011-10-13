@@ -146,12 +146,14 @@
     <div id="featured-videos" class="featured">
       <a class="more" href="{% url videos:featured_videos %}">{% trans "More Featured" %}</a>
       <h2>{% trans "Featured Videos" %}</h2>
-      <p class="links">
-        {% comment %}<a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>{% endcomment %}
-        <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
-      </p>
       
-
+      <p class="links">
+        &nbsp;
+        {% comment %}
+        <a href="{% url videos:volunteer_category category='requested' %}">{% trans "Top volunteer needs" %}</a>
+        <a href="{% url teams:index %}">{% trans "Translation teams" %}</a>
+        {% endcomment %}
+      </p>
             {% with featured_videos as video_list %}
                 {% include 'videos/_watch_page.html' %}
             {% endwith %}

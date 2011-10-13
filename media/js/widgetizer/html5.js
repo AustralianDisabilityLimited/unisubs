@@ -59,7 +59,7 @@ unisubs.widgetizer.HTML5.prototype.makeVideoSource_ =
             sources.push(this.makeVideoSourceForURL_(sourceElements[i].src));
     }
     for (var i = 0; i < sources.length; i++)
-        if (unisubs.video.supportsVideoType(sources[i].getVideoType())) {
+        if (unisubs.player.supportsVideoType(sources[i].getVideoType())) {
             var alternateSources = [];
             for (var j = 0; j < sources.length; j++)
                 if (j != i)
@@ -74,5 +74,5 @@ unisubs.widgetizer.HTML5.prototype.makeVideoSourceForURL_ = function(urlString) 
     var uri = new goog.Uri(urlString);
     if (!uri.hasDomain())
         uri = new goog.Uri(window.location).resolve(uri);
-    return unisubs.video.Html5VideoSource.forURL(uri.toString());
+    return unisubs.player.Html5VideoSource.forURL(uri.toString());
 };

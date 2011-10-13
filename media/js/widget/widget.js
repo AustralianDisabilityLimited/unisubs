@@ -65,7 +65,6 @@ unisubs.widget.Widget.prototype.createDom = function() {
  */
 unisubs.widget.Widget.widgetsCreated_ = [];
 
-
 /* Gets all widgets created on this page.
  * @return {Array} All widgets created on this page.
  * The array is cloned, so end user code can loop, filter and otherwise 
@@ -122,24 +121,24 @@ unisubs.widget.Widget.prototype.findVideoSource_ = function() {
         if (this.videoConfig_)
             mainVideoSpec = { 'url': this.videoURL_, 
                               'config': this.videoConfig_ };
-        return unisubs.video.VideoSource.bestVideoSource(
+        return unisubs.player.MediaSource.bestVideoSource(
             goog.array.concat(mainVideoSpec, this.alternateVideoURLs_));
     }
     else
-        return unisubs.video.VideoSource.videoSourceForURL(
+        return unisubs.player.MediaSource.videoSourceForURL(
             this.videoURL_, this.videoConfig_);
 };
 
 unisubs.widget.Widget.prototype.isVideoSourceImmediatelyUsable_ = 
     function() 
 {
-    if (this.videoSource_ instanceof unisubs.video.BlipTVPlaceholder)
+    if (this.videoSource_ instanceof unisubs.player.BlipTVPlaceholder)
         return false;
     if (this.forceFormat_ || goog.isDefAndNotNull(this.alternateVideoURLs_))
         return true;
     else {
-        return !(this.videoSource_ instanceof unisubs.video.Html5VideoSource)
-                || unisubs.video.supportsVideo();
+        return !(this.videoSource_ instanceof unisubs.player.Html5VideoSource)
+                || unisubs.player.supportsVideo();
     }
 };
 
@@ -187,7 +186,7 @@ unisubs.widget.Widget.prototype.showWidgetError_ = function() {
     // call to show_widget timed out.
     if (!this.isVideoSourceImmediatelyUsable_()) {
         // waiting for video source from server.
-        if (this.videoSource_ instanceof unisubs.video.BlipTVPlaceholder) {
+        if (this.videoSource_ instanceof unisubs.player.BlipTVPlaceholder) {
             // out of luck.
             
         }
@@ -206,7 +205,7 @@ unisubs.widget.Widget.prototype.initializeState_ = function(result) {
     }
     if (!this.isVideoSourceImmediatelyUsable_()) {
         goog.dom.removeNode(this.videoPlaceholder_);
-        var videoSource = unisubs.video.VideoSource.bestVideoSource(
+        var videoSource = unisubs.player.MediaSource.bestVideoSource(
             result['video_urls']);
         if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
             this.videoConfig_)
@@ -243,7 +242,7 @@ unisubs.widget.Widget.prototype.setVideoDimensions_ = function() {
     else
         this.getHandler().listen(
             this.videoPlayer_,
-            unisubs.video.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
+            unisubs.player.AbstractVideoPlayer.EventType.DIMENSIONS_KNOWN,
             this.videoDimensionsKnown_);
 };
 
@@ -300,13 +299,13 @@ unisubs.widget.Widget.exportJSSameDomain_ = function(){
         unisubs.widget.SameDomainEmbed.embed);
     
     goog.exportSymbol(
-        "unisubs.video.supportsVideo", unisubs.video.supportsVideo);
+        "unisubs.player.supportsVideo", unisubs.player.supportsVideo);
     goog.exportSymbol(
-        "unisubs.video.supportsH264", unisubs.video.supportsH264);
+        "unisubs.player.supportsH264", unisubs.player.supportsH264);
     goog.exportSymbol(
-        "unisubs.video.supportsOgg", unisubs.video.supportsOgg);
+        "unisubs.player.supportsOgg", unisubs.player.supportsOgg);
     goog.exportSymbol(
-        "unisubs.video.supportsWebM", unisubs.video.supportsWebM);
+        "unisubs.player.supportsWebM", unisubs.player.supportsWebM);
         
     // these are here to guarantee backwareds compatibility,
     // should be removed once we are sure partners do not need this
@@ -316,13 +315,13 @@ unisubs.widget.Widget.exportJSSameDomain_ = function(){
         unisubs.widget.SameDomainEmbed.embed);
 
     goog.exportSymbol(
-        "mirosubs.video.supportsVideo", unisubs.video.supportsVideo);
+        "mirosubs.video.supportsVideo", unisubs.player.supportsVideo);
     goog.exportSymbol(
-        "mirosubs.video.supportsH264", unisubs.video.supportsH264);
+        "mirosubs.video.supportsH264", unisubs.player.supportsH264);
     goog.exportSymbol(
-        "mirosubs.video.supportsOgg", unisubs.video.supportsOgg);
+        "mirosubs.video.supportsOgg", unisubs.player.supportsOgg);
     goog.exportSymbol(
-        "mirosubs.video.supportsWebM", unisubs.video.supportsWebM);
+        "mirosubs.video.supportsWebM", unisubs.player.supportsWebM);
 };
 
 unisubs.widget.Widget.exportJSCrossDomain_ = function(){

@@ -20,7 +20,7 @@ goog.provide('unisubs.timeline.SubtitleSet');
 /**
 * @constructor
 * @param {unisubs.subtitle.EditableCaptionSet} editableCaptionSet
-* @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+* @param {unisubs.player.AbstractVideoPlayer} videoPlayer
 */
 unisubs.timeline.SubtitleSet = function(editableCaptionSet, videoPlayer) {
     goog.events.EventTarget.call(this);

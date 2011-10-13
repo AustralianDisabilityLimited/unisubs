@@ -39,6 +39,11 @@ unisubs.Widgetizer = function() {
         new unisubs.widgetizer.YoutubeIFrame()
     ];
     this.logger_ = goog.debug.Logger.getLogger('unisubs.Widgetizer');
+    var uri = new goog.Uri(window.location);
+    unisubs.Tracker.getInstance().trackEvent(
+        "Widgetizer",
+        uri.getDomain(),
+        uri.toString());
 };
 goog.addSingletonGetter(unisubs.Widgetizer);
 
@@ -87,8 +92,14 @@ unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
         this.logger_.info('found ' + videoPlayers.length + 
                           ' new video players on the page');
     }
-    for (var i = 0; i < videoPlayers.length; i++)
-        unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
+    for (var i = 0; i < videoPlayers.length; i++) {
+        if (unisubs.usingStreamer()) {
+            unisubs.streamer.StreamerDecorator.decorate(videoPlayers[i]);
+        }
+        else {
+            unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
+        }
+    }
 };
 
 unisubs.Widgetizer.prototype.addHeadCss = function() {

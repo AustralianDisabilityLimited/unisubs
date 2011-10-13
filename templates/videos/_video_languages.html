@@ -14,7 +14,7 @@
     </div><!-- hd -->
     
     <div class="bd clearfix">
-        {% for lang in languages|slice:":10" %}
+        {% for lang in languages|slice:":7" %}
             {% with lang.subtitle_count as lines_count %}
                 {% if lines_count %}  
                     <a href="{{ lang.get_absolute_url }}" class="{% complete_color lang %}">
@@ -22,7 +22,10 @@
                     </a>
                 {% endif %}
             {% endwith %}
-        {% endfor %}                    
+        {% endfor %}
+        {% if languages|length > 7 %}
+          <a href="{{ video.get_absolute_url }}#video-menu" class="more_link">→ View all</a>
+        {% endif %}
     </div>
     {% endif %}
 </div>

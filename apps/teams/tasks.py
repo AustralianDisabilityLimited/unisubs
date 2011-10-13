@@ -37,7 +37,8 @@ def add_videos_notification(*args, **kwargs):
                 'domain': domain,
                 'user': user,
                 'team': team,
-                'team_videos': team_videos
+                'team_videos': team_videos,
+                "STATIC_URL": settings.STATIC_URL,
             }
 
             send_templated_email(user.email, subject, 

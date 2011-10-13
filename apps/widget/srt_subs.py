@@ -137,6 +137,8 @@ class MGSubtitles(BaseSubtitles):
 
         return u''.join(output)
 
+GenerateSubtitlesHandler.register(MGSubtitles)
+
 class SRTSubtitles(BaseSubtitles):
     file_type = 'srt'
 
@@ -268,6 +270,12 @@ class TTMLSubtitles(BaseSubtitles):
         return (u'<?xml version="1.0" encoding="UTF-8"?>%s' % self.line_delimiter)\
             +etree.tounicode(self.xml_node(), pretty_print=True)
     
+    def _get_attributes(self, item):
+        attrib = {}
+        attrib['begin'] = self.format_time(item['start'])
+        attrib['dur'] = self.format_time(item['end']-item['start'])
+        return attrib
+    
     def xml_node(self):
         tt = etree.Element('tt', nsmap={None: 'http://www.w3.org/2006/04/ttaf1', 'tts': 'http://www.w3.org/2006/04/ttaf1#styling'})
         etree.SubElement(tt, 'head')
@@ -275,9 +283,7 @@ class TTMLSubtitles(BaseSubtitles):
         div = etree.SubElement(body, 'div')
         for item in self.subtitles:
             if item['text'] and self.isnumber(item['start']) and self.isnumber(item['end']):
-                attrib = {}
-                attrib['begin'] = self.format_time(item['start'])
-                attrib['dur'] = self.format_time(item['end']-item['start'])
+                attrib = self._get_attributes(item)
                 p = etree.SubElement(div, 'p', attrib=attrib)
                 p.text = self.remove_re.sub('', item['text'].strip())
         return tt
@@ -291,4 +297,15 @@ class TTMLSubtitles(BaseSubtitles):
         fr_seconds = int(time % 1 * 100)
         return u'%02i:%02i:%02i.%02i' % (hours, minutes, seconds, fr_seconds)
     
-GenerateSubtitlesHandler.register(TTMLSubtitles, 'ttml')    
+GenerateSubtitlesHandler.register(TTMLSubtitles, 'ttml')
+
+class DFXPSubtitles(TTMLSubtitles):
+    file_type = 'dfxp'
+
+    def _get_attributes(self, item):
+        attrib = {}
+        attrib['begin'] = self.format_time(item['start'])
+        attrib['end'] = self.format_time(item['end'])
+        return attrib
+    
+GenerateSubtitlesHandler.register(DFXPSubtitles, 'dfxp')

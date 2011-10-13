@@ -21,7 +21,7 @@ goog.provide('unisubs.CaptionManager');
 /**
  * @constructor
  *
- * @param {unisubs.video.AbstractVideoPlayer} videoPlayer
+ * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  */
 unisubs.CaptionManager = function(videoPlayer, captionSet) {
@@ -38,7 +38,7 @@ unisubs.CaptionManager = function(videoPlayer, captionSet) {
 
     this.eventHandler_.listen(
 	videoPlayer,
-	unisubs.video.AbstractVideoPlayer.EventType.TIMEUPDATE,
+	unisubs.player.AbstractVideoPlayer.EventType.TIMEUPDATE,
 	this.timeUpdate_);
     this.eventHandler_.listen(
 	captionSet,

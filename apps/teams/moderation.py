@@ -17,7 +17,8 @@ from apps.teams.models import TeamVideo
 
 from apps.auth.models import CustomUser as User
 from apps.comments.notifications import notify_comment_by_email
-from widget.rpc import video_cache
+
+from widget import video_cache
 
 
 def _update_search_index(video):

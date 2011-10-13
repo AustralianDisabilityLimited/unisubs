@@ -1,25 +1,5 @@
-{% load media_compressor %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 
-1.0 Strict//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  {% if not js_use_compiled %}
-    {% include_bundle "js-base-dependencies" %}
-    <script type="text/javascript">
-      goog.require('goog.debug.FancyWindow');
-      window.UNISUBS_STREAMER = true;
-    </script>
-    <script type="text/javascript" src="/widget/config.js"></script>
-    {% for script in scripts %}
-    <script type="text/javascript" src="{{ script }}"></script>
-    {% endfor %}
-    <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
-  {% else %}
-    <script type="text/javascript" src="{{STATIC_URL_BASE}}js/unisubs-streamer.js"></script>
-  {% endif %}
-</head>
-<body>
+{% extends "streamer/streamerdemobase.html" %}
+{% block content %}
   <script src="http://player.ooyala.com/player.js?callback=us_ooyala_callback&wmode=opaque&playerId=playerrrr&width=480&height=360&embedCode=pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH&version=2"></script>
   <div class="STplayer STplayerEmbedded STplayerBarebones" 
        id="STtranscriptEmbed_5_pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH" 
@@ -45,5 +25,4 @@
       <span id="STtranscriptContent15" class="STtranscriptContent" name="137200"><br><br>To learn more, visit SpeakerText.com</span>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

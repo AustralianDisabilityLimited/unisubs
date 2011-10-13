@@ -25,18 +25,8 @@ goog.provide('unisubs');
  */
 unisubs.REPORT_ANALYTICS = true;
 
-/**
- * @define {boolean}
- */
-unisubs.STREAMER = false;
-
 unisubs.usingStreamer = function() {
-    if (goog.DEBUG) {
-        return !!window.UNISUBS_STREAMER;
-    }
-    else {
-        return unisubs.STREAMER;
-    }
+    return !!window['UNISUBS_STREAMER'];
 };
 
 /**

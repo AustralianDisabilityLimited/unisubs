@@ -26,7 +26,7 @@ def youtubedemo(request):
     v, created = models.Video.get_or_create_for_url(
         'http://www.youtube.com/v/1lxm-e0hMTw')
     subs = v.subtitles()
-    scripts = [widget.full_path(s) for s in settings.JS_STREAMER[:-1]]
+    scripts = [widget.full_path(s) for s in settings.JS_WIDGETIZER[:-1]]
     return render_to_response(
         'streamer/youtubedemo.html',
         { 'js_use_compiled': settings.COMPRESS_MEDIA,
@@ -50,9 +50,8 @@ def overlaybrightcovedemo(request):
 def overlayscdemo(request):
     return _overlaydemo(request, 'streamer/overlayscdemo.html')
 
-
 def _overlaydemo(request, template):
-    scripts = [widget.full_path(s) for s in settings.JS_STREAMER[:-1]]
+    scripts = [widget.full_path(s) for s in settings.JS_WIDGETIZER[:-1]]
     return render_to_response(
         template,
         { 'js_use_compiled': settings.COMPRESS_MEDIA,

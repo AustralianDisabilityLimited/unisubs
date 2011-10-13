@@ -34,7 +34,6 @@ from django.conf import settings
 from django.http import Http404
 from django.contrib.sites.models import Site
 from teams.tasks import update_one_team_video
-from apps.videos.models import SubtitleLanguage
 from utils.panslugify import pan_slugify
 from haystack.query import SQ
 from haystack import site
@@ -629,6 +628,29 @@ class TeamVideo(models.Model):
         super(TeamVideo, self).save(*args, **kwargs)
         
 
+
+    def is_checked_out(self, ignore_member=None):
+        '''Return whether this video is checked out in a task.
+
+        If a member is given, checkouts by that member will be ignored.  This
+        provides a way to ask "can user X check out or work on this task?".
+
+        This is similar to the writelocking done on Videos and
+        SubtitleLanguages.
+
+        '''
+        tasks = self.task_set.filter(
+                # Find all tasks for this video which:
+                deleted=False,           # - Aren't deleted
+                assignee__isnull=False,  # - Are assigned to someone
+                language="",             # - Aren't specific to a language
+                completed__isnull=True,  # - Are unfinished
+        )
+        if ignore_member:
+            tasks = tasks.exclude(assignee=ignore_member)
+
+        return tasks.exists()
+
 def team_video_save(sender, instance, created, **kwargs):
     update_one_team_video.delay(instance.id)
 
@@ -714,6 +736,30 @@ class TeamVideoLanguage(models.Model):
     def save(self, *args, **kwargs):
         self.is_lingua_franca = self.language in settings.LINGUA_FRANCAS
         return super(TeamVideoLanguage, self).save(*args, **kwargs)
+
+
+    def is_checked_out(self, ignore_member=None):
+        '''Return whether this language is checked out in a task.
+
+        If a member is given, checkouts by that member will be ignored.  This
+        provides a way to ask "can user X check out or work on this task?".
+
+        This is similar to the writelocking done on Videos and
+        SubtitleLanguages.
+
+        '''
+        tasks = self.team_video.task_set.filter(
+                # Find all tasks for this video which:
+                deleted=False,           # - Aren't deleted
+                assignee__isnull=False,  # - Are assigned to someone
+                language=self.language,  # - Apply to this language
+                completed__isnull=True,  # - Are unfinished
+        )
+        if ignore_member:
+            tasks = tasks.exclude(assignee=ignore_member)
+
+        return tasks.exists()
+
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)
@@ -968,7 +1014,7 @@ class Workflow(models.Model):
         workflows = list(Workflow.objects.filter(team=team_videos[0].team))
 
         for tv in team_videos:
-            tv.workflow = Workflow.get_for_team_video(team_video, workflows)
+            tv.workflow = Workflow.get_for_team_video(tv, workflows)
 
 
     def get_specific_target(self):

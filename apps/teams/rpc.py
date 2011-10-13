@@ -146,7 +146,6 @@ def _translation_task_needed(tasks, team_video, language):
             # There is already a translation task or a task later in the
             # process in the DB for this video/language combination.
             # No need to return a ghost.
-            "  task or later task already in DB"
             return False
 
     return result

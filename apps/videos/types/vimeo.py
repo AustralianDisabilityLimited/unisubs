@@ -37,7 +37,9 @@ class VimeoVideoType(VideoType):
         try:
             self.shortmem = vimeo.get_shortmem(url)
         except VidscraperError, e:
-            raise VideoTypeError(e[0])   
+            # we're not raising an error here because it 
+            # disallows us from adding private Vimeo videos.
+            pass
         
     @property
     def video_id(self):
@@ -66,11 +68,15 @@ class VimeoVideoType(VideoType):
     
     def set_values(self, video_obj):
         if vimeo.VIMEO_API_KEY and vimeo.VIMEO_API_SECRET:
-            video_obj.thumbnail = vimeo.get_thumbnail_url(self.url, self.shortmem) or ''
-            video_obj.small_thumbnail = vimeo.get_small_thumbnail_url(self.url, self.shortmem) or ''
-            video_obj.title = vimeo.scrape_title(self.url, self.shortmem)
-            video_obj.description = strip_tags(vimeo.scrape_description(self.url, self.shortmem))
-            video_obj.save()
+            try:
+                video_obj.thumbnail = vimeo.get_thumbnail_url(self.url, self.shortmem) or ''
+                video_obj.small_thumbnail = vimeo.get_small_thumbnail_url(self.url, self.shortmem) or ''
+                video_obj.title = vimeo.scrape_title(self.url, self.shortmem)
+                video_obj.description = strip_tags(vimeo.scrape_description(self.url, self.shortmem))
+                video_obj.save()
+            except Exception:
+                # in case the Vimeo video is private.
+                pass
         return video_obj
     
     def _get_vimeo_id(self, video_url):

@@ -93,7 +93,9 @@ class S3EnabledImageField(models.ImageField):
 
     attr_class = S3ImageFieldFile
     
-    def __init__(self, bucket=settings.DEFAULT_BUCKET, thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart'), verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
+    def __init__(self, bucket=settings.DEFAULT_BUCKET, 
+                       thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart', upscale=True), 
+                       verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
         self.thumb_sizes = thumb_sizes
         self.thumb_options = thumb_options
         self.bucket_name = bucket

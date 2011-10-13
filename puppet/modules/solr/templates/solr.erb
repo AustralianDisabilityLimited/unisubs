@@ -1,0 +1,52 @@
+#!/bin/bash
+
+DESC="Solr server"
+NAME=solr
+SCRIPTNAME=/etc/init.d/$NAME
+CURRENT_USER=solr
+
+DAEMON=/usr/bin/java
+
+#PROG_OUTPUT=/var/log/solr/solr.log
+PID_FILE=/var/run/solr.pid
+JAR_FILE="/opt/solr/example/start.jar"
+SOLR_DIR="/opt/solr/example"
+
+DAEMON_OPTS=" -client -Xmx512m -jar $JAR_FILE"
+
+NAME=solr
+
+case "$1" in
+    start)
+        echo -n "Starting $DESC: "
+        start-stop-daemon -d $SOLR_DIR -c $CURRENT_USER --start --background --pidfile $PID_FILE --make-pidfile --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+
+    stop)
+        echo -n "Stopping $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+        echo "$NAME."
+        ;;
+
+    restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon --stop --pidfile $PID_FILE
+
+        # Give the server time to shut down gracefully.
+        echo -n '.'; sleep 1
+        echo -n '.'; sleep 1
+        echo -n '.'; sleep 1
+        echo -n '.'; sleep 1
+        echo -n '.'; sleep 1
+
+        start-stop-daemon -d $SOLR_DIR -c $CURRENT_USER --start --background --pidfile $PID_FILE --make-pidfile --exec $DAEMON -- $DAEMON_OPTS
+        echo "$NAME."
+        ;;
+
+    *)
+    N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac

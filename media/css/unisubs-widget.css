@@ -1282,6 +1282,12 @@ span.unisubs-videoplayer {
    display: block !important;
 }
 
+span.unisubs-videoplayer object,
+span.unisubs-videoplayer embed {
+    min-height: 1px !important;
+    min-width: 1px !important;
+}
+
 .unisubs-videoDiv {
 
 }
@@ -2693,7 +2699,7 @@ cursor:
 }
 
 .unisubs-modal-login {
-   width: 650px !important;
+   width: 725px !important;
    height: 200px !important;
    padding: 15px 0 !important;
    background: #fff url("../images/uni-logo.png") center 165px no-repeat !important;
@@ -2785,7 +2791,7 @@ cursor:
 }
 
 .unisubs-modal-login-content a.unisubs-log {
-   margin: 0 10px 0 30px !important;
+   margin: 0 16px 0 30px !important;
    border-top: 1px solid #ddd !important;
    border-right: 1px solid #bbb !important;
    border-left: 1px solid #bbb !important;
@@ -2807,33 +2813,43 @@ a.unisubs-openid span{
    margin-right: 0 !important;
 }
 
-.unisubs-openid {
+.unisubs-modal-login .unisubs-openid {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
-   margin-left: 17px !important;
-   width: 115px !important;
+   margin-left: 10px !important;
+   width: 96px !important;
    margin-top: 4px !important;
-   background: url("../images/social_login.png") 0 0px no-repeat !important;
+   background: url("../images/social_login.png") -306px 0px no-repeat !important;
 }
 
-.unisubs-twitter{
-   background: url("../images/social_login.png") -120px 0px no-repeat !important;
+.unisubs-modal-login .unisubs-twitter{
+   background: url("../images/social_login.png") 0px 0px no-repeat !important;
    margin-top: 4px !important;
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
-   width: 99px !important;
+   width: 96px !important;
 }
 
-.unisubs-google {
+.unisubs-modal-login .unisubs-google {
    height: 0 !important;
    padding-top: 34px !important;
    overflow: hidden !important;
-   margin-left: 17px !important;
-   width: 95px !important;
+   margin-left: 10px !important;
+   width: 96px !important;
    margin-top: 4px !important;
-   background: url("../images/social_login.png") -236px 0px no-repeat !important;
+   background: url("../images/social_login.png") -204px 0px no-repeat !important;
+}
+
+.unisubs-modal-login .unisubs-facebook {
+   height: 0 !important;
+   padding: 34px 0 0 0 !important;
+   overflow: hidden !important;
+   margin-left: 10px !important;
+   width: 96px !important;
+   margin-top: 4px !important;
+   background: url("../images/social_login.png") -102px 0px no-repeat !important;
 }
 
 .big_spinner{
@@ -3248,7 +3264,6 @@ margin: 0 !important;
 padding: 0 !important;
 list-style: none !important;
 text-shadow: 0 0 0 !important;
-border: none !important;
 }
 
 
@@ -3258,6 +3273,7 @@ text-decoration: none !important;
 padding: 5px 4px 5px 40px !important;
 display: block !important;
 text-shadow: 0 0 0 !important;
+border: none !important;
 }
 
 

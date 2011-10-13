@@ -27,7 +27,8 @@ from teams.models import Team, TeamMember, TeamVideo
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
-from videos.models import SubtitleLanguage
+from videos.models import VideoMetadata, VIDEO_META_TYPE_IDS
+from videos.forms import AddFromFeedForm
 from django.utils.safestring import mark_safe
 from utils.forms import AjaxForm
 import re
@@ -51,25 +52,18 @@ class EditLogoForm(forms.ModelForm, AjaxForm):
         return self.cleaned_data
 
 class EditTeamVideoForm(forms.ModelForm):
-
+    author = forms.CharField(max_length=255, required=False)
+    creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'],
+                                    help_text="Format: YYYY-MM-DD")
 
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail', 'all_languages', 'completed_languages')
+        fields = ('title', 'description', 'thumbnail')
     
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
-        
-            
+
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
-        
-        self.fields['all_languages'].widget.attrs['class'] = 'checkbox'
-        self.fields['completed_languages'].help_text = None
-        self.fields['completed_languages'].widget = forms.CheckboxSelectMultiple()
-        if self.instance:
-            self.fields['completed_languages'].queryset = self.instance.video.subtitlelanguage_set.all()
-        else:
-            self.fields['completed_languages'].queryset = SubtitleLanguage.objects.none()
 
         if feature_is_on("MODERATION"):
             self.should_add_moderation = self.should_remove_moderation = False
@@ -117,7 +111,7 @@ class EditTeamVideoForm(forms.ModelForm):
                         self.should_add_moderation = True
                 else:
                     if not who_owns:
-                        # do nothiing we are good!
+                        # do nothing we are good!
                         pass
                     elif is_ours:
                         self.should_remove_moderation = True
@@ -144,6 +138,30 @@ class EditTeamVideoForm(forms.ModelForm):
                     except Exception ,e:
                         raise
                         self._errors["should_moderate"] = [e]
+
+        author = self.cleaned_data['author'].strip()
+        creation_date = VideoMetadata.date_to_string(self.cleaned_data['creation_date'])
+
+        self._save_metadata(video, 'Author', author)
+        self._save_metadata(video, 'Creation Date', creation_date)
+
+    def _save_metadata(self, video, meta, content):
+        '''Save a single piece of metadata for the given video.
+
+        The metadata is only saved if necessary (i.e. it's not blank OR it's blank
+        but there's already other data that needs to be overwritten).
+
+        '''
+        meta_type_id = VIDEO_META_TYPE_IDS[meta]
+
+        try:
+            meta = VideoMetadata.objects.get(video=video, metadata_type=meta_type_id)
+            meta.content = content
+            meta.save()
+        except VideoMetadata.DoesNotExist:
+            if content:
+                VideoMetadata(video=video, metadata_type=meta_type_id,
+                              content=content).save()
 
 class BaseVideoBoundForm(forms.ModelForm):
     video_url = UniSubBoundVideoField(label=_('Video URL'), verify_exists=True, 
@@ -205,7 +223,41 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         obj.team = self.team
         commit and obj.save()
         return obj
-    
+
+class AddTeamVideosFromFeedForm(AddFromFeedForm):
+    def __init__(self, team, user, *args, **kwargs):
+        self.team = team
+        super(AddTeamVideosFromFeedForm, self).__init__(user, *args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        videos = super(AddTeamVideosFromFeedForm, self).save(*args, **kwargs)
+
+        team_videos = []
+        for video, video_created in videos:
+            try:
+                tv = TeamVideo.objects.get(video=video, team=self.team)
+                tv_created = False
+            except TeamVideo.DoesNotExist:
+                tv = TeamVideo(video=video, team=self.team, added_by=self.user)
+                tv.save()
+                tv_created = True
+            team_videos.append((tv, tv_created))
+
+        return team_videos
+
+    def success_message(self):
+        if not self.video_limit_routreach:
+            return _(u"%(count)s videos have been added. "
+                     u"It will take a minute or so for them to appear.")
+        else:
+            return _(u"%(count)s videos have been added. "
+                     u"It will take a minute or so for them to appear. "
+                     u"To add the remaining videos from this feed, "
+                     u"submit this feed again and make sure to "
+                     u'check "Save feed" box.')
+
+
+
 class CreateTeamForm(BaseVideoBoundForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
     

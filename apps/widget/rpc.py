@@ -103,8 +103,6 @@ class Rpc(BaseRpc):
             for url in additional_video_urls:
                 video_cache.associate_extra_url(url, video_id)
 
-        st_widget_view_statistic_update.delay(video_id=video_id)
-        
         add_general_settings(request, return_value)
         if request.user.is_authenticated():
             return_value['username'] = request.user.username
@@ -135,6 +133,10 @@ class Rpc(BaseRpc):
                         request.user, video_id, language_pk, None)
                     return_value['subtitles'] = subtitles
         return return_value
+
+    def track_subtitle_play(self, request, video_id):
+        st_widget_view_statistic_update.delay(video_id=video_id)
+        return { 'response': 'ok' }
 
     def _find_remote_autoplay_language(self, request):
         language = None
@@ -343,9 +345,9 @@ class Rpc(BaseRpc):
         # we have a default user message, since the UI lets users save non
         # changed subs, but the backend will realize and will not save that
         # version. In those cases, we want to show the defatul user message.
-        user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+        user_message = "Your changes have been saved. It will take a minute or so for your subtitles to appear."
         if new_version is not None and new_version.version_no == 0:
-            user_message = "Thank you for uploading. It will take a minute or so for your subtitles to appear."
+            user_message = "Your changes have been saved. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
             if user_can_moderate(language.video, user) is False:
                 user_message = """This video is moderated by %s. 
@@ -372,13 +374,15 @@ You will not see your subtitles in our widget when you leave this page, they wil
 
     def _create_version_from_session(self, session, user=None, forked=False):
         latest_version = session.language.version(public_only=False)
-        return models.SubtitleVersion(
-            language=session.language,
-            version_no=(0 if latest_version is None 
-                        else latest_version.version_no + 1),
-            is_forked=(session.base_language is None or forked == True),
-            datetime_started=session.datetime_started,
-            user=user)
+        kwargs = dict(language=session.language,
+                      version_no=(0 if latest_version is None 
+                                  else latest_version.version_no + 1),
+                      is_forked=(session.base_language is 
+                                 None or forked == True),
+                      datetime_started=session.datetime_started)
+        if user is not None:
+            kwargs['user'] = user
+        return models.SubtitleVersion(**kwargs)
 
     def fetch_subtitles(self, request, video_id, language_pk):
         cache = video_cache.get_subtitles_dict(

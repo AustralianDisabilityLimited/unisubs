@@ -6,13 +6,12 @@ from utils import send_templated_email
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db.models import ObjectDoesNotExist
-from celery.signals import task_failure, worker_ready
+from celery.signals import task_failure
 from haystack import site
 from videos.models import VideoFeed, SubtitleLanguage, Video
 from sentry.client.models import client
 from celery.decorators import periodic_task
 from celery.schedules import crontab
-from videos.types.youtube import save_subtitles_for_lang
 from django.core.files.base import ContentFile
 from urllib import urlopen
 import logging
@@ -43,6 +42,9 @@ def cleanup():
     from django.db import transaction
     from django.contrib.sessions.models import Session
     from djcelery.models import TaskState
+    from auth.models import EmailConfirmation
+    
+    EmailConfirmation.objects.delete_expired_confirmations()
     
     now = datetime.datetime.now()
     Session.objects.filter(expire_date__lt=now).delete()
@@ -307,8 +309,6 @@ def _send_letter_caption(caption_version):
     }
 
     subject = u'New edits to "%s" by %s on Universal Subtitles' % (language.video, caption_version.user)
-
-    users = []
 
     followers = set(video.notification_list(caption_version.user))
     followers.update(language.notification_list(caption_version.user))

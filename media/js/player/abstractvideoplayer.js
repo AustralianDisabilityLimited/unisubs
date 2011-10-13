@@ -176,7 +176,7 @@ unisubs.player.AbstractVideoPlayer.prototype.setDimensionsKnownInternal = functi
 };
 
 unisubs.player.AbstractVideoPlayer.prototype.createCaptionView = function(){
-    if(!this.captionView_){
+    if (!this.captionView_){
         this.captionView_ = new unisubs.player.CaptionView(this.needsIFrame());
         var offset =  goog.style.getPosition(this.getElement());
         var size = this.getVideoSize();
@@ -184,10 +184,18 @@ unisubs.player.AbstractVideoPlayer.prototype.createCaptionView = function(){
                                  size.width, size.height );
         this.captionView_.setUpPositioning(box);
         this.captionView_.createDom();
-        var videoOffsetParent = this.getElement().offsetParent || goog.dom.getOwnerDocument(this.getElement()).body;
+        this.customizeCaptionView(this.captionView_);
+        var videoOffsetParent = this.getElement().offsetParent || 
+            goog.dom.getOwnerDocument(this.getElement()).body;
         goog.dom.appendChild(videoOffsetParent, this.captionView_.getElement());
-        
     }
+};
+
+/**
+ * @protected
+ */
+unisubs.player.AbstractVideoPlayer.prototype.customizeCaptionView = function(captionView) {
+    // override in subclasses if u wanna
 };
 
 unisubs.player.AbstractVideoPlayer.prototype.areDimensionsKnown = function() {

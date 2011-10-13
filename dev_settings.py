@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from datetime import timedelta
 from settings import *
 import logging
 
@@ -25,6 +26,20 @@ SITE_NAME = 'unisubs-dev'
 JS_USE_COMPILED = True
 
 debug = False
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "unisubs",
+        'USER': "root",
+        'PASSWORD': "root",
+        'HOST': "localhost",
+        'PORT': '3306'
+        }
+    }
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'a9yr_yzp2vmj-2q1zq)d2+b^w(7fqu2o&jh18u9dozjbd@-$0!'
 
 TWITTER_CONSUMER_KEY = '6lHYqtxzQBD3lQ55Chi6Zg'
 TWITTER_CONSUMER_SECRET = 'ApkJPIIbBKp3Wph0JBoAg2Nsk1Z5EG6PFTevNpd5Y00'
@@ -37,9 +52,13 @@ MEDIA_URL = "http://unisubs.example.com:8000/user-data/"
 VIMEO_API_KEY = 'e1a46f832f8dfa99652781ee0b39df12'
 VIMEO_API_SECRET = 'bdaeb531298eeee1'
 
+FACEBOOK_APP_KEY = FACEBOOK_APP_ID = '255603057797860'
+FACEBOOK_SECRET_KEY = '2a18604dac1ad7e9817f80f3aa3a69f2'
+
 # Celery
 CELERY_ALWAYS_EAGER = True
 HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr/core0'
+CELERY_TASK_RESULT_EXPIRES = timedelta(days=7)
 
 # Or you can use redis as backend
 #BROKER_BACKEND = 'redis'

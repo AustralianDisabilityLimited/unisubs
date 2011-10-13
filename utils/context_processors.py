@@ -5,5 +5,7 @@ def media(request):
     Adds media-related context variables to the context.
 
     """
-    return {'STATIC_URL': settings.STATIC_URL, "STATIC_URL_BASE": settings.STATIC_URL_BASE}
-
+    return {
+        'STATIC_URL': settings.STATIC_URL, 
+        "STATIC_URL_BASE": settings.STATIC_URL_BASE,
+        "COMPRESS_MEDIA": settings.COMPRESS_MEDIA }

@@ -207,7 +207,7 @@ def get_video_languages_verbose(video_id, max_items=6):
             # show only with some translation
             if lang.is_dependent():
                 data["items"].append({
-                    'language_display': lang.language_display(),
+                    'language': lang.language,
                     'percent_done': lang.percent_done ,
                     'language_url': lang.get_absolute_url(),
                     'is_dependent': True,
@@ -216,7 +216,7 @@ def get_video_languages_verbose(video_id, max_items=6):
                 # append to the beggininig of the list as
                 # the UI will show this first
                 data["items"].insert(0, {
-                    'language_display': lang.language_display(),
+                    'language': lang.language,
                     'is_complete': lang.is_complete,
                     'language_url': lang.get_absolute_url(),
                 })

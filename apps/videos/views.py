@@ -153,7 +153,7 @@ def create(request):
     context = {
         'video_form': video_form,
         'youtube_form': AddFromFeedForm(request.user)
-    }    
+    }
     if video_form.is_valid():
         try:
             video = video_form.save()
@@ -176,11 +176,8 @@ create.csrf_exempt = True
 def create_from_feed(request):
     form = AddFromFeedForm(request.user, request.POST or None)
     if form.is_valid():
-        count = form.save()
-        if not form.video_limit_routreach:
-            messages.success(request, _(u"%(count)s videos have been added") % {'count': count})
-        else:
-            messages.success(request, _(u"%(count)s videos have been added. To add the remaining videos from this feed, submit this feed again and make sure to check \"Save feed\" box.") % {'count': count})
+        videos = form.save()
+        messages.success(request, form.success_message() % {'count': len(videos)})
         return redirect('videos:create')
     context = {
         'video_form': VideoForm(),
@@ -264,10 +261,15 @@ def actions_list(request, video_id):
 def upload_subtitles(request):
     output = dict(success=False)
     form = SubtitlesUploadForm(request.user, request.POST, request.FILES)
+
     if form.is_valid():
         try:
             language = form.save()
             output['success'] = True
+            if form._sl_created:
+                output['msg'] = ugettext(u'Thank you for uploading. It will take a minute or so for your subtitles to appear.')
+            else:
+                output['msg'] = ugettext(u'Your changes have been saved.')
             output['next'] = language.get_absolute_url()
             transaction.commit()
         except AlreadyEditingException, e:

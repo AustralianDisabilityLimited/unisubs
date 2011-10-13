@@ -67,6 +67,7 @@ VIDEO_TYPE_VIMEO = 'V'
 VIDEO_TYPE_DAILYMOTION = 'D'
 VIDEO_TYPE_FLV = 'L'
 VIDEO_TYPE_BRIGHTCOVE = 'C'
+VIDEO_TYPE_MP3 = 'M'
 VIDEO_TYPE = (
     (VIDEO_TYPE_HTML5, 'HTML5'),
     (VIDEO_TYPE_YOUTUBE, 'Youtube'),
@@ -77,8 +78,17 @@ VIDEO_TYPE = (
     (VIDEO_TYPE_VIMEO, 'Vimeo.com'),
     (VIDEO_TYPE_DAILYMOTION, 'dailymotion.com'),
     (VIDEO_TYPE_FLV, 'FLV'),
-    (VIDEO_TYPE_BRIGHTCOVE, 'brightcove.com')
+    (VIDEO_TYPE_BRIGHTCOVE, 'brightcove.com'),
+    (VIDEO_TYPE_MP3, 'MP3'),
 )
+VIDEO_META_CHOICES = (
+    (1, 'Author'),
+    (2, 'Creation Date'),
+)
+VIDEO_META_TYPE_NAMES = dict(VIDEO_META_CHOICES)
+VIDEO_META_TYPE_VARS = dict((k, name.lower().replace(' ', '_'))
+                            for k, name in VIDEO_META_CHOICES)
+VIDEO_META_TYPE_IDS = dict([choice[::-1] for choice in VIDEO_META_CHOICES])
 WRITELOCK_EXPIRATION = 30 # 30 seconds
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -92,7 +102,7 @@ class AlreadyEditingException(Exception):
     
 class Video(models.Model):
     """Central object in the system"""
-    
+
     video_id = models.CharField(max_length=255, unique=True)
     title = models.CharField(max_length=2048, blank=True)
     description = models.TextField(blank=True)
@@ -124,7 +134,7 @@ class Video(models.Model):
     languages_count = models.PositiveIntegerField(default=0, db_index=True, editable=False)
     moderated_by = models.ForeignKey("teams.Team", blank=True, null=True, related_name="moderating")
 
-    
+
     def __unicode__(self):
         title = self.title_display()
         if len(title) > 60:
@@ -271,7 +281,7 @@ class Video(models.Model):
             video, created = video_url_obj.video, False
         except models.ObjectDoesNotExist:
             video, created = None, False
-        
+
         if not video:
             try:
                 video_url_obj = VideoUrl.objects.get(
@@ -289,7 +299,7 @@ class Video(models.Model):
 
                 from videos.tasks import save_thumbnail_in_s3
                 save_thumbnail_in_s3.delay(obj.pk)
-    
+
                 Action.create_video_handler(obj, user)
                 
                 SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
@@ -493,6 +503,23 @@ class Video(models.Model):
     def is_moderated(self):
         return bool(self.moderated_by_id)
     
+    def metadata(self):
+        '''Return a dict of metadata for this video.
+
+        Example:
+
+        { 'author': 'Sample author',
+          'creation_date': datetime(...), }
+
+        '''
+        meta = dict([(VIDEO_META_TYPE_VARS[md.metadata_type], md.content)
+                     for md in self.videometadata_set.all()])
+
+        meta['creation_date'] = VideoMetadata.string_to_date(meta.get('creation_date'))
+
+        return meta
+
+
     class Meta(object):
         permissions = (
             ("can_moderate_version"   , "Can moderate version" ,),
@@ -503,8 +530,7 @@ def create_video_id(sender, instance, **kwargs):
     if not instance or instance.video_id:
         return
     alphanum = string.letters+string.digits
-    instance.video_id = ''.join([alphanum[random.randint(0, len(alphanum)-1)] 
-                                 for i in xrange(12)])
+    instance.video_id = ''.join([random.choice(alphanum) for i in xrange(12)])
     
 def video_delete_handler(sender, instance, **kwargs):
     video_cache.invalidate_cache(instance.video_id)
@@ -512,6 +538,36 @@ def video_delete_handler(sender, instance, **kwargs):
 models.signals.pre_save.connect(create_video_id, sender=Video)
 models.signals.pre_delete.connect(video_delete_handler, sender=Video)
 models.signals.m2m_changed.connect(User.video_followers_change_handler, sender=Video.followers.through)
+
+
+class VideoMetadata(models.Model):
+    video = models.ForeignKey(Video)
+    metadata_type = models.PositiveIntegerField(choices=VIDEO_META_CHOICES)
+    content = models.CharField(max_length=255)
+
+    created = models.DateTimeField(editable=False, auto_now_add=True)
+    modified = models.DateTimeField(editable=False, auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+        verbose_name_plural = 'video metadata'
+
+    def __unicode__(self):
+        content = self.content
+        if len(content) > 30:
+            content = content[:30] + '...'
+        return u'%s - %s: %s' % (self.video,
+                                 VIDEO_META_TYPE_NAMES[self.metadata_type],
+                                 content)
+
+    @classmethod
+    def date_to_string(cls, d):
+        return d.strftime('%Y-%m-%d') if d else ''
+
+    @classmethod
+    def string_to_date(cls, s):
+        return datetime.strptime(s, '%Y-%m-%d').date() if s else None
+
 
 class SubtitleLanguage(models.Model):
     
@@ -730,10 +786,14 @@ class SubtitleLanguage(models.Model):
             old_version = None
             version_no = 0
 
-        version = SubtitleVersion(
-                language=to_language, version_no=version_no,
-                datetime_started=datetime.now(), user=user,
-                note=u'Uploaded', is_forked=True, time_change=1, text_change=1, result_of_rollback=result_of_rollback)
+        kwargs = dict(
+            language=to_language, version_no=version_no,
+            datetime_started=datetime.now(),
+            note=u'Uploaded', is_forked=True, time_change=1, 
+            text_change=1, result_of_rollback=result_of_rollback)
+        if user:
+            kwargs['user'] = user
+        version = SubtitleVersion(**kwargs)
         version.save()
 
         if old_version:
@@ -809,7 +869,7 @@ class SubtitleVersion(SubtitleCollection):
     language = models.ForeignKey(SubtitleLanguage)
     version_no = models.PositiveIntegerField(default=0)
     datetime_started = models.DateTimeField(editable=False)
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User, default=User.get_anonymous)
     note = models.CharField(max_length=512, blank=True)
     time_change = models.FloatField(null=True, blank=True, editable=False)
     text_change = models.FloatField(null=True, blank=True, editable=False)
@@ -1407,7 +1467,7 @@ class Action(models.Model):
             instance.action = obj
             instance.save()
                 
-post_save.connect(Action.create_comment_handler, Comment)        
+post_save.connect(Action.create_comment_handler, Comment)
 
 class UserTestResult(models.Model):
     email = models.EmailField()
@@ -1451,7 +1511,7 @@ class VideoUrl(models.Model):
     def effective_url(self):
         return video_type_registrar[self.type].video_url(self)
 
-post_save.connect(Action.create_video_url_handler, VideoUrl)   
+post_save.connect(Action.create_video_url_handler, VideoUrl)
 post_save.connect(video_cache.on_video_url_save, VideoUrl)
 
 class VideoFeed(models.Model):

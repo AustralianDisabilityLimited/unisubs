@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator profiles_tags widget %}
+{% load i18n teams_tags paginator profiles_tags widget auth_tags %}
 
 {% block title %}
     {% trans 'My videos' %} | Universal Subtitles
@@ -12,6 +12,10 @@
 
 {% block scripts %}
     {{ block.super }}
+{% endblock %}
+
+{% block email_confirmation_block %}
+    {% email_confirmation_notification 'true' %}
 {% endblock %}
 
 {% block main_content %}

@@ -16,7 +16,9 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-unisubs.Widgetizer.getInstance().widgetize();
-unisubs.widget.WidgetDecorator.exportJSSymbols();
+if (!window['UnisubsWidgetizerLoaded']) {
+    unisubs.Widgetizer.getInstance().widgetize();
+    unisubs.widget.WidgetDecorator.exportJSSymbols();
+}
 
 window['UnisubsWidgetizerLoaded'] = true;

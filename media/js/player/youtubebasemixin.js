@@ -63,7 +63,7 @@ unisubs.player.YoutubeBaseMixin.prototype.setVolume = function(vol) {
     if (this.player_)
         this.player_['setVolume'](vol * 100);
     else
-        this.commands_.push(goog.bind(this.setVolume_, this, vol));
+        this.commands_.push(goog.bind(this.setVolume, this, vol));
 };
 unisubs.player.YoutubeBaseMixin.prototype.isPausedInternal = function() {
     return this.getPlayerState_() == unisubs.player.YoutubeVideoPlayer.State_.PAUSED;

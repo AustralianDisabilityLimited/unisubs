@@ -37,40 +37,42 @@ class UniSubBoundVideoField(UniSubURLField):
         return '%s://%s%s' % (parsed_url.scheme or 'http', parsed_url.netloc, parsed_url.path)  
     
     def clean(self, value):
-        super(UniSubBoundVideoField, self).clean(value)
-        self.vt = None    
+        self.vt = None
         self.video = None
+
+        super(UniSubBoundVideoField, self).clean(value)
+
         video_url = value
-        
+
         if not video_url:
             return video_url
 
         host = Site.objects.get_current().domain
         url_start = 'http://'+host
-        
+
         if video_url.startswith(url_start):
-            #UniSub URL
+            # UniSub URL
             locale, path = strip_path(video_url[len(url_start):])
             video_url = url_start+path
             try:
                 video_url = self.format_url(video_url)
                 func, args, kwargs = resolve(video_url.replace(url_start, ''))
-                
+
                 if not 'video_id' in kwargs:
                     raise forms.ValidationError(_('This URL does not contain video id.'))
-                
+
                 try:
                     self.video = Video.objects.get(video_id=kwargs['video_id'])
                 except Video.DoesNotExist:
                     raise forms.ValidationError(_('Videos does not exist.'))
-                
+
             except Http404:
                 raise forms.ValidationError(_('Incorrect URL.'))
         else:
-            #URL from other site
+            # URL from other site
             try:
                 self.vt = video_type_registrar.video_type_for_url(video_url)
-                
+
                 if hasattr(self, 'user'):
                     user = self.user
                 else:
@@ -87,5 +89,5 @@ class UniSubBoundVideoField(UniSubURLField):
 If you'd like to us to add support for a new site or format, or if you
 think there's been some mistake, <a
 href="mailto:%s">contact us</a>!""") % settings.FEEDBACK_EMAIL))
-             
-        return video_url        
+
+        return video_url

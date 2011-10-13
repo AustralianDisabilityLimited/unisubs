@@ -2,6 +2,9 @@
 Deployment Guide
 ================
 
+For staging:
+
+    fab staging:<username> refresh_db
 
 The basic sequence::
 

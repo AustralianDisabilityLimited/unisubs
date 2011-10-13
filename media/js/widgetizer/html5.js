@@ -44,7 +44,7 @@ unisubs.widgetizer.HTML5.prototype.makeVideoPlayers = function() {
 
 unisubs.widgetizer.HTML5.prototype.unwidgetizedVideos_ = function() {
     return this.filterUnwidgetized(
-        document.getElementsByTagName('video'));
+        goog.dom.getElementsByTagNameAndClass('video'));
 };
 
 unisubs.widgetizer.HTML5.prototype.makeVideoSource_ = 

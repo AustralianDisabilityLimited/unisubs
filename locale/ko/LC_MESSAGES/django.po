@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # 
+# Translators:
 # MinJung Kim <serenakim27@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
-"Report-Msgid-Bugs-To: https://www.pivotaltracker.com/projects/224127\n"
-"POT-Creation-Date: 2011-08-21 01:31-0500\n"
-"PO-Revision-Date: 2011-08-21 06:42+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-25 01:31-0500\n"
+"PO-Revision-Date: 2011-09-25 06:42+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.net/projects/p/universalsubtitles/team/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -30,8 +31,8 @@ msgid "Portuguese, Brazilian"
 msgstr "포르투갈어, 브라질어"
 
 #: settings.py:34
-msgid "Latin, Serbian"
-msgstr "라틴어 세르비아어"
+msgid "Serbian, Latin"
+msgstr ""
 
 #: settings.py:35 utils/translation_names.py:38
 msgid "Chinese, Simplified"
@@ -309,99 +310,130 @@ msgstr "파슈토어"
 msgid "Lakota"
 msgstr "라코타"
 
-#: apps/api/1_0/forms.py:54 apps/videos/forms.py:63 apps/videos/forms.py:84
-#: apps/videos/forms.py:260
-msgid "Can not detect file encoding"
-msgstr "파일 인코딩을 찾을 수 없음"
+#: settings.py:115 utils/translation_names.py:40
+msgid "Cornish"
+msgstr "콘월어"
 
-#: apps/api/1_0/forms.py:57 apps/videos/forms.py:86 apps/videos/forms.py:262
-msgid "Incorrect subtitles format"
-msgstr "잘못된 자막 포맷입니다."
+#: settings.py:116 utils/translation_names.py:86
+msgid "Klingon"
+msgstr "클링온어"
 
-#: apps/api/1_0/forms.py:62
-msgid "Incorrect subtitles encoding format"
-msgstr "잘못된 자막 인코딩 포맷"
+#: settings.py:117 utils/translation_names.py:102
+msgid "Maltese"
+msgstr "몰티즈어"
 
-#: apps/auth/admin.py:12 templates/statistic/users_statistic.html:12
-#: templates/teams/edit_members.html:108 templates/teams/edit_members.html:162
+#: apps/auth/admin.py:13 templates/statistic/users_statistic.html:12
+#: templates/teams/edit_members.html:93 templates/teams/edit_members.html:141
 msgid "Username"
 msgstr "사용자 이름"
 
-#: apps/auth/admin.py:13
+#: apps/auth/admin.py:14
 msgid ""
 "Required. 30 characters or fewer. Alphanumeric characters only (letters, "
 "digits and underscores)."
 msgstr "30자 이내의 문자나 숫자를 사용해 주세요. (문자, 숫자, '_')"
 
-#: apps/auth/admin.py:14
+#: apps/auth/admin.py:15
 msgid "This value must contain only letters, numbers and underscores."
 msgstr "이 값은 문자, 숫자, '_' 만을 포함해야 합니다."
 
-#: apps/auth/admin.py:15
+#: apps/auth/admin.py:16
 msgid "Password"
 msgstr "비밀번호"
 
-#: apps/auth/admin.py:16
+#: apps/auth/admin.py:17
 msgid "Password confirmation"
 msgstr "비밀번호 확인"
 
-#: apps/auth/admin.py:17
+#: apps/auth/admin.py:18
 msgid "Email"
 msgstr "Email"
 
-#: apps/auth/admin.py:48 templates/videos/create.html:61
+#: apps/auth/admin.py:58 templates/videos/create.html:61
 msgid "Hide"
 msgstr "숨기기"
 
-#: apps/auth/models.py:77
+#: apps/auth/models.py:84
 msgid "Retired user"
 msgstr "탈퇴한 사용자"
 
-#: apps/auth/models.py:228
+#: apps/auth/models.py:265
 msgid "Add comment"
 msgstr "댓글 달기"
 
-#: apps/auth/models.py:229
+#: apps/auth/models.py:266
 msgid "Start subtitles"
 msgstr "자막 시작"
 
-#: apps/auth/models.py:230
+#: apps/auth/models.py:267
 msgid "Start translation"
 msgstr "번역 시작"
 
-#: apps/auth/models.py:231
+#: apps/auth/models.py:268
 msgid "Edit subtitles"
 msgstr "자막 수정"
 
-#: apps/auth/models.py:232
+#: apps/auth/models.py:269
 msgid "Edit translation"
 msgstr "번역 수정"
 
-#: apps/auth/models.py:289
+#: apps/auth/models.py:326
 msgid "understand enough"
 msgstr "충분히 이해함"
 
-#: apps/auth/models.py:290
+#: apps/auth/models.py:327
 msgid "understand 99%"
 msgstr "99 % 이해"
 
-#: apps/auth/models.py:291
+#: apps/auth/models.py:328
 msgid "write like a native"
 msgstr "네이티브처럼 쓰기"
 
-#: apps/auth/models.py:296
+#: apps/auth/models.py:333
 msgid "follow requests in language"
 msgstr "언어 요청 팔로우 하기"
 
-#: apps/auth/models.py:311
+#: apps/auth/models.py:348
 msgid ""
 "This is date when start to display announcement. And only the last will be "
 "displayed."
 msgstr "이것이 발표를 표시하기 시작할 때의 날짜입니다. 마지막 날짜만 표시됩니다."
 
-#: apps/auth/views.py:87
+#: apps/auth/models.py:446
+msgid "e-mail confirmation"
+msgstr ""
+
+#: apps/auth/models.py:447
+msgid "e-mail confirmations"
+msgstr ""
+
+#: apps/auth/views.py:47
+msgid "Confirmation key expired."
+msgstr ""
+
+#: apps/auth/views.py:49
+msgid "Email is confirmed."
+msgstr ""
+
+#: apps/auth/views.py:58
+msgid "Confirmation email was sent."
+msgstr ""
+
+#: apps/auth/views.py:60
+msgid "You email is empty or already confirmed."
+msgstr ""
+
+#: apps/auth/views.py:108
 msgid "Your account was deleted."
 msgstr "귀하의 계정이 삭제되었습니다."
+
+#: apps/auth/templatetags/auth_tags.py:30
+msgid "Fill email field, please."
+msgstr ""
+
+#: apps/auth/templatetags/auth_tags.py:32
+msgid "Confirm your email, please."
+msgstr ""
 
 #: apps/comments/forms.py:53
 msgid "You car reply only comments for same object"
@@ -415,7 +447,7 @@ msgstr "메시지를 작성하기 위해 인증을 하셔야 합니다."
 msgid "Only send to speakers of..."
 msgstr ""
 
-#: apps/messages/forms.py:102
+#: apps/messages/forms.py:102 apps/teams/rpc.py:67
 msgid "You are not manager of this team."
 msgstr "당신은 이 팀의 관리자가 아닙니다."
 
@@ -423,25 +455,25 @@ msgstr "당신은 이 팀의 관리자가 아닙니다."
 msgid "This message is from site administrator."
 msgstr "이 메시지는 사이트 관리자가 보냈습니다."
 
-#: apps/messages/models.py:74
+#: apps/messages/models.py:76
 msgid "[no subject]"
 msgstr "[제목 없음]"
 
-#: apps/messages/models.py:123
+#: apps/messages/models.py:125
 msgid "You should enter subject or message."
 msgstr "제목이나 메시지를 입력해야 합니다."
 
-#: apps/messages/rpc.py:34 apps/messages/rpc.py:46 apps/messages/rpc.py:54
-#: apps/messages/rpc.py:64 apps/profiles/rpc.py:51 apps/teams/rpc.py:34
-#: apps/teams/rpc.py:62 apps/teams/rpc.py:83 apps/videos/rpc.py:45
+#: apps/messages/rpc.py:34 apps/messages/rpc.py:50 apps/messages/rpc.py:58
+#: apps/messages/rpc.py:68 apps/profiles/rpc.py:51 apps/teams/rpc.py:34
+#: apps/videos/rpc.py:44
 msgid "You should be authenticated."
 msgstr "인증을 하셔야 합니다."
 
-#: apps/messages/rpc.py:40
+#: apps/messages/rpc.py:42
 msgid "Message does not exist."
 msgstr "메시지가 존재하지 않습니다."
 
-#: apps/messages/tasks.py:24
+#: apps/messages/tasks.py:25
 #, python-format
 msgid "%(author)s sent you a message on Universal Subtitles: %(subject)s"
 msgstr "%(author)s가 Universal Subtitles에서 당신에게 메세지를보냈습니다.: %(subject)s"
@@ -561,7 +593,7 @@ msgstr "모든 언어에 왼쪽 빈 칸"
 msgid "Video In"
 msgstr "비디오"
 
-#: apps/search/forms.py:60 apps/search/forms.py:96
+#: apps/search/forms.py:63 apps/search/forms.py:99
 msgid "All Languages"
 msgstr "모든 언어"
 
@@ -577,15 +609,15 @@ msgstr "비디오 보기 통계"
 msgid "Widget view statistic"
 msgstr "위젯 시청 수 통계"
 
-#: apps/subrequests/models.py:86
+#: apps/subrequests/models.py:87
 msgid "request completed"
 msgstr "요청 완료"
 
-#: apps/subrequests/models.py:88
+#: apps/subrequests/models.py:89
 msgid "follow related activities"
 msgstr "관련 활동을 팔로우 하기"
 
-#: apps/subrequests/models.py:89
+#: apps/subrequests/models.py:90
 msgid "description of the request"
 msgstr ""
 
@@ -618,19 +650,19 @@ msgstr "Unfeature teams"
 msgid "Team"
 msgstr "팀"
 
-#: apps/teams/admin.py:80 templates/videos/history.html:306
+#: apps/teams/admin.py:80 templates/videos/history.html:348
 msgid "User"
 msgstr "사용자"
 
-#: apps/teams/forms.py:90
+#: apps/teams/forms.py:86
 msgid "Moderate subtitles"
 msgstr ""
 
-#: apps/teams/forms.py:143
+#: apps/teams/forms.py:166
 msgid "Video URL"
 msgstr "동영상 URL"
 
-#: apps/teams/forms.py:144
+#: apps/teams/forms.py:167
 msgid ""
 "Enter the URL of any compatible video or any video on our site. You can also"
 " browse the site and use the 'Add Video to Team' menu."
@@ -638,23 +670,23 @@ msgstr ""
 "호환되는 비디오 또는 우리 사이트 비디오의 URL을 입력해 주세요. 당신은 또한 사이트를 탐색하고 메뉴에서 '팀에 동영상 추가'를 사용할"
 " 수 있습니다."
 
-#: apps/teams/forms.py:152
+#: apps/teams/forms.py:175
 msgid "Video language"
 msgstr "비디오 언어"
 
-#: apps/teams/forms.py:154
+#: apps/teams/forms.py:177
 msgid "It will be saved only if video does not exist in our database."
 msgstr "동영상이 데이터베이스에 존재하지 않는 경우에만 저장됩니다."
 
-#: apps/teams/forms.py:183
+#: apps/teams/forms.py:205
 msgid "Set original language for this video."
 msgstr ""
 
-#: apps/teams/forms.py:215 apps/teams/forms.py:251
+#: apps/teams/forms.py:237 apps/teams/forms.py:273
 msgid "Team intro video URL"
 msgstr "팀 소개 동영상 URL"
 
-#: apps/teams/forms.py:217 apps/teams/forms.py:253
+#: apps/teams/forms.py:239 apps/teams/forms.py:275
 msgid ""
 "You can put an optional video \n"
 "on your team homepage that explains what your team is about, to attract volunteers. \n"
@@ -663,7 +695,7 @@ msgstr ""
 "당신은 자원봉사자를 모으고 당신의 팀에 대해 설명하는 팀 홈페이지에 선택적으로 동영상을 넣을 수 있습니다. 호환되는 비디오, 또는 우리 "
 "사이트에 있는 모든 비디오 페이지에 링크를 입력해 주세요."
 
-#: apps/teams/forms.py:222
+#: apps/teams/forms.py:244
 msgid "Team URL: http://universalsubtitles.org/teams/"
 msgstr "팀 URL : http://universalsubtitles.org/teams/"
 
@@ -747,7 +779,7 @@ msgstr "지원자"
 msgid "Intro Video"
 msgstr "소개 동영상"
 
-#: apps/teams/models.py:91 templates/teams/edit.html:98
+#: apps/teams/models.py:91 templates/teams/edit.html:105
 msgid "Page content"
 msgstr "페이지 내용"
 
@@ -763,7 +795,7 @@ msgstr "팀 페이지의 상단에 나타나는 HTML "
 msgid "Teams"
 msgstr "팀"
 
-#: apps/teams/models.py:367
+#: apps/teams/models.py:368
 msgid ""
 "Use this space to explain why you or your team need to caption or subtitle "
 "this video. Adding a note makes volunteers more likely to help out!"
@@ -771,36 +803,36 @@ msgstr ""
 "당신이나 당신 팀이 이 비디오에 왜 캡션이나 자막이 필요한지를 설명하기 위해 이 공간을 사용합니다. 메모를 추가하시면 자원 봉사자들이 "
 "도와줄 가능성이 더 많이 있습니다!"
 
-#: apps/teams/models.py:369
+#: apps/teams/models.py:370
 msgid "We automatically grab thumbnails for certain sites, e.g. Youtube"
 msgstr "우리는 예를 들어 유튜브와 같은 특정 사이트에 대한 썸네일을 자동적으로 얻어냅니다."
 
-#: apps/teams/models.py:370
+#: apps/teams/models.py:371
 msgid "Need help with all languages"
 msgstr "모든 언어에 도움이 필요합니다"
 
-#: apps/teams/models.py:371
+#: apps/teams/models.py:372
 msgid "If you check this, other languages will not be displayed."
 msgstr "당신이 이것을 선택하면, 다른 언어는 표시되지 않습니다."
 
-#: apps/teams/models.py:659
+#: apps/teams/models.py:660
 msgid "Manager"
 msgstr "관리자"
 
-#: apps/teams/models.py:660
+#: apps/teams/models.py:661
 msgid "Member"
 msgstr "회원"
 
-#: apps/teams/models.py:661
+#: apps/teams/models.py:662
 msgid "Contributor"
 msgstr ""
 
-#: apps/teams/models.py:732
+#: apps/teams/models.py:733
 msgid "Invitation to join a team"
 msgstr "팀 참여를 위한 초대"
 
 #: apps/teams/moderation_forms.py:12 apps/teams/views.py:86
-#: templates/teams/index.html:84
+#: templates/teams/index.html:32
 msgid "Newest"
 msgstr "가장 최근"
 
@@ -813,14 +845,14 @@ msgid "Video TieleViews This Week"
 msgstr ""
 
 #: apps/teams/moderation_forms.py:23
-msgid "Video title?"
+msgid "Video title"
 msgstr ""
 
-#: apps/teams/rpc.py:41 apps/teams/rpc.py:69 apps/teams/rpc.py:90
+#: apps/teams/rpc.py:41
 msgid "Team does not exist"
 msgstr "팀이 존재하지 않습니다."
 
-#: apps/teams/rpc.py:45 apps/teams/rpc.py:94
+#: apps/teams/rpc.py:45 apps/teams/views.py:607
 msgid "You are already a member of this team."
 msgstr "당신은 이미 이 팀의 멤버입니다."
 
@@ -836,32 +868,36 @@ msgstr "앱이 성공적으로 보내졌습니다. 팀에서 답변을 기다립
 msgid "You can't join this team by application."
 msgstr "당신은 앱으로 이 팀에 합류할 수 없습니다."
 
-#: apps/teams/rpc.py:75 apps/teams/rpc.py:79
-msgid "You have left this team."
-msgstr "당신은 이 팀을 나갔습니다."
+#: apps/teams/rpc.py:64
+msgid "Team does not exist."
+msgstr ""
 
-#: apps/teams/rpc.py:77
-msgid "You are last member of this team."
-msgstr "이 팀의 마지막 멤버입니다."
+#: apps/teams/rpc.py:70
+msgid "Incorrect team member role."
+msgstr ""
 
-#: apps/teams/rpc.py:99
-msgid "This team is not open."
-msgstr "이 팀은 오픈하지 않습니다."
+#: apps/teams/rpc.py:75
+msgid "Team member does not exist."
+msgstr ""
 
-#: apps/teams/rpc.py:102
-msgid "You are now a member of this team."
-msgstr "이제 이 팀의 멤버입니다."
+#: apps/teams/rpc.py:78
+msgid "You can't promote yourself."
+msgstr ""
+
+#: apps/teams/rpc.py:82
+msgid "Team member role changed."
+msgstr ""
 
 #: apps/teams/tasks.py:30
 #, python-format
 msgid "New %(team)s videos ready for subtitling!"
 msgstr "새로운 %(team)s의 동영상이 자막을 만들 준비가 되었습니다!"
 
-#: apps/teams/views.py:85 templates/teams/index.html:87
+#: apps/teams/views.py:85 templates/teams/index.html:35
 msgid "Name"
 msgstr "이름"
 
-#: apps/teams/views.py:87 templates/teams/index.html:81
+#: apps/teams/views.py:87 templates/teams/index.html:29
 msgid "Most Members"
 msgstr "대부분의 회원"
 
@@ -893,58 +929,70 @@ msgstr "당신은 자신을 제거할 수 없습니다."
 msgid "You can't remove user"
 msgstr "당신은 사용자를 제거할 수 없습니다."
 
-#: apps/teams/views.py:467
-msgid "Team member role changed."
-msgstr ""
-
-#: apps/teams/views.py:473
-msgid "Not a valid role"
-msgstr ""
-
-#: apps/teams/views.py:477
-msgid "You can't promote to manager"
-msgstr "당신은 관리자로 올라갈 수 없습니다."
-
-#: apps/teams/views.py:543
+#: apps/teams/views.py:518
 msgid "Application approved."
 msgstr "신청 승인."
 
-#: apps/teams/views.py:545 apps/teams/views.py:562
+#: apps/teams/views.py:520 apps/teams/views.py:537
 msgid "Application does not exist."
 msgstr "신청서가 존재하지 않습니다."
 
-#: apps/teams/views.py:547
+#: apps/teams/views.py:522
 msgid "You can't approve application."
 msgstr "당신은 신청서를 승인할 수 없습니다."
 
-#: apps/teams/views.py:560
+#: apps/teams/views.py:535
 msgid "Application denied."
 msgstr "신청서가 거부되었습니다."
 
-#: apps/teams/views.py:564
+#: apps/teams/views.py:539
 msgid "You can't deny application."
 msgstr "당신은 신청서를 거부할 수 없습니다."
 
-#: apps/teams/views.py:583
+#: apps/teams/views.py:558
 msgid "User does not exist."
 msgstr "사용자가 존재하지 않습니다."
 
-#: apps/teams/views.py:588
+#: apps/teams/views.py:563
 msgid "You can't invite to team."
 msgstr "당신은 팀에 초대할 수 없습니다."
 
-#: apps/teams/views.py:593
+#: apps/teams/views.py:568
 msgid "This user is member of team already."
 msgstr "이 사용자는 이미 팀의 멤버입니다."
 
-#: apps/teams/views.py:598
+#: apps/teams/views.py:573
 msgid "Note is too long."
 msgstr "참고가 너무 깁니다."
+
+#: apps/teams/views.py:610
+msgid "This team is not open."
+msgstr "이 팀은 오픈하지 않습니다."
+
+#: apps/teams/views.py:613
+msgid "You are now a member of this team."
+msgstr "이제 이 팀의 멤버입니다."
+
+#: apps/teams/views.py:626
+msgid "You are last member of this team."
+msgstr "이 팀의 마지막 멤버입니다."
+
+#: apps/teams/views.py:628
+msgid "You are last manager of this team."
+msgstr ""
+
+#: apps/teams/views.py:631
+msgid "You have left this team."
+msgstr "당신은 이 팀을 나갔습니다."
+
+#: apps/teams/views.py:633
+msgid "You are not member of this team."
+msgstr ""
 
 #: apps/teams/templatetags/moderation.py:58
 #: apps/teams/templatetags/moderation.py:175
 #: apps/teams/templatetags/moderation.py:179
-#: templates/teams/applications.html:32
+#: templates/teams/applications.html:34
 msgid "Approve"
 msgstr "승인"
 
@@ -963,7 +1011,12 @@ msgstr ""
 msgid "Approve all"
 msgstr ""
 
-#: apps/teams/templatetags/teams_tags.py:156
+#: apps/teams/templatetags/moderation.py:305 templates/videos/history.html:186
+#: templates/videos/video.html:144
+msgid "Moderation"
+msgstr ""
+
+#: apps/teams/templatetags/teams_tags.py:158
 #, python-format
 msgid "Can somebody help me subtitle these videos? %(url)s"
 msgstr "누군가 이 비디오에 자막 만드는 것을 도와줄 수 있을까요? %(url)s"
@@ -972,23 +1025,35 @@ msgstr "누군가 이 비디오에 자막 만드는 것을 도와줄 수 있을�
 msgid "Email for alert"
 msgstr "경보에 대한 이메일"
 
-#: apps/videos/forms.py:54
+#: apps/videos/forms.py:56
 msgid "File should have txt format"
 msgstr "파일은 txt 포맷이어야 합니다."
 
-#: apps/videos/forms.py:58 apps/videos/forms.py:76 apps/videos/forms.py:252
+#: apps/videos/forms.py:60 apps/videos/forms.py:78 apps/videos/forms.py:266
 msgid "File size should be less {0} kb"
 msgstr "파일 크기는 {0}kb보다 작아야 합니다."
 
-#: apps/videos/forms.py:67
+#: apps/videos/forms.py:65 apps/videos/forms.py:86 apps/videos/forms.py:274
+msgid "Can not detect file encoding"
+msgstr "파일 인코딩을 찾을 수 없음"
+
+#: apps/videos/forms.py:69
 msgid "Can't encode file. It should have utf8 encoding."
 msgstr "파일을 인코딩할 수 없습니다. utf8 인코딩이 있어야 합니다."
 
-#: apps/videos/forms.py:79 apps/videos/forms.py:255
+#: apps/videos/forms.py:81
 msgid "Incorrect format. Upload .srt, .ssa, .sbv or .xml (TTML  format)"
 msgstr "잘못된 포맷입니다. .srt, .ssa, .sbv .xml(TTML 포맷)을 업로드 하세요. "
 
-#: apps/videos/forms.py:112 utils/forms/unisub_video_form.py:86
+#: apps/videos/forms.py:88 apps/videos/forms.py:276
+msgid "Incorrect subtitles format"
+msgstr "잘못된 자막 포맷입니다."
+
+#: apps/videos/forms.py:114 apps/videos/forms.py:373
+msgid "This URL appears to be a broken link."
+msgstr ""
+
+#: apps/videos/forms.py:120 utils/forms/unisub_video_form.py:86
 #, python-format
 msgid ""
 "Universal Subtitles does not support that website or video format.\n"
@@ -999,15 +1064,20 @@ msgstr ""
 "Universal Subtitles은 해당 웹사이트 또는 비디오 형식을 지원하지 않습니다. 새로운 사이트 또는 포맷에 대한 지원을 추가하고 싶으시거나 뭔가 실수가 있었던 것 같다고 생각되시면 <a\n"
 "href=\"mailto:%s\">문의해 주세요.</a> !"
 
-#: apps/videos/forms.py:123
+#: apps/videos/forms.py:131
 msgid "You have not permission add video URL for this video"
 msgstr "당신은 이 비디오에 대한 동영상 URL을 추가할 권한이 없습니다."
 
-#: apps/videos/forms.py:155
+#: apps/videos/forms.py:163
 msgid "Somebody is subtitling this video right now. Try later."
 msgstr "누군가가 지금 이 비디오에 자막을 만들고 있습니다. 나중에 다시 시도해 주세요."
 
-#: apps/videos/forms.py:340
+#: apps/videos/forms.py:269
+msgid ""
+"Incorrect format. Upload .srt, .ssa, .sbv, .dfxp or .xml (TTML  format)"
+msgstr ""
+
+#: apps/videos/forms.py:358
 #, python-format
 msgid ""
 "Please try again with a link to a video page. \n"
@@ -1016,7 +1086,7 @@ msgstr ""
 "비디오 페이지에 대한 링크와 함께 다시 시도해 주십시오. 만약 문제가 있다면 <a href=\"mailto:%s\">문의해 "
 "주세요.</a> "
 
-#: apps/videos/forms.py:343
+#: apps/videos/forms.py:361
 #, python-format
 msgid ""
 "You must link to a video on a compatible site (like YouTube) or directly to a\n"
@@ -1026,19 +1096,19 @@ msgstr ""
 "당신은 호환되는 사이트(유튜브 등)의 동영상이나 직접 HTML5 브라우저에서 작동하는 동영상 파일에 링크해야합니다. 예를 들면 다음과 같습니다. http://mysite.com/myvideo.ogg 또는 http://mysite.com/myipadvideo.m4v\n"
 "만약 문제가 있다면 <a href=\"mailto:%s\">문의해 주세요.</a> "
 
-#: apps/videos/forms.py:364
+#: apps/videos/forms.py:389
 msgid "Youtube usernames"
 msgstr "YouTube 사용자 이름"
 
-#: apps/videos/forms.py:364
+#: apps/videos/forms.py:389
 msgid "<span class=\"hint\">Enter usernames separated by comma.</span>"
 msgstr "<span class=\"hint\">쉼표로 나눠서 사용자 이름을 적어주세요.</span>"
 
-#: apps/videos/forms.py:365
+#: apps/videos/forms.py:390
 msgid "Youtube page link."
 msgstr "Youtube 페이지 링크"
 
-#: apps/videos/forms.py:366
+#: apps/videos/forms.py:391
 msgid ""
 "<span class=\"hint\">For example: "
 "http://www.youtube.com/user/username</span>"
@@ -1046,7 +1116,7 @@ msgstr ""
 "<span class=\"hint\">예를 들면 다음과 같습니다. "
 "http://www.youtube.com/user/username</span>"
 
-#: apps/videos/forms.py:367
+#: apps/videos/forms.py:392
 msgid ""
 "<span class=\"hint\">Supported: Youtube, Vimeo, Blip or Dailymotion. Only "
 "supported sites added.</span>"
@@ -1054,11 +1124,11 @@ msgstr ""
 "<span class=\"hint\">지원 : Youtube, Vimeo, Blip 또는 Dailymotion. 지원하는 사이트만이 "
 "추가됩니다. </span>"
 
-#: apps/videos/forms.py:368
+#: apps/videos/forms.py:393
 msgid "Save feed"
 msgstr "피드 저장"
 
-#: apps/videos/forms.py:368
+#: apps/videos/forms.py:393
 msgid ""
 "<span class=\"hint checkbox_hint\">Choose this if you wish to add videos "
 "from this feed in the future. Only valid RSS feeds will be saved.</span>"
@@ -1066,74 +1136,74 @@ msgstr ""
 "<span class=\"hint checkbox_hint\">나중에 이 피드에서 동영상을 추가하려는 경우 이것을 선택합니다. 유효한 "
 "RSS 피드만이 저장됩니다.</span>"
 
-#: apps/videos/forms.py:422
+#: apps/videos/forms.py:454
 msgid ""
 "Sorry, we could not find a valid feed at the URL you provided. Please check "
 "the URL and try again."
 msgstr "죄송합니다, 우리는 당신이 제공하는 URL에서 유효한 피드를 찾을 수 없습니다. URL을 확인하고 다시 시도해 주세요."
 
-#: apps/videos/forms.py:450
+#: apps/videos/forms.py:482
 msgid "captcha"
 msgstr "보안 문자"
 
-#: apps/videos/models.py:99
+#: apps/videos/models.py:109
 msgid "in seconds"
 msgstr "몇 초 안에"
 
-#: apps/videos/models.py:118
+#: apps/videos/models.py:128
 msgid "Sub.fetched"
 msgstr ""
 
-#: apps/videos/models.py:119
+#: apps/videos/models.py:129
 msgid "Widget views"
 msgstr "위젯 시청"
 
-#: apps/videos/models.py:120
+#: apps/videos/models.py:130
 msgid "Views"
 msgstr "시청"
 
-#: apps/videos/models.py:721
+#: apps/videos/models.py:781
 msgid ""
 "Sorry, you cannot upload subtitles right now because someone is editing the "
 "language you are uploading or a translation of it"
 msgstr ""
 "죄송합니다. 현재 누군가가 당신이 업로드 하고 있거나 번역하고 있는 언어를 편집하고 있기 때문에 자막을 업로드할 수 없습니다."
 
-#: apps/videos/models.py:1140
+#: apps/videos/models.py:1198
 #, python-format
 msgid ""
 "  rejected <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1145
+#: apps/videos/models.py:1203
 #, python-format
 msgid ""
 "  approved <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1150
+#: apps/videos/models.py:1208
 #, python-format
 msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "추가된 비디오 <a href=\"%(video_url)s\">%(video_name)s</a>"
 
-#: apps/videos/models.py:1152
+#: apps/videos/models.py:1210
 #, python-format
 msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a> 비디오가 추가 되었습니다."
 
-#: apps/videos/models.py:1158
+#: apps/videos/models.py:1216
 #, python-format
 msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>의 제목이 변경 되었습니다."
 
-#: apps/videos/models.py:1160
+#: apps/videos/models.py:1218
 #, python-format
 msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>의 제목이 변경 되었습니다."
 
-#: apps/videos/models.py:1175
+#: apps/videos/models.py:1233
 #, python-format
 msgid ""
 "commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
@@ -1142,7 +1212,7 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>에 대한 <a "
 "href=\"%(comments_url)s\">%(language)s 자막의</a> 제목이 변경 되었습니다."
 
-#: apps/videos/models.py:1177
+#: apps/videos/models.py:1235
 #, python-format
 msgid ""
 "Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
@@ -1151,17 +1221,17 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>에 대한 <a "
 "href=\"%(comments_url)s\">%(language)s 자막에 </a> 댓글이 추가 되었습니다."
 
-#: apps/videos/models.py:1180
+#: apps/videos/models.py:1238
 #, python-format
 msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>에 댓글이 달렸습니다."
 
-#: apps/videos/models.py:1182
+#: apps/videos/models.py:1240
 #, python-format
 msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>에 댓글이 추가 되었습니다."
 
-#: apps/videos/models.py:1191
+#: apps/videos/models.py:1248
 #, python-format
 msgid ""
 "started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1170,7 +1240,7 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>을 위한 <a "
 "href=\"%(language_url)s\">%(language)s 자막이 </a> 시작 되었습니다."
 
-#: apps/videos/models.py:1193
+#: apps/videos/models.py:1250
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
@@ -1179,7 +1249,7 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>에 대한 <a "
 "href=\"%(language_url)s\">%(language)s 자막이</a> 시작 되었습니다."
 
-#: apps/videos/models.py:1204
+#: apps/videos/models.py:1261
 #, python-format
 msgid ""
 "edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
@@ -1188,7 +1258,7 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>에 대한 <a "
 "href=\"%(language_url)s\">%(language)s 자막이</a> 편집 되었습니다."
 
-#: apps/videos/models.py:1206
+#: apps/videos/models.py:1263
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
@@ -1197,71 +1267,71 @@ msgstr ""
 "<a href=\"%(video_url)s\">%(video_name)s</a>에 대한 <a "
 "href=\"%(language_url)s\">%(language)s 자막이</a> 편집 되었습니다."
 
-#: apps/videos/models.py:1212
+#: apps/videos/models.py:1269
 #, python-format
 msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>에 새로운 URL이 추가 되었습니다."
 
-#: apps/videos/models.py:1214
+#: apps/videos/models.py:1271
 #, python-format
 msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr "<a href=\"%(video_url)s\">%(video_name)s</a>에 새로운 URL이 추가 되었습니다."
 
-#: apps/videos/models.py:1228
+#: apps/videos/models.py:1285
 #, python-format
 msgid ""
 "requested subtitles for <a href=\"%(video_url)s\">%(video_name)s</a> in "
 "%(language)s. %(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1230
+#: apps/videos/models.py:1287
 #, python-format
 msgid ""
 "New subtitles requested  for <a href=\"%(video_url)s\">%(video_name)s</a> in"
 " %(language)s. %(language_info)s%(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1246
+#: apps/videos/models.py:1303
 msgid "add video"
 msgstr "동영상 추가"
 
-#: apps/videos/models.py:1247
+#: apps/videos/models.py:1304
 msgid "change title"
 msgstr "제목 변경"
 
-#: apps/videos/models.py:1248
+#: apps/videos/models.py:1305
 msgid "comment"
 msgstr "코멘트"
 
-#: apps/videos/models.py:1249
+#: apps/videos/models.py:1306
 msgid "add version"
 msgstr "버전 추가"
 
-#: apps/videos/models.py:1250
+#: apps/videos/models.py:1307
 msgid "add translation"
 msgstr "번역 추가"
 
-#: apps/videos/models.py:1251
+#: apps/videos/models.py:1308
 msgid "add video url"
 msgstr "동영상 URL 추가"
 
-#: apps/videos/models.py:1252
+#: apps/videos/models.py:1309
 msgid "request subtitles"
 msgstr "자막 요청"
 
-#: apps/videos/models.py:1253
+#: apps/videos/models.py:1310
 msgid "approve version"
 msgstr ""
 
-#: apps/videos/models.py:1254
+#: apps/videos/models.py:1311
 msgid "add contributor"
 msgstr ""
 
-#: apps/videos/models.py:1255
+#: apps/videos/models.py:1312
 msgid "reject version"
 msgstr ""
 
-#: apps/videos/models.py:1453
+#: apps/videos/models.py:1499
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -1270,59 +1340,59 @@ msgstr ""
 "이 URL은 이미 시스템 안에 자체 비디오로 <a href=\"%(url)s\">존재합니다.</a> 당신은 보조 URL로 그것을 추가할 "
 "수 없습니다."
 
-#: apps/videos/rpc.py:56 apps/videos/rpc.py:72
+#: apps/videos/rpc.py:55 apps/videos/rpc.py:71
 msgid "You have not permission"
 msgstr "당신은 허가를 받지 않았습니다."
 
-#: apps/videos/rpc.py:61 apps/videos/rpc.py:77
+#: apps/videos/rpc.py:60 apps/videos/rpc.py:76
 msgid "Incorrect video ID"
 msgstr "잘못된 동영상 ID"
 
-#: apps/videos/rpc.py:64 apps/videos/rpc.py:80 apps/videos/rpc.py:314
+#: apps/videos/rpc.py:63 apps/videos/rpc.py:79 apps/videos/rpc.py:357
 msgid "Video does not exist"
 msgstr "동영상이 존재하지 않습니다"
 
-#: apps/videos/rpc.py:298 apps/videos/rpc.py:323
+#: apps/videos/rpc.py:341 apps/videos/rpc.py:366
 msgid "Title can't be empty"
 msgstr "제목은 비워둘 수 없습니다."
 
-#: apps/videos/rpc.py:312
+#: apps/videos/rpc.py:355
 msgid "Title can't be changed for this video"
 msgstr ""
 
-#: apps/videos/rpc.py:316 apps/videos/rpc.py:334
+#: apps/videos/rpc.py:359 apps/videos/rpc.py:377
 msgid "Title was changed success"
 msgstr "제목이 성공적으로 변경되었습니다."
 
-#: apps/videos/rpc.py:328
+#: apps/videos/rpc.py:371
 msgid "Subtitle language does not exist"
 msgstr "자막 언어가 존재하지 않습니다."
 
-#: apps/videos/rpc.py:336
+#: apps/videos/rpc.py:379
 msgid "This is not forked translation"
 msgstr "이것을 번역하실 수 없습니다."
 
-#: apps/videos/rpc.py:345 apps/videos/rpc.py:361
+#: apps/videos/rpc.py:388 apps/videos/rpc.py:404
 msgid "Video does not exist."
 msgstr "동영상이 존재하지 않습니다."
 
-#: apps/videos/rpc.py:352
+#: apps/videos/rpc.py:395
 msgid "You are following this video now."
 msgstr "당신은 이제 이 비디오를 팔로우 합니다."
 
-#: apps/videos/rpc.py:368
+#: apps/videos/rpc.py:411
 msgid "You stopped following this video now."
 msgstr "이제 이 비디오를 그만 팔로우 합니다."
 
-#: apps/videos/rpc.py:377 apps/videos/rpc.py:390
+#: apps/videos/rpc.py:420 apps/videos/rpc.py:433
 msgid "Subtitles does not exist."
 msgstr "자막이 존재하지 않습니다."
 
-#: apps/videos/rpc.py:381
+#: apps/videos/rpc.py:424
 msgid "You are following this subtitles now."
 msgstr "당신은 이제 이 자막을 팔로우 합니다."
 
-#: apps/videos/rpc.py:394
+#: apps/videos/rpc.py:437
 msgid "You stopped following this subtitles now."
 msgstr "이제 이 자막을 그만 팔로우 합니다."
 
@@ -1352,7 +1422,7 @@ msgstr "막 이 비디오 %(video_title)s에 자막이 있는 버전을 발견 �
 msgid "Just found a version of this video with %(language_name)s subtitles"
 msgstr "막 이 비디오 %(language_name)s에 자막이 있는 버전을 발견 하였습니다."
 
-#: apps/videos/views.py:171
+#: apps/videos/views.py:164
 msgid ""
 "Here is the subtitle workspace for your video. You can\n"
 "share the video with friends, or get an embed code for your site.  To add or\n"
@@ -1361,16 +1431,16 @@ msgstr ""
 "여기 동영상에 대한 자막 작업 영역입니다. 당신이 친구들과 비디오를 공유하거나, 귀하의 사이트에 대한 소스 코드를 얻을 수 있습니다. "
 "자막을 추가하거나 개선하기 위해, 비디오 아래의 버튼을 클릭합니다."
 
-#: apps/videos/views.py:176
+#: apps/videos/views.py:169
 msgid "Existing subtitles will be imported in a few minutes."
 msgstr ""
 
-#: apps/videos/views.py:188
+#: apps/videos/views.py:181
 #, python-format
 msgid "%(count)s videos have been added"
 msgstr "%(count)s 비디오가 추가 되었습니다."
 
-#: apps/videos/views.py:190
+#: apps/videos/views.py:183
 #, python-format
 msgid ""
 "%(count)s videos have been added. To add the remaining videos from this "
@@ -1379,19 +1449,29 @@ msgstr ""
 "%(count)s 동영상이 추가되었습니다. 이 피드에서 나머지 동영상을 추가하려면 다시 이 피드를 제출하시고  \"피드를 저장\" 박스에"
 " 체크 하시기 바랍니다."
 
-#: apps/videos/views.py:621
+#: apps/videos/views.py:273
+msgid ""
+"Thank you for uploading. It will take a minute or so for your subtitles to "
+"appear."
+msgstr "업로드 해주셔서 감사합니다. 귀하의 자막이 나타나는데는 잠시 시간이 걸립니다."
+
+#: apps/videos/views.py:275
+msgid "Your changes have been saved."
+msgstr ""
+
+#: apps/videos/views.py:627
 msgid "You have not permission change this URL"
 msgstr "당신은 이 URL을 변경할 권한이 없습니다."
 
-#: apps/videos/views.py:627 apps/videos/views.py:647
+#: apps/videos/views.py:633 apps/videos/views.py:653
 msgid "Object does not exist"
 msgstr "개체가 존재하지 않습니다."
 
-#: apps/videos/views.py:640
+#: apps/videos/views.py:646
 msgid "You have not permission delete this URL"
 msgstr "이 URL을 삭제할 권한이 없습니다."
 
-#: apps/videos/views.py:643
+#: apps/videos/views.py:649
 msgid "You cann't remove original URL"
 msgstr "원래 URL을 제거할 수 없습니다."
 
@@ -1457,7 +1537,8 @@ msgstr "모든"
 msgid "Progress"
 msgstr "진행"
 
-#: libs/rosetta/templates/rosetta/languages.html:30 templates/settings.html:18
+#: libs/rosetta/templates/rosetta/languages.html:30
+#: templates/messages/index.html:118 templates/messages/sent.html:85
 msgid "Messages"
 msgstr "메시지"
 
@@ -1507,8 +1588,9 @@ msgid "Download this catalog"
 msgstr "이 카탈로그 다운로드"
 
 #: libs/rosetta/templates/rosetta/pofile.html:21
-msgid "Progress: %(percent_translated)s%"
-msgstr "진행: %(percent_translated)s%"
+#, python-format
+msgid "Progress: %(percent_translated)s%%"
+msgstr ""
 
 #: libs/rosetta/templates/rosetta/pofile.html:23
 msgid "File is read-only: download the file when done editing!"
@@ -1544,8 +1626,8 @@ msgid "Fuzzy only"
 msgstr "불분명한 것"
 
 #: libs/rosetta/templates/rosetta/pofile.html:42
-#: templates/profiles/my_profile.html:36 templates/search/_search_form.html:40
-#: templates/teams/index.html:100
+#: templates/profiles/my_profile.html:32 templates/search/_search_form.html:31
+#: templates/teams/index.html:48
 msgid "Search"
 msgstr "검색"
 
@@ -1611,7 +1693,7 @@ msgstr "다음"
 msgid "Share your subtitles"
 msgstr "자막 공유하기"
 
-#: templates/_share_widget.html:6 templates/_sharing_widget.html:7
+#: templates/_share_widget.html:6
 msgid "Now everyone can watch the video with subtitles-- try it!"
 msgstr "이제 모두가 자막과 함께 비디오를 시청할 수 있습니다. 시도해 보세요!"
 
@@ -1719,7 +1801,7 @@ msgid ""
 "                to get started!\n"
 "            </li>\n"
 "            <li>\n"
-"                If you are a developer, check out the <a href=\"http://wiki.github.com/8planes/unisubs/dev-center\">development center</a> \n"
+"                If you are a developer, check out the <a href=\"http://wiki.github.com/pculture/unisubs/dev-center\">development center</a> \n"
 "                and start with some 'bite-sized' tickets that are listed there.\n"
 "            </li>\n"
 "            <li>\n"
@@ -1775,122 +1857,54 @@ msgid ""
 "    <p>\n"
 "        Are there other features that are particular important to your use? \n"
 "        We'd love to hear from you.<br/>\n"
-"        Email us: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a>\n"
+"        Email us: <a href=\"mailto:feedback@universalsubtitles.org\">universalsubtitles@pculture.org</a>\n"
 "    </p>\n"
 "    "
 msgstr ""
-"\n"
-"<h2>Universal Subtitles에 대하여</h2>\n"
-" \n"
-"<p>Universal Subtitles은 개인, 커뮤니티, 그리고 더 큰 조직에게 온라인 비디오를 통해 언어의 장벽과 접근성을 극복할 힘을 줍니다. 그 도구는 무료이고 오픈 소스이며 비디오의 자막을 만들고 번역을 하는 작업을 더 간단하고 더 멋지고 더 협력하도록 만들어 줍니다.</p>\n"
-"<p> 캡션과 자막을 만드는 일의 이점은 엄청납니다:\n"
-"<ul>\n"
-"<li>캡션은 청각 장애인이나 듣는데 어려움을 겪는 시청자들이 비디오를 볼 수 있게 해줍니다.</li> <li>번역은 우리 모두가 할 줄 모르는 언어로 비디오를 시청하는 것이 가능하게 해줍니다.</li>\n"
-"\n"
-" <li>비디오 창작자들이 얻는 것: 더 나은 검색 엔진 최적화, 더 많은 시청 수, 훨씬 더 많은 관객에의 접근(잠재적으로 전세계에 있는 다언어 사용자), 청각 장애인 또는 듣는데 어려움을 겪는 사람들 그 외 많은 사람들</li></ul></p>\n"
-"<p>Universal Subtitles 세가지 주요 부분으로 구성되어 있습니다:\n"
-"<ul><li>자막 제작과 시청 도구(위젯)</li>\n"
-"<li>협력하는 자막 제작 웹사이트</li>\n"
-"<li>자막 검색/전달을 위한 오픈 프로토콜</li></ul></p>\n"
-"<p>우리가 하는 모든 일은 오픈 소스 내에서 가능합니다.\n"
-" <a href=\"http://www.gnu.org/licenses/agpl-3.0.html\">AGPL</a> license.</p>\n"
-"<h2>당신이 도울 수 있는 중요한 세가지 방법</h2>\n"
-"<p>Universal Subtitles은 오픈소스이고 비영리 단체의 프로젝트 입니다. 우리는 자원봉사자들이며 당신이 도와주셨으면 합니다!<br/>\n"
-"여기 당신이 참여할 수 있는 세가지 방법이 있습니다:\n"
-"<ul><li>새로운 버전의 소프트웨어가 발표되기 전 테스트를 도와주고 싶으십니까?\n"
-"<a href=\"http://groups.google.com/group/universal-subtitles-testing\">테스터 리스트</a>에 참여하시고 시작하기 위해 <a href=\"http://develop.participatoryculture.org/index.php/UniversalSubtitlesQA\">테스팅 가이드라인</a>을 팔로우 하세요! </li>\n"
-"<li>당신이 개발자라면,<a href=\"http://wiki.github.com/8planes/unisubs/dev-center\">개발 센터</a>를 확인하시고 그곳에 리스트된 아주 작은 티켓들로 시작하세요.</li>\n"
-"<li>새로운 사용자들을 도와주세요! <a href=\"http://universalsubtitles.org/videos/\">비디오 리스트</a>를 살펴보시고 다양한 비디오에 자막을 추가한 사람들에게 긍정적이고 도움이 될만한 피드백을 남겨 주세요.</li>\n"
-"<li>당신이 청각 장애인이거나 듣는데 어려움을 겪고있으신가요?\n"
-"우리의 <a href=\"http://groups.google.com/group/universal-subtitles-deaf-hoh/\">deaf/hoh 토의 목록</a>에 참여해 보세요.</li></ul></p>\n"
-"<h2>우리 조직</h2>\n"
-"<p><a href=\"http://www.pculture.org/\">Participatory Culture Foundation</a>\n"
-"은 더 민주적이고 탈중심화된 미디어를 위해 무료의 오픈툴을 지향하는 비영리 기관입니다. 우리의 다른 프로젝트들은 <a href=\"http://www.getmiro.com/\">Miro</a>, <a href=\"http://www.mirovideoconverter.com/\">Miro Video Converter</a>, <a href=\"http://www.mirocommunity.org/\">Miro Community</a>, 그리고 <a href=\"http://www.openvideoalliance.org/\">Open Video Alliance</a>를 포함합니다.</p>\n"
-"<p>Universal Subtitles은 <a href=\"http://www.drumbeat.org/\">Mozilla Drumbeat</a>의 주요 프로젝트 입니다. 그리고 Mozilla Foundation은 개발 지원을 제공해오고 있습니다. 또한 Open Society Institute and the MacArthur Foundation은 재정적인 후원자입니다.</p>\n"
-"<p>Universal Subtitles을 위한 소프트웨어 개발은 <br/><a href=\"http://www.8planes.com/\">8 Planes</a>과 파트너십을 맺고 있습니다.</p>\n"
-"<h2>다음은 무엇인가요?</h2>\n"
-"<p>우리는 현재 이 웹사이트와 자막 제작 도구의 알파 단계에 있습니다. 다시 말하자면 우리는 막 시작한 단계입니다. 그러나 우리는 테스트를 하고 더 빠른 피드백을 얻기 위해서 사이트를 열었습니다. 많은 아주 중요한 기능들이 아직 부족합니다. 여기에 우리가 다음 달에 작업하려고 하는 것들이 몇몇 있습니다: \n"
-"<ul><li>non-latin character sets에 대한 더 나은 지원</li>\n"
-"<li>사람들이 캡션과 자막을 요청할 수 있는 요청 센터와 자원봉사 페이지,</li>\n"
-"<li>일단 자막이 만들어지고 나면 기계 번역 옵션</li>\n"
-"<li>사이트와 위젯을 위한 더 나은 키보드 접근성</li>\n"
-"<li>자막 평가와 표시</li>\n"
-"<li>더 나은 커뮤니티 웹사이트 기능들</li>\n"
-"<li>우리 사이트에서 흥미로운 내용을 찾기위한 더 나은 비디오 브라우징</li>\n"
-"<li>최근 생겨난 문자 기준 준수</li>\n"
-"</ul></p>\n"
-"<p>당신이 사용하는데 특별히 중요한 다른 특징들은 무엇인가요?\n"
-"당신으로부터 듣고 싶습니다.<br/>\n"
-"전자우편: <a href=\"mailto:universalsubtitles@pculture.org\">universalsubtitles@pculture.org</a> </p>\n"
-"  "
 
-#: templates/base.html:35
+#: templates/base.html:68
 msgid "Transcribe, caption, translate, and subtitle videos."
 msgstr ""
 
-#: templates/base.html:81 templates/base_masterbranch.html:85
-#: templates/bug.html:77
-msgid "Feedback"
-msgstr "피드백"
-
-#: templates/base.html:86 templates/base_masterbranch.html:90
-msgid ""
-"Universal Subtitles does not support your browser. Upgrade your browser or "
-"<a href=\"http://getfirefox.com\">Try Firefox</a>."
-msgstr ""
-"Universal Subtitles은 당신의 브라우저를 지원하지 않습니다. 브라우저를 업그레이드 하시거나 <a "
-"href=\"http://getfirefox.com\">Firefox를 사용해 보세요.</a>."
-
-#: templates/base.html:97
+#: templates/base.html:134 templates/videos/history.html:196
+#: templates/videos/video.html:155
 msgid "Admin"
 msgstr "관리자"
 
-#: templates/base.html:100
+#: templates/base.html:137
 msgid "Sentry"
 msgstr "보초"
 
-#: templates/base.html:103
+#: templates/base.html:140
 msgid "Rosetta"
 msgstr "로제타"
 
-#: templates/base.html:120 templates/teams/_team_video_lang_detail.html:34
+#: templates/base.html:157 templates/teams/_team_video_lang_detail.html:34
 msgid "Create"
 msgstr "만들기"
 
-#: templates/base.html:121 templates/base_masterbranch.html:122
+#: templates/base.html:158 templates/base_masterbranch.html:123
 #: templates/bug.html:94
 msgid "Watch"
 msgstr "보기"
 
-#: templates/base.html:123
-msgid "Contribute"
-msgstr "기여"
-
-#: templates/base.html:124
-msgid "Solutions"
-msgstr "해결"
-
-#: templates/base.html:125 templates/videos/_follow_video_button.html:46
-msgid "Follow"
-msgstr "팔로우"
-
-#: templates/base.html:127
+#: templates/base.html:165
 msgid "Volunteer"
 msgstr "자원봉사"
 
-#: templates/base.html:128
+#: templates/base.html:166
 msgid "Services"
 msgstr "서비스"
 
-#: templates/base.html:129
+#: templates/base.html:167
 msgid "Help"
 msgstr "도움"
 
-#: templates/base.html:133
+#: templates/base.html:171
 msgid "Sign In"
 msgstr "로그인"
 
-#: templates/base.html:162 templates/base_masterbranch.html:161
+#: templates/base.html:200 templates/base_masterbranch.html:162
 #: templates/bug.html:317
 msgid ""
 "Universal Subtitles is a project of <a "
@@ -1899,22 +1913,22 @@ msgstr ""
 "Universal Subtitles은<a href=\"http://participatoryculture.org/\">PCF</a>의 "
 "프로젝트입니다."
 
-#: templates/base.html:165 templates/base_masterbranch.html:164
-#: templates/profiles/view_profile.html:46
+#: templates/base.html:203 templates/base_masterbranch.html:165
+#: templates/profiles/view_profile.html:63
 msgid "About"
 msgstr "대하여"
 
-#: templates/base.html:168 templates/base_masterbranch.html:167
+#: templates/base.html:206 templates/base_masterbranch.html:168
 #: templates/bug.html:323
 msgid "Contact Us"
 msgstr "연락처"
 
-#: templates/base.html:169 templates/base_masterbranch.html:168
+#: templates/base.html:207 templates/base_masterbranch.html:169
 #: templates/bug.html:324
 msgid "Privacy Policy"
 msgstr "개인정보 보호 정책"
 
-#: templates/base.html:170 templates/base_masterbranch.html:169
+#: templates/base.html:208 templates/base_masterbranch.html:170
 #: templates/bug.html:325
 msgid "Terms of Service"
 msgstr "서비스 약관"
@@ -1923,35 +1937,40 @@ msgstr "서비스 약관"
 msgid "Make subtitles, translations, and captions for almost any video."
 msgstr "거의 모든 동영상에 대한 자막, 번역, 그리고  캡션을 만들어 보세요."
 
-#: templates/base_masterbranch.html:118 templates/bug.html:89
+#: templates/base_masterbranch.html:85 templates/bug.html:77
+msgid "Feedback"
+msgstr "피드백"
+
+#: templates/base_masterbranch.html:119 templates/bug.html:89
+#: templates/index.html:28
 msgid "Subtitle"
 msgstr "자막"
 
-#: templates/base_masterbranch.html:119 templates/bug.html:90
+#: templates/base_masterbranch.html:120 templates/bug.html:90
 msgid "a video now"
 msgstr "현재 동영상"
 
-#: templates/base_masterbranch.html:123 templates/bug.html:95
+#: templates/base_masterbranch.html:124 templates/bug.html:95
 msgid "subbed videos"
 msgstr "자막이 있는 동영상"
 
-#: templates/base_masterbranch.html:128 templates/bug.html:104
+#: templates/base_masterbranch.html:129 templates/bug.html:104
 msgid "blog"
 msgstr "블로그"
 
-#: templates/base_masterbranch.html:129
+#: templates/base_masterbranch.html:130
 msgid "Professional Services"
 msgstr "전문 서비스"
 
-#: templates/base_masterbranch.html:130 templates/bug.html:106
+#: templates/base_masterbranch.html:131 templates/bug.html:106
 msgid "FAQ"
 msgstr "묻고 답하기"
 
-#: templates/base_masterbranch.html:133 templates/bug.html:110
+#: templates/base_masterbranch.html:134 templates/bug.html:110
 msgid "admin"
 msgstr "관리자"
 
-#: templates/base_masterbranch.html:137 templates/bug.html:113
+#: templates/base_masterbranch.html:138 templates/bug.html:113
 msgid "login"
 msgstr "로그인"
 
@@ -2418,62 +2437,54 @@ msgstr ""
 "\n"
 "면책 조항 : 우리는 귀하의 법적 대리인이 아니며, 우리가 여기에 제공하는 정보는 법적 조언이 아닙니다. 우리는 오직 정보 목적만으로 이 정보를 제공합니다.\n"
 
-#: templates/embed_page.html:9
+#: templates/embed_page.html:24
 msgid "Add collaborative subtitling to every video on your site"
 msgstr "귀하의 사이트에 있는 모든 비디오에 협력 자막 추가"
 
-#: templates/embed_page.html:13
-msgid ""
-"Just add this line of code to your webpage, or to your blog/CMS theme (right"
-" before the &lt;/head&gt; tag)"
-msgstr "당신의 웹페이지나  블로그 / CMS 테마에 이 코드라인을 추가하세요. "
+#: templates/embed_page.html:28
+msgid "Just drop one line of code into your page:"
+msgstr ""
 
-#: templates/embed_page.html:20
+#: templates/embed_page.html:32
+msgid ""
+"\n"
+"            You can add it just before the <code>&lt;/head&gt;</code> or <code>&lt;/body&gt;</code> tag (<a href=\"https://github.com/pculture/unisubs/wiki/Widgetizer-script-usage-guide\">see usage notes</a>).\n"
+"        "
+msgstr ""
+
+#: templates/embed_page.html:37
 msgid "This lets you and visitors to your site"
 msgstr "이것은 당신과 당신 사이트의 방문객"
 
-#: templates/embed_page.html:23
-msgid "Not sure how?"
-msgstr "어떻게 해야할지 모르시겠나요?"
-
-#: templates/embed_page.html:23 templates/videos/_video_url_panel.html:7
-#: templates/videos/_video_url_panel.html:72
-msgid "Learn more"
-msgstr "더 알아 보기"
-
-#: templates/embed_page.html:24
-msgid "Contact us"
-msgstr "연락처"
-
-#: templates/embed_page.html:28
+#: templates/embed_page.html:41
 msgid "Create subtitles for any compatible video"
 msgstr "모든 호환 가능한 비디오 자막 만들기"
 
-#: templates/embed_page.html:31
+#: templates/embed_page.html:44
 msgid "Find subtitles created by others"
 msgstr "다른 사람이 만든 자막 찾기"
 
-#: templates/embed_page.html:34
+#: templates/embed_page.html:47
 msgid "Add translations and improve other's work"
 msgstr "번역을 추가하고 다른 사람의 작업을 개선하기"
 
-#: templates/embed_page.html:37
+#: templates/embed_page.html:50
 msgid "Make your videos searchable and accessible"
 msgstr "당신의 동영상을 검색하고 이용할 수 있도록 만들기"
 
-#: templates/embed_page.html:40
+#: templates/embed_page.html:53
 msgid "Bring your videos to an international audience"
 msgstr "귀하의 동영상을 국제 고객에게 보내기"
 
-#: templates/embed_page.html:45
+#: templates/embed_page.html:58
 msgid "Proud to be a"
 msgstr "자랑스럽습니다."
 
-#: templates/embed_page.html:45
+#: templates/embed_page.html:58
 msgid "Featured Mozilla Drumbeat Project"
 msgstr "추천 모질라 Drumbeat 프로젝트"
 
-#: templates/embed_page.html:53
+#: templates/embed_page.html:66
 msgid ""
 "\n"
 "        A \"subtitle me\" or \"choose language\" button will appear across all compatible videos. \n"
@@ -2483,36 +2494,13 @@ msgstr ""
 "\n"
 "\"자막을 만들어 주세요.\"또는 \"언어 선택\" 버튼은 호환되는 모든 동영상에 나타납니다. 사용자 (또는 작성자)는 자막을 활성화하기를 클릭할 수 있습니다."
 
-#: templates/embed_page.html:64
-msgid ""
-"Note: this code is an experimental part of the Universal Subtitles service."
-msgstr "참고: 이 코드는 Universal Subtitles 서비스 실험의 일부분입니다."
-
-#: templates/embed_page.html:65
-msgid "If you run into problems, please"
-msgstr "문제가 생기시면, 제발"
-
-#: templates/embed_page.html:66
-msgid "contact us"
-msgstr "문의해 주세요."
-
-#: templates/embed_page.html:67
-msgid "Known issues:"
-msgstr "알려진 문제:"
-
-#: templates/embed_page.html:71
-msgid "Most Flash videos (e.g. Youtube) will be set to a default, small size"
-msgstr "대부분의 플래시 비디오 (예 : 유튜브)는 기본적으로 작은 크기로 설정됩니다."
-
-#: templates/embed_page.html:74
-msgid "Blip.TV and some other sitesʼ videos will play in our custom player"
-msgstr "Blip.TV와 일부 다른 사이트의 동영상은 우리의 플레이어에서 재생됩니다."
+#: templates/embed_page.html:77
+msgid "This code is experimental. If you run into problems, please"
+msgstr ""
 
 #: templates/embed_page.html:78
-msgid ""
-"Any other problems, especially styling problems on the page, contact us and "
-"include the site URL!"
-msgstr "다른 문제들, 특히 페이지에서 문제가 생기면 사이트 URL을 포함해서 저희에게 연락해 주세요."
+msgid "let us know"
+msgstr ""
 
 #: templates/faq.html:16
 msgid "Frequently Asked Questions"
@@ -2613,11 +2601,9 @@ msgid ""
 "      \t\tUniversal Subtitles is an easy way for anyone to add subtitles, captions, \n"
 "\t\t\tor translate nearly any video on the web. It works in a collaborative \n"
 "\t\t\tWikipedia-like fashion. The software is free and open source and can be used and \n"
-"\t\t\t<a href=\"http://wiki.github.com/8planes/unisubs/dev-center\">improved by anyone</a>.\n"
+"\t\t\t<a href=\"http://wiki.github.com/pculture/unisubs/dev-center\">improved by anyone</a>.\n"
 "\t\t"
 msgstr ""
-"\n"
-"»»Universal Subtitles은 누구나 자막, 캡션을 추가할 수 있는 가장 쉬운방법입니다»»»웹상의 거의 모든 동영상을 번역할 수 있습니다. 그것은 협업을 통해»»»위키피디아 같은 방식으로 작동합니다. 이 소프트웨어는 무료이고 오픈 소스이며, »»»<a href=\"http://wiki.github.com/8planes/unisubs/dev-center\">누구나 향상</a> <span class=\"whitespace other\" title=\"탭\">.»»</span>"
 
 #: templates/faq.html:56
 msgid ""
@@ -2720,9 +2706,6 @@ msgid ""
 "<a href=\"http://wiki.github.com/8planes/unisubs/dev-center\">developer "
 "center</a>."
 msgstr ""
-"해주세요! 당신이 코딩이나 개발에 관심이 있으시다면, <a "
-"href=\"http://wiki.github.com/8planes/unisubs/dev-center\">개발 센터</a>에 방문해 "
-"주세요.\n"
 
 #: templates/faq.html:117
 msgid ""
@@ -2855,6 +2838,118 @@ msgid ""
 "get a lot of email"
 msgstr ""
 "추신. 우리는 모든 질문에 답변하기 위해 최선을 다하고 있습니다. 그러나 많은 email을 받고 있으니 조금만 기다려 주세요. "
+
+#: templates/index.html:18
+msgid "The easiest way to caption and translate any video."
+msgstr ""
+
+#: templates/index.html:19
+msgid "Subtitles make videos more powerful, more global, and more searchable."
+msgstr ""
+
+#: templates/index.html:26
+msgid "Subtitle a Video Now"
+msgstr ""
+
+#: templates/index.html:29
+msgid "Works with YouTube, Vimeo, HTML5, and more."
+msgstr ""
+
+#: templates/index.html:33
+msgid "Features"
+msgstr ""
+
+#: templates/index.html:35
+msgid "Embed the video anywhere"
+msgstr ""
+
+#: templates/index.html:36
+msgid "Add subtitles yourself or ask viewers to help."
+msgstr ""
+
+#: templates/index.html:37
+msgid "Full site integration"
+msgstr ""
+
+#: templates/index.html:43
+msgid "Volunteers Needed"
+msgstr ""
+
+#: templates/index.html:45
+msgid ""
+"\n"
+"            Our deaf and hard of hearing users and non-profits request help for videos that need captions or translations. \n"
+"          "
+msgstr ""
+
+#: templates/index.html:54
+msgid "Complete Subtitling Solutions"
+msgstr ""
+
+#: templates/index.html:56
+msgid ""
+"\n"
+"            Increase viewership with transcription, captioning, and translation services, and flexible API and integration options. Improve SEO, reach a global audience, and build a managed volunteer community.\n"
+"          "
+msgstr ""
+
+#: templates/index.html:59
+msgid "See our enterprise services."
+msgstr ""
+
+#: templates/index.html:88
+msgid "6 key benefits"
+msgstr ""
+
+#: templates/index.html:89
+msgid ""
+"The largest, most powerful captioning and translation platform in the world."
+msgstr ""
+
+#: templates/index.html:97
+msgid "Mozilla Example"
+msgstr ""
+
+#: templates/index.html:103
+msgid "Khan Integration"
+msgstr ""
+
+#: templates/index.html:109
+msgid "Drupal Example"
+msgstr ""
+
+#: templates/index.html:115
+msgid "Al Jazeera Team"
+msgstr ""
+
+#: templates/index.html:121
+msgid "NewsHour Example"
+msgstr ""
+
+#: templates/index.html:136
+msgid "More Popular"
+msgstr ""
+
+#: templates/index.html:137
+msgid "Most Popular Today"
+msgstr ""
+
+#: templates/index.html:140
+msgid "Top this month"
+msgstr ""
+
+#: templates/index.html:141
+msgid "Top all-time"
+msgstr ""
+
+#: templates/index.html:149
+msgid "More Featured"
+msgstr ""
+
+#: templates/index.html:150 templates/videos/featured_videos.html:36
+#: templates/videos/volunteer.html:25 templates/videos/watch.html:25
+msgid "Featured Videos"
+msgstr "추천 동영상"
 
 #: templates/index_old.html:68
 msgid "enter a video URL to enable and then embed anywhere"
@@ -3139,39 +3234,6 @@ msgid ""
 "          "
 msgstr ""
 
-#: templates/services.html:84
-msgid "Transcription and Translation Service Providers"
-msgstr ""
-
-#: templates/services.html:86
-msgid ""
-"\n"
-"        Do you provide professional transcription, subtitling, or translation services? We can work together to offer your customers a powerful subtitle management and embedding platform. And if you’d like to offer your services to our customers, we’d also like to hear from you.\n"
-"      "
-msgstr ""
-
-#: templates/settings.html:8 templates/profiles/_top_user_panel.html:10
-#: templates/profiles/my_profile.html:24
-msgid "My Videos"
-msgstr "내 동영상"
-
-#: templates/settings.html:10 templates/profiles/_top_user_panel.html:14
-#: templates/teams/index.html:8
-msgid "My Teams"
-msgstr "내 팀"
-
-#: templates/settings.html:13 templates/profiles/_top_user_panel.html:19
-msgid "View profile"
-msgstr "프로필 보기"
-
-#: templates/settings.html:15 templates/profiles/_top_user_panel.html:23
-msgid "Edit Profile"
-msgstr "프로필 수정"
-
-#: templates/settings.html:27 templates/profiles/_top_user_panel.html:42
-msgid "Team Management"
-msgstr "팀 관리"
-
 #: templates/admin/base_site.html:4 templates/admin/base_site.html.py:7
 msgid "Universal Subtitles"
 msgstr "Universal Subtitles"
@@ -3188,11 +3250,20 @@ msgstr "설정 수정"
 msgid "Send"
 msgstr "보내기"
 
+#: templates/auth/_announcement.html:7 templates/messages/_messages.html:8
+msgid "hide"
+msgstr ""
+
+#: templates/auth/_email_confirmation_notification.html:6
+msgid "Resend confirmation email"
+msgstr ""
+
 #: templates/auth/delete_user.html:9
 msgid "Are you sure that you want to permanently delete your profile?"
 msgstr "영구적으로 프로필을 삭제하시겠습니까?"
 
-#: templates/auth/delete_user.html:13
+#: templates/auth/delete_user.html:13 templates/messages/index.html:161
+#: templates/messages/sent.html:128
 msgid "Delete"
 msgstr "삭제"
 
@@ -3218,22 +3289,24 @@ msgstr "비밀 번호를 잊으셨습니까?"
 msgid "You can also login using"
 msgstr "당신은 또한 이것을 사용하여 로그인하실 수 있습니다."
 
-#: templates/auth/login.html:23
+#: templates/auth/login.html:24
 msgid "Create an Account"
 msgstr "계정 만들기"
 
-#: templates/auth/login.html:27
+#: templates/auth/login.html:28
 msgid "Create Account"
 msgstr "계정 만들기"
 
-#: templates/comments/_item.html:8 templates/messages/index.html:154
-#: templates/messages/sent.html:121 templates/videos/_action_tpl_video.html:12
-#: templates/videos/_video_url_panel.html:54
+#: templates/comments/_item.html:8 templates/messages/index.html:160
+#: templates/messages/sent.html:127 templates/videos/_action_tpl.html:22
+#: templates/videos/_action_tpl_video.html:12
+#: templates/videos/_video_url_panel.html:58 templates/videos/diffing.html:118
+#: templates/videos/diffing.html.py:173
 msgid "ago"
 msgstr "전"
 
-#: templates/comments/_item.html:13 templates/messages/index.html:193
-#: templates/messages/sent.html:160
+#: templates/comments/_item.html:13 templates/messages/index.html:199
+#: templates/messages/sent.html:166
 msgid "Reply"
 msgstr "답변"
 
@@ -3413,14 +3486,14 @@ msgstr "메시지 보내기"
 
 #: templates/messages/_send_message_form.html:14
 #: templates/messages/_send_to_team_message_form.html:18
-#: templates/messages/index.html:169 templates/messages/sent.html:136
-#: templates/teams/edit_members.html:158
+#: templates/messages/index.html:175 templates/messages/sent.html:142
+#: templates/teams/edit_members.html:137
 #: templates/videos/_feedback_form.html:35
 #: templates/videos/_paste_transcription.html:113
 #: templates/videos/_upload_subtitles.html:7
-#: templates/videos/_video_url_panel.html:71
-#: templates/videos/_video_url_panel.html:84 templates/videos/history.html:123
-#: templates/videos/video.html:85 templates/videos/video.html.py:90
+#: templates/videos/_video_url_panel.html:75
+#: templates/videos/_video_url_panel.html:88 templates/videos/history.html:134
+#: templates/videos/video.html:94 templates/videos/video.html.py:99
 msgid "Close"
 msgstr "닫기"
 
@@ -3431,13 +3504,13 @@ msgstr "메시지 보내기"
 #: templates/messages/_send_message_form.html:18
 #: templates/messages/_send_message_form.html:20
 #: templates/messages/_send_to_team_message_form.html:22
-#: templates/messages/index.html:173 templates/messages/sent.html:140
+#: templates/messages/index.html:179 templates/messages/sent.html:146
 msgid "avatar"
 msgstr "아바타"
 
 #: templates/messages/_send_message_form.html:30
 #: templates/messages/_send_to_team_message_form.html:34
-#: templates/messages/index.html:204 templates/messages/sent.html:171
+#: templates/messages/index.html:210 templates/messages/sent.html:177
 msgid "Send Message"
 msgstr "메시지 보내기"
 
@@ -3458,8 +3531,7 @@ msgstr "팀에게 메시지 보내기"
 msgid "The messages have been successfully sent."
 msgstr "메시지가 성공적으로 전송되었습니다."
 
-#: templates/messages/index.html:6 templates/messages/index.html.py:117
-#: templates/messages/sent.html:84 templates/profiles/_top_user_panel.html:27
+#: templates/messages/index.html:6 templates/profiles/_top_user_panel.html:27
 msgid "My Messages"
 msgstr "내 메시지"
 
@@ -3467,50 +3539,57 @@ msgstr "내 메시지"
 msgid "Do you really wish to delete this message?"
 msgstr "정말 이 메시지를 삭제 하시겠습니까?"
 
-#: templates/messages/index.html:117 templates/messages/sent.html:6
-#: templates/messages/sent.html.py:84
-msgid "Sent Messages"
-msgstr "보낸 메시지"
+#: templates/messages/index.html:121 templates/messages/sent.html:88
+msgid "Inbox"
+msgstr ""
 
-#: templates/messages/index.html:127 templates/profiles/_send_message.html:10
+#: templates/messages/index.html:122 templates/messages/sent.html:89
+msgid "Sent"
+msgstr ""
+
+#: templates/messages/index.html:133 templates/profiles/_send_message.html:10
 msgid "From"
 msgstr "(으)로부터"
 
-#: templates/messages/index.html:128 templates/messages/index.html.py:186
-#: templates/messages/sent.html:95 templates/messages/sent.html.py:153
+#: templates/messages/index.html:134 templates/messages/index.html.py:192
+#: templates/messages/sent.html:101 templates/messages/sent.html.py:159
 #: templates/profiles/_send_message.html:14
-#: templates/teams/edit_members.html:165
+#: templates/teams/edit_members.html:144
 msgid "Message"
 msgstr "메시지"
 
-#: templates/messages/index.html:129 templates/messages/sent.html:96
+#: templates/messages/index.html:135 templates/messages/sent.html:102
 #: templates/statistic/log_entry_model_admin.html:37
 #: templates/statistic/logger_model_admin.html:37
 msgid "Date"
 msgstr "날짜"
 
-#: templates/messages/index.html:140 templates/messages/index.html.py:142
-#: templates/messages/sent.html:107 templates/messages/sent.html.py:109
+#: templates/messages/index.html:146 templates/messages/index.html.py:148
+#: templates/messages/sent.html:113 templates/messages/sent.html.py:115
 msgid "Avatar"
 msgstr "아바타"
 
-#: templates/messages/index.html:164 templates/messages/sent.html:131
+#: templates/messages/index.html:170 templates/messages/sent.html:137
 msgid "You have no messages."
 msgstr "메시지가 없습니다."
 
-#: templates/messages/index.html:171
+#: templates/messages/index.html:177
 msgid "Message from"
 msgstr "인사말"
 
-#: templates/messages/index.html:179 templates/messages/sent.html:146
+#: templates/messages/index.html:185 templates/messages/sent.html:152
 msgid "Subject"
 msgstr "제목"
 
-#: templates/messages/sent.html:94
+#: templates/messages/sent.html:6
+msgid "Sent Messages"
+msgstr "보낸 메시지"
+
+#: templates/messages/sent.html:100
 msgid "To"
 msgstr "에"
 
-#: templates/messages/sent.html:138
+#: templates/messages/sent.html:144
 msgid "Message to"
 msgstr "에게 메시지"
 
@@ -3530,6 +3609,14 @@ msgstr "이 메시지에 회신"
 #: templates/moderation/dashboard.html:21 templates/teams/edit_videos.html:8
 msgid "Team Videos"
 msgstr "팀 비디오"
+
+#: templates/moderation/dashboard.html:59
+msgid "Approve Selected"
+msgstr ""
+
+#: templates/moderation/dashboard.html:60
+msgid "Reject Selected"
+msgstr ""
 
 #: templates/profiles/_require_email_dialog.html:7
 msgid ""
@@ -3599,12 +3686,32 @@ msgstr "메시지를 입력하십시오."
 msgid "Enter email please."
 msgstr "이메일을 입력하세요."
 
+#: templates/profiles/_top_user_panel.html:10
+msgid "My Videos"
+msgstr "내 동영상"
+
+#: templates/profiles/_top_user_panel.html:14 templates/teams/index.html:8
+msgid "My Teams"
+msgstr "내 팀"
+
+#: templates/profiles/_top_user_panel.html:19
+msgid "View profile"
+msgstr "프로필 보기"
+
+#: templates/profiles/_top_user_panel.html:23
+msgid "Edit Profile"
+msgstr "프로필 수정"
+
 #: templates/profiles/_top_user_panel.html:36
 msgid "Logout"
 msgstr "로그아웃"
 
+#: templates/profiles/_top_user_panel.html:42
+msgid "Team Management"
+msgstr "팀 관리"
+
 #: templates/profiles/_user_avatar.html:6
-#: templates/profiles/my_profile.html:79
+#: templates/profiles/my_profile.html:73
 msgid "Edit profile"
 msgstr "프로필 수정"
 
@@ -3620,103 +3727,107 @@ msgstr "아무 활동이 없습니다."
 msgid "Edit My Profile"
 msgstr "내 프로필 수정"
 
-#: templates/profiles/edit_profile.html:12
+#: templates/profiles/edit_profile.html:16
 msgid "Do you really want delete picture?"
 msgstr "정말 사진을 삭제하시겠습니까?"
 
-#: templates/profiles/edit_profile.html:36
+#: templates/profiles/edit_profile.html:40
 #: templates/videos/_paste_transcription.html:106
 #: templates/videos/_paste_transcription.html:158
-#: templates/videos/_video_url_panel.html:99
+#: templates/videos/_video_url_panel.html:103
 msgid "Saving..."
 msgstr "저장 중 ..."
 
-#: templates/profiles/edit_profile.html:49
+#: templates/profiles/edit_profile.html:51
 msgid "Edit Your Profile"
 msgstr "프로필 수정"
 
 #: templates/profiles/edit_profile.html:53
+msgid "View Profile"
+msgstr ""
+
+#: templates/profiles/edit_profile.html:60
 msgid "Personal Info"
 msgstr "개인 정보"
 
-#: templates/profiles/edit_profile.html:60
-#: templates/profiles/edit_profile.html:66
-#: templates/profiles/edit_profile.html:72
+#: templates/profiles/edit_profile.html:67
+#: templates/profiles/edit_profile.html:73
+#: templates/profiles/edit_profile.html:79
 msgid "will display publicly"
 msgstr "공개로 표시 됩니다."
 
-#: templates/profiles/edit_profile.html:85
+#: templates/profiles/edit_profile.html:92
 msgid "remove picture"
 msgstr "사진 제거"
 
-#: templates/profiles/edit_profile.html:91
+#: templates/profiles/edit_profile.html:98
 msgid "Upload picture"
 msgstr "사진 업로드"
 
-#: templates/profiles/edit_profile.html:118
+#: templates/profiles/edit_profile.html:125
 msgid ""
 "Notify me by email about new personal messages and edits to the videos I "
 "follow"
 msgstr "새로운 개인 메시지가 오거나 내가 팔로우 하는 동영상이 편집 되면 이메일로 알려 주세요."
 
-#: templates/profiles/edit_profile.html:125
+#: templates/profiles/edit_profile.html:132
 msgid "Follow the videos I submit"
 msgstr "내가 제출한 동영상을 팔로우하기"
 
-#: templates/profiles/edit_profile.html:136
+#: templates/profiles/edit_profile.html:143
 msgid "Language Info"
 msgstr "언어 정보"
 
-#: templates/profiles/edit_profile.html:149
+#: templates/profiles/edit_profile.html:159
 msgid "Languages I Know"
 msgstr "내가 아는 언어"
 
-#: templates/profiles/edit_profile.html:152
-#: templates/profiles/edit_profile.html:171
+#: templates/profiles/edit_profile.html:163
+#: templates/profiles/edit_profile.html:189
 msgid "Remove Language"
 msgstr "언어 제거"
 
-#: templates/profiles/edit_profile.html:188
+#: templates/profiles/edit_profile.html:211
 msgid "Add Language"
 msgstr "언어 추가"
 
-#: templates/profiles/edit_profile.html:197
-msgid "Save Edits to Profile"
-msgstr "수정한 프로필 저장"
+#: templates/profiles/edit_profile.html:220 templates/teams/edit.html:145
+msgid "Save Changes"
+msgstr ""
 
-#: templates/profiles/edit_profile.html:201
+#: templates/profiles/edit_profile.html:224
 msgid "Permanently Delete Your Profile"
 msgstr "영구적으로 프로필 삭제"
 
-#: templates/profiles/my_profile.html:6 templates/profiles/my_profile.html:19
+#: templates/profiles/my_profile.html:6 templates/profiles/my_profile.html:23
 msgid "My videos"
 msgstr "내 동영상"
 
-#: templates/profiles/my_profile.html:66
+#: templates/profiles/my_profile.html:60
 msgid "Bio"
 msgstr "바이오"
 
-#: templates/profiles/my_profile.html:72
+#: templates/profiles/my_profile.html:66
 msgid "Languages I understand"
 msgstr "내가 이해하는 언어"
 
-#: templates/profiles/view_profile.html:35
+#: templates/profiles/view_profile.html:47
 msgid "Member since"
 msgstr "부터 회원"
 
-#: templates/profiles/view_profile.html:36
+#: templates/profiles/view_profile.html:52
 msgid "Preferred Language"
 msgstr "선호하는 언어"
 
-#: templates/profiles/view_profile.html:37
+#: templates/profiles/view_profile.html:58
 msgid "Homepage"
 msgstr "홈페이지"
 
-#: templates/profiles/view_profile.html:48
+#: templates/profiles/view_profile.html:65
 msgid "<i>User has not submitted a bio.</i>"
 msgstr "<i>사용자가 Bio를 제출하지 않았습니다.</i>"
 
-#: templates/profiles/view_profile.html:55
+#: templates/profiles/view_profile.html:76
 msgid "User deleted his profile"
 msgstr "사용자가 자신의 프로필을 삭제했습니다."
 
@@ -3833,11 +3944,11 @@ msgstr "내 비밀 번호 재설정"
 msgid "Search videos"
 msgstr "동영상 검색"
 
-#: templates/search/_search_form.html:33
+#: templates/search/_search_form.html:24
 msgid "Videos In"
 msgstr ""
 
-#: templates/search/_search_form.html:37
+#: templates/search/_search_form.html:28
 msgid "Subtitles into"
 msgstr "로 자막"
 
@@ -4017,6 +4128,7 @@ msgid "Month"
 msgstr "월"
 
 #: templates/statistic/videos_statistic.html:12
+#: templates/videos/history.html:165 templates/videos/video.html:124
 msgid "Video"
 msgstr "비디오"
 
@@ -4084,7 +4196,11 @@ msgstr "완료된 언어"
 msgid "Video Page"
 msgstr "비디오 페이지"
 
-#: templates/teams/_edit_top_navigation.html:4
+#: templates/teams/_edit_top_navigation.html:2
+msgid "View Team"
+msgstr ""
+
+#: templates/teams/_edit_top_navigation.html:5
 msgid "Settings"
 msgstr ""
 
@@ -4093,22 +4209,18 @@ msgstr ""
 msgid "Members"
 msgstr "회원"
 
-#: templates/teams/_edit_top_navigation.html:12
+#: templates/teams/_edit_top_navigation.html:11
 #: templates/teams/completed_videos.html:30
 #: templates/teams/detail-debug.html:44 templates/teams/detail.html:37
 msgid "Videos"
 msgstr "비디오"
 
-#: templates/teams/_edit_top_navigation.html:16
+#: templates/teams/_edit_top_navigation.html:15
 msgid "Subtitles Pending"
 msgstr ""
 
-#: templates/teams/_edit_top_navigation.html:20
+#: templates/teams/_edit_top_navigation.html:19
 msgid "Applicants"
-msgstr ""
-
-#: templates/teams/_edit_top_navigation.html:24
-msgid "Team Homepage"
 msgstr ""
 
 #: templates/teams/_invite_friends_to_team.html:4
@@ -4135,23 +4247,39 @@ msgstr "당신은 또한 다른 언어를 구사하는 도와줄 친구를 초�
 msgid "You have been invited to a new team"
 msgstr "당신은 새로운 팀에 초대되었습니다."
 
-#: templates/teams/_invite_message.html:5 templates/teams/index.html:129
+#: templates/teams/_invite_message.html:5
 msgid "Join"
 msgstr "회원 가입"
 
-#: templates/teams/_invite_message.html:6 templates/teams/applications.html:33
+#: templates/teams/_invite_message.html:6 templates/teams/applications.html:35
 msgid "Deny"
 msgstr "거부"
 
-#: templates/teams/_team_activity.html:19
+#: templates/teams/_join_button.html:2
+msgid "Do you really wish to join this team?"
+msgstr "정말로 이 팀에 참여 하시겠습니까?"
+
+#: templates/teams/_join_button.html:2
+msgid "Join this team now!"
+msgstr "지금 이 팀에 합류!"
+
+#: templates/teams/_leave_button.html:2
+msgid "Do you really wish to leave this team?"
+msgstr "정말로 이 팀을 떠나시겠습니까?"
+
+#: templates/teams/_leave_button.html:2
+msgid "Leave this team"
+msgstr "이 팀을 떠나기"
+
+#: templates/teams/_team_activity.html:17
 msgid "Team Activity Stream"
 msgstr "팀 활동 스트림"
 
-#: templates/teams/_team_activity.html:25
+#: templates/teams/_team_activity.html:23
 msgid "No Video Activity"
 msgstr "비디오 활동 없음"
 
-#: templates/teams/_team_activity.html:30
+#: templates/teams/_team_activity.html:28
 msgid "See All Activity"
 msgstr "모든 활동 보기"
 
@@ -4159,65 +4287,37 @@ msgstr "모든 활동 보기"
 msgid "Add video to team"
 msgstr "팀에 동영상 추가"
 
-#: templates/teams/_team_detail.html:10
-msgid "Do you really wish to join this team?"
-msgstr "정말로 이 팀에 참여 하시겠습니까?"
-
-#: templates/teams/_team_detail.html:25 templates/teams/index.html:37
-msgid "Do you really wish to leave this team?"
-msgstr "정말로 이 팀을 떠나시겠습니까?"
-
-#: templates/teams/_team_detail.html:52 templates/teams/_team_detail.html:111
-msgid "Team Description"
-msgstr "팀 설명"
-
-#: templates/teams/_team_detail.html:56
-msgid "Show Members"
-msgstr "회원 보기"
-
-#: templates/teams/_team_detail.html:59 templates/teams/_team_detail.html:119
-msgid "Team Managers"
-msgstr "팀 매니저"
-
-#: templates/teams/_team_detail.html:65 templates/teams/_team_detail.html:138
-msgid "Video Policy"
-msgstr "동영상 정책"
-
-#: templates/teams/_team_detail.html:69 templates/teams/_team_detail.html:139
-msgid "Membership Policy"
-msgstr "회원 정책"
-
-#: templates/teams/_team_detail.html:74
-msgid "Team Page"
-msgstr "팀 페이지"
-
-#: templates/teams/_team_detail.html:78
-msgid "Completed Videos"
-msgstr "완료된 동영상"
-
-#: templates/teams/_team_detail.html:83 templates/teams/_team_detail.html:128
+#: templates/teams/_team_detail.html:7
 msgid "Manager's Settings & Controls"
 msgstr "관리자의 설정 및 제어"
 
-#: templates/teams/_team_detail.html:84 templates/teams/index.html:126
-msgid "Leave"
-msgstr "떠나기"
-
-#: templates/teams/_team_detail.html:89 templates/teams/_team_detail.html:101
-msgid "Join this team now!"
-msgstr "지금 이 팀에 합류!"
-
-#: templates/teams/_team_detail.html:124 templates/teams/edit_members.html:8
+#: templates/teams/_team_detail.html:25 templates/teams/edit_members.html:8
 msgid "Team Members"
 msgstr "팀 구성원"
 
-#: templates/teams/_team_detail.html:125
-msgid "Completed Subtitles"
-msgstr "완료된 자막"
+#: templates/teams/_team_detail.html:29
+msgid "Team Page"
+msgstr "팀 페이지"
 
-#: templates/teams/_team_detail.html:130
-msgid "Leave this team"
-msgstr "이 팀을 떠나기"
+#: templates/teams/_team_detail.html:33
+msgid "Completed Videos"
+msgstr "완료된 동영상"
+
+#: templates/teams/_team_detail.html:37
+msgid "Team Description"
+msgstr "팀 설명"
+
+#: templates/teams/_team_detail.html:42
+msgid "Team Managers"
+msgstr "팀 매니저"
+
+#: templates/teams/_team_detail.html:48
+msgid "Video Policy"
+msgstr "동영상 정책"
+
+#: templates/teams/_team_detail.html:52
+msgid "Membership Policy"
+msgstr "회원 정책"
 
 #: templates/teams/_team_message.html:3
 #, python-format
@@ -4268,7 +4368,7 @@ msgid "Subtitles currently in progress"
 msgstr "현재 진행중인 자막"
 
 #: templates/teams/_team_video_lang_detail.html:10
-#: templates/teams/edit_videos.html:48 templates/teams/index.html:123
+#: templates/teams/edit_videos.html:51 templates/teams/index.html:98
 msgid "Edit"
 msgstr "편집"
 
@@ -4320,13 +4420,12 @@ msgstr[0] ""
 msgid "Team video"
 msgstr "팀 비디오"
 
-#: templates/teams/add_video.html:23 templates/teams/edit_videos.html:17
+#: templates/teams/add_video.html:25 templates/teams/edit_videos.html:19
 msgid "Add video"
 msgstr "동영상 추가"
 
-#: templates/teams/add_video.html:29 templates/teams/edit.html:138
-#: templates/teams/team_video.html:40 templates/videos/history.html:139
-#: templates/videos/video.html:102
+#: templates/teams/add_video.html:29 templates/teams/team_video.html:42
+#: templates/videos/history.html:150 templates/videos/video.html:111
 msgid "Save"
 msgstr "저장"
 
@@ -4334,7 +4433,7 @@ msgstr "저장"
 msgid "Team Aplications"
 msgstr "팀 지원"
 
-#: templates/teams/applications.html:41
+#: templates/teams/applications.html:43
 msgid "There are no applicants at this time."
 msgstr "현재는 지원자가 없습니다."
 
@@ -4350,118 +4449,132 @@ msgstr "팀 만들기"
 msgid "Team Settings"
 msgstr "팀 설정"
 
-#: templates/teams/edit.html:47
+#: templates/teams/edit.html:48
 msgid "Details About Your Team"
 msgstr "당신의 팀에 대한 자세한 내용"
 
-#: templates/teams/edit.html:70
-msgid "Upload Team Logo"
-msgstr "팀 로고 업로드"
+#: templates/teams/edit.html:73
+msgid "Team Logo"
+msgstr ""
 
-#: templates/teams/edit.html:80
+#: templates/teams/edit.html:87
 msgid "Upload logo"
 msgstr "로고 업로드"
 
-#: templates/teams/edit.html:83
+#: templates/teams/edit.html:90
 msgid "Team Intro Video"
 msgstr "팀 소개 동영상"
 
-#: templates/teams/edit.html:86
+#: templates/teams/edit.html:93
 msgid "Current video"
 msgstr "현재 비디오"
 
-#: templates/teams/edit.html:92
+#: templates/teams/edit.html:99
 msgid "Application message"
 msgstr "신청 메시지"
 
-#: templates/teams/edit.html:102
+#: templates/teams/edit.html:109
 msgid "You can use"
 msgstr "당신은 사용할 수 있습니다."
 
-#: templates/teams/edit.html:102
+#: templates/teams/edit.html:109
 msgid "markdown"
 msgstr ""
 
-#: templates/teams/edit.html:103
+#: templates/teams/edit.html:110
 msgid "This will replace Description. "
 msgstr "이것이 설명을 대체합니다."
 
-#: templates/teams/edit.html:107
+#: templates/teams/edit.html:114
 msgid "Team Member Settings"
 msgstr "팀원 설정"
 
-#: templates/teams/edit.html:110
+#: templates/teams/edit.html:117
 msgid "Who can join this team?"
 msgstr "누가 이 팀에 합류할 수 있습니까?"
 
-#: templates/teams/edit.html:117
+#: templates/teams/edit.html:124
 msgid "Is moderated?"
 msgstr "허가제 인가요?"
 
-#: templates/teams/edit.html:124
+#: templates/teams/edit.html:131
 msgid "Who can add videos to this team?"
 msgstr "누가 이 팀에 동영상을 추가할 수 있습니까?"
 
-#: templates/teams/edit.html:129
+#: templates/teams/edit.html:136
 msgid "Team Privacy Settings"
 msgstr "팀 개인 정보 설정"
 
-#: templates/teams/edit.html:143
+#: templates/teams/edit.html:149
 msgid "You are not a manager of this team."
 msgstr "당신은 이 팀의 관리자가 아닙니다."
 
-#: templates/teams/edit_members.html:36
+#: templates/teams/edit_members.html:37
 msgid "Enter username."
 msgstr "사용자 이름을 입력하세요."
 
-#: templates/teams/edit_members.html:41
+#: templates/teams/edit_members.html:42
 msgid "Remove this user?"
 msgstr "이 사용자를 삭제하시겠습니까?"
 
-#: templates/teams/edit_members.html:96 templates/teams/edit_members.html:168
+#: templates/teams/edit_members.html:81 templates/teams/edit_members.html:147
 msgid "Invite User"
 msgstr "사용자 초대"
 
-#: templates/teams/edit_members.html:111
+#: templates/teams/edit_members.html:96
 msgid "Role"
 msgstr "역할"
 
-#: templates/teams/edit_members.html:125
+#: templates/teams/edit_members.html:111
 msgid "Remove from Team"
 msgstr "팀에서 제거"
 
-#: templates/teams/edit_members.html:141
-msgid ""
-"* Manager: This role has access to all team management functions including "
-"managing team members and approving moderated subtitles.&#13;* Contributor: "
-"This is the typical subtitle contributor role that applies to most "
-"members.&#13;* Member: This a special role is for team members with a high "
-"level of accuracy. When a trusted member adds subtitles to a moderated video"
-" the subtitles are automatically approved without review by the team "
-"manager."
-msgstr ""
-
-#: templates/teams/edit_members.html:160
+#: templates/teams/edit_members.html:139
 msgid "Invite user"
 msgstr "사용자 초대"
 
-#: templates/teams/edit_videos.html:40
+#: templates/teams/edit_members.html:156
+msgid "About Roles"
+msgstr ""
+
+#: templates/teams/edit_members.html:158
+msgid ""
+"\n"
+"                <strong>Manager:</strong> Can access all administrative functions including managing team members and approving moderated subtitles.\n"
+"            "
+msgstr ""
+
+#: templates/teams/edit_members.html:163
+msgid ""
+"\n"
+"                <strong>Member:</strong> Trusted members may add approved subtitles to a moderated without review by the team manager.\n"
+"            "
+msgstr ""
+
+#: templates/teams/edit_members.html:168
+msgid ""
+"\n"
+"                <strong>Contributor:</strong> Can access team videos and contribute subtitles, but their work is subject to moderation by a manager.\n"
+"            "
+msgstr ""
+
+#: templates/teams/edit_videos.html:43
 msgid "Completed"
 msgstr "완료"
 
-#: templates/teams/edit_videos.html:43
+#: templates/teams/edit_videos.html:46
 msgid "View"
 msgstr "보기"
 
-#: templates/teams/edit_videos.html:45
+#: templates/teams/edit_videos.html:48
 msgid "Remove"
 msgstr "삭제"
 
-#: templates/teams/edit_videos.html:56
+#: templates/teams/edit_videos.html:59
 msgid "This team has not added any videos."
 msgstr "이 팀은 어떤 동영상도 추가하지 않았습니다."
 
-#: templates/teams/edit_videos.html:64
+#: templates/teams/edit_videos.html:67
 msgid "Remove this video?"
 msgstr "이 비디오를 삭제하시겠습니까?"
 
@@ -4498,70 +4611,79 @@ msgstr ""
 msgid "Thank you!"
 msgstr "감사합니다!"
 
-#: templates/teams/index.html:22
-msgid "Do you really wish join this team?"
-msgstr "정말 이 팀에 합류하시겠습니까?"
-
-#: templates/teams/index.html:59
-msgid "Start a Team"
-msgstr "팀 시작하기"
-
-#: templates/teams/index.html:63
+#: templates/teams/index.html:18
 msgid "Team Directory"
 msgstr "팀 디렉토리"
 
-#: templates/teams/index.html:67
-msgid ""
-"\n"
-"        Teams are a great way to work together on subtitling videos. \n"
-"        Membership and participation policies vary from team to team. \n"
-"        Don't know where to start? Check the sidebar!\n"
-"        "
-msgstr ""
-"\n"
-"        팀은 자막 제작을 위해 함께 일할 수 있는 좋은 방법입니다.\n"
-"        회원 참여 정책은 팀마다 모두 다릅니다.\n"
-"        어디서부터 시작해야할지 모르시겠나요? 사이드바를 확인해 보세요!"
-
-#: templates/teams/index.html:78
+#: templates/teams/index.html:26
 msgid "Sort by"
 msgstr "정렬"
 
-#: templates/teams/index.html:91
+#: templates/teams/index.html:39
 msgid "My teams"
 msgstr "내 팀"
 
-#: templates/teams/index.html:120
+#: templates/teams/index.html:70
 msgid "your team"
 msgstr "당신의 팀"
 
-#: templates/teams/index.html:132 templates/teams/index.html.py:167
+#: templates/teams/index.html:73
+msgid "private"
+msgstr ""
+
+#: templates/teams/index.html:78
 #, python-format
 msgid ""
 "\n"
-"                    Team with %(count)s Members\n"
+"                        %(count)s member\n"
 "                    "
-msgstr ""
+msgid_plural ""
 "\n"
-"                    %(count)s명의 회원의 팀"
+"                        %(count)s members\n"
+"                    "
+msgstr[0] ""
 
-#: templates/teams/index.html:144 templates/teams/index.html.py:181
+#: templates/teams/index.html:92 templates/teams/index.html.py:149
 msgid "Un-highlight this team"
 msgstr "이 팀을 하이라이트 하지 않기"
 
-#: templates/teams/index.html:146 templates/teams/index.html.py:183
+#: templates/teams/index.html:94 templates/teams/index.html.py:151
 msgid "Highlight this team"
 msgstr "이 팀을 하이라이트 하기"
 
-#: templates/teams/index.html:157
+#: templates/teams/index.html:115
+msgid "About Teams"
+msgstr ""
+
+#: templates/teams/index.html:117
+msgid ""
+"\n"
+"        Teams are a great way to work together on subtitling videos. \n"
+"        Membership and participation policies vary from team to team.\n"
+"        "
+msgstr ""
+
+#: templates/teams/index.html:125
 msgid "Highlighted Teams"
 msgstr "하이라이트된 팀"
+
+#: templates/teams/index.html:135
+#, python-format
+msgid ""
+"\n"
+"                        Team with %(count)s Members\n"
+"                        "
+msgstr ""
+
+#: templates/teams/index.html:162
+msgid "Start a Team"
+msgstr "팀 시작하기"
 
 #: templates/teams/team_video.html:8
 msgid "Edit team video"
 msgstr "팀 비디오 편집"
 
-#: templates/teams/team_video.html:33
+#: templates/teams/team_video.html:36
 msgid " This video is being moderated by team "
 msgstr ""
 
@@ -4656,6 +4778,10 @@ msgstr "동영상 관심 등록"
 #: templates/videos/_follow_video_button.html:43
 msgid "Unfollow"
 msgstr "언팔로우"
+
+#: templates/videos/_follow_video_button.html:46
+msgid "Follow"
+msgstr "팔로우"
 
 #: templates/videos/_follow_video_button.html:91
 msgid ""
@@ -4786,7 +4912,7 @@ msgstr "자막 업로드"
 #: templates/videos/_upload_subtitles.html:12
 msgid ""
 "\n"
-"              Our site accepts SRT, SSA, SBV and TTML format. Only files ending in .srt, .ssa, .sbv\n"
+"              Our site accepts SRT, SSA, SBV, DFXP and TTML format. Only files ending in .srt, .ssa, .sbv, .dfxp\n"
 "              or .xml (for TTML) are accepted. Or you can\n"
 "              "
 msgstr ""
@@ -4812,26 +4938,16 @@ msgstr ""
 "귀하의 자막 파일이 호환이 된다고 믿으신다면, <a "
 "href='mailto:feedback@universalsubtitles.org'>우리에게 그것을 보내주십시오. </a>"
 
-#: templates/videos/_upload_subtitles.html:48
-msgid ""
-"Thank you for uploading. It will take a minute or so for your subtitles to "
-"appear."
-msgstr "업로드 해주셔서 감사합니다. 귀하의 자막이 나타나는데는 잠시 시간이 걸립니다."
-
-#: templates/videos/_video.html:21
+#: templates/videos/_video.html:24
 msgid "view"
 msgid_plural "views"
 msgstr[0] ""
 
-#: templates/videos/_video.html:23 templates/videos/_video_url_panel.html:29
+#: templates/videos/_video.html:27 templates/videos/_video_url_panel.html:33
 msgid "Added"
 msgstr "추가됨"
 
-#: templates/videos/_video.html:25
-msgid "Last edited"
-msgstr ""
-
-#: templates/videos/_video.html:32
+#: templates/videos/_video.html:34
 #, python-format
 msgid ""
 "\n"
@@ -4853,69 +4969,54 @@ msgstr "활동"
 msgid "Happened"
 msgstr "일어남"
 
-#: templates/videos/_video_url_panel.html:3
-msgid ""
-"\n"
-"    A single video is often hosted in different places online and same\n"
-"    subtitles will work. \n"
-"    "
-msgstr ""
-"\n"
-"하나의 비디오는 종종 온라인의 다른 장소에서 호스팅 되며  같은 자막이 작동할 것입니다."
-
-#: templates/videos/_video_url_panel.html:9
-msgid ""
-"\n"
-"        Only manager can edit URLs for this video.\n"
-"        "
-msgstr ""
-"\n"
-"관리자만 이 비디오에 대한 URL을 수정할 수 있습니다."
-
-#: templates/videos/_video_url_panel.html:16
+#: templates/videos/_video_url_panel.html:19
 msgid "Add new URL"
 msgstr "새 URL 추가"
 
-#: templates/videos/_video_url_panel.html:23
+#: templates/videos/_video_url_panel.html:27
 msgid "Title/URL"
 msgstr "제목 / URL"
 
-#: templates/videos/_video_url_panel.html:26
+#: templates/videos/_video_url_panel.html:30
 msgid "Format/Host"
 msgstr "형식 / 호스트"
 
-#: templates/videos/_video_url_panel.html:32
+#: templates/videos/_video_url_panel.html:36
 msgid "Added by"
 msgstr "으로 추가됨"
 
-#: templates/videos/_video_url_panel.html:35
+#: templates/videos/_video_url_panel.html:39
 msgid "Actions"
 msgstr "행위"
 
-#: templates/videos/_video_url_panel.html:45
-#: templates/videos/_video_url_panel.html:125
+#: templates/videos/_video_url_panel.html:49
+#: templates/videos/_video_url_panel.html:129
 msgid "PRIMARY"
 msgstr "PRIMARY"
 
-#: templates/videos/_video_url_panel.html:48
+#: templates/videos/_video_url_panel.html:52
 msgid "ORIGINAL"
 msgstr "ORIGINAL"
 
-#: templates/videos/_video_url_panel.html:59
+#: templates/videos/_video_url_panel.html:63
 msgid "remove"
 msgstr "삭제"
 
-#: templates/videos/_video_url_panel.html:63
+#: templates/videos/_video_url_panel.html:67
 msgid "make primary"
 msgstr ""
 
-#: templates/videos/_video_url_panel.html:74
+#: templates/videos/_video_url_panel.html:76
+msgid "Learn more"
+msgstr "더 알아 보기"
+
+#: templates/videos/_video_url_panel.html:78
 msgid ""
 "Multiple video URLs let you link multiple videos to a single set of "
 "subtitles. Some example uses:"
 msgstr "여러 개의 동영상 URL은 당신이 한 세트의 자막에 여러 비디오를 연결하게 해줍니다. 예제:"
 
-#: templates/videos/_video_url_panel.html:76
+#: templates/videos/_video_url_panel.html:80
 msgid ""
 "Two versions of the same video exist on Youtube.  You don't want subtitle "
 "volunteers to duplicate their work, so you add both versions to the multiple"
@@ -4924,7 +5025,7 @@ msgstr ""
 "동일한 비디오의 두 가지 버전이 YouTube에 존재합니다. 당신은 자막 자원 봉사자들이 작업을 중복해서 하게 하고 싶지 않을 것입니다."
 " 그러니 여러 개의 URL 패널에 두 버전을 모두 추가하세요."
 
-#: templates/videos/_video_url_panel.html:77
+#: templates/videos/_video_url_panel.html:81
 msgid ""
 "You put your video on Youtube, Vimeo, Blip, and Dailymotion and you want the"
 " subtitles you make to work on all of those versions."
@@ -4932,7 +5033,7 @@ msgstr ""
 "YouTube, Vimeo,  Blip, 그리고 Dailymotion에 비디오를 올리고 그 모든 버전의 비디오에 직접 만든 자막을 넣고 "
 "싶습니다."
 
-#: templates/videos/_video_url_panel.html:78
+#: templates/videos/_video_url_panel.html:82
 msgid ""
 "You want to provide different versions of a video to different browsers "
 "(HTML5/Ogg for free software users, or HTML5/h264 to iPad users).  If you "
@@ -4943,38 +5044,38 @@ msgstr ""
 " 제공하고 싶으신가요. 해당 URL을 추가하시면, 우리의 소스 코드는 자동으로 브라우저가 필요로 하는 어떤 형식으로든 다시 돌아갈 "
 "것입니다. "
 
-#: templates/videos/_video_url_panel.html:80
+#: templates/videos/_video_url_panel.html:84
 msgid "Tip: double check that there are no timing problems."
 msgstr "팁 : 타이밍에 문제가 없는지 더블 체크 하세요."
 
-#: templates/videos/_video_url_panel.html:85
+#: templates/videos/_video_url_panel.html:89
 msgid "Add another URL for this video"
 msgstr ""
 
-#: templates/videos/_video_url_panel.html:88
+#: templates/videos/_video_url_panel.html:92
 msgid "Add a URL for another version of the exact same video."
 msgstr "동일한 비디오의 다른 버전에 대한 URL을 추가합니다."
 
-#: templates/videos/_video_url_panel.html:89
+#: templates/videos/_video_url_panel.html:93
 msgid ""
 "This is useful in cases where many versions of the same video exist, or when"
 " there are versions in different formats (like HTML5)"
 msgstr "이것은 동일한 비디오의 여러 버전이 존재하는 경우 또는 다른 형식의 버전 (HTML5와 같은)이 있을 경우에 유용합니다."
 
-#: templates/videos/_video_url_panel.html:96
+#: templates/videos/_video_url_panel.html:100
 msgid "Add"
 msgstr "추가"
 
-#: templates/videos/_video_url_panel.html:105
+#: templates/videos/_video_url_panel.html:109
 msgid "Login to add new URL"
 msgstr "새 URL을 추가하기 위해 로그인"
 
-#: templates/videos/_video_url_panel.html:137
-#: templates/videos/_video_url_panel.html:157
+#: templates/videos/_video_url_panel.html:141
+#: templates/videos/_video_url_panel.html:161
 msgid "You are not authenticated"
 msgstr "당신은 인증되지 않았습니다."
 
-#: templates/videos/_video_url_panel.html:146
+#: templates/videos/_video_url_panel.html:150
 msgid ""
 "Delete this URL?  Warning: this cannot be undone. Only delete URLs for non-"
 "matching videos or videos where subtitles fail to display correctly."
@@ -5012,8 +5113,8 @@ msgid "Begin"
 msgstr "시작"
 
 #: templates/videos/create.html:28
-msgid "Works with Ogg, WebM, flv, mp4, Youtube, Vimeo, Blip or Dailymotion."
-msgstr "Ogg, WebM, flv, mp4, Youtube, Vimeo, Blip, Dailymotion과 함께 작동합니다."
+msgid "Works with Ogg, WebM, flv, mp4, Youtube, Vimeo or Dailymotion."
+msgstr ""
 
 #: templates/videos/create.html:29
 msgid "Or try the demo"
@@ -5066,11 +5167,12 @@ msgstr ""
 "            "
 
 #: templates/videos/diffing.html:98 templates/videos/history.html:180
-#: templates/videos/revision.html:76
+#: templates/videos/history.html.py:224 templates/videos/revision.html:78
+#: templates/videos/video.html:139
 msgid "Subtitles"
 msgstr "자막"
 
-#: templates/videos/diffing.html:103 templates/videos/revision.html:79
+#: templates/videos/diffing.html:103 templates/videos/revision.html:81
 msgid "Revision History"
 msgstr "수정 내역"
 
@@ -5090,17 +5192,16 @@ msgstr ""
 "            "
 
 #: templates/videos/diffing.html:128 templates/videos/diffing.html.py:185
-#: templates/videos/revision.html:139
 msgid "Submit a new edit based on this version"
 msgstr "이 버전을 기반으로 하는 새로운 편집을 제출"
 
 #: templates/videos/diffing.html:132 templates/videos/diffing.html.py:189
-#: templates/videos/revision.html:144
+#: templates/videos/revision.html:147
 msgid "Roll back to version"
 msgstr "버전으로 롤백"
 
-#: templates/videos/diffing.html:157 templates/videos/diffing.html.py:215
-#: templates/videos/history.html:262
+#: templates/videos/diffing.html:157 templates/videos/diffing.html.py:217
+#: templates/videos/history.html:304
 msgid "Not Synced"
 msgstr "동기화 되지 않음"
 
@@ -5295,20 +5396,15 @@ msgstr "원본 동영상 URL 보기"
 msgid "Watch Subtitled Videos"
 msgstr "자막이 있는 동영상 보기"
 
-#: templates/videos/featured_videos.html:36 templates/videos/volunteer.html:25
-#: templates/videos/watch.html:25
-msgid "Featured Videos"
-msgstr "추천 동영상"
+#: templates/videos/history.html:47
+msgid "Select two revisions to compare, please"
+msgstr ""
 
-#: templates/videos/history.html:52
-msgid "Select two revisions for compare, please"
-msgstr "비교를 위해 두 버전을 선택하시기 바랍니다 "
-
-#: templates/videos/history.html:95 templates/videos/video.html:60
+#: templates/videos/history.html:90 templates/videos/video.html:57
 msgid "Enter non-empty title"
 msgstr ""
 
-#: templates/videos/history.html:104
+#: templates/videos/history.html:99
 #, python-format
 msgid ""
 "\n"
@@ -5316,7 +5412,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:108
+#: templates/videos/history.html:103
 #, python-format
 msgid ""
 "\n"
@@ -5324,11 +5420,11 @@ msgid ""
 "        "
 msgstr ""
 
-#: templates/videos/history.html:118 templates/videos/video.html:76
+#: templates/videos/history.html:129
 msgid "edit title"
 msgstr "제목 편집"
 
-#: templates/videos/history.html:125
+#: templates/videos/history.html:136
 #, python-format
 msgid ""
 "\n"
@@ -5336,7 +5432,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/history.html:131
+#: templates/videos/history.html:142
 msgid ""
 "\n"
 "            IMPORTANT: the translated title will be displayed only with the subtitles \n"
@@ -5345,85 +5441,96 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/history.html:156 templates/videos/history.html.py:211
-#: templates/videos/video.html:121
+#: templates/videos/history.html:168 templates/videos/video.html:127
+msgid "Info"
+msgstr ""
+
+#: templates/videos/history.html:172 templates/videos/video.html:131
+msgid "Add Subtitles"
+msgstr "자막 추가"
+
+#: templates/videos/history.html:174 templates/videos/history.html.py:250
+#: templates/videos/video.html:133
 msgid "Add Translation"
 msgstr "번역 추가"
 
-#: templates/videos/history.html:159 templates/videos/video.html:126
-#: templates/videos/video.html.py:142
-msgid "Video Info"
-msgstr "동영상 정보"
+#: templates/videos/history.html:202 templates/videos/video.html:161
+msgid "Edit in Admin Interface"
+msgstr "관리자 인터페이스에서 편집"
 
-#: templates/videos/history.html:178
-msgid "Original Language Subtitles"
-msgstr "원래 언어 자막"
+#: templates/videos/history.html:215
+msgid "original"
+msgstr ""
 
-#: templates/videos/history.html:190 templates/videos/video.html:146
+#: templates/videos/history.html:218
+msgid "translated from"
+msgstr ""
+
+#: templates/videos/history.html:229 templates/videos/video.html:184
 msgid "Comments"
 msgstr "댓글"
 
-#: templates/videos/history.html:201
+#: templates/videos/history.html:237
 msgid "History"
 msgstr "히스토리"
 
-#: templates/videos/history.html:211
+#: templates/videos/history.html:250
 msgid "Edit Subtitles"
 msgstr "자막 편집"
 
-#: templates/videos/history.html:217
+#: templates/videos/history.html:256
 msgid "Download Subtitles"
 msgstr "자막 다운로드 "
 
-#: templates/videos/history.html:274
+#: templates/videos/history.html:316
 msgid ""
 "\n"
-"                                The most recent revision for this language is blank, but there are older\n"
-"                                revisions that contain subtitles.\n"
-"                                "
+"                                    The most recent revision for this language is blank, but there are older\n"
+"                                    revisions that contain subtitles.\n"
+"                                    "
 msgstr ""
 
-#: templates/videos/history.html:278
+#: templates/videos/history.html:320
 msgid "View revision history"
 msgstr "수정 히스토리 보기"
 
-#: templates/videos/history.html:282
+#: templates/videos/history.html:324
 msgid "No subtitles yet."
 msgstr "아직 자막 없음."
 
-#: templates/videos/history.html:283
+#: templates/videos/history.html:325
 msgid "Make some!"
 msgstr "만들어 보세요!"
 
-#: templates/videos/history.html:296
+#: templates/videos/history.html:338
 msgid "Compare Revisions"
 msgstr "수정 내용 비교"
 
-#: templates/videos/history.html:305
+#: templates/videos/history.html:347
 msgid "Most Recent"
 msgstr "가장 최신"
 
-#: templates/videos/history.html:307
+#: templates/videos/history.html:349
 msgid "Note"
 msgstr "참고"
 
-#: templates/videos/history.html:308
+#: templates/videos/history.html:350
 msgid "Time"
 msgstr "시간"
 
-#: templates/videos/history.html:309
+#: templates/videos/history.html:351
 msgid "Text"
 msgstr "본문"
 
-#: templates/videos/history.html:311
+#: templates/videos/history.html:353
 msgid "Action"
 msgstr ""
 
-#: templates/videos/history.html:342
+#: templates/videos/history.html:387
 msgid "No subtitles for this language."
 msgstr "이 언어에 대한 자막 없습니다."
 
-#: templates/videos/history.html:344
+#: templates/videos/history.html:389
 msgid "Either no subtitles have been entered, or they were deleted."
 msgstr "아무 자막도 입력되지 않았거나 그것들은 삭제되었습니다."
 
@@ -5464,11 +5571,11 @@ msgstr "올해"
 msgid "All Time"
 msgstr "모든 시간"
 
-#: templates/videos/revision.html:72 templates/videos/revision.html.py:82
+#: templates/videos/revision.html:74 templates/videos/revision.html.py:84
 msgid "Revision"
 msgstr "수정"
 
-#: templates/videos/revision.html:87
+#: templates/videos/revision.html:89
 #, python-format
 msgid ""
 "\n"
@@ -5484,7 +5591,7 @@ msgstr ""
 "            %(date)s에 %(user)s에 의해 수정되었습니다. 이것은 최근판과 완전히 다를 수 있습니다.\n"
 "            "
 
-#: templates/videos/revision.html:102
+#: templates/videos/revision.html:104
 #, python-format
 msgid ""
 "\n"
@@ -5495,7 +5602,7 @@ msgstr ""
 "                    #%(version_no)s와 #%(prev_version_no)s의 비교\n"
 "                    "
 
-#: templates/videos/revision.html:112
+#: templates/videos/revision.html:114
 #, python-format
 msgid ""
 "\n"
@@ -5505,7 +5612,7 @@ msgstr ""
 "\n"
 "                    #%(version_no)s와 #%(next_version_no)s의 비교"
 
-#: templates/videos/revision.html:122
+#: templates/videos/revision.html:124
 #, python-format
 msgid ""
 "\n"
@@ -5516,7 +5623,7 @@ msgstr ""
 "               #%(version_no)s와 #%(latest_version_no)s(current)의 비교\n"
 "               "
 
-#: templates/videos/revision.html:151
+#: templates/videos/revision.html:156
 msgid "See full revision history"
 msgstr "전체 수정 히스토리를 참조하십시오"
 
@@ -5584,19 +5691,19 @@ msgstr "모든 작업 2 & 3은 선택 사항입니다. (하지만 모두 시도�
 msgid "That’s it!"
 msgstr "바로 그거예요!"
 
-#: templates/videos/video.html:82
+#: templates/videos/video.html:91
 msgid ""
 "Subtitles saved!  You can share the video with friends,\n"
 "        or get an embed code for your site.  To add a\n"
 "        translation, click the button below."
 msgstr ""
 
-#: templates/videos/video.html:91
+#: templates/videos/video.html:100
 msgid ""
 "You are editing the original video title (translations will not be affected)"
 msgstr ""
 
-#: templates/videos/video.html:94
+#: templates/videos/video.html:103
 msgid ""
 "\n"
 "            IMPORTANT: the new title will appear in the lists of videos and in \n"
@@ -5605,25 +5712,21 @@ msgid ""
 "            "
 msgstr ""
 
-#: templates/videos/video.html:119
-msgid "Add Subtitles"
-msgstr "자막 추가"
+#: templates/videos/video.html:173
+msgid "Edit title"
+msgstr ""
 
-#: templates/videos/video.html:134
-msgid "Edit in Admin Interface"
-msgstr "관리자 인터페이스에서 편집"
-
-#: templates/videos/video.html:155
+#: templates/videos/video.html:179
 msgid "Activity Stream"
 msgstr "활동 스트림"
 
-#: templates/videos/video.html:161
+#: templates/videos/video.html:192
 msgid "Video URLs"
 msgstr "동영상 URL"
 
-#: templates/videos/video.html:179
-msgid "all activity"
-msgstr "모든 활동"
+#: templates/videos/video.html:209
+msgid "View all activity"
+msgstr ""
 
 #: templates/videos/video_list.html:8
 msgid "All Submitted Videos"
@@ -5650,8 +5753,6 @@ msgid "There are no videos."
 msgstr "동영상이 없습니다."
 
 #: templates/videos/volunteer.html:18
-#: templates/videos/volunteer_featured.html:5
-#: templates/videos/volunteer_popular.html:5
 msgid "Contribute Subtitles"
 msgstr ""
 
@@ -5664,7 +5765,7 @@ msgid "More Requested Videos"
 msgstr ""
 
 #: templates/videos/volunteer.html:40
-#: templates/videos/volunteer_requested.html:20
+#: templates/videos/volunteer_requested.html:22
 msgid "Requested Videos"
 msgstr ""
 
@@ -5676,12 +5777,16 @@ msgstr "인기 동영상 더 보기"
 msgid "More Recent Videos"
 msgstr "좀 더 최근 동영상"
 
-#: utils/ajaxmiddleware.py:22
+#: templates/videos/volunteer_requested.html:20
+msgid "Help Subtitle Videos"
+msgstr ""
+
+#: utils/ajaxmiddleware.py:23
 #, python-format
 msgid "Required parameter missing: %s"
 msgstr ""
 
-#: utils/ajaxmiddleware.py:63
+#: utils/ajaxmiddleware.py:66
 msgid "Internal error"
 msgstr ""
 
@@ -5776,10 +5881,6 @@ msgstr "체로키어"
 #: utils/translation_names.py:37
 msgid "Chinese"
 msgstr "중국어"
-
-#: utils/translation_names.py:40
-msgid "Cornish"
-msgstr "콘월어"
 
 #: utils/translation_names.py:41
 msgid "Corsican"
@@ -5937,10 +6038,6 @@ msgstr "키르기즈어"
 msgid "Kirundi"
 msgstr "룬디어"
 
-#: utils/translation_names.py:86
-msgid "Klingon"
-msgstr "클링온어"
-
 #: utils/translation_names.py:87
 msgid "Korean"
 msgstr "한국어"
@@ -5984,10 +6081,6 @@ msgstr "룩셈부르크어"
 #: utils/translation_names.py:98
 msgid "Macedonian"
 msgstr "마케도니아어"
-
-#: utils/translation_names.py:102
-msgid "Maltese"
-msgstr "몰티즈어"
 
 #: utils/translation_names.py:103
 msgid "Manx"

@@ -54,15 +54,27 @@ def embed(request, version_no=''):
 
     if bool(version_no) is False:
         version_no = ""
-    return render_to_response('widget/embed{0}.js'.format(version_no), 
-                              context,
-                              context_instance=RequestContext(request),
-                              mimetype='text/javascript')
+    return render_to_response(
+        'widget/embed{0}.js'.format(version_no), 
+        context,
+        context_instance=RequestContext(request),
+        mimetype='text/javascript')
 
 def widget_public_demo(request):
     context = widget.add_onsite_js_files({})
     return render_to_response('widget/widget_public_demo.html', context,
                               context_instance=RequestContext(request))
+
+def widgetizerbootloader(request):
+    context = { 
+        "gatekeeper": "UnisubsWidgetizerLoaded",
+        "script_src": widget.full_path("js/widgetizer/dowidgetize.js") 
+        }
+    return render_to_response(
+        "widget/widgetizerbootloader.js",
+        context,
+        mimetype='text/javascript',
+        context_instance=RequestContext(request))
 
 def onsite_widget(request):
     """Used for subtitle dialog"""
@@ -96,9 +108,11 @@ def onsite_widget(request):
     general_settings = {}
     add_general_settings(request, general_settings)
     context['general_settings'] = json.dumps(general_settings)
-    return render_to_response('widget/onsite_widget.html',
+    response = render_to_response('widget/onsite_widget.html',
                               context,
                               context_instance=RequestContext(request))
+    response['X-XSS-Protection'] = '0'
+    return response
 
 def onsite_widget_resume(request):
     context = widget.add_config_based_js_files(

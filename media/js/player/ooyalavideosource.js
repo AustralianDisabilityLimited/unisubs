@@ -23,5 +23,21 @@ goog.provide('unisubs.player.OoyalaVideoSource');
  * @implements {unisubs.player.MediaSource}
  */
 unisubs.player.OoyalaVideoSource = function(embedCode) {
-    
+    this.embedCode_ = embedCode;
+};
+
+unisubs.player.OoyalaVideoSource.prototype.createPlayer = function() {
+    return new unisubs.player.OoyalaPlayer(this);
+};
+
+unisubs.player.OoyalaVideoSource.prototype.createControlledPlayer = function() {
+    // not implemented on purpose. maybe in future.
+};
+
+unisubs.player.OoyalaVideoSource.prototype.getVideoURL = function() {
+    return this.embedCode_;
+};
+
+unisubs.player.OoyalaVideoSource.prototype.getEmbedCode = function() {
+    return this.embedCode_;
 };

@@ -32,8 +32,14 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.http import urlquote_plus
 from django.core.exceptions import MultipleObjectsReturned
 from utils.amazon import S3EnabledImageField
-from datetime import datetime, date
+from datetime import datetime, timedelta
 from django.core.cache import cache
+from django.utils.hashcompat import sha_constructor
+from random import random
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 #I'm not sure this is the best way do do this, but this models.py is executed
 #before all other and before url.py
@@ -41,6 +47,7 @@ from localeurl import patch_reverse
 patch_reverse()
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
+EMAIL_CONFIRMATION_DAYS = getattr(settings, 'EMAIL_CONFIRMATION_DAYS', 3)
 
 class CustomUser(BaseUser):
     AUTOPLAY_ON_BROWSER = 1
@@ -82,6 +89,28 @@ class CustomUser(BaseUser):
             else:
                 return self.first_name
         return self.username
+    
+    def save(self, *args, **kwargs):
+        send_confirmation = False
+        
+        if not self.email:
+            self.valid_email = False
+        elif self.pk:
+            try:
+                before_save = self.__class__._default_manager.get(pk=self.pk)
+                send_confirmation = before_save.email != self.email
+            except models.ObjectDoesNotExist:
+                send_confirmation = True
+        elif self.email:
+            send_confirmation = True
+            
+        if send_confirmation:
+            self.valid_email = False
+                
+        super(CustomUser, self).save(*args, **kwargs)
+        
+        if send_confirmation:
+            EmailConfirmation.objects.send_confirmation(self)
     
     def unread_messages(self, hidden_meassage_id=None):
         from messages.models import Message
@@ -222,7 +251,7 @@ def create_custom_user(sender, instance, created, **kwargs):
             values[field.attname] = getattr(instance, field.attname)
         user = CustomUser(**values)
         user.save()
-        
+    
 post_save.connect(create_custom_user, BaseUser)
 
 class Awards(models.Model):
@@ -356,3 +385,68 @@ class Announcement(models.Model):
         
         return last    
         
+class EmailConfirmationManager(models.Manager):
+
+    def confirm_email(self, confirmation_key):
+        try:
+            confirmation = self.get(confirmation_key=confirmation_key)
+        except self.model.DoesNotExist:
+            return None
+        if not confirmation.key_expired():
+            user = confirmation.user
+            user.valid_email = True
+            user.save()
+            return user
+
+    def send_confirmation(self, user):
+        assert user.email
+        
+        self.filter(user=user).delete()
+        
+        salt = sha_constructor(str(random())+settings.SECRET_KEY).hexdigest()[:5]
+        confirmation_key = sha_constructor(salt + user.email).hexdigest()
+        try:
+            current_site = Site.objects.get_current()
+        except Site.DoesNotExist:
+            return
+        path = reverse("auth:confirm_email", args=[confirmation_key])
+        activate_url = u"http://%s%s" % (unicode(current_site.domain), path)
+        context = {
+            "user": user,
+            "activate_url": activate_url,
+            "current_site": current_site,
+            "confirmation_key": confirmation_key,
+        }
+        subject = u'Please confirm your email address for %s' % current_site.name
+        message = render_to_string(
+            "auth/email_confirmation_message.txt", context)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL,
+                  [user.email])
+        return self.create(
+            user=user,
+            sent=datetime.now(),
+            confirmation_key=confirmation_key)
+
+    def delete_expired_confirmations(self):
+        d = datetime.now() - timedelta(days=EMAIL_CONFIRMATION_DAYS)
+        self.filter(sent__lt=d).delete()
+
+class EmailConfirmation(models.Model):
+
+    user = models.ForeignKey(CustomUser)
+    sent = models.DateTimeField()
+    confirmation_key = models.CharField(max_length=40)
+
+    objects = EmailConfirmationManager()
+
+    def __unicode__(self):
+        return u"confirmation for %s" % self.user.email
+
+    class Meta:
+        verbose_name = _("e-mail confirmation")
+        verbose_name_plural = _("e-mail confirmations")
+        
+    def key_expired(self):
+        expiration_date = self.sent + timedelta(days=EMAIL_CONFIRMATION_DAYS)
+        return expiration_date <= datetime.now()
+    key_expired.boolean = True        

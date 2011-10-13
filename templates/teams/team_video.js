@@ -21,3 +21,4 @@
         $("#id_is_moderated").click(warnVideoUnmoderate);
     }
 
+    $("#id_creation_date").datepicker({dateFormat: 'yy-mm-dd'});

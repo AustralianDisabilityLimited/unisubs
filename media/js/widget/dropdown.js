@@ -118,9 +118,6 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
 
     goog.dom.append(
         this.languageList_, 
-        $d('li', 'unisubs-hintTranslate',
-           $d('span', 'unisubs-asterisk', '*'),
-           ' = Missing sections translated by Google Translate'),
         this.subtitlesOff_);
 
     if (this.shouldShowRequestLink_) {
@@ -131,13 +128,15 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
 };
 
 unisubs.widget.DropDown.prototype.addLanguageListRequestLink_ = function($d) {
+// still not showing request stuff, lol.
+/*
     this.languageListRequestLink_ = 
         $d('a', {'href': '#', 'className': 'requestsubs'}, "request subtitles");
     var li = $d('li', 'request',
                 "Don't see the language you want? Please ",
                 this.languageListRequestLink_, "!");
-// temporarily hiding request stuff
-//    goog.dom.append(this.languageList_, li);
+    goog.dom.append(this.languageList_, li);
+*/
 };
 
 unisubs.widget.DropDown.prototype.addVideoLanguagesLinks_ = function($d) {
@@ -241,6 +240,7 @@ unisubs.widget.DropDown.prototype.updateActions_ = function() {
     // FIXME: this should use goog.dom.append and turn into one line.
     this.videoActions_.appendChild(this.addLanguageLink_);
     this.videoActions_.appendChild(this.improveSubtitlesLink_);
+// still not showing request link
 //    this.videoActions_.appendChild(this.requestSubtitlesLink_);
     this.videoActions_.appendChild(this.subtitleHomepageLink_);
     this.videoActions_.appendChild(this.getEmbedCodeLink_);    

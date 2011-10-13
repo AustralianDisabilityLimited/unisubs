@@ -1,8 +1,10 @@
+import urlparse
 from django import template
-from django.db import connection
 from django.utils.translation import ugettext
 from django.contrib.sites.models import Site
 from django.template.defaulttags import URLNode, url
+from django.template.defaultfilters import stringfilter
+from utils.translation import SUPPORTED_LANGUAGES_DICT_LAZY
 
 register = template.Library()
 
@@ -134,4 +136,9 @@ def absurl(parser, token, node_cls=AbsoluteURLNode):
         args=node_instance.args,
         kwargs=node_instance.kwargs,
         asvar=node_instance.asvar)
-absurl = register.tag(absurl)        
+absurl = register.tag(absurl)
+
+@register.filter
+@stringfilter
+def lang_name_from_code(value):
+    return SUPPORTED_LANGUAGES_DICT_LAZY.get(value, value)

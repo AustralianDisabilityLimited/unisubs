@@ -9,11 +9,16 @@
     {% include_bundle "js-base-dependencies" %}
     <script type="text/javascript">
       goog.require('goog.debug.FancyWindow');
-      goog.require('goog.dom.annotate');
       window.UNISUBS_STREAMER = true;
     </script>
+    <script type="text/javascript" src="/widget/config.js"></script>
+    {% for script in scripts %}
+    <script type="text/javascript" src="{{ script }}"></script>
+    {% endfor %}
+    <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
+  {% else %}
+    {% include_bundle "unisubs-streamer" %}
   {% endif %}
-  {% include_bundle "unisubs-streamer" %}
 </head>
 <body>
   <object id="idOVideo" name="idOVideo" width="600" height="360"> 

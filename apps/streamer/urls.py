@@ -21,4 +21,9 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns(
     'streamer.views',
     url(r'^youtubedemo$', 'youtubedemo'),
+    url(r'^overlayytdemo$', 'overlayytdemo'),
+    url(r'^overlayooyalademo$', 'overlayooyalademo'),
+    url(r'^overlaywistiademo$', 'overlaywistiademo'),
+    url(r'^overlaybrightcovedemo$', 'overlaybrightcovedemo'),
+    url(r'^overlayscdemo$', 'overlayscdemo'),
 )

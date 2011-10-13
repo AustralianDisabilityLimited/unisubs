@@ -36,7 +36,9 @@ unisubs.Widgetizer = function() {
         new unisubs.widgetizer.Youtube(),
         new unisubs.widgetizer.HTML5(),
         new unisubs.widgetizer.JWPlayer(),
-        new unisubs.widgetizer.YoutubeIFrame()
+        new unisubs.widgetizer.YoutubeIFrame(),
+        new unisubs.widgetizer.Wistia(),
+        new unisubs.widgetizer.SoundCloud()
     ];
     this.logger_ = goog.debug.Logger.getLogger('unisubs.Widgetizer');
     var uri = new goog.Uri(window.location);
@@ -47,11 +49,16 @@ unisubs.Widgetizer = function() {
 };
 goog.addSingletonGetter(unisubs.Widgetizer);
 
+
+
 /**
  * Converts all videos in the page to unisubs widgets.
  *
  */
 unisubs.Widgetizer.prototype.widgetize = function() {
+    window["unisubsPlayerReady"] = 
+        goog.bind(this.unisubsPlayerReady_, this);
+    this.initListenedPlayers_();
     if (unisubs.LoadingDom.getInstance().isDomLoaded()) {
         this.onLoaded_();
     }
@@ -74,6 +81,42 @@ unisubs.Widgetizer.prototype.onLoaded_ = function() {
     this.widgetizeAttemptTimer_.start();
 };
 
+unisubs.Widgetizer.prototype.unisubsPlayerReady_ = function(code, args) {
+    var videoPlayer;
+    if (code == "y") {
+        unisubs.player.YoutubeVideoPlayer.registerReady.apply(
+            null, args);
+    }
+    else if (code == "o") {
+        videoPlayer = unisubs.player.OoyalaPlayer.callbackMade.apply(
+            null, args);
+    }
+    else if (code == "b") {
+        videoPlayer = unisubs.player.BrightcoveLitePlayer.templateReady.apply(
+            null, args);
+    }
+    if (videoPlayer) {
+        this.decorateVideoPlayer_(videoPlayer);
+    }
+};
+
+unisubs.Widgetizer.prototype.initListenedPlayers_ = function() {
+    goog.array.forEach(
+        window["unisubsReady"],
+        function(ready) {
+            this.unisubsPlayerReady_(ready[0], ready[1]);
+        }, 
+        this);
+    // for legacy purposes with widgetizerprimer
+    if (window["unisubs_readyAPIIDs"]) {
+        goog.array.forEach(
+            window['unisubs_readyAPIIDs'],
+            function(playerID) {
+                this.unisubsPlayerReady_("y", [playerID]);
+            }, this);
+    }
+};
+
 unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
     this.widgetizeAttemptCount_++;
     if (this.widgetizeAttemptCount_ > 5) {
@@ -92,13 +135,15 @@ unisubs.Widgetizer.prototype.findAndWidgetizeElements_ = function() {
         this.logger_.info('found ' + videoPlayers.length + 
                           ' new video players on the page');
     }
-    for (var i = 0; i < videoPlayers.length; i++) {
-        if (unisubs.usingStreamer()) {
-            unisubs.streamer.StreamerDecorator.decorate(videoPlayers[i]);
-        }
-        else {
-            unisubs.widget.WidgetDecorator.decorate(videoPlayers[i]);
-        }
+    goog.array.forEach(videoPlayers, this.decorateVideoPlayer_, this);
+};
+
+unisubs.Widgetizer.prototype.decorateVideoPlayer_ = function(videoPlayer) {
+    if (unisubs.usingStreamer()) {
+        unisubs.streamer.StreamerDecorator.decorate(videoPlayer);
+    }
+    else {
+        unisubs.widget.WidgetDecorator.decorate(videoPlayer);
     }
 };
 

@@ -1,0 +1,60 @@
+{% load media_compressor %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 
+1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  {% if not js_use_compiled %}
+    {% include_bundle "js-base-dependencies" %}
+    <script type="text/javascript">
+      goog.require('goog.debug.FancyWindow');
+      window.UNISUBS_STREAMER = true;
+    </script>
+    <script type="text/javascript" src="/widget/config.js"></script>
+    {% for script in scripts %}
+    <script type="text/javascript" src="{{ script }}"></script>
+    {% endfor %}
+    <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
+  {% else %}
+    <script type="text/javascript" src="{{STATIC_URL_BASE}}js/unisubs-streamer.js"></script>
+  {% endif %}
+</head>
+<body>
+ <object id="idOVideo" name="idOVideo" width="600" height="360" 
+         classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+    <param name="movie" value="http://www.youtube.com/v/1lxm-e0hMTw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1">
+    <param name="allowFullScreen" value="true">
+    <param name="allowScriptAccess" value="always">
+    <param name="wmode" value="transparent">
+    <embed id="idPlayer" name="idPlayer" wmode="transparent" 
+           src="http://www.youtube.com/v/1lxm-e0hMTw&hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" 
+           type="application/x-shockwave-flash" 
+           allowScriptAccess="always" allowfullscreen="true" 
+           width="600" height="360">
+  </object>
+  <div class="STplayer STplayerEmbedded STplayerBarebones" 
+       id="STtranscriptEmbed_5_pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH" 
+       style='width:440px; display: none;'>
+    <div class="STbar">
+      <div class="STlogo"><a href="http://speakertext.com/captionbox?ref=cb" target="_blank"></a></div>
+    </div>
+    <div class="STembedWrapper" style='width: 410px; height: 177px;'>
+      <span id="STtranscriptContent1" class="STtranscriptContent" name="1000">Let's talk about the Internet. </span>
+      <span id="STtranscriptContent2" class="STtranscriptContent" name="3980"><br><br>The Internet started off as a web of text documents, but as it matured and technology advanced, people started using it to share pictures, and music, and videos. </span>
+      <span id="STtranscriptContent3" class="STtranscriptContent" name="17430"><br><br>But search engines like Google can still only see and understand text. </span>
+      <span id="STtranscriptContent4" class="STtranscriptContent" name="23140"><br><br>If you're someone who is serious about putting video on the Web, this is a big problem for you. </span>
+      <span id="STtranscriptContent5" class="STtranscriptContent" name="30260"><br><br>SpeakerText is a new service for video publishers that turns video into text and puts your videos on Google's radar. </span>
+      <span id="STtranscriptContent6" class="STtranscriptContent" name="41440"><br><br>SpeakerText detects all the videos on your site and loads an interactive transcript plugin––called the SpeakerBar––beneath each video that's been transcribed. <br><br></span>
+      <span id="STtranscriptContent7" class="STtranscriptContent" name="52602">The SpeakerBar shows you the full video text and automatically highlights each sentence as the video plays. </span>
+      <span id="STtranscriptContent8" class="STtranscriptContent" name="61790"><br><br>You can use the SpeakerBar to scroll through the full transcript and click on the text to skip backwards and forwards through the video. </span>
+      <span id="STtranscriptContent9" class="STtranscriptContent" name="70350"><br><br>You can even use the SpeakerBar to search for quotes within the video itself. </span>
+      <span id="STtranscriptContent10" class="STtranscriptContent" name="80520"><br><br>The SpeakerBar makes it easy for people to share specific moments from inside the videos on your website. <br><br></span>
+      <span id="STtranscriptContent11" class="STtranscriptContent" name="88362">If you copy a quote from the SpeakerBar and paste it into a rich text editor like a blog post or an email, the quote becomes a link--called a QuoteLink––that takes people back to your website and starts playing the video at the time cue where the quote appeared. </span>
+      <span id="STtranscriptContent12" class="STtranscriptContent" name="111400"><br><br>People can also use the SpeakerBar to share the quotes they like and link back to them on social networking sites like Facebook and Twitter.     </span>
+      <span id="STtranscriptContent13" class="STtranscriptContent" name="124630"><br><br>SpeakerText is easy to install and works with popular publishing platforms like Wordpress, and video sharing sites like YouTube, Blip.tv </span>
+      <span id="STtranscriptContent14" class="STtranscriptContent" name="136006">and Brightcove. </span>
+      <span id="STtranscriptContent15" class="STtranscriptContent" name="137200"><br><br>To learn more, visit SpeakerText.com</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -14,10 +14,11 @@
     <a class="forgot" href="{% url password_reset %}">{% trans 'Forgot password?' %}</a>
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
-  <p style="clear: both">{% trans 'You can also login using' %}</p>
-    <a class="twitter" href="{% url auth:twitter_login %}?next={{ next }}"> twitter</a> 
-    <a class="open-id" href="{% url socialauth_openid_login %}?next={{ next }}">openid</a>
-    <a class="google" href="{% url socialauth_google_login %}?next={{ next }}">gmail</a>
+  <p style="clear: both; padding: 1em 0;">{% trans 'You can also login using' %}</p>
+    <a class="provider" id="twitter" href="{% url auth:twitter_login %}?next={{ next }}"> twitter</a> 
+    <a class="provider" id="open-id" href="{% url socialauth_openid_login %}?next={{ next }}">openid</a>
+    <a class="provider" id="google" href="{% url socialauth_google_login %}?next={{ next }}">gmail</a>
+    <a class="provider" id="facebook" href="{% url auth:facebook_login %}?next={{ next }}">facebook</a>
 </div>
 <div class="right_column">
 <h2>{% trans 'Create an Account' %}</h2>

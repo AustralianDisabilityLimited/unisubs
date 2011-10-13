@@ -164,6 +164,12 @@ This is needed, since it's for the js templating
 
 <script id="tasksListItem" type="text/html">
     <p>
+        {{ #ghost }}
+            <b>GHOST</b>
+        {{ /ghost }}
+        {{ #completed }}
+            <b>COMPLETED</b>
+        {{ /completed }}
         <a href="{{ teamVideoUrl }}">{{ teamVideoDisplay }}</a>
         <br/>
         <span>

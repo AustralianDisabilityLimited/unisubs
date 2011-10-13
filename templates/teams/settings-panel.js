@@ -66,6 +66,7 @@ var TaskModel = Class.$extend({
         this.assigneeDisplay = data.assignee_display;
         this.completed = data.completed;
         this.type = data.type;
+        this.ghost = data.ghost;
         this.teamSlug = TEAM_SLUG;
         this.performAllowed = data.perform_allowed;
         this.performUrl = PERFORM_TASK_URL;
@@ -349,7 +350,11 @@ var TaskListItem = Class.$extend({
 
         var assignee_id = $(e.target).closest('form').find('select').val();
         if (assignee_id !== "") {
-            TeamsApiV2.task_assign(this.model.pk, assignee_id, this.onTaskAssigned);
+            if (this.model.type === "Translate") {
+                TeamsApiV2.task_translate_assign(this.model.teamVideo, this.model.language, assignee_id, this.onTaskAssigned);
+            } else {
+                TeamsApiV2.task_assign(this.model.pk, assignee_id, this.onTaskAssigned);
+            }
         }
     },
     onDeleteClick: function(e) {

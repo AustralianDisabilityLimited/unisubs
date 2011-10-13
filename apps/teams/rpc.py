@@ -114,8 +114,75 @@ def _project_to_dict(p):
     d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk"])
     d.update({"pk":p.pk})
     return d
+
+
+def _build_translation_task_dict(team, team_video, language, member):
+    task_dict = Task(team=team, team_video=team_video,
+                     type=Task.TYPE_IDS['Translate'], assignee=None,
+                     language=language).to_dict(member)
+    task_dict['ghost'] = True
+    return task_dict
+
+def _translation_task_needed(tasks, team_video, language):
+    '''Return True if a translation task for the language needs to be added to the list.'''
+
+    result = False
+
+    video_tasks = [t for t in tasks if t.team_video == team_video]
+    for task in video_tasks:
+        if task.type == Task.TYPE_IDS['Subtitle']:
+            if not task.completed:
+                # There's an incomplete subtitling task, so we don't need to
+                # return a ghost (yet).
+                return False
+            else:
+                # If there's a *complete* subtitling task we *may* need to
+                # return a ghost (if there isn't already one there).
+                result = True
+
+    videolanguage_tasks = [t for t in tasks if t.language == language]
+    for task in videolanguage_tasks:
+        if task.type in (Task.TYPE_IDS['Translate'], Task.TYPE_IDS['Review'], Task.TYPE_IDS['Approve']):
+            # There is already a translation task or a task later in the
+            # process in the DB for this video/language combination.
+            # No need to return a ghost.
+            "  task or later task already in DB"
+            return False
+
+    return result
+
+def _get_translation_tasks(team, tasks, member, team_video, language):
+    # TODO: Once this is a setting, look it up.
+    languages = [language] if language else ['fr', 'es', 'tl']
+
+    team_videos = [team_video] if team_video else team.teamvideo_set.all()
+
+    return [_build_translation_task_dict(team, team_video, language, member)
+            for language in languages
+            for team_video in team_videos
+            if _translation_task_needed(tasks, team_video, language)]
+
+def _ghost_tasks(team, tasks, filters, member):
+    '''Return a list of "ghost" tasks for the given team.
     
+    Ghost tasks are tasks that don't exist in the database, but should be shown anyway.
     
+    '''
+    type = filters.get('type')
+    should_add = (                           # Add the ghost translation tasks iff:
+        ((not type) or type == u'Translate') # We care about translation tasks
+        and not filters.get('completed')     # We care about incomplete tasks
+        and not filters.get('assignee')      # We care about unassigned tasks
+    )
+
+    if should_add:
+        return _get_translation_tasks(team, tasks, member,
+                                      filters.get('team_video'),
+                                      filters.get('language'))
+    else:
+        return []
+
+
 class TeamsApiV2Class(object):
     def test_api(self, message, user):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
@@ -126,6 +193,9 @@ class TeamsApiV2Class(object):
                                                      deleted=False)
                                  .values_list('language', flat=True)
                                  .distinct())
+
+        # TODO: Handle the team language setting here once team settings are
+        # implemented.
 
         return [{'language': l,
                  'language_display': SUPPORTED_LANGUAGES_DICT[l]}
@@ -143,11 +213,10 @@ class TeamsApiV2Class(object):
         * team_video: team video ID as an integer
 
         '''
-        tasks = Task.objects.filter(team__slug=team_slug, deleted=False)
+        team = Team.objects.get(slug=team_slug)
+        tasks = Task.objects.filter(team=team, deleted=False)
         member = Team.objects.get(slug=team_slug).members.get(user=user)
 
-        if filters.get('type'):
-            tasks = tasks.filter(type=Task.TYPE_IDS[filters['type']])
         if filters.get('completed'):
             tasks = tasks.filter(completed__isnull=not filters['completed'])
         if filters.get('assignee'):
@@ -157,7 +226,23 @@ class TeamsApiV2Class(object):
         if filters.get('language'):
             tasks = tasks.filter(language=filters['language'])
 
-        return [t.to_dict(member) for t in tasks]
+        # Force the main query here for performance.  This way we can manipulate
+        # the list in-memory instead of making several more calls to the DB
+        # below.
+        tasks = list(tasks)
+
+        # We have to filter the type separately here after the main task list is
+        # created, because if we do it beforehand the subtitling tasks might not
+        # be included, which we need to determine whether to add ghost
+        # translation tasks.
+        real_tasks = [t for t in tasks if not t.completed]
+        if filters.get('type'):
+            real_tasks = [t for t in real_tasks if t.type == Task.TYPE_IDS[filters['type']]]
+        real_tasks = [t.to_dict(member) for t in real_tasks]
+
+        ghost_tasks = _ghost_tasks(team, tasks, filters, member)
+
+        return real_tasks + ghost_tasks
 
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given team member, or unassign it if null/None.'''

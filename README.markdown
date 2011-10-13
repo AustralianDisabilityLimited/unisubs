@@ -30,6 +30,7 @@ To run the development version:
     Then run following commands:
 
         cd /opt/unisubs
+        source ../extras/venv/bin/activate
         ./bootstrap-vagrant.sh
 
     It's safe to run `bootstrap-vagrant.sh` multiple times if something goes

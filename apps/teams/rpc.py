@@ -22,6 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from auth.models import CustomUser as User
 from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
 
 from django.shortcuts import get_object_or_404
@@ -208,7 +209,7 @@ class TeamsApiV2Class(object):
 
         * type: a string describing the type of task. 'Subtitle', 'Translate', etc.
         * completed: true or false
-        * assignee: team member ID as an integer
+        * assignee: user ID as an integer
         * team_video: team video ID as an integer
 
         '''
@@ -244,14 +245,14 @@ class TeamsApiV2Class(object):
         return real_tasks + ghost_tasks
 
     def task_assign(self, task_id, assignee_id, user):
-        '''Assign a task to the given team member, or unassign it if null/None.'''
+        '''Assign a task to the given user, or unassign it if null/None.'''
         task = Task.objects.get(pk=task_id)
         member = task.team.members.get(user=user)
 
         form = TaskAssignForm(task.team, member,
                     data={'task': task_id, 'assignee': assignee_id})
         if form.is_valid():
-            assignee = TeamMember.objects.get(pk=assignee_id) if assignee_id else None
+            assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
             task.assignee = assignee
             task.save()
@@ -292,7 +293,7 @@ class TeamsApiV2Class(object):
         tv = TeamVideo.objects.get(pk=team_video_id)
         task, created = Task.objects.get_or_create(team=tv.team, team_video=tv,
                 language=language, type=Task.TYPE_IDS['Translate'])
-        assignee = TeamMember.objects.get(pk=assignee_id) if assignee_id else None
+        assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
         task.assignee = assignee
         task.save()

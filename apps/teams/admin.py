@@ -117,7 +117,7 @@ class WorkflowAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'type', 'team', 'team_video', 'language',
                     'assignee', 'created', 'completed')
-    list_filter = ('type', 'created', 'modified', 'completed')
+    list_filter = ('type', 'deleted', 'created', 'modified', 'completed')
     search_fields = ('assignee__username', 'team__name', 'assignee__first_name',
                      'assignee__last_name', 'team_video__title',
                      'team_video__video__title')

@@ -629,10 +629,10 @@ class TeamVideo(models.Model):
         
 
 
-    def is_checked_out(self, ignore_member=None):
+    def is_checked_out(self, ignore_user=None):
         '''Return whether this video is checked out in a task.
 
-        If a member is given, checkouts by that member will be ignored.  This
+        If a user is given, checkouts by that user will be ignored.  This
         provides a way to ask "can user X check out or work on this task?".
 
         This is similar to the writelocking done on Videos and
@@ -646,8 +646,8 @@ class TeamVideo(models.Model):
                 language="",             # - Aren't specific to a language
                 completed__isnull=True,  # - Are unfinished
         )
-        if ignore_member:
-            tasks = tasks.exclude(assignee=ignore_member)
+        if ignore_user:
+            tasks = tasks.exclude(assignee=ignore_user)
 
         return tasks.exists()
 
@@ -738,10 +738,10 @@ class TeamVideoLanguage(models.Model):
         return super(TeamVideoLanguage, self).save(*args, **kwargs)
 
 
-    def is_checked_out(self, ignore_member=None):
+    def is_checked_out(self, ignore_user=None):
         '''Return whether this language is checked out in a task.
 
-        If a member is given, checkouts by that member will be ignored.  This
+        If a user is given, checkouts by that user will be ignored.  This
         provides a way to ask "can user X check out or work on this task?".
 
         This is similar to the writelocking done on Videos and
@@ -755,8 +755,8 @@ class TeamVideoLanguage(models.Model):
                 language=self.language,  # - Apply to this language
                 completed__isnull=True,  # - Are unfinished
         )
-        if ignore_member:
-            tasks = tasks.exclude(assignee=ignore_member)
+        if ignore_user:
+            tasks = tasks.exclude(assignee=ignore_user)
 
         return tasks.exists()
 
@@ -1077,7 +1077,7 @@ class Task(models.Model):
     team = models.ForeignKey(Team)
     team_video = models.ForeignKey(TeamVideo)
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True, db_index=True)
-    assignee = models.ForeignKey(TeamMember, blank=True, null=True)
+    assignee = models.ForeignKey(User, blank=True, null=True)
 
     deleted = models.BooleanField(default=False)
 
@@ -1089,7 +1089,7 @@ class Task(models.Model):
         return u'%d' % self.id
 
 
-    def to_dict(self, member=None):
+    def to_dict(self, user=None):
         '''Return a dictionary representing this task.
 
         Useful for converting to JSON.
@@ -1102,11 +1102,11 @@ class Task(models.Model):
                  'team_video_url': self.team_video.get_absolute_url() if self.team_video else None,
                  'type': Task.TYPE_NAMES[self.type],
                  'assignee': self.assignee.id if self.assignee else None,
-                 'assignee_display': unicode(self.assignee.user) if self.assignee else None,
+                 'assignee_display': unicode(self.assignee) if self.assignee else None,
                  'language': self.language if self.language else None,
                  'language_display': SUPPORTED_LANGUAGES_DICT[self.language]
                                      if self.language else None,
-                 'perform_allowed': self.perform_allowed(member) if member else None,
+                 'perform_allowed': self.perform_allowed(user) if user else None,
                  'completed': True if self.completed else False, }
 
 
@@ -1116,9 +1116,9 @@ class Task(models.Model):
         return Workflow.get_for_team_video(self.team_video)
 
 
-    def perform_allowed(self, member, workflow=None):
-        '''Return True if the member is permitted to perform this task, False otherwise.'''
-        if not member:
+    def perform_allowed(self, user, workflow=None):
+        '''Return True if the user is permitted to perform this task, False otherwise.'''
+        if not user:
             return False
 
         # workflow = workflow or self.workflow
@@ -1138,7 +1138,7 @@ class Task(models.Model):
         if not self.assignee:
             return True
         else:
-            return member == self.assignee
+            return user == self.assignee
 
 
     def complete(self):

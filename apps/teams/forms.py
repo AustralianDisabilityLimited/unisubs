@@ -22,6 +22,7 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
+from auth.models import CustomUser as User
 from django import forms
 from teams.models import Team, TeamMember, TeamVideo, Task
 from django.utils.translation import ugettext_lazy as _
@@ -346,14 +347,14 @@ class EditTeamFormAdmin(EditTeamForm):
 
 class TaskAssignForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
-    assignee = forms.ModelChoiceField(queryset=TeamMember.objects.all())
+    assignee = forms.ModelChoiceField(queryset=User.objects.all())
 
     def __init__(self, team, member, *args, **kwargs):
         super(TaskAssignForm, self).__init__(*args, **kwargs)
 
         self.team = team
         self.member = member
-        self.fields['assignee'].queryset = team.members.all()
+        self.fields['assignee'].queryset = User.objects.filter(teammember__team=team)
 
 
     def clean_task(self):

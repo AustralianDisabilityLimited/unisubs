@@ -1,29 +1,11 @@
-{% load media_compressor %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 
-1.0 Strict//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <link rel="stylesheet" href="{{STATIC_URL}}soundcloud-demo/css/sc-player-standard.css" type="text/css">
-    <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}soundcloud-demo/js/soundcloud.player.api.js"></script>
-    <script type="text/javascript" src="{{STATIC_URL}}soundcloud-demo/js/sc-player.js"></script>
-    {% if not js_use_compiled %}
-    {% include_bundle "js-base-dependencies" %}
-    <script type="text/javascript">
-      goog.require('goog.debug.FancyWindow');
-      window.UNISUBS_STREAMER = true;
-    </script>
-    <script type="text/javascript" src="/widget/config.js"></script>
-    {% for script in scripts %}
-    <script type="text/javascript" src="{{ script }}"></script>
-    {% endfor %}
-    <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
-    {% else %}
-    <script type="text/javascript" src="{{STATIC_URL_BASE}}js/unisubs-streamer.js"></script>
-    {% endif %}
-  </head>
-  <body>
+{% extends "streamer/streamerdemobase.html" %}
+{% block prescripts %}
+  <link rel="stylesheet" href="{{STATIC_URL}}soundcloud-demo/css/sc-player-standard.css" type="text/css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}soundcloud-demo/js/soundcloud.player.api.js"></script>
+  <script type="text/javascript" src="{{STATIC_URL}}soundcloud-demo/js/sc-player.js"></script>
+{% endblock %}
+{% block content %}
     <a href="http://soundcloud.com/matas/hobnotropic" class="sc-player">My new dub track</a>
   <div class="STplayer STplayerEmbedded STplayerBarebones" 
        id="STtranscriptEmbed_5_pnNmdxMTqYxCp5xLBN9kigewIWoP9aTH" 
@@ -49,5 +31,4 @@
       <span id="STtranscriptContent15" class="STtranscriptContent" name="137200"><br><br>To learn more, visit SpeakerText.com</span>
     </div>
   </div>
-  </body>
-</html>
+{% endblock %}

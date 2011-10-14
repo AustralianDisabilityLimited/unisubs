@@ -309,23 +309,19 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/jwplayer.js",
     "js/widgetizer/youtubeiframe.js",
     "js/widgetizer/wistia.js",
-    "js/widgetizer/soundcloud.js"])
+    "js/widgetizer/soundcloud.js",
+    'js/player/ooyalaplayer.js', 
+    'js/player/wistiavideoplayer.js', 
+    'js/player/brightcoveliteplayer.js', 
+    'js/player/soundcloudplayer.js', 
+    'js/streamer/streamerdecorator.js', 
+    'js/streamer/streamercontroller.js', 
+    'js/streamer/streambox.js', 
+    'js/streamer/streamsub.js', 
+    'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
-
-JS_STREAMER = list(JS_WIDGETIZER_CORE)
-JS_STREAMER.extend([
-        'js/player/ooyalaplayer.js', 
-        'js/player/wistiavideoplayer.js', 
-        'js/player/brightcoveliteplayer.js', 
-        'js/player/soundcloudplayer.js', 
-        'js/streamer/streamerdecorator.js', 
-        'js/streamer/streamercontroller.js', 
-        'js/streamer/streambox.js', 
-        'js/streamer/streamsub.js', 
-        'js/streamer/overlaycontroller.js',
-        'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
 JS_EXTENSION.append('js/widgetizer/extension.js')
@@ -694,17 +690,6 @@ MEDIA_BUNDLES = {
             "render_bootloader": True
         }
     },
-    "unisubs-streamer":{
-        "type": "js",
-        "closure_deps": "js/closure-dependencies.js",
-        "files": ["js/config.js"] + JS_STREAMER,
-        "extra_defines": {"unisubs.STREAMER": "true"},
-        "bootloader": { 
-            "template": "widget/widgetizerbootloader.js",
-            "gatekeeper": "UnisubsStreamerLoaded",
-            "render_bootloader": True
-        }
-     },
     "unisubs-widgetizer-sumo": {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
@@ -814,3 +799,5 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
+    INSTALLED_APPS += ("api",)

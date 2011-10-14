@@ -6,7 +6,7 @@ set -e
 mkdir -p ../extras/static-cache
 mkdir -p ../extras/pictures
 mkdir -p ../extras/video
-test -L venv               || ln -s ../../extras/venv venv
+test -L venv               || ln -s ../extras/venv venv
 test -L media/static-cache || ln -s ../../extras/static-cache media/static-cache
 test -L user-data/video    || ln -s ../../extras/video user-data/video
 test -L user-data/pictures || ln -s ../../extras/pictures user-data/pictures
@@ -20,7 +20,6 @@ cd ..
 # Set up the DB ---------------------------------------------------------------
 python manage.py syncdb --all --settings=dev_settings --noinput
 python manage.py migrate --fake --settings=dev_settings
-python manage.py createsuperuser --settings=dev_settings
 
 # Solr-------------------------------------------------------------------------
 sudo ./deploy/update_solr_schema_vagrant.sh

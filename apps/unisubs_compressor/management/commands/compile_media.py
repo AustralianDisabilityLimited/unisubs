@@ -71,10 +71,6 @@ NO_UNIQUE_URL = (
 #        "no-cache": True 
 #    },
     {
-        "name": "js/unisubs-streamer.js",
-        "no-cache": True
-    }, 
-    {
         "name": "js/unisubs-widgetizer.js",
         "no-cache": True
     }, {
@@ -453,6 +449,3 @@ class Command(BaseCommand):
             
             data = open(to_path).read()
             assert(data.endswith(version_str))
-            
-        
-

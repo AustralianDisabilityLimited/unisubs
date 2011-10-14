@@ -71,8 +71,11 @@ class CustomUser(BaseUser):
         choices=AUTOPLAY_CHOICES, default=AUTOPLAY_ON_BROWSER)
     award_points = models.IntegerField(default=0)
     last_ip = models.IPAddressField(blank=True, null=True)
-    #videos witch are related to user. this is for quicker queries 
+    # videos witch are related to user. this is for quicker queries 
     videos = models.ManyToManyField('videos.Video', blank=True)
+    # for some login backends we end up with a full name but not 
+    # a first name, last name pair.
+    full_name = models.CharField(max_length=63, blank=True, default='')
     
     objects = UserManager()
     
@@ -88,6 +91,8 @@ class CustomUser(BaseUser):
                 return self.get_full_name()
             else:
                 return self.first_name
+        if self.full_name:
+            return self.full_name
         return self.username
     
     def save(self, *args, **kwargs):

@@ -5,6 +5,9 @@ var MENU_SELECTOR = ".sub-settings-panel";
 var CONTAINER_SELECTOR = ".panel-holder";
 var TEAM_SLUG = "{{team.slug}}";
 var ON_PROJECT_SAVED = "onProjectSaved";
+var ON_PROJECT_CANCELED = "onProjectCanceled";
+var ON_PROJECT_DELETED = "onProjectDeleted";
+
 
 var PERFORM_TASK_URL = "{% url teams:perform_task %}";
 var USER_CAN_ASSIGN_TASK = {% if user_can_assign_tasks %}true{% else %}false{% endif %};
@@ -111,6 +114,7 @@ var ProjectEditPanel = Class.$extend({
          this.onSaveClicked = _.bind(this.onSaveClicked, this);
          this.onDeleteClicked = _.bind(this.onDeleteClicked, this);
          this.onChangeProjectReturned = _.bind(this.onChangeProjectReturned, this);
+         this.onCancel  = _.bind(this.onCancel, this);
          var deleteButtonEl = $(".project-delete", this.el);
          if(this.model.isNew()){
              deleteButtonEl.remove();
@@ -118,18 +122,16 @@ var ProjectEditPanel = Class.$extend({
               deleteButtonEl.click(this.onDeleteClicked);
          }
          $(".project-save", this.el).click(this.onSaveClicked);
+         $(".project-cancel", this.el).click(this.onCancel);
          
     },
     show: function(){
         $(this.el).show();
-        $(this.el).mod("show");
+        //$(this.el).mod("show");
         
     },
     hide: function(){
-        $(this.el).mod("close", {"close-modal": function(){
-            //$(this).remove();
-        }});
-        
+        $(this.el).remove();        
     },
     getValuesFromForm: function(form){
         var inputs = $(':input', form);
@@ -161,7 +163,7 @@ var ProjectEditPanel = Class.$extend({
             $.jGrowl(res.msg);
             if (res.obj){
                 this.model.update(res.obj);
-                this.el.trigger(ON_PROJECT_SAVED, this.model, res.isRemoval);
+                this.el.trigger(ON_PROJECT_SAVED, this.model);
                 
             }
             // show errors
@@ -171,6 +173,11 @@ var ProjectEditPanel = Class.$extend({
 
             }
         }
+    },
+    onCancel: function(e){
+        e.preventDefault();
+        this.el.trigger(ON_PROJECT_CANCELED);
+        return false;
     },
     onDeleteClicked: function(e){
         e.preventDefault();
@@ -206,7 +213,7 @@ var ProjectEditPanel = Class.$extend({
                 if (res && res.success ){
                     $.jGrowl(res.msg);
                     
-                    that.el.trigger(ON_PROJECT_SAVED, [that.model, true]);
+                    that.el.trigger(ON_PROJECT_DELETED, [that.model]);
                 }
             }
         );
@@ -239,12 +246,14 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onProjectListLoaded = _.bind(this.onProjectListLoaded, this);
         this.onNewProjectClicked = _.bind(this.onNewProjectClicked, this);
         this.onProjectSaved = _.bind(this.onProjectSaved, this);
+        this.onProjectCanceled = _.bind(this.onProjectCanceled, this);
         this.onEditRequested = _.bind(this.onEditRequested, this);
         this.el = ich.projectPanel();
         $("a.project-add", this.el).click(this.onNewProjectClicked);
         scope = this;
         TeamsApiV2.project_list(TEAM_SLUG, null, this.onProjectListLoaded);
         this.projects = [];
+        this.projectListing = $(".projects.listing", this.el);
         
     },
     addProject: function(pModel){
@@ -265,11 +274,11 @@ var ProjectPanel  = AsyncPanel.$extend({
         }
     },
     renderProjectList: function(){
-        var projectListing = $(".projects.listing", this.el);
-        $("li", projectListing).remove();
+        
+        $("li", this.projectListing).remove();
         _.each(this.projects, function(x){
             var item = new ProjectListItem(x)
-            projectListing.append(item.el);
+            this.projectListing.append(item.el);
             item.el.bind("onEditRequested", this.onEditRequested)
         }, this);
     },
@@ -278,7 +287,10 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.projectEditPanel  = new ProjectEditPanel(model);
         this.el.prepend(this.projectEditPanel.el);
         this.projectEditPanel.show();
+        this.projectListing.hide()
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
+        this.projectEditPanel.el.bind(ON_PROJECT_CANCELED, this.onProjectCanceled);
+        this.projectEditPanel.el.bind(ON_PROJECT_DELETED, this.onProjectDeleted);
         return false;
     },
     onProjectListLoaded: function(data){
@@ -292,16 +304,27 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onEditRequested(e, new ProjectModel());
         return false;
     },
-    onProjectSaved: function(e, p, isRemoval){
-        this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
+    _hideEditPanel:function(){
         this.projectEditPanel.hide();
-        if (isRemoval){
-            this.removeProject(p)
-        }else{
-            this.addProject(p);
-        }
-        this.renderProjectList();
+        this.projectEditPanel.el.unbind(ON_PROJECT_SAVED);
+        this.projectEditPanel.el.unbind(ON_PROJECT_CANCELED);
+        this.projectEditPanel.el.unbind(ON_PROJECT_DELETED);
+        this.projectListing.show()
         
+    },
+    onProjectCanceled: function(e){
+        console.log("cancelling");
+        this._hideEditPanel();
+    },
+    onProjectSaved: function(e, p){
+        this._hideEditPanel()
+        this.addProject(p);
+        this.renderProjectList();
+    },
+    onProjectDeleted: function(e,p){
+        this._hideEditPanel()
+        this.removeProject(p)
+        this.renderProjectList();
     }
 });
 

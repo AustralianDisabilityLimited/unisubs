@@ -4,7 +4,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from celery.decorators import periodic_task
 from celery.schedules import crontab
-from datetime import datetime, timedelta
+from datetime import datetime
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
 from haystack import site
@@ -48,7 +48,7 @@ def add_videos_notification(*args, **kwargs):
 
 @task()
 def update_one_team_video(team_video_id):
-    from teams.models import TeamVideo, TeamVideoLanguage
+    from teams.models import TeamVideo
     try:
         team_video = TeamVideo.objects.get(id=team_video_id)
     except TeamVideo.DoesNotExist:
@@ -57,3 +57,36 @@ def update_one_team_video(team_video_id):
     tv_search_index = site.get_index(TeamVideo)
     tv_search_index.backend.update(
         tv_search_index, [team_video])
+
+
+@task()
+def complete_applicable_tasks(team_video_id):
+    from teams.models import TeamVideo, Task
+
+    try:
+        team_video = TeamVideo.objects.get(id=team_video_id)
+    except TeamVideo.DoesNotExist:
+        return
+
+    incomplete_tasks = team_video.task_set.filter(completed__isnull=True)
+
+    completed_languages = team_video.video.completed_subtitle_languages()
+    subtitle_complete = any([sl.is_original and sl.is_complete
+                             for sl in completed_languages])
+    translate_complete = [sl.language for sl in completed_languages]
+    review_complete = []
+    approve_complete = []
+
+    for t in incomplete_tasks:
+        should_complete = (
+            (t.type == Task.TYPE_IDS['Subtitle'] and subtitle_complete)
+            or (t.type == Task.TYPE_IDS['Translate']
+                and t.language in translate_complete)
+            or (t.type == Task.TYPE_IDS['Review']
+                and t.language in review_complete)
+            or (t.type == Task.TYPE_IDS['Approve']
+                and t.language in approve_complete)
+        )
+        if should_complete:
+            t.complete()
+

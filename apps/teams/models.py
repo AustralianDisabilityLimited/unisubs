@@ -1144,15 +1144,13 @@ class Task(models.Model):
     def complete(self):
         '''Mark as complete and return the next task in the process if applicable.'''
         self.completed = datetime.datetime.now()
-
-        result = { 'Subtitle': self._complete_subtitle,
-                   'Translate': self._complete_translate,
-                   'Review': self._complete_review,
-                   'Approve': self._complete_review,
-                 }[Task.TASK_NAMES[self.type]]()
-
         self.save()
-        return result
+
+        return { 'Subtitle': self._complete_subtitle,
+                 'Translate': self._complete_translate,
+                 'Review': self._complete_review,
+                 'Approve': self._complete_review,
+        }[Task.TASK_NAMES[self.type]]()
 
     def _complete_subtitle(self):
         # Normally we would create the next task in the sequence here, but since

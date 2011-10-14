@@ -141,7 +141,7 @@ def _translation_task_needed(tasks, team_video, language):
                 # return a ghost (if there isn't already one there).
                 result = True
 
-    videolanguage_tasks = [t for t in tasks if t.language == language]
+    videolanguage_tasks = [t for t in video_tasks if t.language == language]
     for task in videolanguage_tasks:
         if task.type in (Task.TYPE_IDS['Translate'], Task.TYPE_IDS['Review'], Task.TYPE_IDS['Approve']):
             # There is already a translation task or a task later in the
@@ -217,8 +217,6 @@ class TeamsApiV2Class(object):
         tasks = Task.objects.filter(team=team, deleted=False)
         member = Team.objects.get(slug=team_slug).members.get(user=user)
 
-        if filters.get('completed'):
-            tasks = tasks.filter(completed__isnull=not filters['completed'])
         if filters.get('assignee'):
             tasks = tasks.filter(assignee=filters['assignee'])
         if filters.get('team_video'):
@@ -230,12 +228,15 @@ class TeamsApiV2Class(object):
         # the list in-memory instead of making several more calls to the DB
         # below.
         tasks = list(tasks)
+        real_tasks = tasks
 
-        # We have to filter the type separately here after the main task list is
-        # created, because if we do it beforehand the subtitling tasks might not
-        # be included, which we need to determine whether to add ghost
-        # translation tasks.
-        real_tasks = [t for t in tasks if not t.completed]
+        # We have to filter the completion and type separately here after the
+        # main task list is created, because if we do it beforehand the
+        # subtitling tasks and finished translation tasks might not be included,
+        # and we need those to determine whether to add ghost translation tasks.
+        if not filters.get('completed'):
+            real_tasks = [t for t in tasks if not t.completed]
+
         if filters.get('type'):
             real_tasks = [t for t in real_tasks if t.type == Task.TYPE_IDS[filters['type']]]
         real_tasks = [t.to_dict(member) for t in real_tasks]

@@ -16,14 +16,10 @@
 # along with this program.  If not, see
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
+from collections import defaultdict
 from auth.models import CustomUser as User
 from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
+from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
 
@@ -151,22 +147,46 @@ def _translation_task_needed(tasks, team_video, language):
 
     return result
 
+def _get_completed_language_dict(team_videos, languages):
+    '''Return a dict of video IDs to languages complete for each video.
+
+    This is created all at once so we can use only one query to look the
+    information up, instead of using a separate one for each video later when
+    we're going through them.
+
+    '''
+    video_ids = [tv.video.id for tv in team_videos]
+
+    completed_langs = SubtitleLanguage.objects.filter(
+            video__in=video_ids, language__in=languages, is_complete=True
+    ).values_list('video', 'language')
+
+    completed_languages = defaultdict(list)
+
+    for video_id, lang in completed_langs:
+        completed_languages[video_id].append(lang)
+
+    return completed_languages
+
 def _get_translation_tasks(team, tasks, member, team_video, language):
     # TODO: Once this is a setting, look it up.
     languages = [language] if language else ['fr', 'es', 'tl']
 
     team_videos = [team_video] if team_video else team.teamvideo_set.all()
+    completed_languages = _get_completed_language_dict(team_videos, languages)
 
     return [_build_translation_task_dict(team, team_video, language, member)
             for language in languages
             for team_video in team_videos
-            if _translation_task_needed(tasks, team_video, language)]
+            if _translation_task_needed(tasks, team_video, language)
+            and language not in completed_languages.get(team_video.video.pk)]
 
 def _ghost_tasks(team, tasks, filters, member):
     '''Return a list of "ghost" tasks for the given team.
-    
-    Ghost tasks are tasks that don't exist in the database, but should be shown anyway.
-    
+
+    Ghost tasks are tasks that don't exist in the database, but should be shown
+    to the user anyway.
+
     '''
     type = filters.get('type')
     should_add = (                           # Add the ghost translation tasks iff:

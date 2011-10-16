@@ -171,6 +171,7 @@ def _get_completed_language_dict(team_videos, languages):
 def _get_translation_tasks(team, tasks, member, team_video, language):
     # TODO: Once this is a setting, look it up.
     languages = [language] if language else ['fr', 'es', 'tl']
+    languages = map(str, languages)
 
     team_videos = [team_video] if team_video else team.teamvideo_set.all()
     completed_languages = _get_completed_language_dict(team_videos, languages)
@@ -179,7 +180,7 @@ def _get_translation_tasks(team, tasks, member, team_video, language):
             for language in languages
             for team_video in team_videos
             if _translation_task_needed(tasks, team_video, language)
-            and language not in completed_languages.get(team_video.video.pk)]
+            and language not in completed_languages[team_video.video.pk]]
 
 def _ghost_tasks(team, tasks, filters, member):
     '''Return a list of "ghost" tasks for the given team.
@@ -216,6 +217,8 @@ class TeamsApiV2Class(object):
 
         # TODO: Handle the team language setting here once team settings are
         # implemented.
+        languages += ['fr', 'es', 'tl']
+        languages = list(set(languages))
 
         return [{'language': l,
                  'language_display': SUPPORTED_LANGUAGES_DICT[l]}
@@ -241,8 +244,6 @@ class TeamsApiV2Class(object):
             tasks = tasks.filter(assignee=filters['assignee'])
         if filters.get('team_video'):
             tasks = tasks.filter(team_video=filters['team_video'])
-        if filters.get('language'):
-            tasks = tasks.filter(language=filters['language'])
 
         # Force the main query here for performance.  This way we can manipulate
         # the list in-memory instead of making several more calls to the DB
@@ -250,17 +251,17 @@ class TeamsApiV2Class(object):
         tasks = list(tasks)
         real_tasks = tasks
 
-        # We have to filter the completion and type separately here after the
-        # main task list is created, because if we do it beforehand the
-        # subtitling tasks and finished translation tasks might not be included,
-        # and we need those to determine whether to add ghost translation tasks.
+        # We have to run most of the filtering after the main task list is
+        # created, because if we do it beforehand some of the tasks needed to
+        # determine which ghost tasks to show may be excluded.
         if not filters.get('completed'):
-            real_tasks = [t for t in tasks if not t.completed]
-
+            real_tasks = [t for t in real_tasks if not t.completed]
+        if filters.get('language'):
+            real_tasks = [t for t in real_tasks if t.language == filters['language']]
         if filters.get('type'):
             real_tasks = [t for t in real_tasks if t.type == Task.TYPE_IDS[filters['type']]]
-        real_tasks = [t.to_dict(member) for t in real_tasks]
 
+        real_tasks = [t.to_dict(member) for t in real_tasks]
         ghost_tasks = _ghost_tasks(team, tasks, filters, member)
 
         return real_tasks + ghost_tasks

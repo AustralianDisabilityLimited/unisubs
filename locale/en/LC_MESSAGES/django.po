@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-09 01:31-0500\n"
+"POT-Creation-Date: 2011-10-16 01:31-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -313,6 +313,10 @@ msgstr ""
 msgid "Maltese"
 msgstr ""
 
+#: settings.py:116 utils/translation_names.py:15
+msgid "Armenian"
+msgstr ""
+
 #: apps/auth/admin.py:13 templates/statistic/users_statistic.html:12
 #: templates/teams/edit_members.html:93 templates/teams/edit_members.html:141
 msgid "Username"
@@ -344,57 +348,57 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#: apps/auth/models.py:84
+#: apps/auth/models.py:87
 msgid "Retired user"
 msgstr ""
 
-#: apps/auth/models.py:265
+#: apps/auth/models.py:270
 msgid "Add comment"
 msgstr ""
 
-#: apps/auth/models.py:266
+#: apps/auth/models.py:271
 msgid "Start subtitles"
 msgstr ""
 
-#: apps/auth/models.py:267
+#: apps/auth/models.py:272
 msgid "Start translation"
 msgstr ""
 
-#: apps/auth/models.py:268
+#: apps/auth/models.py:273
 msgid "Edit subtitles"
 msgstr ""
 
-#: apps/auth/models.py:269
+#: apps/auth/models.py:274
 msgid "Edit translation"
 msgstr ""
 
-#: apps/auth/models.py:326
+#: apps/auth/models.py:331
 msgid "understand enough"
 msgstr ""
 
-#: apps/auth/models.py:327
+#: apps/auth/models.py:332
 msgid "understand 99%"
 msgstr ""
 
-#: apps/auth/models.py:328
+#: apps/auth/models.py:333
 msgid "write like a native"
 msgstr ""
 
-#: apps/auth/models.py:333
+#: apps/auth/models.py:338
 msgid "follow requests in language"
 msgstr ""
 
-#: apps/auth/models.py:348
+#: apps/auth/models.py:353
 msgid ""
 "This is date when start to display announcement. And only the last will be "
 "displayed."
 msgstr ""
 
-#: apps/auth/models.py:446
+#: apps/auth/models.py:451
 msgid "e-mail confirmation"
 msgstr ""
 
-#: apps/auth/models.py:447
+#: apps/auth/models.py:452
 msgid "e-mail confirmations"
 msgstr ""
 
@@ -406,15 +410,15 @@ msgstr ""
 msgid "Email is confirmed."
 msgstr ""
 
-#: apps/auth/views.py:58
+#: apps/auth/views.py:61
 msgid "Confirmation email was sent."
 msgstr ""
 
-#: apps/auth/views.py:60
+#: apps/auth/views.py:63
 msgid "You email is empty or already confirmed."
 msgstr ""
 
-#: apps/auth/views.py:108
+#: apps/auth/views.py:111
 msgid "Your account was deleted."
 msgstr ""
 
@@ -5842,10 +5846,6 @@ msgstr ""
 
 #: utils/translation_names.py:14
 msgid "Aragonese"
-msgstr ""
-
-#: utils/translation_names.py:15
-msgid "Armenian"
 msgstr ""
 
 #: utils/translation_names.py:16

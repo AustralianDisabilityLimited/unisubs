@@ -266,6 +266,7 @@ class TeamsApiV2Class(object):
 
         return real_tasks + ghost_tasks
 
+
     def task_assign(self, task_id, assignee_id, user):
         '''Assign a task to the given user, or unassign it if null/None.'''
         task = Task.objects.get(pk=task_id)

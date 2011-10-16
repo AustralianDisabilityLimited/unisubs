@@ -16,12 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
 from django.contrib import admin
 from teams.models import Team, TeamMember, TeamVideo, Workflow, Task
 from videos.models import SubtitleLanguage
@@ -116,7 +110,7 @@ class WorkflowAdmin(admin.ModelAdmin):
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'type', 'team', 'team_video', 'language',
-                    'assignee', 'created', 'completed')
+                    'assignee', 'completed', 'deleted')
     list_filter = ('type', 'deleted', 'created', 'modified', 'completed')
     search_fields = ('assignee__username', 'team__name', 'assignee__first_name',
                      'assignee__last_name', 'team_video__title',

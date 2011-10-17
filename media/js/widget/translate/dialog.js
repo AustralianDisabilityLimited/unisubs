@@ -59,22 +59,17 @@ unisubs.translate.Dialog.prototype.createDom = function() {
 unisubs.translate.Dialog.prototype.createRightPanel_ = function() {
     var title = this.subtitleState_.VERSION > 0 ? 
         "Editing Translation" : "Adding a New Translation";
-
-    var helpParagraphs = [
-        ["Thanks for volunteering to translate! Your translation will be available to ",
-         "everyone watching the video in our widget."].join(''),
-        ["Please translate each line, one by one, in the white  ", 
-         "space below each line."].join(''),
-        ["If you need to rearrange the order of words or split a phrase ",
-         "differently, that's okay."].join(''),
-        ["As you're translating, you can use the \"TAB\" key to advance to ",
-         "the next line, and \"Shift-TAB\" to go back."].join('')
-    ];
-    if (this.subtitleState_.GUIDELINES) {
-        helpParagraphs.push(this.subtitleState_.GUIDELINES);
-    }
-    var helpContents = new unisubs.RightPanel.HelpContents(title, helpParagraphs);
-
+    var helpContents = new unisubs.RightPanel.HelpContents(
+        title,
+        [["Thanks for volunteering to translate! Your translation will be available to ",
+"everyone  watching the video in our widget."].join(''),
+         ["Please translate each line, one by one, in the white  ", 
+          "space below each line."].join(''),
+         ["If you need to rearrange the order of words or split a phrase ",
+          "differently, that's okay."].join(''),
+         ["As you're translating, you can use the \"TAB\" key to advance to ",
+          "the next line, and \"Shift-TAB\" to go back."].join('')
+        ]);
     var extraHelp = [
         ["Google Translate", "http://translate.google.com/"],
         ["List of dictionaries", "http://yourdictionary.com/languages.html"],

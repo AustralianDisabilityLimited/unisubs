@@ -30,12 +30,11 @@ goog.inherits(unisubs.streamer.StreamBox, goog.ui.Component);
 
 unisubs.streamer.StreamBox.prototype.createDom = function() {
     unisubs.streamer.StreamBox.superClass_.createDom.call(this);
-    console.log('createDom');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.transcriptElem_ = $d('div', 'unisubs-transcript');
     var substreamerElem = 
         $d('div', 'unisubs-substreamer',
-           $d('div', 'unisubs-controls', 
+           $d('div', 'unisubs-substreamer-controls', 
               $d('ul', null, 
                  $d('li', null,
                     $d('a', { 'href': '#' },

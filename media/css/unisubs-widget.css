@@ -3475,3 +3475,100 @@ label[for="unisubs-request-track"]{
   font-weight: bold;
   color: #c03 !important;
 }
+
+div.unisubs-substreamer {
+   width: 600px !important;
+}
+
+div.unisubs-substreamer div.unisubs-substreamer-controls {
+   position: relative !important;
+   height: 28px !important;
+   margin-top: -5px !important;
+   padding: 5px !important;
+   background-color: #ebebeb !important;
+   background: -moz-linear-gradient(
+      top,
+         hsla(0, 0%, 96%, 1),
+            hsla(0, 0%, 92%, 1) 20%,
+               hsla(0, 0%, 92%, 1)
+      ) !important;
+   background: -webkit-gradient(
+      linear,
+         left top,
+            left bottom,
+               color-stop(0, hsla(0, 0%, 96%, 1)),
+                  color-stop(.2, hsla(0, 0%, 92%, 1)),
+                     color-stop(1, hsla(0, 0%, 92%, 1))
+      ) !important;
+   border: 1px solid #ddd !important;
+   border-bottom: none !important;
+   font-size: 12px !important;
+}
+
+.unisubs-substreamer-controls ul {
+   display: inline !important;
+   list-style: none !important;
+   padding: 0 !important;
+}
+
+.unisubs-substreamer-controls ul a {
+   float: left !important;
+   display: block !important;
+   padding: 7px 5px !important;
+   text-decoration: none !important;
+   color: #666 !important;
+}
+
+.unisubs-substreamer-controls ul a#edit-link {
+   margin: -5px 0 -5px 5px !important;
+   padding: 14px 10px 10px 12px !important;
+   border-left: 1px solid #d3d3d3 !important;
+   color: #aaa !important;
+}
+
+.unisubs-substreamer-controls ul a#unisubs-logo {
+   margin: -5px 5px -5px 0 !important;
+   padding: 12px 10px 8px 5px !important;
+   border-right: 1px solid #d3d3d3 !important;
+}
+
+.unisubs-substreamer-controls input {
+   position: absolute !important;
+   right: 5px !important;
+   border: 1px solid #ddd !important;
+   padding: 4px !important;
+   -moz-border-radius: 3px !important;
+   -webkit-border-radius: 3px !important;
+   border-radius: 3px !important;
+   color: #888 !important;
+}
+
+div.unisubs-transcript {
+   clear: both !important;
+   font-size: 13px !important;
+   line-height: 225% !important;
+   padding: 15px 50px !important;
+   height: 225px !important;
+   overflow: auto !important;
+   border: 1px solid #ddd !important;
+   background-color: #fff !important;
+}
+
+div.unisubs-transcript .unisubs-sub-current {
+   color: #232323 !important;
+   border: 1px solid #cfd9e5 !important;
+   background-color: #d9ebff !important;
+   padding: 5px 2px !important;
+   margin: -5px -2px !important;
+   -moz-border-radius: 5px !important;
+   -webkit-border-radius: 5px !important;
+   border-radius: 5px !important;
+}
+
+div.unisubs-transcript .unisubs-search {
+   background-color: #f66 !important;
+}
+
+div.unisubs-transcript .highlighted {
+   background-color: #fcc !important;
+}

@@ -17,11 +17,13 @@ USE_THREADED_THUMBNAIL_CREATING = getattr(settings, 'USE_THREADED_THUMBNAIL_CREA
 
 def create_thumbnails(obj, content, size=None, thumb_name=None):
     sizes = size and [size] or obj.field.thumb_sizes
-    
+
     for size in sizes:
         img = StringIO()
         content.seek(0)
-        Thumbnail(StringIO(content.read(content.size)), size, dest=img, opts=obj.field.thumb_options)
+        if not isinstance(content, StringIO):
+            content = StringIO(content.read(content.size))
+        Thumbnail(content, size, dest=img, opts=obj.field.thumb_options)
         th_name = thumb_name or obj.build_thumbnail_name(obj.name, size)
         obj.storage.save(th_name, ContentFile(img.read()))
 
@@ -93,7 +95,7 @@ class S3EnabledImageField(models.ImageField):
 
     attr_class = S3ImageFieldFile
     
-    def __init__(self, bucket=settings.DEFAULT_BUCKET, 
+    def __init__(self, bucket=settings.AWS_USER_DATA_BUCKET_NAME, 
                        thumb_sizes=THUMB_SIZES, thumb_options=dict(crop='smart', upscale=True), 
                        verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
         self.thumb_sizes = thumb_sizes
@@ -103,7 +105,7 @@ class S3EnabledImageField(models.ImageField):
         if settings.USE_AMAZON_S3:
             self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
             
-            if self.bucket_name == settings.DEFAULT_BUCKET:
+            if self.bucket_name == settings.AWS_USER_DATA_BUCKET_NAME:
                 from utils.amazon import default_s3_store
                 storage = default_s3_store
                 self.bucket = storage.bucket
@@ -119,13 +121,13 @@ class S3EnabledImageField(models.ImageField):
     
 class S3EnabledFileField(models.FileField):
     
-    def __init__(self, bucket=settings.DEFAULT_BUCKET, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
+    def __init__(self, bucket=settings.AWS_USER_DATA_BUCKET_NAME, verbose_name=None, name=None, upload_to='', storage=None, **kwargs):
         self.bucket_name = bucket
         
         if settings.USE_AMAZON_S3:
             self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
             
-            if self.bucket_name == settings.DEFAULT_BUCKET:
+            if self.bucket_name == settings.AWS_USER_DATA_BUCKET_NAME:
                 from utils.amazon import default_s3_store
                 storage = default_s3_store
                 self.bucket = storage.bucket
@@ -145,7 +147,7 @@ add_introspection_rules([
         [S3EnabledImageField, S3EnabledFileField], 
         [],
         {   
-            "bucket": ["bucket_name", {"default": settings.DEFAULT_BUCKET}]
+            "bucket": ["bucket_name", {"default": settings.AWS_USER_DATA_BUCKET_NAME}]
         },
     ),
 ], ["^utils\.amazon\.fields"])

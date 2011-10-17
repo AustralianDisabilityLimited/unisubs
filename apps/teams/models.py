@@ -1150,7 +1150,7 @@ class Task(models.Model):
                  'Translate': self._complete_translate,
                  'Review': self._complete_review,
                  'Approve': self._complete_review,
-        }[Task.TASK_NAMES[self.type]]()
+        }[Task.TYPE_NAMES[self.type]]()
 
     def _complete_subtitle(self):
         # Normally we would create the next task in the sequence here, but since

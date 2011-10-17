@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from django.contrib import admin
-from teams.models import Team, TeamMember, TeamVideo, Workflow, Task
+from teams.models import Team, TeamMember, TeamVideo, Workflow, Task, Setting
 from videos.models import SubtitleLanguage
 from django.utils.translation import ugettext_lazy as _
 from messages.forms import TeamAdminPageMessageForm
@@ -118,9 +118,17 @@ class TaskAdmin(admin.ModelAdmin):
     raw_id_fields = ('team_video', 'team', 'assignee')
     ordering = ('-created',)
 
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'team', 'key', 'created', 'modified')
+    list_filter = ('key', 'created', 'modified')
+    search_fields = ('team__name',)
+    raw_id_fields = ('team',)
+    ordering = ('-created',)
+
 
 admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(TeamVideo, TeamVideoAdmin)
 admin.site.register(Workflow, WorkflowAdmin)
 admin.site.register(Task, TaskAdmin)
+admin.site.register(Setting, SettingAdmin)

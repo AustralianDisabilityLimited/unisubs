@@ -248,5 +248,45 @@ This is needed, since it's for the js templating
     </div>
 </script>
 
+<script id="guidelinesPanel" type="text/html">
+    <div class="panel-guidelines">
+        <form id="guidelines_messages_form">
+            <div class="messages">
+                <h3>Custom messages</h3>
+                <p class="description">
+                    Customize the messages sent to your users.
+                    The text you enter will preceed the default system message.
+                </p>
+
+                <label for="id_messages_join">When a member joins the team</label><br/>
+                <textarea id="id_messages_join" name="messages_join"></textarea><br/>
+
+                <label for="id_messages_manager">When a member is given the Manager role</label><br/>
+                <textarea id="id_messages_manager" name="messages_manager"></textarea><br/>
+
+                <label for="id_messages_admin">When a member is given the Admin role</label><br/>
+                <textarea id="id_messages_admin" name="messages_admin"></textarea><br/>
+            </div>
+            <div class="guidelines">
+                <h3>Guidelines</h3>
+                <p class="description">
+                    Add guidelines to be displayed to your users when completing tasks.
+                </p>
+
+                <label for="id_guidelines_subtitle">When creating subtitles</label><br/>
+                <textarea id="id_guidelines_subtitle" name="guidelines_subtitle"></textarea><br/>
+
+                <label for="id_guidelines_translate">When translating</label><br/>
+                <textarea id="id_guidelines_translate" name="guidelines_translate"></textarea><br/>
+
+                <label for="id_guidelines_review">When reviewing</label><br/>
+                <textarea id="id_guidelines_review" name="guidelines_review"></textarea><br/>
+            </div>
+
+            <input type="submit" class="submit" value="Save Changes" name="save" />
+        </form>
+    </div>
+</script>
+
 {% endverbatim %}
 {% endblock %}

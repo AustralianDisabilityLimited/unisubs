@@ -18,7 +18,7 @@
 
 from collections import defaultdict
 from auth.models import CustomUser as User
-from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task
+from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task, Setting
 from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
@@ -31,7 +31,7 @@ from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
-from teams.forms import TaskAssignForm, TaskDeleteForm
+from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm
 from teams.project_forms import ProjectForm
 
 class TeamsApiClass(object):
@@ -209,6 +209,7 @@ class TeamsApiV2Class(object):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
 
 
+    # Tasks
     def tasks_languages_list(self, team_slug, user):
         languages = filter(None, Task.objects.filter(team__slug=team_slug,
                                                      deleted=False)
@@ -345,6 +346,7 @@ class TeamsApiV2Class(object):
         return task.to_dict()
 
 
+    # Workflows
     def workflow_get(self, team_slug, project_id, team_video_id, user):
         if team_video_id:
             target_id, target_type = team_video_id, 'team_video'
@@ -379,6 +381,7 @@ class TeamsApiV2Class(object):
         return workflow.to_dict()
 
 
+    # Projects
     def project_list(self, team_slug,  project_pk, user):
         team, project = _user_can_edit_project(team_slug, project_pk, user)
         project_objs = []
@@ -427,7 +430,28 @@ class TeamsApiV2Class(object):
             isRemoval=True
         )
 
-                
+
+    # Guidelines and messages
+    def guidelines_get(self, team_slug, user):
+        team = Team.objects.get(slug=team_slug)
+        return [{'key': s.key_name, 'data': s.data} for s in team.settings.all()
+                if s.key_name.startswith('messages_')
+                or s.key_name.startswith('guidelines_')]
+
+    def guidelines_set(self, team_slug, data, user):
+        team = Team.objects.get(slug=team_slug)
+
+        form = GuidelinesMessagesForm(data)
+        if form.is_valid():
+            for key, val in form.cleaned_data.items():
+                setting, created = Setting.objects.get_or_create(
+                        team=team, key=Setting.KEY_IDS[key])
+                setting.data = val
+                setting.save()
+
+            return {}
+        else:
+            return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
 
 TeamsApiV2 = TeamsApiV2Class()

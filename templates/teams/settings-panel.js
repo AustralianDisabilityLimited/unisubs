@@ -57,55 +57,6 @@ var BaseModel = Class.$extend({
 
 var ProjectModel = BaseModel.$extend({});
 
-var TaskModel = Class.$extend({
-    __init__: function(data) {
-        this.pk = data.pk;
-        this.language = data.language;
-        this.languageDisplay = data.language_display;
-        this.teamVideo = data.team_video;
-        this.teamVideoDisplay = data.team_video_display;
-        this.teamVideoUrl = data.team_video_url;
-        this.assignee = data.assignee;
-        this.assigneeDisplay = data.assignee_display;
-        this.completed = data.completed;
-        this.type = data.type;
-        this.ghost = data.ghost;
-        this.teamSlug = TEAM_SLUG;
-        this.performAllowed = data.perform_allowed;
-        this.performUrl = PERFORM_TASK_URL;
-        this.assignAllowed = USER_CAN_ASSIGN_TASK;
-        this.deleteAllowed = USER_CAN_DELETE_TASK;
-        this.steps = function() {
-            var step = { 'Subtitle': 0,
-                         'Translate': 2,
-                         'Review': 4,
-                         'Approve': 6
-            }[this.type];
-            if (this.assignee) {
-                step += 1
-            }
-
-            return _.map(_.range(0, 7), function(i) {
-                return { 'done': i < step ? true : false };
-            });
-        };
-        if (this.assignee) {
-            this.stepDisplay = {
-                'Subtitle': 'Subtitling in Progress',
-                'Translate': 'Translation in Progress',
-                'Review': 'Review in Progress',
-                'Approve': 'Approval in Progress'
-            }[this.type];
-        } else {
-            this.stepDisplay = {
-                'Subtitle': 'Needs Subtitles',
-                'Translate': 'Needs Translation',
-                'Review': 'Needs Review',
-                'Approve': 'Needs Approval'
-            }[this.type];
-        }
-    }
-});
 
 var ProjectEditPanel = Class.$extend({
      __init__: function(pModel){
@@ -328,6 +279,97 @@ var ProjectPanel  = AsyncPanel.$extend({
     }
 });
 
+// Guidelines and Messages ----------------------------------------------------
+var GuidelinesPanel  = AsyncPanel.$extend({
+    __init__: function() {
+        // Rebind functions
+        this.onSubmit = _.bind(this.onSubmit, this);
+        this.onLoaded = _.bind(this.onLoaded, this);
+
+        // Render template
+        this.el = ich.guidelinesPanel();
+
+        // Bind events
+        $('form', this.el).submit(this.onSubmit);
+
+        // Load initial data
+        TeamsApiV2.guidelines_get(TEAM_SLUG, this.onLoaded);
+
+        // Constants
+        this.SETTING_KEYS = [
+            'messages_join', 'messages_manager', 'messages_admin',
+            'guidelines_subtitle', 'guidelines_translate', 'guidelines_review'
+        ];
+    },
+
+    onSubmit: function(e) {
+        e.preventDefault();
+
+        var data = {};
+        _.each(this.SETTING_KEYS, function(key) {
+            data[key] = $('#id_' + key, this.el).val();
+        });
+
+        TeamsApiV2.guidelines_set(TEAM_SLUG, data, this.onLoaded);
+    },
+    onLoaded: function(data) {
+        _.each(data, function(setting) {
+            $('#id_' + setting.key, this.el).val(setting.data);
+        }, this);
+    }
+});
+
+
+// Tasks ----------------------------------------------------------------------
+var TaskModel = Class.$extend({
+    __init__: function(data) {
+        this.pk = data.pk;
+        this.language = data.language;
+        this.languageDisplay = data.language_display;
+        this.teamVideo = data.team_video;
+        this.teamVideoDisplay = data.team_video_display;
+        this.teamVideoUrl = data.team_video_url;
+        this.assignee = data.assignee;
+        this.assigneeDisplay = data.assignee_display;
+        this.completed = data.completed;
+        this.type = data.type;
+        this.ghost = data.ghost;
+        this.teamSlug = TEAM_SLUG;
+        this.performAllowed = data.perform_allowed;
+        this.performUrl = PERFORM_TASK_URL;
+        this.assignAllowed = USER_CAN_ASSIGN_TASK;
+        this.deleteAllowed = USER_CAN_DELETE_TASK;
+        this.steps = function() {
+            var step = { 'Subtitle': 0,
+                         'Translate': 2,
+                         'Review': 4,
+                         'Approve': 6
+            }[this.type];
+            if (this.assignee) {
+                step += 1
+            }
+
+            return _.map(_.range(0, 7), function(i) {
+                return { 'done': i < step ? true : false };
+            });
+        };
+        if (this.assignee) {
+            this.stepDisplay = {
+                'Subtitle': 'Subtitling in Progress',
+                'Translate': 'Translation in Progress',
+                'Review': 'Review in Progress',
+                'Approve': 'Approval in Progress'
+            }[this.type];
+        } else {
+            this.stepDisplay = {
+                'Subtitle': 'Needs Subtitles',
+                'Translate': 'Needs Translation',
+                'Review': 'Needs Review',
+                'Approve': 'Needs Approval'
+            }[this.type];
+        }
+    }
+});
 var TaskListItem = Class.$extend({
     __init__: function(model, parent) {
         // Rebind functions
@@ -476,8 +518,7 @@ var TasksTypesList = Class.$extend({
         this.parent.reloadTasks();
     }
 });
-
-var TasksPanel  = AsyncPanel.$extend({
+var TasksPanel = AsyncPanel.$extend({
     __init__: function() {
         // Rebind functions
         this.onTasksListLoaded = _.bind(this.onTasksListLoaded, this);
@@ -535,6 +576,7 @@ var TasksPanel  = AsyncPanel.$extend({
     }
 });
 
+// Main -----------------------------------------------------------------------
 var TabMenuItem = Class.$extend({
     __init__: function (data){
         this.el = ich.subMenuItem(data)[0];
@@ -562,7 +604,6 @@ var TabMenuItem = Class.$extend({
     }
 });
 
-
 var TabViewer = Class.$extend({
     __init__: function(buttons, menuContainer, panelContainer){
         this.menuItems = _.map(buttons, function(x){
@@ -570,7 +611,7 @@ var TabViewer = Class.$extend({
             $(menuContainer).append(item.el);
             return item;
         })
-            
+
         $(menuContainer).click(_.bind(this.onClick, this));
         this.panelContainer = panelContainer;
     },
@@ -656,7 +697,7 @@ var ConfirmationDialog = Class.$extend({
 function boostrapTabs(){
     var buttons = [
         {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
-        {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:null},
+        {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:GuidelinesPanel},
         {label:"Display Settings", panelSelector:".panel-display", klass:null},
         {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel},
         {label:"Tasks", panelSelector:".panel-tasks", klass:TasksPanel}

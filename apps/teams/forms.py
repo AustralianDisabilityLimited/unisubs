@@ -16,12 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
 from auth.models import CustomUser as User
 from django import forms
 from teams.models import Team, TeamMember, TeamVideo, Task
@@ -387,3 +381,13 @@ class TaskDeleteForm(forms.Form):
         # TODO: check that self.user has permission to delete the task
 
         return task
+
+
+class GuidelinesMessagesForm(forms.Form):
+    messages_join = forms.CharField(max_length=1024, required=False)
+    messages_manager = forms.CharField(max_length=1024, required=False)
+    messages_admin = forms.CharField(max_length=1024, required=False)
+
+    guidelines_subtitle = forms.CharField(max_length=1024, required=False)
+    guidelines_translate = forms.CharField(max_length=1024, required=False)
+    guidelines_review = forms.CharField(max_length=1024, required=False)

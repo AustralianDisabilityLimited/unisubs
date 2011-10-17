@@ -1180,3 +1180,34 @@ class Task(models.Model):
 
     def _complete_approve(self):
         pass
+
+
+class Setting(models.Model):
+    KEY_CHOICES = (
+        (100, 'messages_join'),
+        (101, 'messages_manager'),
+        (102, 'messages_admin'),
+        (200, 'guidelines_subtitle'),
+        (201, 'guidelines_translate'),
+        (202, 'guidelines_review'),
+    )
+    KEY_NAMES = dict(KEY_CHOICES)
+    KEY_IDS = dict([choice[::-1] for choice in KEY_CHOICES])
+
+    key = models.PositiveIntegerField(choices=KEY_CHOICES)
+    data = models.TextField(blank=True)
+    team = models.ForeignKey(Team, related_name='settings')
+
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    modified = models.DateTimeField(auto_now=True, editable=False)
+
+    class Meta:
+        unique_together = (('key', 'team'),)
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.team, self.key_name)
+
+    @property
+    def key_name(self):
+        return Setting.KEY_NAMES[self.key]
+

@@ -532,6 +532,17 @@ You will not see your subtitles in our widget when you leave this page, they wil
         latest_version = language.latest_version()
         if latest_version is None or version_no >= latest_version.version_no:
             is_latest = True
+
+        guidelines = None
+        teams = list(version.video.team_set.all()[:1])
+        if teams:
+            from apps.teams.models import Setting
+            key = 'guidelines_subtitle' if language.is_original else 'guidelines_translate'
+            try:
+                guidelines = teams[0].settings.get(key=Setting.KEY_IDS[key]).data
+            except Setting.DoesNotExist:
+                pass
+
         return self._make_subtitles_dict(
             [s.__dict__ for s in version.subtitles()],
             language.language,
@@ -542,7 +553,8 @@ You will not see your subtitles in our widget when you leave this page, they wil
             is_latest,
             version.is_forked or force_forked,
             base_language,
-            language.get_title())
+            language.get_title(),
+            guidelines)
 
 def language_summary( language):
     summary = {

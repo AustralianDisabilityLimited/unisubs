@@ -40,6 +40,7 @@ unisubs.widget.SubtitleState = function(json, opt_subs) {
     this.BASE_LANGUAGE_PK = json['base_language_pk'];
     this.IS_LATEST = json['is_latest'];
     this.TITLE = json['title'];
+    this.GUIDELINES = json['guidelines'];
 };
 
 unisubs.widget.SubtitleState.fromJSON = function(json) {

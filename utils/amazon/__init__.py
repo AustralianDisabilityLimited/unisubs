@@ -20,6 +20,7 @@ from django.core.files import File
 from fields import S3EnabledImageField, S3EnabledFileField
 from django.core.mail import mail_admins
 from sentry.client.models import client
+from StringIO import StringIO
 import os
 
 __all__ = ['S3EnabledImageField', 'S3EnabledFileField', 'S3Storage']
@@ -48,8 +49,20 @@ class S3Storage(FileSystemStorage):
 
     def _open(self, name, mode='rb'):
         class S3File(File):
-            def __init__(self, key):
+            
+            def __init__(self, key, mode):
                 self.key = key
+                self._file = None
+                self._mode = mode
+                
+            @property
+            def file(self):
+                if self._file is None:
+                    self._file = StringIO()
+                    if 'r' in self._mode:
+                        self.key.get_contents_to_file(self._file)
+                        self._file.seek(0)
+                return self._file            
             
             def size(self):
                 return self.key.size
@@ -62,7 +75,7 @@ class S3Storage(FileSystemStorage):
             
             def close(self):
                 self.key.close()  
-        return S3File(Key(self.bucket, name))
+        return S3File(Key(self.bucket, name), mode)
 
     def _save(self, name, content):
         name = name.replace('\\', '/')

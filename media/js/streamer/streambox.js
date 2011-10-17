@@ -22,15 +22,44 @@ goog.provide('unisubs.streamer.StreamBox');
  * @constructor
  */
 unisubs.streamer.StreamBox = function() {
-    goog.events.EventTarget.call(this);
+    goog.ui.Component.call(this);
     this.subMap_ = null;
     this.displayedSub_ = null;
 };
-goog.inherits(unisubs.streamer.StreamBox, goog.events.EventTarget);
+goog.inherits(unisubs.streamer.StreamBox, goog.ui.Component);
 
+unisubs.streamer.StreamBox.prototype.createDom = function() {
+    unisubs.streamer.StreamBox.superClass_.createDom.call(this);
+    console.log('createDom');
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    this.transcriptElem_ = $d('div', 'unisubs-transcript');
+    var substreamerElem = 
+        $d('div', 'unisubs-substreamer',
+           $d('div', 'unisubs-controls', 
+              $d('ul', null, 
+                 $d('li', null,
+                    $d('a', { 'href': '#' },
+                       $d('img', { 'src': 'http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png' } ))))),
+           this.transcriptElem_);
+    goog.dom.append(this.getElement(), substreamerElem);
+};
 
+unisubs.streamer.StreamBox.prototype.setSubtitles = function(subtitles) {
+    var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
+    var subSpans = goog.array.map(
+        subtitles,
+        function(s) {
+            return $d(
+                'span', 
+                { 'className': 'unisubs-sub',
+                  'id': 'usub-a-' + s['subtitle_id'] },
+                s['text']);
+        });
+    goog.dom.append(this.transcriptElem_, subSpans);
+    this.makeSubsAndSubMap_(subSpans);
+};
 
-unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
+unisubs.streamer.StreamBox.prototype.decorateContainer = function(elem) {
     this.elem_ = elem;
     this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
         'div', 'unisubs-transcript', elem)[0];
@@ -43,6 +72,10 @@ unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
         goog.bind(this.handleSearchKey_, this));
     var subSpans = goog.dom.getElementsByTagNameAndClass(
         'span', 'unisubs-sub', elem);
+    this.makeSubsAndSubMap_(subSpans);
+};
+
+unisubs.streamer.StreamBox.prototype.makeSubsAndSubMap_ = function(subSpans) {
     this.subs_ = goog.array.map(
         subSpans, function(s) { 
             return new unisubs.streamer.StreamSub(s); 

@@ -212,6 +212,9 @@ JS_CORE = \
      'js/startdialog/tolanguage.js',
      'js/startdialog/tolanguages.js',
      'js/startdialog/dialog.js',
+     'js/streamer/streamercontroller.js', 
+     'js/streamer/streambox.js', 
+     'js/streamer/streamsub.js', 
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
@@ -315,9 +318,6 @@ JS_WIDGETIZER_CORE.extend([
     'js/player/brightcoveliteplayer.js', 
     'js/player/soundcloudplayer.js', 
     'js/streamer/streamerdecorator.js', 
-    'js/streamer/streamercontroller.js', 
-    'js/streamer/streambox.js', 
-    'js/streamer/streamsub.js', 
     'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)

@@ -167,6 +167,7 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     if (this.streamer_) {
         this.streamBox_ = new unisubs.streamer.StreamBox();
         var streamerContainer = new goog.ui.Component();
+        this.addChild(streamerContainer, true);
         streamerContainer.addChild(this.streamBox_, true);
         // TODO: show loading?
     }
@@ -185,6 +186,7 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     };
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;
+    console.log('calling show_widget');
     unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.initializeState_, this),
@@ -256,6 +258,9 @@ unisubs.widget.Widget.prototype.initializeStateTab_ = function(result) {
 };
 
 unisubs.widget.Widget.prototype.initializeStateStreamer_ = function(result) {
+    var subtitleState = unisubs.widget.SubtitleState.fromJSON(
+        result['subtitles']);
+    this.streamBox_.setSubtitles(subtitleState.SUBTITLES);
     var controller = new unisubs.streamer.StreamerController(
         this.videoPlayer_, this.streamBox_);
     controller.initializeState(result);

@@ -25,8 +25,8 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var streamBox = new unisubs.streamer.StreamBox();
     var videoElem = videoPlayer.getElement();
     var captionBoxElem = 
-        unisubs.streamer.StreamerDecorator.getUnisubsElem_(videoElem);
-    streamBox.decorate(captionBoxElem);
+        unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoElem);
+    streamBox.decorateContainer(captionBoxElem);
     var controller = new unisubs.streamer.StreamerController(
         videoPlayer, streamBox);
     var args = {
@@ -40,17 +40,17 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
 
 unisubs.streamer.StreamerDecorator.makeOverlayStreamer_ = function(videoPlayer) {
     var controller = new unisubs.streamer.OverlayController(
-        videoPlayer, unisubs.streamer.StreamerDecorator.getSTElem_());
+        videoPlayer, unisubs.streamer.StreamerDecorator.getSpeakerTextElem_());
 };
 
-unisubs.streamer.StreamerDecorator.getUnisubsElem_ = function(videoPlayer) {
+unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_ = function(videoPlayer) {
     // TODO: walk dom to get this in the future in case there's more than one per page.
     var elems = goog.dom.getElementsByTagNameAndClass(
         'div', 'unisubs-substreamer');
     return elems.length > 0 ? elems[0] : null;
 };
 
-unisubs.streamer.StreamerDecorator.getSTElem_ = function(videoPlayer) {
+unisubs.streamer.StreamerDecorator.getSpeakerTextElem_ = function(videoPlayer) {
     // TODO: walk dom to get this in the future in case there's more than one per page.
     var elems = goog.dom.getElementsByTagNameAndClass(
         'div', 'STembedWrapper');
@@ -63,7 +63,7 @@ unisubs.streamer.StreamerDecorator.getSTElem_ = function(videoPlayer) {
  *     be attached to page.
  */
 unisubs.streamer.StreamerDecorator.decorate = function(videoPlayer) {
-    if (unisubs.streamer.StreamerDecorator.getUnisubsElem_(videoPlayer)) {
+    if (unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoPlayer)) {
         unisubs.streamer.StreamerDecorator.makeStreamer_(videoPlayer);
     }
     else {

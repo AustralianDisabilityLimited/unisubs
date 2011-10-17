@@ -30,7 +30,7 @@ media/js/js-base-dependencies.js
 media/js/js-moderation-dashboard.js
 media/js/js-onsite-dialog.js
 media/js/js-testing-base.js
-media/static-cache/
+media/static-cache
 media/teams/*
 media/videos/*
 disabled
@@ -42,7 +42,7 @@ celerybeat-schedule
 /media/docs/*
 /media/video/thumbnail/*
 user-data/teams/*
-user-data/video/*
+user-data/video
 apps/services
 apps/servicesauth
 media/unisubservices

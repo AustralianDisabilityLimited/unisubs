@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<user>
+  <fullName>Craig Zheng</fullName>
+  <properties>
+    <hudson.model.MyViewsProperty>
+      <primaryViewName>All</primaryViewName>
+      <views>
+        <hudson.model.AllView>
+          <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
+          <name>All</name>
+          <filterExecutors>false</filterExecutors>
+          <filterQueue>false</filterQueue>
+        </hudson.model.AllView>
+      </views>
+    </hudson.model.MyViewsProperty>
+    <hudson.plugins.jabber.user.JabberUserProperty/>
+    <hudson.plugins.ircbot.IrcUserProperty/>
+    <hudson.security.HudsonPrivateSecurityRealm_-Details>
+      <passwordHash>bhnhWT:79f6914cfc8f56840f1428d867b9e09c5927f5823fc9e9bfa615084067e4d0ce</passwordHash>
+    </hudson.security.HudsonPrivateSecurityRealm_-Details>
+    <hudson.tasks.Mailer_-UserProperty>
+      <emailAddress>craig@pculture.org</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
+  </properties>
+</user>

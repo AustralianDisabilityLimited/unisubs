@@ -47,8 +47,11 @@ def confirm_email(request, confirmation_key):
         messages.error(request, _(u'Confirmation key expired.'))
     else:
         messages.success(request, _(u'Email is confirmed.'))
-        
-    return redirect(user)
+    
+    if request.user.is_authenticated():
+        return redirect('profiles:my_profile')
+    
+    return redirect('/')
 
 @login_required
 def resend_confirmation_email(request):

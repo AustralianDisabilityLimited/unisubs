@@ -28,6 +28,8 @@ unisubs.streamer.StreamBox = function() {
 };
 goog.inherits(unisubs.streamer.StreamBox, goog.events.EventTarget);
 
+
+
 unisubs.streamer.StreamBox.prototype.decorate = function(elem) {
     this.elem_ = elem;
     this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(

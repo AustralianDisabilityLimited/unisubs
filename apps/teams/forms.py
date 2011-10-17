@@ -18,7 +18,7 @@
 
 from auth.models import CustomUser as User
 from django import forms
-from teams.models import Team, TeamMember, TeamVideo, Task
+from teams.models import Team, TeamMember, TeamVideo, Task, Project
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -51,15 +51,25 @@ class EditTeamVideoForm(forms.ModelForm):
     creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'],
                                     help_text="Format: YYYY-MM-DD")
 
+    
+    project = forms.ModelChoiceField(
+        label=_(u'Project'),
+        queryset = Project.objects.none(),
+        required=True,
+        help_text=_(u"Let's keep things tidy, shall we?")
+    )
+                                             
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail')
+        fields = ('title', 'description', 'thumbnail', 'project',)
     
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
-
+        
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
 
+
+        self.fields['project'].queryset = self.instance.team.project_set.all()
         if feature_is_on("MODERATION"):
             self.should_add_moderation = self.should_remove_moderation = False
 

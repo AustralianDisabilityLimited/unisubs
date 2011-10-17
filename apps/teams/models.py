@@ -398,7 +398,6 @@ class ProjectManager(models.Manager):
             team = Team.objects.get(pk=team_identifier)
         elif isinstance(team_identifier, str):
             team = Team.objects.get(slug=team_identifier)
-        print "will exclude"    , team
         return Project.objects.filter(team=team).exclude(name=Project.DEFAULT_NAME)
     
 class Project(models.Model):
@@ -421,7 +420,9 @@ class Project(models.Model):
     objects = ProjectManager()
     
     def __unicode__(self):
-        return u"%s for team %s" % (self.name, self.team)
+        if self.is_default_project:
+            return u"---"
+        return u"%s" % (self.name)
 
     def save(self, slug=None,*args, **kwargs):
         self.modified = datetime.datetime.now()
@@ -429,6 +430,10 @@ class Project(models.Model):
         self.slug = pan_slugify(slug)
         super(Project, self).save(*args, **kwargs)
 
+    @property
+    def is_default_project(self):
+        return self.name == Project.DEFAULT_NAME
+        
     class Meta:
         unique_together = (
                 ("team", "name",),

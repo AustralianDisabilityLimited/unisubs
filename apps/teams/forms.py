@@ -37,6 +37,7 @@ from doorman import feature_is_on
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
 
+    
     class Meta:
         model = Team
         fields = ('logo',)
@@ -181,16 +182,24 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
                                  required=False,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
-    
+
+
+    project = forms.ModelChoiceField(
+        label=_(u'Project'),
+        queryset = Project.objects.none(),
+        required=True,
+        help_text=_(u"Let's keep things tidy, shall we?")
+    )
     class Meta:
         model = TeamVideo
-        fields = ('video_url', 'language', 'title', 'description', 'thumbnail')
+        fields = ('video_url', 'language', 'title', 'description', 'thumbnail', 'project',)
         
     def __init__(self, team, user, *args, **kwargs):
         self.team = team
         self.user = user
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['language'].choices = get_languages_list(True)
+        self.fields['project'].queryset = self.team.project_set.all()
 
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']

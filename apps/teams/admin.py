@@ -37,10 +37,14 @@ class TeamMemberInline(admin.TabularInline):
 class TeamAdmin(admin.ModelAdmin):
     inlines = [TeamMemberInline]
     search_fields = ('name'),
-    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight', 'last_notification_time')
+    list_display = ('name', 'membership_policy', 'video_policy', 'is_visible', 'highlight', 'last_notification_time', 'thumbnail')
     list_filter = ('highlight', 'is_visible')
     actions = ['highlight', 'unhighlight', 'send_message']
     raw_id_fields = ['video']
+    
+    def thumbnail(self, object):
+        return '<img src="%s"/>' % object.logo_thumbnail()
+    thumbnail.allow_tags = True
     
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}

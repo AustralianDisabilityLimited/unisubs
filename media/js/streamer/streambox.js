@@ -97,6 +97,29 @@ unisubs.streamer.StreamBox.prototype.handleSearchKey_ = function(e) {
             function(number, str) {
                 return '<span class="unisubs-search">' + str + '</span>';
             }, true);
+        if (searchText.length > 1) {
+            this.scrollToFirstAnnotated_();
+        }
+    }
+};
+
+unisubs.streamer.StreamBox.prototype.annotatedIsInView_ = function(annotatedSpan) {
+    var elementPos = goog.style.getPageOffset(annotatedSpan);
+    var containerPos = goog.style.getPageOffset(this.transcriptElem_);
+    return (elementPos.y >= containerPos.y && 
+            elementPos.y + annotatedSpan.offsetHeight <
+            containerPos.y + this.transcriptElem_.clientHeight);
+};
+
+unisubs.streamer.StreamBox.prototype.scrollToFirstAnnotated_ = function() {
+    var annotatedTerms = goog.dom.getElementsByTagNameAndClass(
+        'span', 'unisubs-search', this.transcriptElem_);
+    if (annotatedTerms.length > 0) {
+        var firstAnnotated = annotatedTerms[0];
+        if (!this.annotatedIsInView_(firstAnnotated)) {
+            goog.style.scrollIntoContainerView(
+                firstAnnotated, this.transcriptElem_, true);
+        }
     }
 };
 

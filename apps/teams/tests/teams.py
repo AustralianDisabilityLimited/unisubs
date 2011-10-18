@@ -26,7 +26,7 @@ import re
 
 from widget.tests import create_two_sub_session, RequestMockup
 
-LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z\-]+)_(.*)")
+LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z_\-]+)_(.*)")
 LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
 
 from apps.teams.tests.teamstestsutils import refresh_obj, reset_solr, rpc

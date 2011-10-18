@@ -1193,6 +1193,24 @@ class Task(models.Model):
         pass
 
 
+class SettingManager(models.Manager):
+    use_for_related_fields = True
+
+    def guidelines(self):
+        keys = [key for key, name in Setting.KEY_CHOICES
+                if name.startswith('guidelines_')]
+        return self.get_query_set().filter(key__in=keys)
+
+    def messages(self):
+        keys = [key for key, name in Setting.KEY_CHOICES
+                if name.startswith('messages_')]
+        return self.get_query_set().filter(key__in=keys)
+
+    def messages_guidelines(self):
+        keys = [key for key, name in Setting.KEY_CHOICES
+                if name.startswith('messages_') or name.startswith('guidelines_')]
+        return self.get_query_set().filter(key__in=keys)
+
 class Setting(models.Model):
     KEY_CHOICES = (
         (100, 'messages_join'),
@@ -1211,6 +1229,8 @@ class Setting(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(auto_now=True, editable=False)
+
+    objects = SettingManager()
 
     class Meta:
         unique_together = (('key', 'team'),)

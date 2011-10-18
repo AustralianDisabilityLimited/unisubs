@@ -74,6 +74,9 @@ unisubs.api.openUnisubsDialogWithSettings =
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
     if (config['returnURL'])
         unisubs.returnURL = config['returnURL'];
+    if (config['guidelines']) {
+        unisubs.guidelines = config['guidelines'];
+    }
     unisubs.IS_NULL = !!config['nullWidget'];
     var videoSource = 
         unisubs.player.MediaSource.videoSourceForURL(

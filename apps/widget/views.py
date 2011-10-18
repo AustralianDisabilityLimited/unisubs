@@ -19,6 +19,7 @@
 import time
 
 from django.http import HttpResponse, Http404, HttpResponseServerError
+from django.template.defaultfilters import urlize, linebreaks, force_escape
 from django.shortcuts import render_to_response, redirect
 from django.utils.http import cookie_date
 from django.contrib.sites.models import Site
@@ -34,7 +35,7 @@ from django.shortcuts import get_object_or_404
 from widget.rpc import add_general_settings
 from widget.rpc import Rpc
 from widget.null_rpc import NullRpc
-from django.utils.encoding import iri_to_uri, DjangoUnicodeDecodeError
+from django.utils.encoding import iri_to_uri
 from django.db.models import ObjectDoesNotExist
 from uslogging.models import WidgetDialogCall
 from auth.models import CustomUser
@@ -103,6 +104,15 @@ def onsite_widget(request):
 
         if not 'effectiveVideoURL' in config:
             config['effectiveVideoURL'] = video.get_video_url()
+
+        team_videos = list(video.teamvideo_set.all()[:1])
+        if team_videos:
+            config['guidelines'] = dict(
+                    [(s.key_name.split('_', 1)[-1],
+                      linebreaks(urlize(force_escape(s.data))))
+                     for s in team_videos[0].team.settings.guidelines()])
+        else:
+            config['guidelines'] = {}
 
     context['widget_params'] = json.dumps(config)
     general_settings = {}

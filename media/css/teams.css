@@ -229,7 +229,7 @@ p.notice {
   float: left;
   width: 100%;
   padding: 0;
-  border-bottom: 1px solid #e3e3e3;
+  border-bottom: 1px solid #e2e8e9;
 }
 
   .new-teams .tabs li {
@@ -241,17 +241,27 @@ p.notice {
     float: left;
     padding: 1em 2em;
     text-decoration: none;
+    color: #788b90;
+    border-style: solid;
+  }
+
+  .new-teams .tabs li a:hover {
+    border-bottom-width: 2px;
+    margin-bottom: -1px;
   }
 
   .new-teams .tabs li.current a {
-    color: #aaa;
+    color: #485b60;
+    font-weight: bold;
+    border-bottom-width: 2px;
+    margin-bottom: -1px;
   }
 
 .new-teams .omega {
   width: 199px;
   padding-left: 20px;
-  padding-bottom: 2em;
-  border-left: 1px solid #e3e3e3;
+  padding-bottom: 4em;
+  border-left: 1px solid #e2e8e9;
   background-color: #fff;
   background: -moz-linear-gradient(
       left,
@@ -275,11 +285,13 @@ p.notice {
 
   .new-teams .listing > li {
     position: relative;
-    padding: 1em 0;
-    min-height: 3em;
-    border-bottom: 1px dotted #ddd;
-    margin: 1em 0;
+    padding: 2em 1em;
+    border-bottom: 1px dotted #d2d8d9;
   }
+
+    .new-teams .video.listing li {
+      min-height: 3em;
+    }
 
   .new-teams .videos > li {
     padding-left: 120px;
@@ -292,7 +304,7 @@ p.notice {
   }
 
   .new-teams .listing h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
     .new-teams .listing h3 a {
@@ -306,7 +318,7 @@ p.notice {
 
   .new-teams .listing .thumb {
     position: absolute;
-    top: 1em; left: 0;
+    top: 2em; left: 0;
     overflow: hidden;
   }
 
@@ -326,12 +338,17 @@ p.notice {
     border-radius: 3px;
   }
 
-  .new-teams .listing li .actions {
+  .new-teams .listing li .actions, .new-teams .activity li .timestamp {
     position: absolute;
-    top: 1em; right: 0;
+    top: 2em; right: 0;
     width: 120px;
     padding: 0;
   }
+
+    .new-teams .activity li .timestamp {
+      text-align: right;
+      color: #98abb0;
+    }
 
   .new-teams .listing li .actions li {
     padding: 0;
@@ -356,10 +373,9 @@ p.notice {
 
   .new-teams .view-filter li a {
     display: block;
-    padding: .5em 0 .5em 20px;
+    padding: .75em 0 .75em 20px;
     margin-left: -20px;
     text-decoration: none;
-    color: #333;
     -webkit-border-top-right-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
     -moz-border-radius-topright: 5px;
@@ -370,7 +386,7 @@ p.notice {
   }
 
   .new-teams .view-filter li.current a {
-    background-color: #f5f5f5;
+    background-color: #edf1f2;
     background: -moz-linear-gradient(
       left,
       hsla(192, 15%, 90%, 1),
@@ -385,8 +401,44 @@ p.notice {
         color-stop(.05, hsla(192, 15%, 94%, 1)),
         color-stop(1, hsla(192, 15%, 94%, 1))
     );
-    padding: .75em 0 .75em 20px;
     color: #586b70;
+  }
+
+  .new-teams .view-filter li a:hover {
+    color: #384b50;
+    background-color: #f9fafb;
+    background: -moz-linear-gradient(
+      left,
+      hsla(192, 15%, 92%, 1),
+      hsla(192, 15%, 96%, 1) 5%,
+      hsla(192, 15%, 96%, 1)
+    );
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0, hsla(192, 15%, 92%, 1)),
+        color-stop(.05, hsla(192, 15%, 96%, 1)),
+        color-stop(1, hsla(192, 15%, 96%, 1))
+    );
+  }
+
+  .new-teams .view-filter li.current a:hover {
+    background-color: #e8ecee;
+    background: -moz-linear-gradient(
+      left,
+      hsla(192, 15%, 88%, 1),
+      hsla(192, 15%, 92%, 1) 5%,
+      hsla(192, 15%, 92%, 1)
+    );
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0, hsla(192, 15%, 88%, 1)),
+        color-stop(.05, hsla(192, 15%, 92%, 1)),
+        color-stop(1, hsla(192, 15%, 92%, 1))
+    );
   }
 
 .new-teams .button {
@@ -407,6 +459,63 @@ p.notice {
   font-size: .95em;
   color: #777;
 }
+
+.new-teams form {
+  padding: 2em 0;
+}
+
+  .new-teams form .secondary {
+    margin-left: 60px;
+  }
+
+  .new-teams form div.submit {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #e2e8e9;
+    text-align: right;
+  }
+
+  .new-teams form fieldset {
+    padding-bottom: 2em;
+  }
+
+  .new-teams form legend {
+    font-weight: bold;
+    padding-bottom: .5em;
+  }
+
+  .new-teams form input {
+    padding: 4px;
+  }
+
+  .new-teams form input[type="text"], .new-teams form textarea, .new-teams form label {
+    display: block;
+    width: 100%;
+  }
+
+  .new-teams form input[type="text"], .new-teams form textarea {
+    border: 1px solid #c2c8c9;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+  }
+
+    .new-teams form input[type='checkbox'] {
+      margin: 0 4px 0 0;
+    }
+
+    .new-teams form input[type='submit'] { }
+
+  .new-teams form select {
+    padding: 4px;
+    width: 100%;
+  }
+
+  .new-teams label {
+    margin-top: 2em;
+  }
+
+  
 
 
 /*~~~~~~~~~~ DASHBOARD ~~~~~~~~~~*/

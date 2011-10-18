@@ -434,9 +434,8 @@ class TeamsApiV2Class(object):
     # Guidelines and messages
     def guidelines_get(self, team_slug, user):
         team = Team.objects.get(slug=team_slug)
-        return [{'key': s.key_name, 'data': s.data} for s in team.settings.all()
-                if s.key_name.startswith('messages_')
-                or s.key_name.startswith('guidelines_')]
+        return [{'key': s.key_name, 'data': s.data}
+                for s in team.settings.messages_guidelines()]
 
     def guidelines_set(self, team_slug, data, user):
         team = Team.objects.get(slug=team_slug)

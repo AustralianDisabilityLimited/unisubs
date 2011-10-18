@@ -55,6 +55,24 @@ unisubs.translate.Dialog.prototype.createDom = function() {
             this.handleSaveAndExitKeyPress_);
     goog.dom.classes.add(this.getContentElement(),
                          'unisubs-modal-widget-translate');
+    this.showGuidelines_();
+};
+unisubs.translate.Dialog.prototype.showGuidelines_ = function() {
+    if (!unisubs.guidelines['translate']) {
+        return;
+    }
+
+    var guidelinesPanel = new unisubs.GuidelinesPanel(unisubs.guidelines['translate']);
+    this.showTemporaryPanel(guidelinesPanel);
+    this.displayingGuidelines_ = true;
+
+    var that = this;
+    this.getHandler().listenOnce(guidelinesPanel, unisubs.GuidelinesPanel.CONTINUE, function(e) {
+        goog.Timer.callOnce(function() {
+            that.displayingGuidelines_ = false;
+            that.hideTemporaryPanel();
+        });
+    });
 };
 unisubs.translate.Dialog.prototype.createRightPanel_ = function() {
     var title = this.subtitleState_.VERSION > 0 ? 

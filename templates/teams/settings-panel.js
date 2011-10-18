@@ -13,6 +13,16 @@ var PERFORM_TASK_URL = "{% url teams:perform_task %}";
 var USER_CAN_ASSIGN_TASK = {% if user_can_assign_tasks %}true{% else %}false{% endif %};
 var USER_CAN_DELETE_TASK = {% if user_can_delete_tasks %}true{% else %}false{% endif %};
 
+
+function captureEnterSubmit(form, callback){
+    $(form).keypress(function(e){
+        if (e.keyCode == 13){
+            callback();
+            return false;
+        }
+    });
+}
+
 var AsyncPanel = Class.$extend({
     load: function (url){
         var oldEl = $(this.el).children().remove();
@@ -87,6 +97,7 @@ var ProjectEditPanel = Class.$extend({
          }
          $(".project-save", this.el).click(this.onSaveClicked);
          $(".project-cancel", this.el).click(this.onCancel);
+         captureEnterSubmit($("form", this.el), this.onSaveClicked);
          
     },
     show: function(){
@@ -108,7 +119,7 @@ var ProjectEditPanel = Class.$extend({
 
     },
     onSaveClicked: function(e){
-        e.preventDefault();
+        if (e) e.preventDefault();
         var values = this.getValuesFromForm($("form", this.el));
         var wf = $("input[name='workflow_enabled']", $("form", this.el)).attr("checked");
         TeamsApiV2.project_edit(

@@ -203,7 +203,7 @@ var ProjectListItem = Class.$extend({
     __init__:function(model){
         var vel = this.el = ich.projectListItem(model);
         this.model = model;
-        $("a", this.el).click(function(e){
+        $("a.action-edit", this.el).click(function(e){
             e.preventDefault();
             vel.trigger("onEditRequested", model)
             return false;

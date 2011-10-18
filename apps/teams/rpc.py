@@ -23,6 +23,7 @@ from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
 
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from django.forms.models import model_to_dict
 from utils.rpc import Error, Msg, RpcRouter
@@ -109,7 +110,13 @@ def _user_can_edit_project(team_slug, project_pk, user):
 
 def _project_to_dict(p):
     d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk", "workflow_enabled"])
-    d.update({"pk":p.pk})
+    d.update({
+        "pk":p.pk,
+        "url": reverse("teams:project_video_list", kwargs={
+            "slug":p.team.slug,
+            "project_slug": p.slug,
+        })
+    })
     return d
 
 

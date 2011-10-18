@@ -283,7 +283,7 @@ class Team(models.Model):
         else:
             return TeamVideoLanguagesIndex.results().filter(team_id=self.id)
 
-    def get_videos_for_languages_haystack(self, languages, user=None):
+    def get_videos_for_languages_haystack(self, languages, project=None, user=None):
         from utils.multi_query_set import MultiQuerySet
 
         is_member = user and user.is_authenticated() and self.members.filter(user=user).exists()
@@ -300,7 +300,9 @@ class Team(models.Model):
                     pairs_0.append(self._lang_pair((l1, l0), "0"))
 
         qs_list = []
-        qs_list.append(self._filter(self._base_sqs(is_member), pairs_m))
+        
+        # FIXME do project filtering here
+        qs_list.append(self._filter(self._base_sqs(is_member), pairs_m ).filter(project_pk=project.pk))
         qs_list.append(self._exclude(self._filter(self._base_sqs(is_member), pairs_0), 
                                      pairs_m))
         qs_list.append(self._exclude(
@@ -318,7 +320,6 @@ class Team(models.Model):
         # this is way more efficient than making a count from all the
         # constituent querysets.
         mqs.set_count(self._base_sqs(is_member).count())
-
         return qs_list, mqs
 
     def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):

@@ -33,6 +33,9 @@
         <a href="{% url teams:completed_videos team.slug %}">{% trans "Completed Videos" %}</a>            
     </p>    
     {% endif %}
+    <p>
+        <a href="{% url teams:project_list slug=team.slug %}">{% trans "View All projects" %}</a>            
+    </p>    
     {% if team.description %}
     <h4>{% trans 'Team Description' %}</h4>
     <p>

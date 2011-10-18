@@ -31,6 +31,7 @@ class TeamVideoLanguagesIndex(SearchIndex):
     original_language_display = CharField(indexed=False)
     has_lingua_franca = BooleanField()
     absolute_url = CharField(indexed=False)
+    project_pk = IntegerField(indexed=True)
     # never store an absolute url with solr
     # since the url changes according to the user
     # one cannot construct the url at index time
@@ -88,7 +89,7 @@ class TeamVideoLanguagesIndex(SearchIndex):
         self.prepared_data['description'] = obj.description
         self.prepared_data['is_complete'] = obj.video.complete_date is not None
         self.prepared_data['video_complete_date'] = obj.video.complete_date
-        
+        self.prepared_data['project_pk'] = obj.project.pk
         completed_sls = obj.video.completed_subtitle_languages()
         self.prepared_data['video_completed_langs'] = \
             [sl.language for sl in completed_sls]

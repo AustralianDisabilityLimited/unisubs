@@ -30,12 +30,11 @@ goog.inherits(unisubs.streamer.StreamBox, goog.ui.Component);
 
 unisubs.streamer.StreamBox.prototype.createDom = function() {
     unisubs.streamer.StreamBox.superClass_.createDom.call(this);
-    console.log('createDom');
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.transcriptElem_ = $d('div', 'unisubs-transcript');
     var substreamerElem = 
         $d('div', 'unisubs-substreamer',
-           $d('div', 'unisubs-controls', 
+           $d('div', 'unisubs-substreamer-controls', 
               $d('ul', null, 
                  $d('li', null,
                     $d('a', { 'href': '#' },
@@ -63,16 +62,15 @@ unisubs.streamer.StreamBox.prototype.decorateContainer = function(elem) {
     this.elem_ = elem;
     this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
         'div', 'unisubs-transcript', elem)[0];
-    this.searchInput_ = new goog.ui.LabelInput();
-    this.searchInput_.decorate(goog.dom.getElementsByTagNameAndClass(
-        'input', 'unisubs-search', elem)[0]);
-    goog.events.listen(
-        this.searchInput_.getElement(),
-        goog.events.EventType.KEYUP,
-        goog.bind(this.handleSearchKey_, this));
     var subSpans = goog.dom.getElementsByTagNameAndClass(
         'span', 'unisubs-sub', elem);
     this.makeSubsAndSubMap_(subSpans);
+    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
+    var searchContainer = goog.dom.getElementsByTagNameAndClass(
+        null, 'unisubs-search-container', elem)[0];
+    this.streamBoxSearch_.decorate(searchContainer);
+    this.streamBoxSearch_.setTranscriptElemAndSubs(
+        this.transcriptElem_, this.subs_);
 };
 
 unisubs.streamer.StreamBox.prototype.makeSubsAndSubMap_ = function(subSpans) {
@@ -85,20 +83,6 @@ unisubs.streamer.StreamBox.prototype.makeSubsAndSubMap_ = function(subSpans) {
         s.setParentEventTarget(this);
         this.subMap_.set(s.SUBTITLE_ID, s); 
     }, this);
-};
-
-unisubs.streamer.StreamBox.prototype.handleSearchKey_ = function(e) {
-    goog.array.forEach(
-        this.subs_, 
-        function(s) { s.reset(); });
-    var searchText = this.searchInput_.getValue();
-    if (searchText != "") {
-        goog.dom.annotate.annotateTerms(
-            this.transcriptElem_, [[searchText, false]],
-            function(number, str) {
-                return '<span class="unisubs-search">' + str + '</span>';
-            }, true);
-    }
 };
 
 unisubs.streamer.StreamBox.prototype.displaySub = function(subtitleID) {

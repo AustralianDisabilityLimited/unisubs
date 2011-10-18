@@ -52,7 +52,18 @@ var BaseModel = Class.$extend({
     delete: function(){
         delete this['pk'];
         this.isDeleted=true
+    },
+    toObject: function(){
+        var data = {};
+        _.each(_.keys(this), function(key){
+            if (!_.isFunction(this[key])){
+                data[key] = this[key];
+            }
+        }, this);
+        return data;
     }
+    
+
 });
 
 var ProjectModel = BaseModel.$extend({});
@@ -61,7 +72,9 @@ var ProjectModel = BaseModel.$extend({});
 var ProjectEditPanel = Class.$extend({
      __init__: function(pModel){
          this.model = pModel;
-         this.el = ich.projectEditPanel(pModel);
+         // checkbox needs to be normalized
+       
+         this.el = ich.projectEditPanel(this.model);
          this.onSaveClicked = _.bind(this.onSaveClicked, this);
          this.onDeleteClicked = _.bind(this.onDeleteClicked, this);
          this.onChangeProjectReturned = _.bind(this.onChangeProjectReturned, this);
@@ -97,6 +110,7 @@ var ProjectEditPanel = Class.$extend({
     onSaveClicked: function(e){
         e.preventDefault();
         var values = this.getValuesFromForm($("form", this.el));
+        var wf = $("input[name='workflow_enabled']", $("form", this.el)).attr("checked");
         TeamsApiV2.project_edit(
             TEAM_SLUG,
             values.pk,
@@ -104,6 +118,7 @@ var ProjectEditPanel = Class.$extend({
             values.slug,
             values.description,
             values.order ,
+            wf,
             this.onChangeProjectReturned
         )
         return false;

@@ -100,6 +100,11 @@ This is needed, since it's for the js templating
       <input type="hidden" value='{{order}}' name="order"/>  
       <input type="hidden" value='{{slug}}' name="slug"/>  
       <div class="clearfix"/>
+      <b> Workflows</b>
+      <label for="workflow_enabled">Moderate this project's subtitles. Wil override the team's workflow if exists.</p>
+<input type="checkbox"  name="workflow_enabled" {{#workflow_enabled}}checked="checked"{{/workflow_enabled}}/>
+      
+        
       <a class="red_button project-delete">Delete</a>
       <a class="blue_button project-save">Save</a>
       <a class="blue_button project-cancel">Changed my mind just cancel</a>

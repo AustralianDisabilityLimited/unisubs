@@ -108,7 +108,7 @@ def _user_can_edit_project(team_slug, project_pk, user):
     return team, project
 
 def _project_to_dict(p):
-    d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk"])
+    d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk", "workflow_enabled"])
     d.update({"pk":p.pk})
     return d
 
@@ -390,18 +390,19 @@ class TeamsApiV2Class(object):
         return project_objs
 
     def project_edit(self, team_slug, project_pk, name,
-                     slug, description, order, user):
+                     slug, description, order, workflow_enabled, user):
         team, project = _user_can_edit_project(team_slug, project_pk, user)
         # insert a new project as the last one
         if bool(order):
             num_projects = team.project_set.exclude(pk=project_pk).count()
             order = num_projects    
         form = ProjectForm(instance=project, data=dict(
-                name=name, 
-                description=description,
-                slug=slug, 
-                pk=project and project.pk,
-                order=order,
+            name=name, 
+            description=description,
+            slug=slug, 
+            pk=project and project.pk,
+            order=order,
+            workflow_enabled=workflow_enabled,
                 ))
         if form.is_valid():
             p = form.save(commit=False)

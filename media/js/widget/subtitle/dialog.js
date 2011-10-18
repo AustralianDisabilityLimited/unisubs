@@ -337,17 +337,9 @@ unisubs.subtitle.Dialog.prototype.enterState_ = function(state) {
 };
 
 unisubs.subtitle.Dialog.prototype.showGuidelinesForState_ = function(state) {
-    var that = this;
-    var done = function(e) {
-        goog.Timer.callOnce(function() {
-            that.displayingGuidelines_ = false;
-            that.hideTemporaryPanel();
-            that.setState_(state);
-        });
-    };
-
-    if (!unisubs.guidelines['subtitle']) {
-        done();
+    var s = unisubs.subtitle.Dialog.State_;
+    if (state !== s.TRANSCRIBE || !unisubs.guidelines['subtitle']) {
+        this.setState_(state);
         return;
     }
 
@@ -356,9 +348,16 @@ unisubs.subtitle.Dialog.prototype.showGuidelinesForState_ = function(state) {
 
     var guidelinesPanel = new unisubs.GuidelinesPanel(unisubs.guidelines['subtitle']);
     this.showTemporaryPanel(guidelinesPanel);
-
     this.displayingGuidelines_ = true;
-    this.getHandler().listenOnce(guidelinesPanel, unisubs.GuidelinesPanel.CONTINUE, done);
+
+    var that = this;
+    this.getHandler().listenOnce(guidelinesPanel, unisubs.GuidelinesPanel.CONTINUE, function(e) {
+        goog.Timer.callOnce(function() {
+            that.displayingGuidelines_ = false;
+            that.hideTemporaryPanel();
+            that.setState_(state);
+        });
+    });
 };
 unisubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
     this.suspendKeyEvents_(true);

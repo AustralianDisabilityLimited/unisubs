@@ -720,7 +720,8 @@ class TeamsTest(TestCase):
             "languages-TOTAL_FORMS": u"1",
             "video_url": u"http://www.youtube.com/watch?v=Hhgfz0zPmH4&feature=grec_index",
             "thumbnail": u"",
-            "languages-INITIAL_FORMS": u"0"
+            "languages-INITIAL_FORMS": u"0",
+            "project":team.default_project.pk,
         }
         tv_len = team.teamvideo_set.count()
         url = reverse("teams:add_video", kwargs={"slug": team.slug})

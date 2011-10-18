@@ -302,7 +302,10 @@ class Team(models.Model):
         qs_list = []
         
         # FIXME do project filtering here
-        qs_list.append(self._filter(self._base_sqs(is_member), pairs_m ).filter(project_pk=project.pk))
+        qs = self._filter(self._base_sqs(is_member), pairs_m )
+        if project is not None:
+            qs = qs.filter(project_pk=project.pk)
+        qs_list.append(qs)
         qs_list.append(self._exclude(self._filter(self._base_sqs(is_member), pairs_0), 
                                      pairs_m))
         qs_list.append(self._exclude(

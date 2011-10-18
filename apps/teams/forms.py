@@ -188,7 +188,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     project = forms.ModelChoiceField(
         label=_(u'Project'),
         queryset = Project.objects.none(),
-        required=True,
+        required=False,
         empty_label=None,
         help_text=_(u"Let's keep things tidy, shall we?")
     )

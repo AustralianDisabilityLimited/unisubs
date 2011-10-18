@@ -281,6 +281,7 @@ class TeamsTest(TestCase):
             "title": u"",
             "video_url": video_url,
             "thumbnail": u"",
+            "project": team.default_project.pk,
         }
         old_count = TeamVideo.objects.count()
         old_video_count = Video.objects.count()
@@ -317,7 +318,8 @@ class TeamsTest(TestCase):
             "video_policy": u"1",
             "logo": u"",
             "slug": u"new-team",
-            "name": u"New team"
+            "name": u"New team",
+            
         }
 
         response = self.client.post(reverse("teams:create"), data)
@@ -448,7 +450,9 @@ class TeamsTest(TestCase):
             "languages-TOTAL_FORMS": u"1",
             "languages-0-completed": u"on",
             "thumbnail": u"",
-            "description": u"and descriptionnn"
+            "description": u"and descriptionnn",
+            "project": team.default_project.pk,
+            
         }
         url = reverse("teams:team_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url, data)

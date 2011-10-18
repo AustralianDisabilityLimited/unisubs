@@ -18,7 +18,7 @@
 
 from auth.models import CustomUser as User
 from django import forms
-from teams.models import Team, TeamMember, TeamVideo, Task
+from teams.models import Team, TeamMember, TeamVideo, Task, Project
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -37,6 +37,7 @@ from doorman import feature_is_on
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
 
+    
     class Meta:
         model = Team
         fields = ('logo',)
@@ -51,15 +52,26 @@ class EditTeamVideoForm(forms.ModelForm):
     creation_date = forms.DateField(required=False, input_formats=['%Y-%m-%d'],
                                     help_text="Format: YYYY-MM-DD")
 
+    
+    project = forms.ModelChoiceField(
+        label=_(u'Project'),
+        queryset = Project.objects.none(),
+        required=True,
+        empty_label=None,
+        help_text=_(u"Let's keep things tidy, shall we?")
+    )
+                                             
     class Meta:
         model = TeamVideo
-        fields = ('title', 'description', 'thumbnail')
+        fields = ('title', 'description', 'thumbnail', 'project',)
     
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
-
+        
         super(EditTeamVideoForm, self).__init__(*args, **kwargs)
 
+
+        self.fields['project'].queryset = self.instance.team.project_set.all()
         if feature_is_on("MODERATION"):
             self.should_add_moderation = self.should_remove_moderation = False
 
@@ -171,16 +183,25 @@ class AddTeamVideoForm(BaseVideoBoundForm):
     language = forms.ChoiceField(label=_(u'Video language'), choices=settings.ALL_LANGUAGES,
                                  required=False,
                                  help_text=_(u'It will be saved only if video does not exist in our database.'))
-    
+
+
+    project = forms.ModelChoiceField(
+        label=_(u'Project'),
+        queryset = Project.objects.none(),
+        required=False,
+        empty_label=None,
+        help_text=_(u"Let's keep things tidy, shall we?")
+    )
     class Meta:
         model = TeamVideo
-        fields = ('video_url', 'language', 'title', 'description', 'thumbnail')
+        fields = ('video_url', 'language', 'title', 'description', 'thumbnail', 'project',)
         
     def __init__(self, team, user, *args, **kwargs):
         self.team = team
         self.user = user
         super(AddTeamVideoForm, self).__init__(*args, **kwargs)
         self.fields['language'].choices = get_languages_list(True)
+        self.fields['project'].queryset = self.team.project_set.all()
 
     def clean_video_url(self):
         video_url = self.cleaned_data['video_url']

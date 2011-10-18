@@ -283,7 +283,7 @@ class Team(models.Model):
         else:
             return TeamVideoLanguagesIndex.results().filter(team_id=self.id)
 
-    def get_videos_for_languages_haystack(self, languages, user=None):
+    def get_videos_for_languages_haystack(self, languages, project=None, user=None):
         from utils.multi_query_set import MultiQuerySet
 
         is_member = user and user.is_authenticated() and self.members.filter(user=user).exists()
@@ -300,7 +300,12 @@ class Team(models.Model):
                     pairs_0.append(self._lang_pair((l1, l0), "0"))
 
         qs_list = []
-        qs_list.append(self._filter(self._base_sqs(is_member), pairs_m))
+        
+        # FIXME do project filtering here
+        qs = self._filter(self._base_sqs(is_member), pairs_m )
+        if project is not None:
+            qs = qs.filter(project_pk=project.pk)
+        qs_list.append(qs)
         qs_list.append(self._exclude(self._filter(self._base_sqs(is_member), pairs_0), 
                                      pairs_m))
         qs_list.append(self._exclude(
@@ -318,7 +323,6 @@ class Team(models.Model):
         # this is way more efficient than making a count from all the
         # constituent querysets.
         mqs.set_count(self._base_sqs(is_member).count())
-
         return qs_list, mqs
 
     def get_videos_for_languages(self, languages, CUTTOFF_DUPLICATES_NUM_VIDEOS_ON_TEAMS):
@@ -398,7 +402,6 @@ class ProjectManager(models.Manager):
             team = Team.objects.get(pk=team_identifier)
         elif isinstance(team_identifier, str):
             team = Team.objects.get(slug=team_identifier)
-        print "will exclude"    , team
         return Project.objects.filter(team=team).exclude(name=Project.DEFAULT_NAME)
     
 class Project(models.Model):
@@ -421,7 +424,9 @@ class Project(models.Model):
     objects = ProjectManager()
     
     def __unicode__(self):
-        return u"%s for team %s" % (self.name, self.team)
+        if self.is_default_project:
+            return u"---"
+        return u"%s" % (self.name)
 
     def save(self, slug=None,*args, **kwargs):
         self.modified = datetime.datetime.now()
@@ -429,6 +434,10 @@ class Project(models.Model):
         self.slug = pan_slugify(slug)
         super(Project, self).save(*args, **kwargs)
 
+    @property
+    def is_default_project(self):
+        return self.name == Project.DEFAULT_NAME
+        
     class Meta:
         unique_together = (
                 ("team", "name",),

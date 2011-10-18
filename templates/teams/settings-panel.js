@@ -78,7 +78,7 @@ var ProjectEditPanel = Class.$extend({
     },
     show: function(){
         $(this.el).show();
-        //$(this.el).mod("show");
+
         
     },
     hide: function(){
@@ -149,11 +149,19 @@ var ProjectEditPanel = Class.$extend({
                 if (e) {
                     e.preventDefault()
                 }
-                that.confirmationDialog.hide();
+                that.onDeletionCanceled();
                 return false;
             })
         this.confirmationDialog.show();
+        this.el.append(this.confirmationDialog.el);
+        $("form", this.el).hide();
         return false;
+    },
+    onDeletionCanceled: function(){
+        this.confirmationDialog.hide();
+        $("form", this.el).show();
+        this.confirmationDialog = null;
+
     },
     onDeletionConfimed: function(){
         var that = this;
@@ -163,8 +171,11 @@ var ProjectEditPanel = Class.$extend({
             function(res){
                 if (res && res.success ){
                     $.jGrowl(res.msg);
-                    
+                    $("form", that.el).hide();
                     that.el.trigger(ON_PROJECT_DELETED, [that.model]);
+                    if (that.confirmationDialog){
+                        that.confirmationDialog.hide()
+                    }
                 }
             }
         );
@@ -198,6 +209,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onNewProjectClicked = _.bind(this.onNewProjectClicked, this);
         this.onProjectSaved = _.bind(this.onProjectSaved, this);
         this.onProjectCanceled = _.bind(this.onProjectCanceled, this);
+        this.onProjectDeleted = _.bind(this.onProjectDeleted, this);
         this.onEditRequested = _.bind(this.onEditRequested, this);
         this.el = ich.projectPanel();
         $("a.project-add", this.el).click(this.onNewProjectClicked);
@@ -264,7 +276,6 @@ var ProjectPanel  = AsyncPanel.$extend({
         
     },
     onProjectCanceled: function(e){
-        console.log("cancelling");
         this._hideEditPanel();
     },
     onProjectSaved: function(e, p){
@@ -273,8 +284,8 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.renderProjectList();
     },
     onProjectDeleted: function(e,p){
-        this._hideEditPanel()
-        this.removeProject(p)
+        this._hideEditPanel();
+        this.removeProject(p);
         this.renderProjectList();
     }
 });
@@ -668,7 +679,7 @@ var ConfirmationDialog = Class.$extend({
             $(".cancel", this.el).click(this.onCancel);
             $(".confirm", this.el).click(this.onConfirm);
         }
-        $(this.el).mod("show");
+        $(this.el).show();
     },
     onCancel: function(e){
         if (e){
@@ -688,7 +699,7 @@ var ConfirmationDialog = Class.$extend({
         }
     },
     hide: function(){
-        $(this.el).mod("close");
+        $(this.el).hide();
         $(this.el).remove();
     }
 

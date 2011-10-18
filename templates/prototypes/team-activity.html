@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block body_attrs %}class="new-teams"{% endblock %}
+
+{% block main_content %}
+
+    <div class="team-banner"><img src="http://blog.universalsubtitles.org/wp-content/uploads/2011/08/twitter-video-translation-project.png" alt="Twitter, son"></div>
+
+    <ul class="tabs">
+        <li><a href="/prototypes/team-videos/">Videos</a></li>
+        <li><a href="/prototypes/team-members/">Members</a></li>
+        <li class="current"><a href="/prototypes/team-activity/">Activity</a></li>
+        <li><a href="/prototypes/team-tasks/">Tasks</a></li>
+        <li><a href="/prototypes/team-settings/">Settings</a></li>
+    </ul>
+
+    <div class="grid_9 alpha">
+
+        <ul class="activity listing">
+            <li>
+                <a href="">Somebody</a> commented on English subtitles for <a href="">"Some Video"</a>
+                <span class="timestamp">4 hours ago</span>
+            </li>
+            <li>
+                <a href="">Person</a> completed a Spanish translation for <a href="">"Awesome Lecture"</a>
+                <span class="timestamp">12 hours ago</span>
+            </li>
+            <li>
+                <a href="">Henry Ford</a> approved Icelandic subtitles for <a href="">"Promotional Video"</a>
+                <span class="timestamp">2 days ago</span>
+            </li>
+            <li>
+                <a href="">Andrew</a> commented on French subtitles for <a href="">"Awesome Lecture"</a>
+                <span class="timestamp">4 days ago</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="grid_3 omega">
+        <ul class="view-filter">
+            <li class="current"><a href="">Basic Settings</a></li>
+            <li><a href="">Guidelines & Messages</a></li>
+            <li><a href="">Display Settings</a></li>
+            <li><a href="">Projects</a></li>
+        </ul>
+    </div>
+{% endblock %}

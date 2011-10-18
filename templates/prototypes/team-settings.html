@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block body_attrs %}class="new-teams"{% endblock %}
+
+{% block main_content %}
+
+    <div class="team-banner"><img src="http://blog.universalsubtitles.org/wp-content/uploads/2011/08/twitter-video-translation-project.png" alt="Twitter, son"></div>
+
+    <ul class="tabs">
+        <li><a href="/prototypes/team-videos/">Videos</a></li>
+        <li><a href="/prototypes/team-members/">Members</a></li>
+        <li><a href="/prototypes/team-activity/">Activity</a></li>
+        <li><a href="/prototypes/team-tasks/">Tasks</a></li>
+        <li class="current"><a href="/prototypes/team-settings/">Settings</a></li>
+    </ul>
+
+    <div class="grid_9 alpha">
+
+        <form action="">
+            <div class="grid_4">
+                <fieldset>
+                    <legend>Team Details</legend>
+
+                    <label for="name">Name</label>
+                    <input type="text" />
+
+                    <label for="description">Description</label>
+                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                </fieldset>
+            </div>
+            <div class="grid_4 secondary">
+                <fieldset>
+                    <legend>Permissions</legend>
+
+                    <label for="">Who can join</label>
+                    <select name="" id="">
+                        <option value="">Anyone</option>
+                    </select>
+
+                    <label for="">Who can add videos</label>
+                    <select name="" id="">
+                        <option value="">Anyone</option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <legend>Workflows</legend>
+                    <p class="notation">Moderate subtitles on your videos</p>
+                    <label for=""><input type="checkbox" /> Enable Workflows</label>
+                </fieldset>
+            </div>
+            <div class="grid_9 submit">
+                <input type="submit" value="Save Changes"/>
+            </div>
+        </form>
+    </div>
+
+    <div class="grid_3 omega">
+        <ul class="view-filter">
+            <li class="current"><a href="/prototypes/team-settings/">Basic Settings</a></li>
+            <li><a href="/prototypes/team-settings-gm/">Guidelines & Messages</a></li>
+            <li><a href="/prototypes/team-settings-display/">Display Settings</a></li>
+            <li><a href="/prototypes/team-settings-projects/">Projects</a></li>
+        </ul>
+    </div>
+{% endblock %}

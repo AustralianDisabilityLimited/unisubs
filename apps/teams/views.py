@@ -18,7 +18,7 @@
 
 from utils import render_to, render_to_json
 from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm, TaskAssignForm
-from teams.models import Team, TeamMember, Invite, Application, TeamVideo, Task
+from teams.models import Team, TeamMember, Invite, Application, TeamVideo, Task, Project
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseForbidden
@@ -107,7 +107,7 @@ def index(request, my_teams=False):
                        template_object_name='teams',
                        extra_context=extra_context)
 
-def detail(request, slug, is_debugging=False, languages=None):
+def detail(request, slug, is_debugging=False, project_slug=None, languages=None):
     team = Team.get(slug, request.user)
 
     if languages is None:
@@ -115,7 +115,11 @@ def detail(request, slug, is_debugging=False, languages=None):
     if bool(is_debugging):
         languages = request.GET.get('langs', '').split(',')
 
-    qs_list, mqs = team.get_videos_for_languages_haystack(languages, request.user)
+    if project_slug is not None:
+        project = get_object_or_404(Project, team=team, slug=project_slug)
+    else:
+        project = None
+    qs_list, mqs = team.get_videos_for_languages_haystack(languages, user=request.user, project=project)
 
     extra_context = widget.add_onsite_js_files({})
     extra_context.update({
@@ -674,3 +678,10 @@ def perform_task(request):
 
     return {}
 
+def project_list(request, slug):
+    team = get_object_or_404(Team, slug=slug)
+    projects = Project.objects.for_team(team)
+    return render_to_response("teams/project_list.html", {
+        "team":team,
+        "projects": projects
+    }, RequestContext(request))

@@ -214,6 +214,7 @@ JS_CORE = \
      'js/startdialog/dialog.js',
      'js/streamer/streamercontroller.js', 
      'js/streamer/streambox.js', 
+     'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',

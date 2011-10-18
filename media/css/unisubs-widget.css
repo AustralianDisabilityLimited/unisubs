@@ -3532,9 +3532,14 @@ div.unisubs-substreamer div.unisubs-substreamer-controls {
    border-right: 1px solid #d3d3d3 !important;
 }
 
-.unisubs-substreamer-controls input {
+.unisubs-substreamer-controls .unisubs-search-container {
    position: absolute !important;
+   display: block !important;
    right: 5px !important;
+   width: 210px !important;
+}
+
+div.unisubs-substreamer-controls input {
    border: 1px solid #ddd !important;
    padding: 4px !important;
    -moz-border-radius: 3px !important;
@@ -3571,4 +3576,8 @@ div.unisubs-transcript .unisubs-search {
 
 div.unisubs-transcript .highlighted {
    background-color: #fcc !important;
+}
+
+div.unisubs-transcript .highlighted-search {
+   background-color: #ff0 !important;
 }

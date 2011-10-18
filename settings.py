@@ -120,6 +120,7 @@ ALL_LANGUAGES['sh'] = gettext_noop(u'Serbo-Croatian')
 ALL_LANGUAGES['lo'] = gettext_noop(u'Lao')
 ALL_LANGUAGES['rup'] = gettext_noop(u'Aromanian')
 ALL_LANGUAGES['tl'] = gettext_noop(u'Tagalog')
+ALL_LANGUAGES['uz'] = gettext_noop(u'Uzbek')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())

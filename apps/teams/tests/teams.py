@@ -747,6 +747,7 @@ class TeamsTest(TestCase):
             "description": u"and description",
             "author": u"Test Author",
             "creation_date": u"2011-01-01",
+            "project": team.default_project.pk
         }
         url = reverse("teams:team_video", kwargs={"team_video_pk": tv.pk})
         response = self.client.post(url, data)

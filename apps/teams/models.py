@@ -421,6 +421,8 @@ class Project(models.Model):
     slug = models.SlugField(blank=True)
     order = models.PositiveIntegerField(default=0)
 
+    workflow_enabled = models.BooleanField(default=False)
+
     objects = ProjectManager()
     
     def __unicode__(self):

@@ -221,6 +221,7 @@ JS_CORE = \
      'js/widget/logindialog.js',
      'js/widget/videotab.js',
      'js/widget/howtovideopanel.js',
+     'js/widget/guidelinespanel.js',
      'js/widget/dialog.js',
      'js/widget/captionmanager.js',
      'js/widget/rightpanel.js',

@@ -2878,7 +2878,7 @@ a.unisubs-openid span{
    margin-right: 10px !important;
 }
 
-.unisubs-howtopanel {
+.unisubs-howtopanel, .unisubs-guidelinespanel {
    position: absolute !important;
    top: 0 !important;
    left: 0 !important;
@@ -2889,13 +2889,16 @@ a.unisubs-openid span{
 }
 
 
+.unisubs-guidelinespanel,
+.unisubs-guidelinespanel h2,
 .unisubs-howtopanel,
 .unisubs-howtopanel h2,
-.unisubs-howtopanel .unisubs-videoDiv{
+.unisubs-howtopanel .unisubs-videoDiv {
    text-align: center !important;
 	text-shadow: 0 0 0 !important;
 }
 
+.unisubs-guidelinespanel .unisubs-done,
 .unisubs-howtopanel .unisubs-done {
   float: none !important;
   display: block !important;

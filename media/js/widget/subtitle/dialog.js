@@ -327,13 +327,39 @@ unisubs.subtitle.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isCom
 };
 
 unisubs.subtitle.Dialog.prototype.enterState_ = function(state) {
-    if (unisubs.UserSettings.getBooleanValue(
-        unisubs.UserSettings.Settings.SKIP_HOWTO_VIDEO))
-        this.setState_(state);
-    else
+    var skipHowto = unisubs.UserSettings.getBooleanValue(unisubs.UserSettings.Settings.SKIP_HOWTO_VIDEO);
+
+    if (!skipHowto) {
         this.showHowToForState_(state);
+    } else {
+        this.showGuidelinesForState_(state);
+    }
 };
 
+unisubs.subtitle.Dialog.prototype.showGuidelinesForState_ = function(state) {
+    var that = this;
+    var done = function(e) {
+        goog.Timer.callOnce(function() {
+            that.displayingGuidelines_ = false;
+            that.hideTemporaryPanel();
+            that.setState_(state);
+        });
+    };
+
+    if (!unisubs.guidelines['subtitle']) {
+        done();
+        return;
+    }
+
+    this.suspendKeyEvents_(true);
+    this.getVideoPlayerInternal().pause();
+
+    var guidelinesPanel = new unisubs.GuidelinesPanel(unisubs.guidelines['subtitle']);
+    this.showTemporaryPanel(guidelinesPanel);
+
+    this.displayingGuidelines_ = true;
+    this.getHandler().listenOnce(guidelinesPanel, unisubs.GuidelinesPanel.CONTINUE, done);
+};
 unisubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
     this.suspendKeyEvents_(true);
     this.getVideoPlayerInternal().pause();
@@ -356,10 +382,11 @@ unisubs.subtitle.Dialog.prototype.showHowToForState_ = function(state) {
             goog.Timer.callOnce(function() {
                 that.displayingHowTo_ = false;
                 that.hideTemporaryPanel();
-                that.setState_(state);
+                that.showGuidelinesForState_(state);
             });
         });
 };
+
 unisubs.subtitle.Dialog.prototype.skipBack_ = function() {
     var videoPlayer = this.getVideoPlayerInternal();
     var now = videoPlayer.getPlayheadTime();

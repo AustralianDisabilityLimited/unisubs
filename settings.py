@@ -767,7 +767,6 @@ MEDIA_BUNDLES = {
               "js/messages.js",
 
             ],
-        "optimizations": "SIMPLE_OPTIMIZATIONS",
         "closure_deps": "",
         "include_flash_deps": False,
         },
@@ -799,7 +798,7 @@ MEDIA_BUNDLES = {
     "js-teams-settings-panel":{
         "type":"js",
         "optimizations": "WHITESPACE_ONLY",
-        "closure_deps": "js/closure-dependencies.js",
+        "closure_deps": "",
         "files": (
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",

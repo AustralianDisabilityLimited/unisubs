@@ -57,6 +57,7 @@ class EditTeamVideoForm(forms.ModelForm):
         label=_(u'Project'),
         queryset = Project.objects.none(),
         required=True,
+        empty_label=None,
         help_text=_(u"Let's keep things tidy, shall we?")
     )
                                              
@@ -188,6 +189,7 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         label=_(u'Project'),
         queryset = Project.objects.none(),
         required=True,
+        empty_label=None,
         help_text=_(u"Let's keep things tidy, shall we?")
     )
     class Meta:

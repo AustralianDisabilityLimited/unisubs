@@ -26,7 +26,7 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var videoElem = videoPlayer.getElement();
     var captionBoxElem = 
         unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoElem);
-    streamBox.decorateContainer(captionBoxElem);
+    streamBox.decorate(captionBoxElem);
     var controller = new unisubs.streamer.StreamerController(
         videoPlayer, streamBox);
     var args = {

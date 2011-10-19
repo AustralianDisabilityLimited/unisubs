@@ -202,9 +202,9 @@ class Team(models.Model):
     def can_add_video(self, user):
         if not user.is_authenticated():
             return False
-        if self.video_policy == self.MEMBER_REMOVE and self.is_member(user):
-            return True
-        return self.is_manager(user)
+        if self.video_policy == self.MANAGER_REMOVE:
+            return self.is_manager(user)
+        return self.is_member(user)
 
     def can_invite(self, user):
         if self.membership_policy == self.INVITATION_BY_MANAGER:

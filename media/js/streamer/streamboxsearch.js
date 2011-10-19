@@ -45,7 +45,7 @@ unisubs.streamer.StreamBoxSearch.prototype.setTranscriptElemAndSubs =
  * show result counts.
  */
 unisubs.streamer.StreamBoxSearch.prototype.decorateInternal = function(elem) {
-    unisubs.streamer.StreamBoxSearch.superClass_.decorateInternal.call(this);
+    unisubs.streamer.StreamBoxSearch.superClass_.decorateInternal.call(this, elem);
     var children = goog.dom.getChildren(elem);
     this.searchInput_ = new goog.ui.LabelInput();
     this.searchInput_.decorate(children[0]);
@@ -72,6 +72,7 @@ unisubs.streamer.StreamBoxSearch.prototype.enterDocument = function() {
 };
 
 unisubs.streamer.StreamBoxSearch.prototype.navLinkClicked_ = function(e) {
+    e.preventDefault();
     if (e.target == this.previousResultLink_ && this.termIndex_ > 0) {
         this.showSearchedTerm_(this.termIndex_ - 1);
     }

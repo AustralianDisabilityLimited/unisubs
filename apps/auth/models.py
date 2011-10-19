@@ -111,10 +111,11 @@ class CustomUser(BaseUser):
             
         if send_confirmation:
             self.valid_email = False
-                
+        
+        send_email_confirmation = kwargs.pop('send_email_confirmation', True)
         super(CustomUser, self).save(*args, **kwargs)
         
-        if send_confirmation:
+        if send_confirmation and send_email_confirmation:
             EmailConfirmation.objects.send_confirmation(self)
     
     def unread_messages(self, hidden_meassage_id=None):

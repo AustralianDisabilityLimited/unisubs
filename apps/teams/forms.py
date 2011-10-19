@@ -414,6 +414,7 @@ class GuidelinesMessagesForm(forms.Form):
     guidelines_review = forms.CharField(max_length=1024, required=False)
 
 class SettingsForm(forms.ModelForm):
+    # TODO: Handle slug change.
     class Meta:
         model = Team
         fields = ('name', 'membership_policy', 'video_policy', 'description')

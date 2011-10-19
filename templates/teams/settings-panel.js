@@ -335,7 +335,7 @@ var BasicPanel  = AsyncPanel.$extend({
         this.el = ich.basicPanel();
 
         // Bind events
-        $('form', this.el).submit(this.onSubmit);
+        $('form.team-settings', this.el).submit(this.onSubmit);
         $('button', this.el).click(this.onImageUploadClick);
 
         // Load initial data
@@ -358,12 +358,13 @@ var BasicPanel  = AsyncPanel.$extend({
     onSubmit: function(e) {
         e.preventDefault();
 
-        var data = {};
-        _.each(this.SETTING_KEYS, function(key) {
-            data[key] = $('#id_' + key, this.el).val();
-        });
-
-        TeamsApiV2.guidelines_set(TEAM_SLUG, data, this.onLoaded);
+        var data = {
+            name: $('#basic_name', this.el).val(),
+            description: $('#basic_description', this.el).val(),
+            membership_policy: $('#id_membership_policy', this.el).val(),
+            video_policy: $('#id_video_policy', this.el).val()
+        };
+        TeamsApiV2.team_set(TEAM_SLUG, data, this.onLoaded);
     },
     onLoaded: function(data) {
         this.team = new TeamModel(data);
@@ -374,12 +375,17 @@ var BasicPanel  = AsyncPanel.$extend({
         $('#basic_description', this.el).val(this.team.description);
         $('#id_membership_policy', this.el).val(this.team.membership_policy);
         $('#id_video_policy', this.el).val(this.team.video_policy);
+
         if (this.team.logo) {
             $('#current_logo', this.el).attr('src', this.team.logo);
         } else {
             // TODO: Fill in placeholder image.
             $('#current_logo', this.el).attr('src', 'some/placeholder.jpg');
         }
+
+        // We edit the page-level title here too.  It's not part of the
+        // template, but in this one case we should update it.
+        $('.hd h2').text(this.team.name);
     }
 });
 

@@ -32,7 +32,7 @@ from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
-from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm
+from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm
 from teams.project_forms import ProjectForm
 
 class TeamsApiClass(object):
@@ -219,6 +219,16 @@ class TeamsApiV2Class(object):
     # Basic Settings
     def team_get(self, team_slug, user):
         return Team.objects.get(slug=team_slug).to_dict()
+
+    def team_set(self, team_slug, data, user):
+        team = Team.objects.get(slug=team_slug)
+
+        form = SettingsForm(data, instance=team)
+        if form.is_valid():
+            form.save()
+            return team.to_dict()
+        else:
+            return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
 
     # Tasks

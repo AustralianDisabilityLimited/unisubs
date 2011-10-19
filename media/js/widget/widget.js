@@ -186,7 +186,6 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     };
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;
-    console.log('calling show_widget');
     unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.initializeState_, this),

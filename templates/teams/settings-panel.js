@@ -8,11 +8,9 @@ var ON_PROJECT_SAVED = "onProjectSaved";
 var ON_PROJECT_CANCELED = "onProjectCanceled";
 var ON_PROJECT_DELETED = "onProjectDeleted";
 
-
 var PERFORM_TASK_URL = "{% url teams:perform_task %}";
 var USER_CAN_ASSIGN_TASK = {% if user_can_assign_tasks %}true{% else %}false{% endif %};
 var USER_CAN_DELETE_TASK = {% if user_can_delete_tasks %}true{% else %}false{% endif %};
-
 
 function captureEnterSubmit(form, callback){
     $(form).keypress(function(e){
@@ -76,9 +74,8 @@ var BaseModel = Class.$extend({
 
 });
 
+// Projects -------------------------------------------------------------------
 var ProjectModel = BaseModel.$extend({});
-
-
 var ProjectEditPanel = Class.$extend({
      __init__: function(pModel){
          this.model = pModel;
@@ -209,7 +206,6 @@ var ProjectEditPanel = Class.$extend({
             
     
 });
-
 var ProjectListItem = Class.$extend({
     __init__:function(model){
         var vel = this.el = ich.projectListItem(model);
@@ -228,7 +224,6 @@ var ProjectSelectionButton = Class.$extend({
 
     }
 });
-
 var ProjectPanel  = AsyncPanel.$extend({
     __init__: function(){
         this.onProjectListLoaded = _.bind(this.onProjectListLoaded, this);
@@ -355,7 +350,6 @@ var GuidelinesPanel  = AsyncPanel.$extend({
         }, this);
     }
 });
-
 
 // Tasks ----------------------------------------------------------------------
 var TaskModel = Class.$extend({
@@ -640,7 +634,6 @@ var TabMenuItem = Class.$extend({
         return null;
     }
 });
-
 var TabViewer = Class.$extend({
     __init__: function(buttons, menuContainer, panelContainer){
         this.menuItems = _.map(buttons, function(x){
@@ -681,7 +674,6 @@ var TabViewer = Class.$extend({
         
     }
 });
-
 var ConfirmationDialog = Class.$extend({
     __init__: function(title, body, okText, okCallback, cancelText, cancelCallback){
         this.title = title;
@@ -731,6 +723,7 @@ var ConfirmationDialog = Class.$extend({
 
 
 });
+
 function boostrapTabs(){
     var buttons = [
         {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
@@ -743,5 +736,4 @@ function boostrapTabs(){
     viewer.openDefault();
     
 }
-
 boostrapTabs();

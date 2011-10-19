@@ -312,11 +312,21 @@ var ProjectPanel  = AsyncPanel.$extend({
 });
 
 // Basic Settings -------------------------------------------------------------
+var TeamModel = Class.$extend({
+    __init__: function(data) {
+        this.pk = data.pk;
+        this.name = data.name;
+        this.description = data.description;
+        this.membership_policy = data.membership_policy;
+        this.video_policy = data.video_policy;
+    }
+});
 var BasicPanel  = AsyncPanel.$extend({
     __init__: function() {
         // Rebind functions
         this.onSubmit = _.bind(this.onSubmit, this);
         this.onLoaded = _.bind(this.onLoaded, this);
+        this.fillFromModel = _.bind(this.fillFromModel, this);
 
         // Render template
         this.el = ich.basicPanel();
@@ -325,7 +335,8 @@ var BasicPanel  = AsyncPanel.$extend({
         $('form', this.el).submit(this.onSubmit);
 
         // Load initial data
-        // TeamsApiV2.guidelines_get(TEAM_SLUG, this.onLoaded);
+        this.team = null;
+        TeamsApiV2.team_get(TEAM_SLUG, this.onLoaded);
     },
 
     onSubmit: function(e) {
@@ -339,9 +350,14 @@ var BasicPanel  = AsyncPanel.$extend({
         TeamsApiV2.guidelines_set(TEAM_SLUG, data, this.onLoaded);
     },
     onLoaded: function(data) {
-        _.each(data, function(setting) {
-            $('#id_' + setting.key, this.el).val(setting.data);
-        }, this);
+        this.team = new TeamModel(data);
+        this.fillFromModel();
+    },
+    fillFromModel: function() {
+        $('#basic_name', this.el).val(this.team.name);
+        $('#basic_description', this.el).val(this.team.description);
+        $('#id_membership_policy', this.el).val(this.team.membership_policy);
+        $('#id_video_policy', this.el).val(this.team.video_policy);
     }
 });
 

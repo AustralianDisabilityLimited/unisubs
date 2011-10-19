@@ -216,6 +216,11 @@ class TeamsApiV2Class(object):
         return Msg(u'Received message: "%s" from user "%s"' % (message, unicode(user)))
 
 
+    # Basic Settings
+    def team_get(self, team_slug, user):
+        return Team.objects.get(slug=team_slug).to_dict()
+
+
     # Tasks
     def tasks_languages_list(self, team_slug, user):
         languages = filter(None, Task.objects.filter(team__slug=team_slug,

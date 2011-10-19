@@ -393,6 +393,12 @@ class Team(models.Model):
             self.default_project
 
     
+    def to_dict(self):
+        return { 'pk': self.pk,
+                 'name': self.name,
+                 'description': self.description,
+                 'membership_policy': self.membership_policy,
+                 'video_policy': self.video_policy, }
 
 class ProjectManager(models.Manager):
 

@@ -68,7 +68,7 @@ unisubs.widget.VideoTab.prototype.enterDocument = function() {
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
-unisubs.widget.VideoTab.prototype.getMenuAnchor = function() {
+unisubs.widget.VideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
 
@@ -123,10 +123,6 @@ unisubs.widget.VideoTab.prototype.showContent = function(
         text = hasSubtitles ? "Select Language" : "Subtitle Me";
     this.text_ = text;
     goog.dom.setTextContent(this.spanElem_, text);
-};
-
-unisubs.widget.VideoTab.prototype.getAnchorElem = function() {
-    return this.anchorElem_;
 };
 
 unisubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {

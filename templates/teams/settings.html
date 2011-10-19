@@ -3,28 +3,7 @@
 
 {% block scripts %}
     {{ block.super }}
-    <script type="text/javascript">
-        jQuery(function($){
-            $('#id_logo').change(function(){
-                $('.edit-team').ajaxSubmit({
-                    url: '{% url teams:edit_logo team.slug %}',
-                    dataType: 'json',
-                    success: function(response){
-                        if (response.error){
-                            $('#logo-errors').html('<ul class="errorlist"><li>'+response.error.logo+'</li></ul>');
-                        }else{
-                            $('#logo-errors').html('');
-                            $('.team-logo').attr('src', response.url);
-                        }
-                    },
-                    beforeSubmit: function(arr, $form, options) {
-                        $('#logo-errors').html('Saving...');
-                    }
-                });
-            });
-        });
-    </script>
- {% include_bundle "js-teams-settings-panel" %}
+    {% include_bundle "js-teams-settings-panel" %}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
 {% endblock %}
 
@@ -293,8 +272,8 @@ This is needed, since it's for the js templating
 
 <script id="basicPanel" type="text/html">
     <div class="panel-basic">
-        <form id="basic_settings_form">
-            <fieldset>
+        <div id="basic_settings_form">
+            <form>
                 <h3>Team Details</h3>
 
                 <label for="basic_name">Name</label>
@@ -302,17 +281,22 @@ This is needed, since it's for the js templating
 
                 <label for="basic_description">Description</label>
                 <textarea id="basic_description" name="name"></textarea>
+            </form>
 
+            <form class="logo" action="{% endverbatim %}{% url teams:upload_logo team.slug %}{% verbatim %}" method="POST">
                 <div style="float: left; clear: both; margin: 30px 0;">
-                    <input type="file" id="basic_picture" name="picture" />
+                    {% endverbatim %}{% csrf_token %}{% verbatim %}
+                    <img id="current_logo" src="" style="max-width: 100px; max-height: 100px; border: 1px solid black;"/>
+                    <br/>
+                    <input type="file" id="basic_picture" name="logo" />
                     <button class="green_button small upload-picture">
                         <span>Upload a Logo</span>
                     </button>
                 </div>
                 <p class="help">Max size 000x000</p>
-            </fieldset>
+            </form>
 
-            <fieldset>
+            <form>
                 <h3>Permissions</h3>
 
                 <label for="id_membership_policy">Who can join</label>
@@ -320,18 +304,18 @@ This is needed, since it's for the js templating
 
                 <label for="id_video_policy">Who can add videos</label>
                 {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
-            </fieldset>
+            </form>
 
-            <fieldset>
+            <form>
                 <h3>Workflows</h3>
                 <p class="help">Moderate subtitles on your videos</p>
 
                 <input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/>
                 <label for="basic_workflows_enabled">Enable workflows</label>
-            </fieldset>
+            </form>
 
-            <input type="submit" class="submit" value="Save Changes" name="save" />
-        </form>
+            <form><input type="submit" class="submit" value="Save Changes" name="save" /></form>
+        </div>
     </div>
 </script>
 

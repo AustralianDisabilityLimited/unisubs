@@ -398,7 +398,8 @@ class Team(models.Model):
                  'name': self.name,
                  'description': self.description,
                  'membership_policy': self.membership_policy,
-                 'video_policy': self.video_policy, }
+                 'video_policy': self.video_policy,
+                 'logo': self.logo_thumbnail() if self.logo else None, }
 
 class ProjectManager(models.Manager):
 

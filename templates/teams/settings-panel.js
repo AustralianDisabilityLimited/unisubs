@@ -319,6 +319,7 @@ var TeamModel = Class.$extend({
         this.description = data.description;
         this.membership_policy = data.membership_policy;
         this.video_policy = data.video_policy;
+        this.logo = data.logo;
     }
 });
 var BasicPanel  = AsyncPanel.$extend({
@@ -327,18 +328,33 @@ var BasicPanel  = AsyncPanel.$extend({
         this.onSubmit = _.bind(this.onSubmit, this);
         this.onLoaded = _.bind(this.onLoaded, this);
         this.fillFromModel = _.bind(this.fillFromModel, this);
+        this.onImageUploadClick = _.bind(this.onImageUploadClick, this);
+        this.onImageUploaded = _.bind(this.onImageUploaded, this);
 
         // Render template
         this.el = ich.basicPanel();
 
         // Bind events
         $('form', this.el).submit(this.onSubmit);
+        $('button', this.el).click(this.onImageUploadClick);
 
         // Load initial data
         this.team = null;
         TeamsApiV2.team_get(TEAM_SLUG, this.onLoaded);
     },
 
+    onImageUploadClick: function(e) {
+        e.preventDefault();
+        $('form.logo', this.el).ajaxSubmit({
+            success: this.onImageUploaded,
+            dataType: 'json'
+        });
+        return false;
+    },
+    onImageUploaded: function(resp, status, xhr, form) {
+        this.team.logo = resp['url'];
+        this.fillFromModel();
+    },
     onSubmit: function(e) {
         e.preventDefault();
 
@@ -358,6 +374,12 @@ var BasicPanel  = AsyncPanel.$extend({
         $('#basic_description', this.el).val(this.team.description);
         $('#id_membership_policy', this.el).val(this.team.membership_policy);
         $('#id_video_policy', this.el).val(this.team.video_policy);
+        if (this.team.logo) {
+            $('#current_logo', this.el).attr('src', this.team.logo);
+        } else {
+            // TODO: Fill in placeholder image.
+            $('#current_logo', this.el).attr('src', 'some/placeholder.jpg');
+        }
     }
 });
 

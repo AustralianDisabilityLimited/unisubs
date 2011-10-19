@@ -336,6 +336,26 @@ def edit_logo(request, slug):
         output['error'] = form.get_errors()
     return HttpResponse('<textarea>%s</textarea>'  % json.dumps(output))
 
+@login_required
+def upload_logo(request, slug):
+    team = Team.get(slug, request.user)
+
+    if not team.is_member(request.user):
+        raise Http404
+
+    output = {}
+    form = EditLogoForm(request.POST, instance=team, files=request.FILES)
+    if form.is_valid():
+        try:
+            form.save()
+            output['url'] =  str(team.logo_thumbnail())
+        except S3StorageError:
+            output['error'] = {'logo': ugettext(u'File server unavailable. Try later. You can edit some other information without any problem.')}
+    else:
+        output['error'] = form.get_errors()
+
+    return HttpResponse(json.dumps(output))
+
 
 def _check_add_video_permission(request, team):
     if not team.is_member(request.user):

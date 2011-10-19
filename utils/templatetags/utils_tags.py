@@ -142,4 +142,3 @@ absurl = register.tag(absurl)
 @stringfilter
 def lang_name_from_code(value):
     return SUPPORTED_LANGUAGES_DICT_LAZY.get(value, value)
-

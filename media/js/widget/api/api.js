@@ -69,8 +69,6 @@ unisubs.api.openUnisubsDialogWithSettings =
         var debugWindow = new goog.debug.FancyWindow('main');
         debugWindow.setEnabled(true);
         debugWindow.init();             
-
-
         unisubs.DEBUG = true;
     }
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);

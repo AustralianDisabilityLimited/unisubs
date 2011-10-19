@@ -113,6 +113,14 @@ ALL_LANGUAGES['lkt'] = gettext_noop(u'Lakota')
 ALL_LANGUAGES['kw'] = gettext_noop(u'Cornish')
 ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
 ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
+ALL_LANGUAGES['hy'] = gettext_noop(u'Armenian')
+ALL_LANGUAGES['bi'] = gettext_noop(u'Bislama')
+ALL_LANGUAGES['fr_ca'] = gettext_noop(u'French (Canada)')
+ALL_LANGUAGES['sh'] = gettext_noop(u'Serbo-Croatian')
+ALL_LANGUAGES['lo'] = gettext_noop(u'Lao')
+ALL_LANGUAGES['rup'] = gettext_noop(u'Aromanian')
+ALL_LANGUAGES['tl'] = gettext_noop(u'Tagalog')
+ALL_LANGUAGES['uz'] = gettext_noop(u'Uzbek')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -211,6 +219,10 @@ JS_CORE = \
      'js/startdialog/tolanguage.js',
      'js/startdialog/tolanguages.js',
      'js/startdialog/dialog.js',
+     'js/streamer/streamercontroller.js', 
+     'js/streamer/streambox.js', 
+     'js/streamer/streamboxsearch.js', 
+     'js/streamer/streamsub.js', 
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
@@ -308,23 +320,16 @@ JS_WIDGETIZER_CORE.extend([
     "js/widgetizer/jwplayer.js",
     "js/widgetizer/youtubeiframe.js",
     "js/widgetizer/wistia.js",
-    "js/widgetizer/soundcloud.js"])
+    "js/widgetizer/soundcloud.js",
+    'js/player/ooyalaplayer.js', 
+    'js/player/wistiavideoplayer.js', 
+    'js/player/brightcoveliteplayer.js', 
+    'js/player/soundcloudplayer.js', 
+    'js/streamer/streamerdecorator.js', 
+    'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
 JS_WIDGETIZER.append('js/widgetizer/dowidgetize.js')
-
-JS_STREAMER = list(JS_WIDGETIZER_CORE)
-JS_STREAMER.extend([
-        'js/player/ooyalaplayer.js', 
-        'js/player/wistiavideoplayer.js', 
-        'js/player/brightcoveliteplayer.js', 
-        'js/player/soundcloudplayer.js', 
-        'js/streamer/streamerdecorator.js', 
-        'js/streamer/streamercontroller.js', 
-        'js/streamer/streambox.js', 
-        'js/streamer/streamsub.js', 
-        'js/streamer/overlaycontroller.js',
-        'js/widgetizer/dowidgetize.js'])
 
 JS_EXTENSION = list(JS_WIDGETIZER_CORE)
 JS_EXTENSION.append('js/widgetizer/extension.js')
@@ -693,17 +698,6 @@ MEDIA_BUNDLES = {
             "render_bootloader": True
         }
     },
-    "unisubs-streamer":{
-        "type": "js",
-        "closure_deps": "js/closure-dependencies.js",
-        "files": ["js/config.js"] + JS_STREAMER,
-        "extra_defines": {"unisubs.STREAMER": "true"},
-        "bootloader": { 
-            "template": "widget/widgetizerbootloader.js",
-            "gatekeeper": "UnisubsStreamerLoaded",
-            "render_bootloader": True
-        }
-     },
     "unisubs-widgetizer-sumo": {
         "type": "js",
         "closure_deps": "js/closure-dependencies.js",
@@ -813,3 +807,5 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
+if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
+    INSTALLED_APPS += ("api",)

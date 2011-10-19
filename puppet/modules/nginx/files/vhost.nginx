@@ -11,6 +11,31 @@ server {
 
     keepalive_timeout 5;
 
+    location ~* /en/user-data/video/(.*) {
+        root /opt/extras/video;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/user-data/pictures/(.*) {
+        root /opt/extras/pictures;
+        try_files /$1 @unisubs;
+    }
+    location ~* /en/site_media/static-cache/(.*) {
+        root /opt/extras/static-cache;
+        try_files /$1 @unisubs;
+    }
+    location ~* /user-data/video/(.*) {
+        root /opt/extras/video;
+        try_files /$1 @unisubs;
+    }
+    location ~* /user-data/pictures/(.*) {
+        root /opt/extras/pictures;
+        try_files /$1 @unisubs;
+    }
+    location ~* /site_media/static-cache/(.*) {
+        root /opt/extras/static-cache;
+        try_files /$1 @unisubs;
+    }
+
     location ~* /en/user-data/(.*) {
         root /opt/unisubs/user-data;
         try_files /$1 @unisubs;
@@ -49,4 +74,3 @@ server {
         proxy_pass http://unisubs_backend;
     }
 }
-

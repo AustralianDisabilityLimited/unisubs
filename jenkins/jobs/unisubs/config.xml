@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator>
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>100</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.security.AuthorizationMatrixProperty>
+      <permission>hudson.model.Item.Workspace:sjl</permission>
+      <permission>hudson.model.Item.Workspace:Dmitriy</permission>
+      <permission>hudson.model.Item.Build:sjl</permission>
+      <permission>hudson.model.Item.Build:Dmitriy</permission>
+      <permission>hudson.model.Run.Delete:sjl</permission>
+      <permission>hudson.model.Run.Delete:Dmitriy</permission>
+      <permission>hudson.model.Item.Delete:sjl</permission>
+      <permission>hudson.model.Item.Delete:Dmitriy</permission>
+      <permission>hudson.model.Run.Update:sjl</permission>
+      <permission>hudson.model.Run.Update:Dmitriy</permission>
+      <permission>hudson.model.Item.Read:sjl</permission>
+      <permission>hudson.model.Item.Read:Dmitriy</permission>
+      <permission>hudson.model.Item.Configure:sjl</permission>
+      <permission>hudson.model.Item.Configure:Dmitriy</permission>
+    </hudson.security.AuthorizationMatrixProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>origin</name>
+        <refspec>+refs/heads/*:refs/remotes/origin/*</refspec>
+        <url>git://github.com/pculture/unisubs.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>ongoing</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <recursiveSubmodules>false</recursiveSubmodules>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <authorOrCommitter>false</authorOrCommitter>
+    <clean>false</clean>
+    <wipeOutWorkspace>false</wipeOutWorkspace>
+    <pruneBranches>false</pruneBranches>
+    <buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/>
+    <gitTool>Default</gitTool>
+    <browser class="hudson.plugins.git.browser.GithubWeb">
+      <url>https://github.com/pculture/unisubs/</url>
+    </browser>
+    <submoduleCfg class="list"/>
+    <relativeTargetDir></relativeTargetDir>
+    <excludedRegions></excludedRegions>
+    <excludedUsers></excludedUsers>
+    <gitConfigName></gitConfigName>
+    <gitConfigEmail></gitConfigEmail>
+    <skipTag>false</skipTag>
+    <scmName></scmName>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector">
+    <hudson.triggers.SCMTrigger>
+      <spec>* * * * *</spec>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>cd $WORKSPACE/..
+rm -rf unisubs-selenium
+git clone git://github.com/pculture/unisubs-testing.git unisubs-selenium
+cd ${WORKSPACE}/../unisubs-selenium
+git fetch -t git://github.com/pculture/unisubs-testing.git +refs/heads/*:refs/remotes/origin/*
+git ls-tree HEAD
+cp settings-jenkins.py settings.py</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cd $WORKSPACE
+virtualenv -q deploy
+. ./deploy/bin/activate
+cd deploy
+python create_commit_file.py
+pip install -q -E . -r requirements.txt
+pip install -q -E . -r requirements-test.txt
+cd ..
+python manage.py build_solr_schema --settings=test_settings &gt; /etc/solr/conf/main/conf/schema.xml
+python manage.py build_solr_schema --settings=test_settings &gt; /etc/solr/conf/testing/conf/schema.xml
+sudo service tomcat6 restart
+#bash ./hudson_test.sh test_settings
+python manage.py test api auth comments messages profiles search statistic videos widget teams icanhaz --verbosity=0 --settings=test_settings --with-xunit</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cd /var/www/universalsubtitles.dev/libs/unisubs-integration
+git pull origin master
+
+cd $WORKSPACE
+. ./deploy/bin/activate
+cd deploy
+echo &quot;MIGRATING&quot;
+fab dev:jenkins migrate
+echo &quot;UPDATING&quot;
+fab dev:jenkins update
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cd $WORKSPACE
+. ./deploy/bin/activate
+cd ${WORKSPACE}/../unisubs-selenium
+pip install -r requirements.txt
+export DISPLAY=:99
+nosetests sel_js_unittests.py sg_64_submit.py:subgroup_64.test_534 sg_88_teams.py:subgroup_88.test_693 --with-xunit --xunit-file=${WORKSPACE}/nosetests-selenium.xml</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.junit.JUnitResultArchiver>
+      <testResults>nosetests*.xml</testResults>
+      <keepLongStdio>false</keepLongStdio>
+      <testDataPublishers/>
+    </hudson.tasks.junit.JUnitResultArchiver>
+    <hudson.tasks.Mailer>
+      <recipients>aduston@gmail.com debert@gmail.com jed@pculture.org</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>true</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <hudson.plugins.ircbot.IrcPublisher>
+      <targets>
+        <hudson.plugins.im.GroupChatIMMessageTarget>
+          <name>#universalsubtitles</name>
+          <password></password>
+        </hudson.plugins.im.GroupChatIMMessageTarget>
+      </targets>
+      <strategy>FAILURE_AND_FIXED</strategy>
+      <notifyOnBuildStart>false</notifyOnBuildStart>
+      <notifySuspects>false</notifySuspects>
+      <notifyCulprits>false</notifyCulprits>
+      <notifyFixers>false</notifyFixers>
+      <notifyUpstreamCommitters>false</notifyUpstreamCommitters>
+      <buildToChatNotifier class="hudson.plugins.im.build_notify.DefaultBuildToChatNotifier"/>
+      <matrixMultiplier>ONLY_CONFIGURATIONS</matrixMultiplier>
+      <channels/>
+    </hudson.plugins.ircbot.IrcPublisher>
+  </publishers>
+  <buildWrappers/>
+</project>

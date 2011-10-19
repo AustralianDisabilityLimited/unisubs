@@ -30,10 +30,10 @@ To run the development version:
     Then run following commands:
 
         cd /opt/unisubs
-        source venv/bin/activate
-        python manage.py syncdb --all --settings=dev_settings
-        python manage.py migrate --fake --settings=dev_settings
-        sudo ./deploy/update_solr_schema_vagrant.sh
+        ./bootstrap-vagrant.sh
+
+    It's safe to run `bootstrap-vagrant.sh` multiple times if something goes
+    wrong (like PyPi goes down).
 
 4. Add `unisubs.example.com` to your hosts file, pointing at `127.0.0.1`.  This
    is necessary for Twitter and Facebook oauth to work correctly.

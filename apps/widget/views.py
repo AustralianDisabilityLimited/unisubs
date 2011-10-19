@@ -51,6 +51,7 @@ def embed(request, version_no=''):
     Public clients will use the url : SITE_MEDIA/embed.js
     """
     context = widget.embed_context()
+
     if bool(version_no) is False:
         version_no = ""
     return render_to_response(
@@ -206,6 +207,8 @@ def save_emailed_translations(request):
 def base_widget_params(request, extra_params={}):
     params = {}
     params['video_url'] = request.GET.get('video_url')
+    if request.GET.get('streamer') == 'true':
+        params['streamer'] = True
     if request.GET.get('null_widget') == 'true':   
         params['null_widget'] = True
     if request.GET.get('debug_js') == 'true':

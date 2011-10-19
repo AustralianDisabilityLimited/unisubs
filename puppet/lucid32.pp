@@ -1,22 +1,24 @@
 class lucid32 {
   $projectdir = "/opt/unisubs"
-  $venv = "/opt/unisubs/venv"
+  $extrasdir = "/opt/extras"
+  $venv = "/opt/extras/venv"
 
   group { "vagrant": ensure => "present"; } ->
   user { "vagrant": ensure => "present"; } ->
-  class { 'environ': }
+  class { 'environ': } ->
+  file { "${extrasdir}":
+    ensure => directory,
+    owner => "vagrant",
+    group => "vagrant",
+  }
 
   group { "puppet": ensure => "present"; }  ->
   class { 'aptitude': } ->
   class { 'java': } ->
   class { 'python': } ->
   python::venv { "unisubsvenv":
+    require => [File["${extrasdir}"]],
     path => $venv,
-    owner => "vagrant",
-    group => "vagrant"; } ->
-  class { 'unisubs::pip':
-    venv => $venv,
-    projectdir => $projectdir,
     owner => "vagrant",
     group => "vagrant"; } ->
   class { 'unisubs::db': } ->
@@ -37,6 +39,8 @@ class lucid32 {
   class { 'nginx': }
 
   package { "curl": ensure => "present", }
+  package { "git-core": ensure => "installed", }
+  package { "swig": ensure => "installed", }
 }
 
 class { "lucid32": }

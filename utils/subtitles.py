@@ -116,6 +116,15 @@ class SubtitleParser(object):
         return bool(self._pattern.search(self.subtitles))
      
     def _result_iter(self):
+        """
+        Should iterate over items like this:
+        {
+            'start_time': ...,
+            'end_time': ...,
+            'subtitle_text': ...
+        }
+        start_time and end_time in seconds. If it is not defined use -1.
+        """
         for item in self._matches:
             yield self._get_data(item)
 

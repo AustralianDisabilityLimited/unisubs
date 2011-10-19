@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<user>
+  <fullName>janet dragojevic</fullName>
+  <description></description>
+  <properties>
+    <hudson.tasks.Mailer_-UserProperty>
+      <emailAddress>jed@pculture.org</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
+    <hudson.security.HudsonPrivateSecurityRealm_-Details>
+      <passwordHash>bVCtYf:021b76d5a9ced66c45194c04311114b621260daefe97a8f9114991b85877473d</passwordHash>
+    </hudson.security.HudsonPrivateSecurityRealm_-Details>
+    <hudson.model.MyViewsProperty>
+      <primaryViewName>All</primaryViewName>
+      <views>
+        <hudson.model.AllView>
+          <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
+          <name>All</name>
+          <filterExecutors>false</filterExecutors>
+          <filterQueue>false</filterQueue>
+        </hudson.model.AllView>
+      </views>
+    </hudson.model.MyViewsProperty>
+    <hudson.plugins.jabber.user.JabberUserProperty/>
+    <hudson.plugins.ircbot.IrcUserProperty>
+      <nick>janet</nick>
+    </hudson.plugins.ircbot.IrcUserProperty>
+  </properties>
+</user>

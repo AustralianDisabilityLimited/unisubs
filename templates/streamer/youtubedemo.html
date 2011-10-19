@@ -1,26 +1,5 @@
-{% load media_compressor %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 
-1.0 Strict//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <link rel="stylesheet" type="text/css" href="{{STATIC_URL_BASE}}css/streamer.css"/>
-  {% if not js_use_compiled %}
-    {% include_bundle "js-base-dependencies" %}
-    <script type="text/javascript">
-      goog.require('goog.debug.FancyWindow');
-      window.UNISUBS_STREAMER = true;
-    </script>
-    <script type="text/javascript" src="/widget/config.js"></script>
-    {% for script in scripts %}
-    <script type="text/javascript" src="{{ script }}"></script>
-    {% endfor %}
-    <script type="text/javascript" src="{% url widget:widgetizerbootloader %}"></script>
-  {% else %}
-    {% include_bundle "unisubs-streamer" %}
-  {% endif %}
-</head>
-<body>
+{% extends "streamer/streamerdemobase.html" %}
+{% block content %}
   <object id="idOVideo" name="idOVideo" width="600" height="360"> 
     <param name="movie" value="http://www.youtube.com/v/1lxm-e0hMTw?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
     <param name="allowFullScreen" value="true"> 
@@ -29,14 +8,18 @@
     <embed id="idPlayer" name="idPlayer" wmode="transparent" src="http://www.youtube.com/v/1lxm-e0hMTw?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1" type="application/x-shockwave-flash" allowScriptAccess="always" allowfullscreen="true" width="600" height="360"> 
   </object> 
   <div class="unisubs-substreamer">
-    <div class="unisubs-controls">
+    <div class="unisubs-substreamer-controls">
       <ul> 
         <li><a href="" id="unisubs-logo"><img src="http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png" alt="Universal Subtitles" /></a></li> 
-        <li><a href=""><img src="http://f.cl.ly/items/2E0E0I0S2Q190S283n45/twitter.png" alt="Twitter" /></a></li> 
-        <li><a href=""><img src="http://f.cl.ly/items/2E0E0I0S2Q190S283n45/fb.png" alt="Facebook" /></a></li> 
         {# <li><a href="" id="edit-link">Edit Transcript</a></li> #}
       </ul> 
-      <input class="unisubs-search" label="Search..."/>
+      <a class="resync" href="javascript:void(0)" style="visibility: hidden !important">resync</a>
+      <span class="unisubs-search-container">
+        <input class="unisubs-search" label="Search..."/>
+        <a href="javascript:void(0)" style="visibility: hidden !important">&lt;</a>
+        <a href="javascript:void(0)" style="visibility: hidden !important">&gt;</a>
+        <span class="resultcount" style="visibility: hidden !important"></span>
+      </span>
     </div>
     <div class="unisubs-transcript">
       {% for sub in subs %}
@@ -44,5 +27,4 @@
       {% endfor %}
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

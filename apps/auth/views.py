@@ -47,8 +47,11 @@ def confirm_email(request, confirmation_key):
         messages.error(request, _(u'Confirmation key expired.'))
     else:
         messages.success(request, _(u'Email is confirmed.'))
-        
-    return redirect(user)
+    
+    if request.user.is_authenticated():
+        return redirect('profiles:my_profile')
+    
+    return redirect('/')
 
 @login_required
 def resend_confirmation_email(request):
@@ -232,10 +235,10 @@ def _fb64_encode(s):
     http://stackoverflow.com/questions/4386691/facebook-error-error-validating-verification-code/5389447#5389447
 
     '''
-    return base64.b64encode(s, ['-', '_'])
+    return base64.b64encode(s.encode('utf-8'), ['-', '_'])
 
 def _fb64_decode(s):
-    return base64.b64decode(str(s), ['-', '_'])
+    return base64.b64decode(str(s), ['-', '_']).decode('utf-8')
 
 
 def _fb_callback_url(request, fb64_next):
@@ -258,7 +261,7 @@ def _fb_fallback_url(fb64_next):
     if 'close_window' in final_target_url:
         return final_target_url
     else:
-        return '%s?next=%s' % (reverse('auth:login'), final_target_url)
+        return u'%s?next=%s' % (reverse('auth:login'), final_target_url)
 
 
 def facebook_login(request, next=None):

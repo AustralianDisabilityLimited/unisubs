@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<user>
+  <fullName>Dmitriy Kostochko</fullName>
+  <properties>
+    <hudson.model.MyViewsProperty>
+      <primaryViewName>Все</primaryViewName>
+      <views>
+        <hudson.model.AllView>
+          <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
+          <name>Все</name>
+          <filterExecutors>false</filterExecutors>
+          <filterQueue>false</filterQueue>
+        </hudson.model.AllView>
+      </views>
+    </hudson.model.MyViewsProperty>
+    <hudson.security.HudsonPrivateSecurityRealm_-Details>
+      <passwordHash>OyYLQh:e41e60a67eadce9e9133901a1147f32c4f5a7a8dab7868f40298f54751a09192</passwordHash>
+    </hudson.security.HudsonPrivateSecurityRealm_-Details>
+    <hudson.tasks.Mailer_-UserProperty>
+      <emailAddress>alerion.um@gmail.com</emailAddress>
+    </hudson.tasks.Mailer_-UserProperty>
+  </properties>
+</user>

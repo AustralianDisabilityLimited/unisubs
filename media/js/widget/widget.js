@@ -32,6 +32,7 @@ unisubs.widget.Widget = function(widgetConfig) {
     this.alternateVideoURLs_ = widgetConfig['alternate_video_urls'];
     this.forceFormat_ = !!widgetConfig['force_format'];
     this.videoConfig_ = widgetConfig['video_config'];
+    this.streamer_ = widgetConfig['streamer'];
     /**
      * If true, this is the equivalent of clicking on "Add subtitles" 
      * if base state is null, or equivalent of clicking on "Improve 
@@ -163,13 +164,22 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
         this.createVideoPlayer_(this.videoSource_);
     else
         this.addVideoLoadingPlaceholder_(el);
-    this.videoTab_ = new unisubs.widget.VideoTab();
-    var videoTabContainer = new goog.ui.Component();
-    this.addChild(videoTabContainer, true);
-    videoTabContainer.addChild(this.videoTab_, true);
-    videoTabContainer.getElement().className = 
-        'unisubs-videoTab-container';
-    this.videoTab_.showLoading();
+    if (this.streamer_) {
+        this.streamBox_ = new unisubs.streamer.StreamBox();
+        var streamerContainer = new goog.ui.Component();
+        this.addChild(streamerContainer, true);
+        streamerContainer.addChild(this.streamBox_, true);
+        // TODO: show loading?
+    }
+    else {
+        this.videoTab_ = new unisubs.widget.VideoTab();
+        var videoTabContainer = new goog.ui.Component();
+        this.addChild(videoTabContainer, true);
+        videoTabContainer.addChild(this.videoTab_, true);
+        videoTabContainer.getElement().className = 
+            'unisubs-videoTab-container';
+        this.videoTab_.showLoading();
+    }
     var args = {
         'video_url': this.videoURL_,
         'is_remote': unisubs.isFromDifferentDomain()
@@ -198,24 +208,37 @@ unisubs.widget.Widget.prototype.showWidgetError_ = function() {
             this.createVideoPlayer_(this.videoSource_);            
         }
     }
-    this.videoTab_.showError();
+    if (this.videoTab_) {
+        this.videoTab_.showError();
+    }
 };
 
 unisubs.widget.Widget.prototype.initializeState_ = function(result) {
+    if (result && !result["error_msg"]) {
+        if (!this.isVideoSourceImmediatelyUsable_()) {
+            goog.dom.removeNode(this.videoPlaceholder_);
+            var videoSource = unisubs.player.MediaSource.bestVideoSource(
+                result['video_urls']);
+            if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
+                this.videoConfig_)
+                videoSource.setVideoConfig(this.videoConfig_);
+            this.videoSource_ = videoSource;
+            this.createVideoPlayer_(this.videoSource_);
+        }
+    }
+    if (this.streamer_) {
+        this.initializeStateStreamer_(result);
+    }
+    else {
+        this.initializeStateTab_(result);
+    }
+};
+
+unisubs.widget.Widget.prototype.initializeStateTab_ = function(result) {
     if (!result || result["error_msg"]) {
         // this happens, for example, for private youtube videos.
         this.videoTab_.showError(result["error_msg"]);
         return;
-    }
-    if (!this.isVideoSourceImmediatelyUsable_()) {
-        goog.dom.removeNode(this.videoPlaceholder_);
-        var videoSource = unisubs.player.MediaSource.bestVideoSource(
-            result['video_urls']);
-        if (goog.typeOf(videoSource) == goog.typeOf(this.videoSource_) &&
-            this.videoConfig_)
-            videoSource.setVideoConfig(this.videoConfig_);
-        this.videoSource_ = videoSource;
-        this.createVideoPlayer_(this.videoSource_);
     }
 
     this.controller_ = new unisubs.widget.WidgetController(
@@ -230,7 +253,16 @@ unisubs.widget.Widget.prototype.initializeState_ = function(result) {
     else if (this.translateImmediately_)
         goog.Timer.callOnce(
             goog.bind(subController_.openNewLanguageDialog, 
-                      subController_));
+                      subController_));    
+};
+
+unisubs.widget.Widget.prototype.initializeStateStreamer_ = function(result) {
+    var subtitleState = unisubs.widget.SubtitleState.fromJSON(
+        result['subtitles']);
+    this.streamBox_.setSubtitles(subtitleState.SUBTITLES);
+    var controller = new unisubs.streamer.StreamerController(
+        this.videoPlayer_, this.streamBox_);
+    controller.initializeState(result);
 };
 
 unisubs.widget.Widget.prototype.enterDocument = function() {

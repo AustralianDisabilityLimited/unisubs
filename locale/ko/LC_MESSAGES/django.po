@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-09 01:31-0500\n"
+"POT-Creation-Date: 2011-10-16 01:31-0500\n"
 "PO-Revision-Date: 2011-10-02 06:43+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.net/projects/p/"
@@ -315,6 +315,10 @@ msgstr "클링온어"
 msgid "Maltese"
 msgstr "몰티즈어"
 
+#: settings.py:116 utils/translation_names.py:15
+msgid "Armenian"
+msgstr "아르메니아어"
+
 #: apps/auth/admin.py:13 templates/statistic/users_statistic.html:12
 #: templates/teams/edit_members.html:93 templates/teams/edit_members.html:141
 msgid "Username"
@@ -346,58 +350,58 @@ msgstr "Email"
 msgid "Hide"
 msgstr "숨기기"
 
-#: apps/auth/models.py:84
+#: apps/auth/models.py:87
 msgid "Retired user"
 msgstr "탈퇴한 사용자"
 
-#: apps/auth/models.py:265
+#: apps/auth/models.py:270
 msgid "Add comment"
 msgstr "댓글 달기"
 
-#: apps/auth/models.py:266
+#: apps/auth/models.py:271
 msgid "Start subtitles"
 msgstr "자막 시작"
 
-#: apps/auth/models.py:267
+#: apps/auth/models.py:272
 msgid "Start translation"
 msgstr "번역 시작"
 
-#: apps/auth/models.py:268
+#: apps/auth/models.py:273
 msgid "Edit subtitles"
 msgstr "자막 수정"
 
-#: apps/auth/models.py:269
+#: apps/auth/models.py:274
 msgid "Edit translation"
 msgstr "번역 수정"
 
-#: apps/auth/models.py:326
+#: apps/auth/models.py:331
 msgid "understand enough"
 msgstr "충분히 이해함"
 
-#: apps/auth/models.py:327
+#: apps/auth/models.py:332
 msgid "understand 99%"
 msgstr "99 % 이해"
 
-#: apps/auth/models.py:328
+#: apps/auth/models.py:333
 msgid "write like a native"
 msgstr "네이티브처럼 쓰기"
 
-#: apps/auth/models.py:333
+#: apps/auth/models.py:338
 msgid "follow requests in language"
 msgstr "언어 요청 팔로우 하기"
 
-#: apps/auth/models.py:348
+#: apps/auth/models.py:353
 msgid ""
 "This is date when start to display announcement. And only the last will be "
 "displayed."
 msgstr ""
 "이것이 발표를 표시하기 시작할 때의 날짜입니다. 마지막 날짜만 표시됩니다."
 
-#: apps/auth/models.py:446
+#: apps/auth/models.py:451
 msgid "e-mail confirmation"
 msgstr ""
 
-#: apps/auth/models.py:447
+#: apps/auth/models.py:452
 msgid "e-mail confirmations"
 msgstr ""
 
@@ -409,15 +413,15 @@ msgstr ""
 msgid "Email is confirmed."
 msgstr ""
 
-#: apps/auth/views.py:58
+#: apps/auth/views.py:61
 msgid "Confirmation email was sent."
 msgstr ""
 
-#: apps/auth/views.py:60
+#: apps/auth/views.py:63
 msgid "You email is empty or already confirmed."
 msgstr ""
 
-#: apps/auth/views.py:108
+#: apps/auth/views.py:111
 msgid "Your account was deleted."
 msgstr "귀하의 계정이 삭제되었습니다."
 
@@ -6299,10 +6303,6 @@ msgstr "아랍어"
 #: utils/translation_names.py:14
 msgid "Aragonese"
 msgstr "아라곤어"
-
-#: utils/translation_names.py:15
-msgid "Armenian"
-msgstr "아르메니아어"
 
 #: utils/translation_names.py:16
 msgid "Aromanian"

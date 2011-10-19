@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-09 01:34-0500\n"
+"POT-Creation-Date: 2011-10-16 01:34-0500\n"
 "PO-Revision-Date: 2011-10-02 06:43+0000\n"
 "Last-Translator: unisubsapi <debert+pcf@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.net/projects/p/"
@@ -316,6 +316,10 @@ msgstr ""
 msgid "Maltese"
 msgstr ""
 
+#: settings.py:116 utils/translation_names.py:15
+msgid "Armenian"
+msgstr ""
+
 #: apps/auth/admin.py:13 templates/statistic/users_statistic.html:12
 #: templates/teams/edit_members.html:93 templates/teams/edit_members.html:141
 msgid "Username"
@@ -347,57 +351,57 @@ msgstr "البريد الإلكتروني"
 msgid "Hide"
 msgstr "أخفِ"
 
-#: apps/auth/models.py:84
+#: apps/auth/models.py:87
 msgid "Retired user"
 msgstr ""
 
-#: apps/auth/models.py:265
+#: apps/auth/models.py:270
 msgid "Add comment"
 msgstr "أضف تعليقك"
 
-#: apps/auth/models.py:266
+#: apps/auth/models.py:271
 msgid "Start subtitles"
 msgstr "ابدأ الترجمة"
 
-#: apps/auth/models.py:267
+#: apps/auth/models.py:272
 msgid "Start translation"
 msgstr "ابدأ الترجمة"
 
-#: apps/auth/models.py:268
+#: apps/auth/models.py:273
 msgid "Edit subtitles"
 msgstr "حرر الترجمة"
 
-#: apps/auth/models.py:269
+#: apps/auth/models.py:274
 msgid "Edit translation"
 msgstr "حرر الترجمة"
 
-#: apps/auth/models.py:326
+#: apps/auth/models.py:331
 msgid "understand enough"
 msgstr "أفهم ما يكفي"
 
-#: apps/auth/models.py:327
+#: apps/auth/models.py:332
 msgid "understand 99%"
 msgstr "أفهم 99%"
 
-#: apps/auth/models.py:328
+#: apps/auth/models.py:333
 msgid "write like a native"
 msgstr "أكتب بطلاقة"
 
-#: apps/auth/models.py:333
+#: apps/auth/models.py:338
 msgid "follow requests in language"
 msgstr ""
 
-#: apps/auth/models.py:348
+#: apps/auth/models.py:353
 msgid ""
 "This is date when start to display announcement. And only the last will be "
 "displayed."
 msgstr "هذا هو التاريخ الذي يبدأ عرض الاعلان. وسوف يتم عرض الأخير فقط."
 
-#: apps/auth/models.py:446
+#: apps/auth/models.py:451
 msgid "e-mail confirmation"
 msgstr ""
 
-#: apps/auth/models.py:447
+#: apps/auth/models.py:452
 msgid "e-mail confirmations"
 msgstr ""
 
@@ -409,15 +413,15 @@ msgstr ""
 msgid "Email is confirmed."
 msgstr ""
 
-#: apps/auth/views.py:58
+#: apps/auth/views.py:61
 msgid "Confirmation email was sent."
 msgstr ""
 
-#: apps/auth/views.py:60
+#: apps/auth/views.py:63
 msgid "You email is empty or already confirmed."
 msgstr ""
 
-#: apps/auth/views.py:108
+#: apps/auth/views.py:111
 msgid "Your account was deleted."
 msgstr "حُذف حسابك."
 
@@ -5984,10 +5988,6 @@ msgstr "العربية"
 
 #: utils/translation_names.py:14
 msgid "Aragonese"
-msgstr ""
-
-#: utils/translation_names.py:15
-msgid "Armenian"
 msgstr ""
 
 #: utils/translation_names.py:16

@@ -152,9 +152,15 @@ unisubs.widget.PlayController.prototype.languageSelected = function(videoLanguag
         });
 };
 
+unisubs.widget.PlayController.prototype.setCaptionDisplayStrategy = 
+    function(strategy) 
+{
+    this.captionDisplayStrategy_ = strategy;
+};
+
 unisubs.widget.PlayController.prototype.captionReached_ = function(event) {
     var c = event.caption;
-    this.videoPlayer_.showCaptionText(c ? c.getText() : '');
+    this.captionDisplayStrategy_(c);
 };
 
 unisubs.widget.PlayController.prototype.finished_ = function() {

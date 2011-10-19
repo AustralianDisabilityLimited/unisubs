@@ -75,6 +75,14 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
         videoID, this.videoPlayer_.getVideoSource(), this.videoPlayer_, 
         this.videoTab_, popupMenu, subtitleState);
 
+    var videoPlayer = this.videoPlayer_;
+    var captionDisplayStrategy = this.captionDisplayStrategy_ ||
+        (function(editableCaption) {
+            videoPlayer.showCaptionText(
+                editableCaption ? editableCaption.getText() : '');
+        });
+    this.playController_.setCaptionDisplayStrategy(captionDisplayStrategy);
+
     this.subtitleController_ = new unisubs.widget.SubtitleController(
         videoID, this.videoURL_, 
         this.playController_, this.videoTab_, popupMenu);

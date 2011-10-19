@@ -17,7 +17,7 @@
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
 from utils import render_to, render_to_json
-from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm, TaskAssignForm
+from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeamVideoForm, EditTeamVideoForm, EditLogoForm, AddTeamVideosFromFeedForm, TaskAssignForm, SettingsForm
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, Task, Project
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
@@ -38,7 +38,6 @@ from videos.models import Action
 from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
-from teams.rpc import TeamsApi
 from teams.search_indexes import TeamVideoLanguagesIndex
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -315,6 +314,7 @@ def team_settings(request, slug):
         'user_can_delete_tasks': member.can_delete_tasks(),
         'user_can_assign_tasks': member.can_assign_tasks(),
         'assign_form': TaskAssignForm(team, member),
+        'settings_form': SettingsForm(),
     }
 
 @login_required

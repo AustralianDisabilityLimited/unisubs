@@ -57,7 +57,7 @@
     </div>
       
     
-<script>
+<script type="text/javascript">
 $(window).load(function(){
     //findme
     {% include "teams/settings-panel.js" %}
@@ -157,7 +157,6 @@ This is needed, since it's for the js templating
     </ul>
 </script>
 
-
 <script id="confirmationDialog" type="text/html">
     <div class="modal-window-bg">
       <h3>{{title}}</h3>
@@ -167,7 +166,6 @@ This is needed, since it's for the js templating
       <button class="blue_button small submit_button confirm">{{okText}}</button>
     </div>
 </script>
-
 
 <script id="tasksListItem" type="text/html">
     <p>
@@ -287,6 +285,50 @@ This is needed, since it's for the js templating
                 <label for="id_guidelines_review">When reviewing</label><br/>
                 <textarea id="id_guidelines_review" name="guidelines_review"></textarea><br/>
             </div>
+
+            <input type="submit" class="submit" value="Save Changes" name="save" />
+        </form>
+    </div>
+</script>
+
+<script id="basicPanel" type="text/html">
+    <div class="panel-basic">
+        <form id="basic_settings_form">
+            <fieldset>
+                <h3>Team Details</h3>
+
+                <label for="basic_name">Name</label>
+                <input id="basic_name" type="text" name="name" value="" />
+
+                <label for="basic_description">Description</label>
+                <textarea id="basic_description" name="name"></textarea>
+
+                <div style="float: left; clear: both; margin: 30px 0;">
+                    <input type="file" id="basic_picture" name="picture" />
+                    <button class="green_button small upload-picture">
+                        <span>Upload a Logo</span>
+                    </button>
+                </div>
+                <p class="help">Max size 000x000</p>
+            </fieldset>
+
+            <fieldset>
+                <h3>Permissions</h3>
+
+                <label for="id_membership_policy">Who can join</label>
+                {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
+
+                <label for="id_video_policy">Who can add videos</label>
+                {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
+            </fieldset>
+
+            <fieldset>
+                <h3>Workflows</h3>
+                <p class="help">Moderate subtitles on your videos</p>
+
+                <input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/>
+                <label for="basic_workflows_enabled">Enable workflows</label>
+            </fieldset>
 
             <input type="submit" class="submit" value="Save Changes" name="save" />
         </form>

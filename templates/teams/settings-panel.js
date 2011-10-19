@@ -311,6 +311,40 @@ var ProjectPanel  = AsyncPanel.$extend({
     }
 });
 
+// Basic Settings -------------------------------------------------------------
+var BasicPanel  = AsyncPanel.$extend({
+    __init__: function() {
+        // Rebind functions
+        this.onSubmit = _.bind(this.onSubmit, this);
+        this.onLoaded = _.bind(this.onLoaded, this);
+
+        // Render template
+        this.el = ich.basicPanel();
+
+        // Bind events
+        $('form', this.el).submit(this.onSubmit);
+
+        // Load initial data
+        // TeamsApiV2.guidelines_get(TEAM_SLUG, this.onLoaded);
+    },
+
+    onSubmit: function(e) {
+        e.preventDefault();
+
+        var data = {};
+        _.each(this.SETTING_KEYS, function(key) {
+            data[key] = $('#id_' + key, this.el).val();
+        });
+
+        TeamsApiV2.guidelines_set(TEAM_SLUG, data, this.onLoaded);
+    },
+    onLoaded: function(data) {
+        _.each(data, function(setting) {
+            $('#id_' + setting.key, this.el).val(setting.data);
+        }, this);
+    }
+});
+
 // Guidelines and Messages ----------------------------------------------------
 var GuidelinesPanel  = AsyncPanel.$extend({
     __init__: function() {
@@ -726,7 +760,7 @@ var ConfirmationDialog = Class.$extend({
 
 function boostrapTabs(){
     var buttons = [
-        {label:"Basic Settings", panelSelector:".panel-basic", klass:null},
+        {label:"Basic Settings", panelSelector:".panel-basic", klass:BasicPanel},
         {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:GuidelinesPanel},
         {label:"Display Settings", panelSelector:".panel-display", klass:null},
         {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel},
@@ -734,6 +768,5 @@ function boostrapTabs(){
     ];
     var viewer = new TabViewer(buttons, $(".sub-settings-panel"), $(CONTAINER_SELECTOR));
     viewer.openDefault();
-    
 }
 boostrapTabs();

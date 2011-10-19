@@ -412,3 +412,8 @@ class GuidelinesMessagesForm(forms.Form):
     guidelines_subtitle = forms.CharField(max_length=1024, required=False)
     guidelines_translate = forms.CharField(max_length=1024, required=False)
     guidelines_review = forms.CharField(max_length=1024, required=False)
+
+class SettingsForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ('name', 'membership_policy', 'video_policy', 'description')

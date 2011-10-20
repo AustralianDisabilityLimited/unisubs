@@ -25,7 +25,7 @@ goog.provide('unisubs.widget.WidgetDecorator');
  */
 unisubs.widget.WidgetDecorator = function(videoPlayer) {
     this.videoPlayer_ = videoPlayer;
-    this.videoTab_ = new unisubs.widget.VideoTab(true);
+    this.videoTab_ = new unisubs.widget.HangingVideoTab(true);
     this.videoTab_.render();
     this.videoTab_.show(false);
     this.videoTab_.showLoading();

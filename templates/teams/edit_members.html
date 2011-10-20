@@ -27,7 +27,7 @@
                         if (response.error){
                             $('.invite-user-error').html(response.error).show();
                         }else{
-                            $.jGrowl('User was invited. Wait for onfirmation.')
+                            $.jGrowl('User was invited. Wait for confirmation.')
                             $('.invite-user-error').html('').hide();
                             $('#invite-user').modClose();
                             $('.username-invite-field, .user-invite-note').val('');

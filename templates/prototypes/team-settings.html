@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body_attrs %}class="new-teams"{% endblock %}
+{% block body_attrs %}class="v1 teams"{% endblock %}
 
 {% block main_content %}
 
@@ -14,10 +14,10 @@
         <li class="current"><a href="/prototypes/team-settings/">Settings</a></li>
     </ul>
 
-    <div class="grid_9 alpha">
+    <div class="view grid_9 alpha">
 
         <form action="">
-            <div class="grid_4">
+            <div class="grid_4 alpha">
                 <fieldset>
                     <legend>Team Details</legend>
 
@@ -28,18 +28,34 @@
                     <textarea name="" id="" cols="30" rows="10"></textarea>
                 </fieldset>
             </div>
-            <div class="grid_4 secondary">
+            <div class="grid_4 omega">
                 <fieldset>
-                    <legend>Permissions</legend>
+                    <legend>Privacy Settings</legend>
+
+                    <label for="">Who can view your videos</label>
+                    <select name="" id="">
+                        <option value="">Anyone</option>
+                        <option value="">Anyone with the URL</option>
+                        <option value="">Members only</option>
+                    </select>
+
+                    <label for=""><input type="checkbox" /> Hide team from public</label>
+
+                </fieldset>
+                <fieldset>
+                    <legend>Member Permissions</legend>
 
                     <label for="">Who can join</label>
                     <select name="" id="">
                         <option value="">Anyone</option>
+                        <option value="">Approved Applicants</option>
                     </select>
 
                     <label for="">Who can add videos</label>
                     <select name="" id="">
-                        <option value="">Anyone</option>
+                        <option value="">Any Team Member</option>
+                        <option value="">Managers only</option>
+                        <option value="">Admins only</option>
                     </select>
                 </fieldset>
                 <fieldset>
@@ -54,12 +70,12 @@
         </form>
     </div>
 
-    <div class="grid_3 omega">
-        <ul class="view-filter">
+    <div class="controls grid_3 omega">
+        <ul>
             <li class="current"><a href="/prototypes/team-settings/">Basic Settings</a></li>
             <li><a href="/prototypes/team-settings-gm/">Guidelines & Messages</a></li>
             <li><a href="/prototypes/team-settings-display/">Display Settings</a></li>
-            <li><a href="/prototypes/team-settings-projects/">Projects</a></li>
+            <li><a href="/prototypes/team-settings-projects/">Projects<span>4</span></a></li>
         </ul>
     </div>
 {% endblock %}

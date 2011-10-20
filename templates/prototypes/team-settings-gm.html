@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body_attrs %}class="new-teams"{% endblock %}
+{% block body_attrs %}class="v1 teams"{% endblock %}
 
 {% block main_content %}
 
@@ -14,37 +14,40 @@
         <li class="current"><a href="/prototypes/team-settings/">Settings</a></li>
     </ul>
 
-    <div class="grid_9 alpha">
+    <div class="view grid_9 alpha">
 
         <form action="">
-            <div class="grid_4">
+            <div class="grid_4 alpha">
                 <fieldset>
                     <legend>Custom Messages</legend>
                     <p class="notation">Customize messages sent to your users. The text you enter will precede the default system message.</p>
 
+                    <label for="">When a user applies to become a member</label>
+                    <textarea name="" id="" rows="8"></textarea>
+
                     <label for="">When a member joins the team</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
 
                     <label for="">When a member is given the Manager role</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
 
                     <label for="">When a member is given the Admin role</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
                 </fieldset>
             </div>
-            <div class="grid_4 secondary">
+            <div class="grid_4 omega">
                 <fieldset>
                     <legend>Guidelines</legend>
                     <p class="notation">Add guidelines to be displayed to your users when completing tasks.</p>
 
                     <label for="">When creating subtitles</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
 
                     <label for="">When translating</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
 
                     <label for="">When reviewing</label>
-                    <textarea name="" id="" rows="10"></textarea>
+                    <textarea name="" id="" rows="8"></textarea>
                 </fieldset>
             </div>
             <div class="grid_9 submit">
@@ -53,12 +56,12 @@
         </form>
     </div>
 
-    <div class="grid_3 omega">
-        <ul class="view-filter">
+    <div class="controls grid_3 omega">
+        <ul>
             <li><a href="/prototypes/team-settings/">Basic Settings</a></li>
             <li class="current"><a href="/prototypes/team-settings-gm/">Guidelines & Messages</a></li>
             <li><a href="/prototypes/team-settings-display/">Display Settings</a></li>
-            <li><a href="/prototypes/team-settings-projects/">Projects</a></li>
+            <li><a href="/prototypes/team-settings-projects/">Projects<span>4</span></a></li>
         </ul>
     </div>
 {% endblock %}

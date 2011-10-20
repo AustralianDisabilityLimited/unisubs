@@ -568,7 +568,7 @@ class VideoMetadata(models.Model):
         if len(content) > 30:
             content = content[:30] + '...'
         return u'%s - %s: %s' % (self.video,
-                                 VIDEO_META_TYPE_NAMES[self.metadata_type],
+                                 self.get_metadata_type_display(),
                                  content)
 
     @classmethod
@@ -1156,7 +1156,25 @@ class Subtitle(models.Model):
         if self.pk:
             return u"(%4s) %s %s -> %s - syc = %s = %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
                                           self.start_time, self.end_time, self.is_synced, self.subtitle_text, self.version_id)
-    
+
+START_OF_PARAGRAPH = 1
+
+SUBTITLE_META_CHOICES = (
+    (START_OF_PARAGRAPH, 'Start of pargraph'),
+)
+
+class SubtitleMetadata(models.Model):
+    subtitle = models.ForeignKey(Subtitle)
+    metadata_type = models.PositiveIntegerField(choices=SUBTITLE_META_CHOICES)
+    content = models.CharField(max_length=255)
+
+    created = models.DateTimeField(editable=False, auto_now_add=True)
+    modified = models.DateTimeField(editable=False, auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+        verbose_name_plural = 'subtitles metadata'
+
 from django.template.loader import render_to_string
 
 class ActionRenderer(object):

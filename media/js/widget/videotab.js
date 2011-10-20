@@ -16,7 +16,7 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.widget.HangingVideoTab');
+goog.provide('unisubs.widget.VideoTab');
 
 /**
  * @interface

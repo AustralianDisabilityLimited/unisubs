@@ -27,7 +27,7 @@ from django.template import RequestContext
 from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt, SSASubtitles
 import simplejson as json
-from simplejson.decoder import JSONDecodeError
+from simplejson.decoder import JSONDecodeError, JSONDecodeError
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
@@ -306,7 +306,10 @@ def rpc(request, method_name, null=False):
     args = { 'request': request }
     try:
         for k, v in request.POST.items():
-            args[k.encode('ascii')] = json.loads(v)
+            try:
+                args[k.encode('ascii')] = json.loads(v)
+            except JSONDecodeError:
+                pass            
     except UnicodeEncodeError:
         return HttpResponseServerError('non-ascii chars received')
     except JSONDecodeError:
@@ -334,7 +337,10 @@ def xd_rpc(request, method_name, null=False):
     args = { 'request' : request }
     for k, v in request.POST.items():
         if k[0:4] == 'xdp:':
-            args[k[4:].encode('ascii')] = json.loads(v)
+            try:
+                args[k[4:].encode('ascii')] = json.loads(v)
+            except JSONDecodeError:
+                pass
     rpc_module = null_rpc_views if null else rpc_views
     func = getattr(rpc_module, method_name)
     result = func(**args)

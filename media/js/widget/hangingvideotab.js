@@ -16,14 +16,14 @@
 // along with this program.  If not, see 
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.widget.VideoTab');
+goog.provide('unisubs.widget.HangingVideoTab');
 
 /**
  * @constructor
  * @param {boolean=} opt_forAnchoring If true, will add a style that gives 
  *     the tab absolute position.
  */
-unisubs.widget.VideoTab = function(opt_forAnchoring) {
+unisubs.widget.HangingVideoTab = function(opt_forAnchoring) {
     goog.ui.Component.call(this);
     this.anchorElem_ = null;
     this.imageElem_ = null;
@@ -41,10 +41,10 @@ unisubs.widget.VideoTab = function(opt_forAnchoring) {
     this.imageLoader_.addImage('small_logo', this.logoURL_);
     this.imageLoader_.start();
 };
-goog.inherits(unisubs.widget.VideoTab, goog.ui.Component);
+goog.inherits(unisubs.widget.HangingVideoTab, goog.ui.Component);
 
-unisubs.widget.VideoTab.prototype.createDom = function() {
-    unisubs.widget.VideoTab.superClass_.createDom.call(this);
+unisubs.widget.HangingVideoTab.prototype.createDom = function() {
+    unisubs.widget.HangingVideoTab.superClass_.createDom.call(this);
     goog.dom.classes.add(
         this.getElement(), 
         "cleanslate", "unisubs-videoTab", 'unisubs-videoTab-' + 
@@ -61,18 +61,18 @@ unisubs.widget.VideoTab.prototype.createDom = function() {
                     this.anchorElem_, this.nudgeElem_);
 };
 
-unisubs.widget.VideoTab.prototype.enterDocument = function() {
-    unisubs.widget.VideoTab.superClass_.enterDocument.call(this);
+unisubs.widget.HangingVideoTab.prototype.enterDocument = function() {
+    unisubs.widget.HangingVideoTab.superClass_.enterDocument.call(this);
     this.showNudge(false);
     this.getHandler().
         listen(this.nudgeElem_, 'click', this.nudgeClicked_);
 };
 
-unisubs.widget.VideoTab.prototype.getAnchorElem = function() {
+unisubs.widget.HangingVideoTab.prototype.getAnchorElem = function() {
     return this.anchorElem_;
 };
 
-unisubs.widget.VideoTab.prototype.showLoading = function() {
+unisubs.widget.HangingVideoTab.prototype.showLoading = function() {
     this.imageElem_.src = this.spinnerGifURL_;
     goog.dom.setTextContent(this.spanElem_, "Loading");
 };
@@ -82,7 +82,7 @@ unisubs.widget.VideoTab.prototype.showLoading = function() {
 * any interaction handlers on the widget.
 * @param {str=} msg An optional message explaining what went wrong
 **/
-unisubs.widget.VideoTab.prototype.showError = function(msg) {
+unisubs.widget.HangingVideoTab.prototype.showError = function(msg) {
     this.imageElem_.src = this.logoURL_;
     goog.dom.setTextContent(this.spanElem_, msg || "Subs Unavailable");
     this.getHandler().listen(
@@ -98,7 +98,7 @@ unisubs.widget.VideoTab.prototype.showError = function(msg) {
  * calling showContent instead.
  *
  */
-unisubs.widget.VideoTab.prototype.stopLoading = function() {
+unisubs.widget.HangingVideoTab.prototype.stopLoading = function() {
     this.imageElem_.src = this.logoURL_;
     if (this.text_)
         goog.dom.setTextContent(this.spanElem_, this.text_);
@@ -110,7 +110,7 @@ unisubs.widget.VideoTab.prototype.stopLoading = function() {
  * @param {unisubs.widget.SubtitleState=} opt_playSubState Subtitles 
  *     that are currently loaded to play in widget.
  */
-unisubs.widget.VideoTab.prototype.showContent = function(
+unisubs.widget.HangingVideoTab.prototype.showContent = function(
     hasSubtitles, opt_playSubState) 
 {
     this.imageElem_.src = this.logoURL_;
@@ -125,14 +125,14 @@ unisubs.widget.VideoTab.prototype.showContent = function(
     goog.dom.setTextContent(this.spanElem_, text);
 };
 
-unisubs.widget.VideoTab.prototype.nudgeClicked_ = function(e) {
+unisubs.widget.HangingVideoTab.prototype.nudgeClicked_ = function(e) {
     e.preventDefault();
     unisubs.Tracker.getInstance().trackPageview('Clicks_Improve_Subtitles_or_translation');
     if (this.nudgeClickCallback_)
         this.nudgeClickCallback_();
 };
 
-unisubs.widget.VideoTab.prototype.showNudge = function(shows) {
+unisubs.widget.HangingVideoTab.prototype.showNudge = function(shows) {
     unisubs.style.setVisibility(this.nudgeElem_, shows);
     unisubs.style.setVisibility(this.nudgeSpanElem_, shows);
      if (shows){
@@ -151,7 +151,7 @@ unisubs.widget.VideoTab.prototype.showNudge = function(shows) {
  * @param shareURL {goog.URI} The url for the 'share' link.
  * @param newWindow {bool=} If true will open on new window.
  */
-unisubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWindow) {
+unisubs.widget.HangingVideoTab.prototype.createShareButton = function (shareURL, newWindow) {
     // users can make share button never show by setting UNISUBS_HIDESHARE.
     // see https://www.pivotaltracker.com/story/show/13700869
     if (!unisubs.isEmbeddedInDifferentDomain() || window['UNISUBS_HIDESHARE']) {
@@ -168,14 +168,14 @@ unisubs.widget.VideoTab.prototype.createShareButton = function (shareURL, newWin
     goog.dom.setProperties(this.shareElem_, {"href": shareURL.toString(), "target":target});
 };
 
-unisubs.widget.VideoTab.prototype.updateNudge = function(text, fn) {
+unisubs.widget.HangingVideoTab.prototype.updateNudge = function(text, fn) {
     goog.dom.setTextContent(this.nudgeSpanElem_, text);
     this.nudgeClickCallback_ = fn;
 };
-unisubs.widget.VideoTab.prototype.show = function(shown) {
+unisubs.widget.HangingVideoTab.prototype.show = function(shown) {
     unisubs.style.showElement(this.getElement(), shown);
 };
-unisubs.widget.VideoTab.prototype.disposeInternal = function() {
-    unisubs.widget.VideoTab.superClass_.disposeInternal.call(this);
+unisubs.widget.HangingVideoTab.prototype.disposeInternal = function() {
+    unisubs.widget.HangingVideoTab.superClass_.disposeInternal.call(this);
     this.imageLoader_.dispose();
 };

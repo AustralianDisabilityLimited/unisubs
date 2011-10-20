@@ -172,7 +172,7 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
         // TODO: show loading?
     }
     else {
-        this.videoTab_ = new unisubs.widget.VideoTab();
+        this.videoTab_ = new unisubs.widget.HangingVideoTab();
         var videoTabContainer = new goog.ui.Component();
         this.addChild(videoTabContainer, true);
         videoTabContainer.addChild(this.videoTab_, true);

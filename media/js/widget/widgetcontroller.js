@@ -23,12 +23,14 @@ goog.provide('unisubs.widget.WidgetController');
  *
  */
 unisubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
+    goog.events.EventTarget.call(this);
     // TODO: when all VideoSource implementations support getVideoURL,
     // remove videoURL from the parameters for this constructor.
     this.videoURL_ = videoURL;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
 };
+goog.inherits(unisubs.widget.WidgetController, goog.events.EventTarget);
 
 /**
  * Widget calls this when show_widget rpc call returns.
@@ -88,6 +90,7 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
     this.playController_ = new unisubs.widget.PlayController(
         videoID, this.videoPlayer_.getVideoSource(), this.videoPlayer_, 
         this.videoTab_, popupMenu, subtitleState);
+    this.playController_.setParentEventTarget(this);
 
     var videoPlayer = this.videoPlayer_;
     var captionDisplayStrategy = this.captionDisplayStrategy_ ||

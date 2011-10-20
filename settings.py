@@ -219,7 +219,6 @@ JS_CORE = \
      'js/startdialog/tolanguage.js',
      'js/startdialog/tolanguages.js',
      'js/startdialog/dialog.js',
-     'js/streamer/streamercontroller.js', 
      'js/streamer/streambox.js', 
      'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 

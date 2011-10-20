@@ -50,6 +50,12 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
         streamBox,
         unisubs.streamer.StreamSub.SUB_CLICKED,
         subClicked);
+    goog.events.listen(
+        controller,
+        unisubs.widget.PlayController.LANGUAGE_CHANGED,
+        function(e) {
+            streamBox.setSubtitles(e.target.getSubtitlesJSON());
+        });
     unisubs.Rpc.call(
         'show_widget', args,
         goog.bind(controller.initializeState, controller));

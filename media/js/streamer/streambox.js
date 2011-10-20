@@ -87,8 +87,18 @@ unisubs.streamer.StreamBox.prototype.setSubtitles = function(subtitles) {
                   'id': 'usub-a-' + s['subtitle_id'] },
                 s['text']);
         });
-    goog.dom.append(this.transcriptElem_, subSpans);
+    goog.dom.removeChildren(this.transcriptElem_);
+    var elems = [];
+    for (var i = 0; i < subSpans.length; i++) {
+        elems.push(subSpans[i]);
+        if (i < subSpans.length - 1) {
+            elems.push(goog.dom.createTextNode(" "));
+        }
+    }
+    goog.dom.append(this.transcriptElem_, elems);
     this.makeSubsAndSubMap_(subSpans);
+    this.streamBoxSearch_.setTranscriptElemAndSubs(
+        this.transcriptElem_, this.subs_);
 };
 
 unisubs.streamer.StreamBox.prototype.enterDocument = function() {

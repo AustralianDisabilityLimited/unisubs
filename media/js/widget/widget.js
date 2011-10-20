@@ -260,9 +260,8 @@ unisubs.widget.Widget.prototype.initializeStateStreamer_ = function(result) {
     var subtitleState = unisubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
     this.streamBox_.setSubtitles(subtitleState.SUBTITLES);
-    var controller = new unisubs.streamer.StreamerController(
-        this.videoPlayer_, this.streamBox_);
-    controller.initializeState(result);
+    unisubs.streamer.StreamerDecorator.makeStreamer(
+        this.videoPlayer_, this.streamBox_, result);
 };
 
 unisubs.widget.Widget.prototype.enterDocument = function() {

@@ -223,6 +223,7 @@ JS_CORE = \
      'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 
      'js/streamer/streamervideotab.js', 
+     'js/streamer/streamerdecorator.js', 
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
@@ -324,8 +325,7 @@ JS_WIDGETIZER_CORE.extend([
     'js/player/ooyalaplayer.js', 
     'js/player/wistiavideoplayer.js', 
     'js/player/brightcoveliteplayer.js', 
-    'js/player/soundcloudplayer.js', 
-    'js/streamer/streamerdecorator.js', 
+    'js/player/soundcloudplayer.js',
     'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)

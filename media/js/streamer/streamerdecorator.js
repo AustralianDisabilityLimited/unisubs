@@ -28,6 +28,10 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var captionBoxElem = 
         unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoElem);
     streamBox.decorate(captionBoxElem);
+    unisubs.streamer.StreamerDecorator.makeStreamer(videoPlayer, streamBox);
+};
+
+unisubs.streamer.StreamerDecorator.makeStreamer = function(videoPlayer, streamBox, opt_initialState) {
     var controller = new unisubs.widget.WidgetController(
         videoPlayer.getVideoSource().getVideoURL(), 
         videoPlayer, 
@@ -56,9 +60,14 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
         function(e) {
             streamBox.setSubtitles(e.target.getSubtitlesJSON());
         });
-    unisubs.Rpc.call(
-        'show_widget', args,
-        goog.bind(controller.initializeState, controller));
+    if (!opt_initialState) {
+        unisubs.Rpc.call(
+            'show_widget', args,
+            goog.bind(controller.initializeState, controller));
+    }
+    else {
+        controller.initializeState(opt_initialState);
+    }
 };
 
 unisubs.streamer.StreamerDecorator.makeOverlayStreamer_ = function(videoPlayer) {

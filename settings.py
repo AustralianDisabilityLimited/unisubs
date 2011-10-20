@@ -223,6 +223,7 @@ JS_CORE = \
      'js/streamer/streambox.js', 
      'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 
+     'js/streamer/streamervideotab.js', 
      'js/requestdialog.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",

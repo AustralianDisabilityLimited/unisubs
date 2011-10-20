@@ -99,6 +99,7 @@ unisubs.widget.PlayController.prototype.setUpSubs_ =
     this.subtitleState_ = subtitleState;
     var captionSet = new unisubs.subtitle.EditableCaptionSet(
         subtitleState.SUBTITLES);
+    this.subMap_ = captionSet.makeMap();
     this.captionManager_ = 
         new unisubs.CaptionManager(this.videoPlayer_, captionSet);
     this.playEventHandler_ = new goog.events.EventHandler(this);
@@ -117,6 +118,10 @@ unisubs.widget.PlayController.prototype.setUpSubs_ =
                this.trackPlay_);
     if (this.videoPlayer_.isPlaying())
         this.trackPlay_();
+};
+
+unisubs.widget.PlayController.prototype.getSubMap = function() {
+    return this.subMap_;
 };
 
 unisubs.widget.PlayController.prototype.trackPlay_ = function() {

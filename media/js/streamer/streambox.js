@@ -32,19 +32,46 @@ unisubs.streamer.StreamBox.prototype.createDom = function() {
     unisubs.streamer.StreamBox.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.transcriptElem_ = $d('div', 'unisubs-transcript');
-    this.unisubsLink_ = 
+    var unisubsLink = 
         $d('a', { 'href': '#' },
            $d('img', 
               { 'src': 
                 'http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png' } ));
+    this.videoTab_ = new unisubs.streamer.StreamerVideoTab(unisubsLink);
     var substreamerElem = 
         $d('div', 'unisubs-substreamer',
            $d('div', 'unisubs-substreamer-controls', 
               $d('ul', null, 
-                 $d('li', null, this.unisubsLink_))),
+                 $d('li', null, unisubsLink))),
            this.transcriptElem_);
     goog.dom.append(this.getElement(), substreamerElem);
 };
+
+unisubs.streamer.StreamBox.prototype.decorateInternal = function(elem) {
+    unisubs.streamer.StreamBox.superClass_.decorateInternal.call(this, elem);
+    this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
+        'div', 'unisubs-transcript', elem)[0];
+    this.resyncButton_ = goog.dom.getElementsByTagNameAndClass(
+        'a', 'resync', elem)[0];
+    this.videoTab_ = new unisubs.streamer.StreamerVideoTab(
+        goog.dom.getElement("unisubs-logo"));
+    var subSpans = goog.dom.getElementsByTagNameAndClass(
+        'span', 'unisubs-sub', elem);
+    this.makeSubsAndSubMap_(subSpans);
+    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
+    var searchContainer = goog.dom.getElementsByTagNameAndClass(
+        null, 'unisubs-search-container', elem)[0];
+    this.streamBoxSearch_.decorate(searchContainer);
+    this.streamBoxSearch_.setTranscriptElemAndSubs(
+        this.transcriptElem_, this.subs_);
+};
+
+
+unisubs.streamer.StreamBox.prototype.getVideoTab = function() {
+    return this.videoTab_;
+};
+
+
 
 /**
  * @param {Array} subtitles json subs from server
@@ -62,23 +89,6 @@ unisubs.streamer.StreamBox.prototype.setSubtitles = function(subtitles) {
         });
     goog.dom.append(this.transcriptElem_, subSpans);
     this.makeSubsAndSubMap_(subSpans);
-};
-
-unisubs.streamer.StreamBox.prototype.decorateInternal = function(elem) {
-    unisubs.streamer.StreamBox.superClass_.decorateInternal.call(this, elem);
-    this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
-        'div', 'unisubs-transcript', elem)[0];
-    this.resyncButton_ = goog.dom.getElementsByTagNameAndClass(
-        'a', 'resync', elem)[0];
-    var subSpans = goog.dom.getElementsByTagNameAndClass(
-        'span', 'unisubs-sub', elem);
-    this.makeSubsAndSubMap_(subSpans);
-    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
-    var searchContainer = goog.dom.getElementsByTagNameAndClass(
-        null, 'unisubs-search-container', elem)[0];
-    this.streamBoxSearch_.decorate(searchContainer);
-    this.streamBoxSearch_.setTranscriptElemAndSubs(
-        this.transcriptElem_, this.subs_);
 };
 
 unisubs.streamer.StreamBox.prototype.enterDocument = function() {

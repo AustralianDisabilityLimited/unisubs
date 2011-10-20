@@ -19,6 +19,7 @@
 goog.provide('unisubs.streamer.StreamerDecorator');
 
 /**
+ * This makes the streamer, not the overlay thing.
  * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
 unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
@@ -27,12 +28,28 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var captionBoxElem = 
         unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoElem);
     streamBox.decorate(captionBoxElem);
-    var controller = new unisubs.streamer.StreamerController(
-        videoPlayer, streamBox);
+    var controller = new unisubs.widget.WidgetController(
+        videoPlayer.getVideoSource().getVideoURL(), 
+        videoPlayer, 
+        streamBox.getVideoTab());
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': unisubs.isFromDifferentDomain()
     };
+    controller.setCaptionDisplayStrategy(
+        function(caption) {
+            streamBox.displaySub(caption ? caption.getCaptionID() : null);
+        });
+    var subClicked = function(e) {
+        var editableCaption = controller.getPlayController().getSubMap()[
+            e.target.SUBTITLE_ID];
+        videoPlayer.setPlayheadTime(editableCaption.getStartTime());
+        streamBox.displaySub(e.target.SUBTITLE_ID);
+    };
+    goog.events.listen(
+        streamBox,
+        unisubs.streamer.StreamSub.SUB_CLICKED,
+        subClicked);
     unisubs.Rpc.call(
         'show_widget', args,
         goog.bind(controller.initializeState, controller));

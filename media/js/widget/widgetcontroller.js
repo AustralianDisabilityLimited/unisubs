@@ -34,12 +34,26 @@ unisubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
  * Widget calls this when show_widget rpc call returns.
  */
 unisubs.widget.WidgetController.prototype.initializeState = function(result) {
-    try {
+    if (goog.DEBUG) {
         this.initializeStateImpl_(result);
     }
-    catch (e) {
-        this.videoTab_.showError();
+    else {
+        try {
+            this.initializeStateImpl_(result);
+        }
+        catch (e) {
+            this.videoTab_.showError();
+        }
     }
+};
+
+/**
+ * @param {function(unisubs.subtitle.EditableCaption)} strategy
+ */
+unisubs.widget.WidgetController.prototype.setCaptionDisplayStrategy = 
+    function(strategy) 
+{
+    this.captionDisplayStrategy_ = strategy;
 };
 
 unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result) {
@@ -47,7 +61,7 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
 
     var videoID = result['video_id'];
 
-    if (videoID){
+    if (videoID) {
         this.videoTab_.createShareButton(
             new goog.Uri(unisubs.getSubtitleHomepageURL(videoID)), false);
     }

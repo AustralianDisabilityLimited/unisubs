@@ -22,6 +22,7 @@ goog.provide('unisubs.widget.HangingVideoTab');
  * @constructor
  * @param {boolean=} opt_forAnchoring If true, will add a style that gives 
  *     the tab absolute position.
+ * @implements {unisubs.widget.VideoTab}
  */
 unisubs.widget.HangingVideoTab = function(opt_forAnchoring) {
     goog.ui.Component.call(this);

@@ -245,9 +245,9 @@ New Header Styles
 	margin: 10px 0 0 0;
 }
 
-#main_bar ul#bar_menu li#me_menu #user_menu #menu ul#dropdown li ul#teams_menu h4 {
-	padding: 10px;
-	font-size: 12px;
+#menu #dropdown h4 {
+	font-size: 14px;
+	padding: 15px 15px 5px;
 	font-weight: bold;
 	color: #444;
 }

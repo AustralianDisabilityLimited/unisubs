@@ -18,7 +18,7 @@
 
 from auth.models import CustomUser as User
 from django import forms
-from teams.models import Team, TeamMember, TeamVideo, Task, Project
+from teams.models import Team, TeamMember, TeamVideo, Task, Project, Workflow
 from django.utils.translation import ugettext_lazy as _
 from utils.validators import MaxFileSizeValidator
 from django.conf import settings
@@ -33,6 +33,7 @@ from utils.forms.unisub_video_form import UniSubBoundVideoField
 from apps.teams.moderation import add_moderation, remove_moderation
 
 from doorman import feature_is_on
+
 
 class EditLogoForm(forms.ModelForm, AjaxForm):
     logo = forms.ImageField(validators=[MaxFileSizeValidator(settings.AVATAR_MAX_SIZE)], required=False)
@@ -417,4 +418,10 @@ class SettingsForm(forms.ModelForm):
     # TODO: Handle slug change.
     class Meta:
         model = Team
-        fields = ('name', 'membership_policy', 'video_policy', 'description')
+        fields = ('name', 'membership_policy', 'video_policy', 'description',
+                  'workflow_enabled')
+
+class WorkflowForm(forms.ModelForm):
+    class Meta:
+        model = Workflow
+        fields = ('perm_subtitle', 'perm_translate', 'perm_review', 'perm_approve')

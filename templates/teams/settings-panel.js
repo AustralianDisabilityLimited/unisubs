@@ -311,6 +311,66 @@ var ProjectPanel  = AsyncPanel.$extend({
     }
 });
 
+// Workflows ------------------------------------------------------------------
+var WorkflowModel = Class.$extend({
+    __init__: function(data) {
+        this.pk = data.pk;
+        this.team = data.team;
+        this.project = data.project;
+        this.team_video = data.team_video;
+        this.perm_subtitle = data.perm_subtitle;
+        this.perm_translate = data.perm_translate;
+        this.perm_review = data.perm_review;
+        this.perm_approve = data.perm_approve;
+    }
+});
+var WorkflowItem = Class.$extend({
+    __init__: function(model) {
+        // Rebind functions
+        this.render = _.bind(this.render, this);
+        this.onSubmit = _.bind(this.onSubmit, this);
+        this.onSaved = _.bind(this.onSaved, this);
+
+        // Store data
+        this.model = model;
+
+        // Render template
+        this.el = $("<div></div>");
+        this.render();
+    },
+
+    render: function() {
+        $(this.el).html(ich.workflow(this.model));
+
+        // Fill values
+        $('[name=perm_subtitle]', this.el).val(this.model.perm_subtitle);
+        $('[name=perm_translate]', this.el).val(this.model.perm_translate);
+        $('[name=perm_review]', this.el).val(this.model.perm_review);
+        $('[name=perm_approve]', this.el).val(this.model.perm_approve);
+
+        // Bind events
+        $("form", this.el).submit(this.onSubmit);
+    },
+    onSubmit: function(e) {
+        e && e.preventDefault();
+
+        TeamsApiV2.workflow_set(this.model.team, this.model.project, this.model.team_video, {
+            perm_subtitle: $('[name=perm_subtitle]', this.el).val(),
+            perm_translate: $('[name=perm_translate]', this.el).val(),
+            perm_review: $('[name=perm_review]', this.el).val(),
+            perm_approve: $('[name=perm_approve]', this.el).val()
+        }, this.onSaved);
+    },
+    onSaved: function(data) {
+        if (data && data.error) {
+            $.jGrowl(data.error);
+        } else {
+            this.model = new WorkflowModel(data);
+            this.render();
+        }
+    }
+});
+
 // Basic Settings -------------------------------------------------------------
 var TeamModel = Class.$extend({
     __init__: function(data) {
@@ -320,6 +380,7 @@ var TeamModel = Class.$extend({
         this.membership_policy = data.membership_policy;
         this.video_policy = data.video_policy;
         this.logo = data.logo;
+        this.workflowEnabled = data.workflow_enabled;
     }
 });
 var BasicPanel  = AsyncPanel.$extend({
@@ -328,8 +389,14 @@ var BasicPanel  = AsyncPanel.$extend({
         this.onSubmit = _.bind(this.onSubmit, this);
         this.onLoaded = _.bind(this.onLoaded, this);
         this.fillFromModel = _.bind(this.fillFromModel, this);
+
         this.onImageUploadClick = _.bind(this.onImageUploadClick, this);
         this.onImageUploaded = _.bind(this.onImageUploaded, this);
+
+        this.onWorkflowStatusChange = _.bind(this.onWorkflowStatusChange, this);
+        this.onWorkflowLoaded = _.bind(this.onWorkflowLoaded, this);
+        this.showWorkflow = _.bind(this.showWorkflow, this);
+        this.hideWorkflow = _.bind(this.hideWorkflow, this);
 
         // Render template
         this.el = ich.basicPanel();
@@ -337,10 +404,30 @@ var BasicPanel  = AsyncPanel.$extend({
         // Bind events
         $('form.team-settings', this.el).submit(this.onSubmit);
         $('button', this.el).click(this.onImageUploadClick);
+        $('#basic_workflows_enabled', this.el).change(this.onWorkflowStatusChange);
 
         // Load initial data
         this.team = null;
+        this.workflow = null;
         TeamsApiV2.team_get(TEAM_SLUG, this.onLoaded);
+    },
+
+    onWorkflowStatusChange: function(e) {
+        if ($('#basic_workflows_enabled', this.el).attr('checked')) {
+            this.showWorkflow();
+        } else {
+            this.hideWorkflow();
+        }
+    },
+    onWorkflowLoaded: function(data) {
+        this.workflow = new WorkflowItem(new WorkflowModel(data));
+        $('.workflow', this.el).html(this.workflow.el);
+    },
+    showWorkflow: function(e) {
+        TeamsApiV2.workflow_get(TEAM_SLUG, null, null, this.onWorkflowLoaded);
+    },
+    hideWorkflow: function(e) {
+        $('.workflow', this.el).html('');
     },
 
     onImageUploadClick: function(e) {
@@ -355,6 +442,7 @@ var BasicPanel  = AsyncPanel.$extend({
         this.team.logo = resp['url'];
         this.fillFromModel();
     },
+
     onSubmit: function(e) {
         e.preventDefault();
 
@@ -362,14 +450,18 @@ var BasicPanel  = AsyncPanel.$extend({
             name: $('#basic_name', this.el).val(),
             description: $('#basic_description', this.el).val(),
             membership_policy: $('#id_membership_policy', this.el).val(),
-            video_policy: $('#id_video_policy', this.el).val()
+            video_policy: $('#id_video_policy', this.el).val(),
+            workflow_enabled: $('#basic_workflows_enabled', this.el).attr('checked')
         };
         TeamsApiV2.team_set(TEAM_SLUG, data, this.onLoaded);
+
+        this.workflow && this.workflow.onSubmit();
     },
     onLoaded: function(data) {
         this.team = new TeamModel(data);
         this.fillFromModel();
     },
+
     fillFromModel: function() {
         $('#basic_name', this.el).val(this.team.name);
         $('#basic_description', this.el).val(this.team.description);
@@ -382,6 +474,13 @@ var BasicPanel  = AsyncPanel.$extend({
             // TODO: Fill in placeholder image.
             $('#current_logo', this.el).attr('src', 'some/placeholder.jpg');
         }
+
+        if (this.team.workflowEnabled) {
+            $('#basic_workflows_enabled', this.el).attr('checked', 'checked');
+        } else {
+            $('#basic_workflows_enabled', this.el).attr('checked', '');
+        }
+        this.onWorkflowStatusChange();
 
         // We edit the page-level title here too.  It's not part of the
         // template, but in this one case we should update it.

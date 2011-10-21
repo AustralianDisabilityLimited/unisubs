@@ -97,6 +97,7 @@ class Team(models.Model):
     last_notification_time = models.DateTimeField(editable=False, default=datetime.datetime.now)
 
     projects_enabled = models.BooleanField(default=False)
+    workflow_enabled = models.BooleanField(default=False)
     
     objects = TeamManager()
     
@@ -399,7 +400,8 @@ class Team(models.Model):
                  'description': self.description,
                  'membership_policy': self.membership_policy,
                  'video_policy': self.video_policy,
-                 'logo': self.logo_thumbnail() if self.logo else None, }
+                 'logo': self.logo_thumbnail() if self.logo else None,
+                 'workflow_enabled': self.workflow_enabled, }
 
 class ProjectManager(models.Manager):
 
@@ -1071,14 +1073,13 @@ class Workflow(models.Model):
 
         '''
         return { 'pk': self.id,
-                 'team': self.team.id if self.team else None,
+                 'team': self.team.slug if self.team else None,
                  'project': self.project.id if self.project else None,
                  'team_video': self.team_video.id if self.team_video else None,
-                 'permissions': {
-                    'perm_subtitle': Workflow.PERM_NAMES[self.perm_subtitle],
-                    'perm_translate': Workflow.PERM_NAMES[self.perm_translate],
-                    'perm_review': Workflow.PERM_NAMES[self.perm_review],
-                    'perm_approve': Workflow.PERM_NAMES[self.perm_approve], }, }
+                 'perm_subtitle': self.perm_subtitle,
+                 'perm_translate': self.perm_translate,
+                 'perm_review': self.perm_review,
+                 'perm_approve': self.perm_approve, }
 
 
 class Task(models.Model):

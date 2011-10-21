@@ -314,9 +314,50 @@ This is needed, since it's for the js templating
                 <label for="basic_workflows_enabled">Enable workflows</label>
             </form>
 
+            <form action="" class="workflow" method="post"></form>
+
             <form class="team-settings"><input type="submit" class="submit" value="Save Changes" name="save" /></form>
         </div>
     </div>
+</script>
+
+<script id="workflow" type="text/html">
+    <form>
+        <label>Subtitle</label>
+        <select name="perm_subtitle">
+            <option value="20">Open to public</option>
+            <option value="30">Open to team</option>
+            <option value="40">Managers and admins</option>
+            <option value="50">Admins only</option>
+        </select>
+
+        <label>Translate</label>
+        <select name="perm_translate">
+            <option value="20">Open to public</option>
+            <option value="30">Open to team</option>
+            <option value="40">Managers and admins</option>
+            <option value="50">Admins only</option>
+        </select>
+
+        <label>Review</label>
+        <select name="perm_review">
+            <option value="10">None</option>
+            <option value="30">Open to team</option>
+            <option value="40">Managers and admins</option>
+            <option value="50">Admins only</option>
+            <option value="60">Owner only</option>
+        </select>
+
+        <label>Approve</label>
+        <select name="perm_approve">
+            <option value="10">None</option>
+            <option value="40">Managers and admins</option>
+            <option value="50">Admins only</option>
+            <option value="60">Owner only</option>
+        </select>
+
+        <input type="submit" class="submit" value="Save Workflow Changes" name="save" />
+    </form>
 </script>
 
 {% endverbatim %}

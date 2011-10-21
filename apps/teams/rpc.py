@@ -32,7 +32,7 @@ from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
-from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm
+from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm, WorkflowForm
 from teams.project_forms import ProjectForm
 
 class TeamsApiClass(object):
@@ -210,6 +210,25 @@ def _ghost_tasks(team, tasks, filters, member):
     else:
         return []
 
+def _get_or_create_workflow(team_slug, project_id, team_video_id):
+    try:
+        workflow = Workflow.objects.get(team__slug=team_slug, project=project_id,
+                                        team_video=team_video_id)
+    except Workflow.DoesNotExist:
+        # We special case this because Django won't let us create new models
+        # with the IDs, we need to actually pass in the Model objects for
+        # the ForeignKey fields.
+        #
+        # Most of the time we won't need to do these three extra queries.
+
+        team = Team.objects.get(slug=team_slug)
+        project = Project.objects.get(pk=project_id) if project_id else None
+        team_video = TeamVideo.objects.get(pk=team_video_id) if team_video_id else None
+
+        workflow = Workflow(team=team, project=project, team_video=team_video)
+
+    return workflow
+
 
 class TeamsApiV2Class(object):
     def test_api(self, message, user):
@@ -381,26 +400,22 @@ class TeamsApiV2Class(object):
         return Workflow.get_for_target(target_id, target_type).to_dict()
 
     def workflow_set_step(self, team_slug, project_id, team_video_id, step, perm, user):
-        try:
-            workflow = Workflow.objects.get(team__slug=team_slug, project=project_id,
-                                            team_video=team_video_id)
-        except Workflow.DoesNotExist:
-            # We special case this because Django won't let us create new models
-            # with the IDs, we need to actually pass in the Model objects for
-            # the ForeignKey fields.
-            #
-            # Most of the time we won't need to do these three extra queries.
-
-            team = Team.objects.get(slug=team_slug)
-            project = Project.objects.get(pk=project_id) if project_id else None
-            team_video = TeamVideo.objects.get(pk=team_video_id) if team_video_id else None
-
-            workflow = Workflow(team=team, project=project, team_video=team_video)
-
+        workflow = _get_or_create_workflow(team_slug, project_id, team_video_id)
         setattr(workflow, 'perm_%s' % step, Workflow.PERM_IDS[perm])
         workflow.save()
 
         return workflow.to_dict()
+
+    def workflow_set(self, team_slug, project_id, team_video_id, data, user):
+        workflow = _get_or_create_workflow(team_slug, project_id, team_video_id)
+
+        form = WorkflowForm(data, instance=workflow)
+        if form.is_valid():
+            form.save()
+            return workflow.to_dict()
+        else:
+            print form.errors
+            return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
 
     # Projects

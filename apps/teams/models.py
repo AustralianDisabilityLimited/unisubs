@@ -902,7 +902,7 @@ def invite_send_message(sender, instance, created, **kwargs):
         msg.author = instance.author
         msg.save()
     
-post_save.connect(invite_send_message, Invite)
+post_save.connect(invite_send_message, Invite, dispatch_uid="teams.invite.send_invite")
 
 
 class Workflow(models.Model):

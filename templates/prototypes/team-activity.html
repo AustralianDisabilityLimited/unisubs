@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body_attrs %}class="new-teams"{% endblock %}
+{% block body_attrs %}class="v1 teams"{% endblock %}
 
 {% block main_content %}
 
@@ -14,9 +14,13 @@
         <li><a href="/prototypes/team-settings/">Settings</a></li>
     </ul>
 
-    <div class="grid_9 alpha">
+    <div class="view grid_9 alpha">
 
         <ul class="activity listing">
+            <li>
+                <a href="">Alison H</a> became a team Manager
+                <span class="timestamp">2 hours ago</span>
+            </li>
             <li>
                 <a href="">Somebody</a> commented on English subtitles for <a href="">"Some Video"</a>
                 <span class="timestamp">4 hours ago</span>
@@ -30,18 +34,26 @@
                 <span class="timestamp">2 days ago</span>
             </li>
             <li>
+                <a href="">Henry Ford</a> added <a href="">"Some Video"</a> to the team
+                <span class="timestamp">3 days ago</span>
+            </li>
+            <li>
                 <a href="">Andrew</a> commented on French subtitles for <a href="">"Awesome Lecture"</a>
                 <span class="timestamp">4 days ago</span>
+            </li>
+            <li>
+                <a href="">ErrolM</a> joined the team
+                <span class="timestamp">1 week ago</span>
             </li>
         </ul>
     </div>
 
-    <div class="grid_3 omega">
-        <ul class="view-filter">
-            <li class="current"><a href="">Basic Settings</a></li>
-            <li><a href="">Guidelines & Messages</a></li>
-            <li><a href="">Display Settings</a></li>
-            <li><a href="">Projects</a></li>
+    <div class="controls grid_3 omega">
+        <ul>
+            <li class="current"><a href="">All Activity</a></li>
+            <li><a href="">Videos Activity</a></li>
+            <li><a href="">Members Activity</a></li>
+            <li><a href="">Tasks Activity</a></li>
         </ul>
     </div>
 {% endblock %}

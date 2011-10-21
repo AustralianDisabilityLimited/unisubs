@@ -39,7 +39,7 @@
                 <li>
                     {% if user_teams %}
                     <div id="teams_menu">
-                        <h4>{% trans "Team Management" %}</h4>
+                        <h4>{% trans "My Teams" %}</h4>
                         {% for t in user_teams %}
                         <li  {% if team == t %}class="active"{% endif %}>
                             <a href="{% url teams:settings slug=t.slug %}">{{ t }}</a>

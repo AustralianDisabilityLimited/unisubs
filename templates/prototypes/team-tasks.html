@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body_attrs %}class="new-teams"{% endblock %}
+{% block body_attrs %}class="v1 teams"{% endblock %}
 
 {% block main_content %}
 
@@ -14,23 +14,47 @@
         <li><a href="/prototypes/team-settings/">Settings</a></li>
     </ul>
 
-    <div class="grid_9 alpha">
+    <div class="view grid_9 alpha">
 
         <ul class="activity listing">
-            <li>Some shit happened</li>
-            <li>Some shit happened</li>
-            <li>Some shit happened</li>
-            <li>Some shit happened</li>
-            <li>Some shit happened</li>
+            <li>
+                <h3><a href="">Promotional Video</a></h3>
+                <p>Spanish Subtitles</p>
+                <ul class="actions">
+                    <li><a href="">Review now</a></li>
+                </ul>
+            </li>
+            <li>
+                <h3><a href="">Promotional Video</a></h3>
+                <p>French Subtitles</p>
+                <ul class="actions">
+                    <li>Due in 4 days</li>
+                </ul>
+            </li>
+            <li>
+                <h3><a href="">Introducing Something Important</a></h3>
+                <p>English Subtitles</p>
+                <ul class="actions">
+                    <li><a href="">Approve now</a></li>
+                </ul>
+            </li>
+            <li>
+                <h3><a href="">Something funny that a cat did</a></h3>
+                <p>Turkish Subtitles</p>
+                <ul class="actions">
+                    <li>Due in 6 days</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="grid_3 omega">
-        <ul class="view-filter">
-            <li class="current"><a href="">Basic Settings</a></li>
-            <li><a href="">Guidelines & Messages</a></li>
-            <li><a href="">Display Settings</a></li>
-            <li><a href="">Projects</a></li>
+    <div class="controls grid_3 omega">
+        <ul>
+            <li class="current"><a href="">All Pending<span>40</span></a></li>
+            <li><a href="">Approve<span>5</span></a></li>
+            <li><a href="">Review<span>6</span></a></li>
+            <li><a href="">Translate<span>19</span></a></li>
+            <li><a href="">Subtitle<span>10</span></a></li>
         </ul>
     </div>
 {% endblock %}

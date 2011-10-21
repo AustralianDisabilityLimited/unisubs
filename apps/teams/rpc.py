@@ -1,3 +1,4 @@
+from pprint import pprint as pp
 # Universal Subtitles, universalsubtitles.org
 #
 # Copyright (C) 2010 Participatory Culture Foundation
@@ -175,9 +176,18 @@ def _get_completed_language_dict(team_videos, languages):
 
     return completed_languages
 
+
+TEAM_LANGUAGES = ['fr', 'es', 'tl']
+
 def _get_translation_tasks(team, tasks, member, team_video, language):
     # TODO: Once this is a setting, look it up.
-    languages = [language] if language else ['fr', 'es', 'tl']
+    if language:
+        if language not in TEAM_LANGUAGES:
+            return []
+        else:
+            languages = [language]
+    else:
+        languages = TEAM_LANGUAGES
     languages = map(str, languages)
 
     team_videos = [team_video] if team_video else team.teamvideo_set.all()

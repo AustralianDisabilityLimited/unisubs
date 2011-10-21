@@ -70,8 +70,6 @@ var BaseModel = Class.$extend({
         }, this);
         return data;
     }
-    
-
 });
 
 // Projects -------------------------------------------------------------------
@@ -506,7 +504,7 @@ var GuidelinesPanel  = AsyncPanel.$extend({
 
         // Constants
         this.SETTING_KEYS = [
-            'messages_join', 'messages_manager', 'messages_admin',
+            'messages_invite', 'messages_manager', 'messages_admin',
             'guidelines_subtitle', 'guidelines_translate', 'guidelines_review'
         ];
     },

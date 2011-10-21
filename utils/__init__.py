@@ -22,9 +22,9 @@
 #  link context.  For usage documentation see:
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template.context import RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils import simplejson
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.functional import update_wrapper
@@ -92,6 +92,12 @@ def render_to_json(func):
         json = simplejson.dumps(result, cls=DjangoJSONEncoder)
         return HttpResponse(json, mimetype="application/json")
     return update_wrapper(wrapper, func)
+
+def get_object_or_none(*args, **kwargs):
+    try:
+        return get_object_or_404(*args, **kwargs)
+    except Http404:
+        return None
 
 def get_page(request):
     page = request.GET.get('page')

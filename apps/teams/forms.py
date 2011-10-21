@@ -406,7 +406,7 @@ class TaskDeleteForm(forms.Form):
 
 
 class GuidelinesMessagesForm(forms.Form):
-    messages_join = forms.CharField(max_length=1024, required=False)
+    messages_invite = forms.CharField(max_length=1024, required=False)
     messages_manager = forms.CharField(max_length=1024, required=False)
     messages_admin = forms.CharField(max_length=1024, required=False)
 

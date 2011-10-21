@@ -16,12 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
 from videos.models import Video, SubtitleLanguage
@@ -38,6 +32,7 @@ from utils.panslugify import pan_slugify
 from haystack.query import SQ
 from haystack import site
 from utils.translation import SUPPORTED_LANGUAGES_DICT
+from utils import get_object_or_none
 import datetime 
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -885,7 +880,10 @@ class Invite(models.Model):
         self.delete()
     
     def render_message(self, msg):
-        return render_to_string('teams/_invite_message.html', {'invite': self})
+        message = get_object_or_none(Setting, team=self.team,
+                                     key=Setting.KEY_IDS['messages_invite'])
+        return render_to_string('teams/_invite_message.html',
+                                {'invite': self, 'custom_message': message})
     
     def message_json_data(self, data, msg):
         data['can-reaply'] = False
@@ -1222,7 +1220,7 @@ class SettingManager(models.Manager):
 
 class Setting(models.Model):
     KEY_CHOICES = (
-        (100, 'messages_join'),
+        (100, 'messages_invite'),
         (101, 'messages_manager'),
         (102, 'messages_admin'),
         (200, 'guidelines_subtitle'),

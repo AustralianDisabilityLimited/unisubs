@@ -35,7 +35,8 @@ unisubs.streamer.StreamerDecorator.makeStreamer = function(videoPlayer, streamBo
     var controller = new unisubs.widget.WidgetController(
         videoPlayer.getVideoSource().getVideoURL(), 
         videoPlayer, 
-        streamBox.getVideoTab());
+        streamBox.getVideoTab(),
+        true);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': unisubs.isFromDifferentDomain()

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/swfobject.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL_BASE }}js/closure-library/closure/goog/base.js"></script>
+    <script>
+      goog.require('goog.debug.Logger');
+      goog.require('goog.debug.DivConsole');
+    </script>
+  </head>
+  <body>
+    <video id="webmvideo" style="width: 400px ! important; height: 300px ! important;" tabindex="0">
+      <source src="http://www.ioncannon.net/examples/vp8-webm/big_buck_bunny_480p.webm"></source>
+    </video>
+    <div>
+      <p>
+        Dear Firefox: Instructions for making this fail on FF: First press play. This calls play() on the video
+        element. Then press 'set playhead time to 0'. This sets currentTime to 0. Now play will not 
+        work anymore :(. The code is pretty simple, please check it out.
+      </p>
+      <a href="javascript:void(0)" onclick="setPlayheadTime(); return false;">set playhead time to 0</a>
+      <a href="javascript:void(0)" onclick="play(); return false;">play</a>
+    </div>
+    <!-- Event log. -->
+    <fieldset class="goog-debug-panel">
+      <legend>Event Log</legend>
+      <div id="log" style="height: 300px; overflow-y: auto"></div>
+    </fieldset>
+    <div id="perf"></div>  
+    <script type="text/javascript">
+      var video = document.getElementById('webmvideo');
+
+      function setPlayheadTime() {
+          video.currentTime = 0;
+      }
+      function play() {
+          video.play();
+      }
+    </script>
+  </body>
+</html>

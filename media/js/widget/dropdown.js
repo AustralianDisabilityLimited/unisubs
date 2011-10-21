@@ -413,7 +413,7 @@ unisubs.widget.DropDown.prototype.hide = function() {
 };
 
 unisubs.widget.DropDown.prototype.show = function() {
-    unisubs.attachToLowerLeft(this.videoTab_.getMenuAnchor(),
+    unisubs.attachToLowerLeft(this.videoTab_.getAnchorElem(),
                                this.getElement());
     this.shown_ = true;
 };

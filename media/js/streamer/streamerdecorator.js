@@ -19,6 +19,7 @@
 goog.provide('unisubs.streamer.StreamerDecorator');
 
 /**
+ * This makes the streamer, not the overlay thing.
  * @param {unisubs.player.AbstractVideoPlayer} videoPlayer
  */
 unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
@@ -26,16 +27,48 @@ unisubs.streamer.StreamerDecorator.makeStreamer_ = function(videoPlayer) {
     var videoElem = videoPlayer.getElement();
     var captionBoxElem = 
         unisubs.streamer.StreamerDecorator.getUnisubsStreamerElem_(videoElem);
-    streamBox.decorateContainer(captionBoxElem);
-    var controller = new unisubs.streamer.StreamerController(
-        videoPlayer, streamBox);
+    streamBox.decorate(captionBoxElem);
+    unisubs.streamer.StreamerDecorator.makeStreamer(videoPlayer, streamBox);
+};
+
+unisubs.streamer.StreamerDecorator.makeStreamer = function(videoPlayer, streamBox, opt_initialState) {
+    var controller = new unisubs.widget.WidgetController(
+        videoPlayer.getVideoSource().getVideoURL(), 
+        videoPlayer, 
+        streamBox.getVideoTab(),
+        true);
     var args = {
         'video_url': videoPlayer.getVideoSource().getVideoURL(),
         'is_remote': unisubs.isFromDifferentDomain()
     };
-    unisubs.Rpc.call(
-        'show_widget', args,
-        goog.bind(controller.initializeState, controller));
+    controller.setCaptionDisplayStrategy(
+        function(caption) {
+            streamBox.displaySub(caption ? caption.getCaptionID() : null);
+        });
+    var subClicked = function(e) {
+        var editableCaption = controller.getPlayController().getSubMap()[
+            e.target.SUBTITLE_ID];
+        videoPlayer.setPlayheadTime(editableCaption.getStartTime());
+        streamBox.displaySub(e.target.SUBTITLE_ID);
+    };
+    goog.events.listen(
+        streamBox,
+        unisubs.streamer.StreamSub.SUB_CLICKED,
+        subClicked);
+    goog.events.listen(
+        controller,
+        unisubs.widget.PlayController.LANGUAGE_CHANGED,
+        function(e) {
+            streamBox.setSubtitles(e.target.getSubtitlesJSON());
+        });
+    if (!opt_initialState) {
+        unisubs.Rpc.call(
+            'show_widget', args,
+            goog.bind(controller.initializeState, controller));
+    }
+    else {
+        controller.initializeState(opt_initialState);
+    }
 };
 
 unisubs.streamer.StreamerDecorator.makeOverlayStreamer_ = function(videoPlayer) {

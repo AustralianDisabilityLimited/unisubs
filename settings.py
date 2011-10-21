@@ -114,6 +114,13 @@ ALL_LANGUAGES['kw'] = gettext_noop(u'Cornish')
 ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
 ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
 ALL_LANGUAGES['hy'] = gettext_noop(u'Armenian')
+ALL_LANGUAGES['bi'] = gettext_noop(u'Bislama')
+ALL_LANGUAGES['fr_ca'] = gettext_noop(u'French (Canada)')
+ALL_LANGUAGES['sh'] = gettext_noop(u'Serbo-Croatian')
+ALL_LANGUAGES['lo'] = gettext_noop(u'Lao')
+ALL_LANGUAGES['rup'] = gettext_noop(u'Aromanian')
+ALL_LANGUAGES['tl'] = gettext_noop(u'Tagalog')
+ALL_LANGUAGES['uz'] = gettext_noop(u'Uzbek')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -212,14 +219,17 @@ JS_CORE = \
      'js/startdialog/tolanguage.js',
      'js/startdialog/tolanguages.js',
      'js/startdialog/dialog.js',
-     'js/streamer/streamercontroller.js', 
      'js/streamer/streambox.js', 
+     'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 
+     'js/streamer/streamervideotab.js', 
+     'js/streamer/streamerdecorator.js', 
      'js/requestdialog.js',
+     'js/widget/videotab.js',
+     'js/widget/hangingvideotab.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
      'js/widget/logindialog.js',
-     'js/widget/videotab.js',
      'js/widget/howtovideopanel.js',
      'js/widget/dialog.js',
      'js/widget/captionmanager.js',
@@ -316,8 +326,7 @@ JS_WIDGETIZER_CORE.extend([
     'js/player/ooyalaplayer.js', 
     'js/player/wistiavideoplayer.js', 
     'js/player/brightcoveliteplayer.js', 
-    'js/player/soundcloudplayer.js', 
-    'js/streamer/streamerdecorator.js', 
+    'js/player/soundcloudplayer.js',
     'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)

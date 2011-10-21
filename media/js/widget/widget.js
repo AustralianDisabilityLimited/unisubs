@@ -172,7 +172,7 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
         // TODO: show loading?
     }
     else {
-        this.videoTab_ = new unisubs.widget.VideoTab();
+        this.videoTab_ = new unisubs.widget.HangingVideoTab();
         var videoTabContainer = new goog.ui.Component();
         this.addChild(videoTabContainer, true);
         videoTabContainer.addChild(this.videoTab_, true);
@@ -186,7 +186,6 @@ unisubs.widget.Widget.prototype.addWidget_ = function(el) {
     };
     if (this.baseState_)
         args['base_state'] = this.baseState_.ORIGINAL_PARAM;
-    console.log('calling show_widget');
     unisubs.Rpc.call(
         'show_widget', args, 
         goog.bind(this.initializeState_, this),
@@ -261,9 +260,8 @@ unisubs.widget.Widget.prototype.initializeStateStreamer_ = function(result) {
     var subtitleState = unisubs.widget.SubtitleState.fromJSON(
         result['subtitles']);
     this.streamBox_.setSubtitles(subtitleState.SUBTITLES);
-    var controller = new unisubs.streamer.StreamerController(
-        this.videoPlayer_, this.streamBox_);
-    controller.initializeState(result);
+    unisubs.streamer.StreamerDecorator.makeStreamer(
+        this.videoPlayer_, this.streamBox_, result);
 };
 
 unisubs.widget.Widget.prototype.enterDocument = function() {

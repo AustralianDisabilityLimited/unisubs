@@ -52,7 +52,7 @@ def is_version_same(version, parser):
     return True
 
 def save_subtitle(video, language, parser, user=None, update_video=True):
-    from videos.models import SubtitleVersion, Subtitle
+    from videos.models import SubtitleVersion, Subtitle, SubtitleMetadata
     from videos.tasks import video_changed_tasks
 
     key = str(uuid4()).replace('-', '')
@@ -81,12 +81,24 @@ def save_subtitle(video, language, parser, user=None, update_video=True):
             while id in ids:
                 id = int(random.random()*10e12)
             ids.append(id)
+
+            metadata = item.pop('metadata', None)
+
             caption = Subtitle(**item)
             caption.version = version
             caption.subtitle_id = str(id)
             caption.subtitle_order = i+1
             caption.save()
             
+            if metadata:
+                print metadata
+                for name, value in metadata.items():
+                    SubtitleMetadata(
+                        subtitle=caption,
+                        metadata_type=name,
+                        content=value
+                    ).save()
+
     language.video.release_writelock()
     language.video.save()
     translations = video.subtitlelanguage_set.filter(standard_language=language)
@@ -116,6 +128,15 @@ class SubtitleParser(object):
         return bool(self._pattern.search(self.subtitles))
      
     def _result_iter(self):
+        """
+        Should iterate over items like this:
+        {
+            'start_time': ...,
+            'end_time': ...,
+            'subtitle_text': ...
+        }
+        start_time and end_time in seconds. If it is not defined use -1.
+        """
         for item in self._matches:
             yield self._get_data(item)
 

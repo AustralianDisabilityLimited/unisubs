@@ -959,12 +959,15 @@ class Workflow(models.Model):
 
         '''
 
+
         if not workflows:
             team_id = Workflow._get_target_team_id(id, type)
             workflows = list(Workflow.objects.filter(team=team_id))
+        else:
+            team_id = workflows[0].team.pk
 
         if not workflows:
-            return None
+            return Workflow(team=Team.objects.get(pk=team_id))
 
         if type == 'team_video':
             try:
@@ -974,11 +977,8 @@ class Workflow(models.Model):
                 # If there's no video-specific workflow for this video, there
                 # might be a workflow for its project, so we'll start looking
                 # for that instead.
-                try:
-                    team_video = TeamVideo.objects.get(pk=id)
-                    id, type = team_video.project.id, 'project'
-                except TeamVideo.DoesNotExist:
-                    return None
+                team_video = TeamVideo.objects.get(pk=id)
+                id, type = team_video.project.id, 'project'
 
         if type == 'project':
             try:

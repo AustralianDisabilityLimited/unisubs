@@ -238,39 +238,45 @@ This is needed, since it's for the js templating
 <script id="guidelinesPanel" type="text/html">
     <div class="panel-guidelines">
         <form id="guidelines_messages_form">
-            <div class="messages">
-                <h3>Custom messages</h3>
-                <p class="description">
-                    Customize the messages sent to your users.
-                    The text you enter will preceed the default system message.
-                </p>
+            <div class="grid_4 alpha messages">
+                <fieldset>
+                    <legend>Custom messages</legend>
+                    <p class="notation">
+                        Customize the messages sent to your users.
+                        The text you enter will preceed the default system message.
+                    </p>
 
-                <label for="id_messages_invite">When a member is invited to join the team</label><br/>
-                <textarea id="id_messages_invite" name="messages_invite"></textarea><br/>
+                    <label for="id_messages_invite">When a member is invited to join the team</label>
+                    <textarea id="id_messages_invite" name="messages_invite"></textarea>
 
-                <label for="id_messages_manager">When a member is given the Manager role</label><br/>
-                <textarea id="id_messages_manager" name="messages_manager"></textarea><br/>
+                    <label for="id_messages_manager">When a member is given the Manager role</label>
+                    <textarea id="id_messages_manager" name="messages_manager"></textarea>
 
-                <label for="id_messages_admin">When a member is given the Admin role</label><br/>
-                <textarea id="id_messages_admin" name="messages_admin"></textarea><br/>
+                    <label for="id_messages_admin">When a member is given the Admin role</label>
+                    <textarea id="id_messages_admin" name="messages_admin"></textarea>
+                </fieldset>
             </div>
-            <div class="guidelines">
-                <h3>Guidelines</h3>
-                <p class="description">
-                    Add guidelines to be displayed to your users when completing tasks.
-                </p>
+            <div class="grid_4 omega guidelines">
+                <fieldset>
+                    <legend>Guidelines</legend>
+                    <p class="notation">
+                        Add guidelines to be displayed to your users when completing tasks.
+                    </p>
 
-                <label for="id_guidelines_subtitle">When creating subtitles</label><br/>
-                <textarea id="id_guidelines_subtitle" name="guidelines_subtitle"></textarea><br/>
+                    <label for="id_guidelines_subtitle">When creating subtitles</label>
+                    <textarea id="id_guidelines_subtitle" name="guidelines_subtitle"></textarea>
 
-                <label for="id_guidelines_translate">When translating</label><br/>
-                <textarea id="id_guidelines_translate" name="guidelines_translate"></textarea><br/>
+                    <label for="id_guidelines_translate">When translating</label>
+                    <textarea id="id_guidelines_translate" name="guidelines_translate"></textarea>
 
-                <label for="id_guidelines_review">When reviewing</label><br/>
-                <textarea id="id_guidelines_review" name="guidelines_review"></textarea><br/>
+                    <label for="id_guidelines_review">When reviewing</label>
+                    <textarea id="id_guidelines_review" name="guidelines_review"></textarea>
+                </fieldset>
             </div>
 
-            <input type="submit" class="submit" value="Save Changes" name="save" />
+            <div class="grid_9 submit">
+                <input type="submit" class="submit" value="Save Changes" name="save" />
+            </div>
         </form>
     </div>
 </script>

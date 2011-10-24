@@ -7,7 +7,7 @@
 /* line 19, ../../../unisubs-design/sass/v1.scss */
 .v1 .notation {
   font-size: .95em;
-  color: #5f8196;
+  color: #7692a3;
 }
 
 /* line 24, ../../../unisubs-design/sass/v1.scss */
@@ -62,7 +62,7 @@
 .v1 .view .empty {
   padding: 2em 1em;
   font-size: 18px;
-  color: #5f8196;
+  color: #678ca3;
 }
 
 /*************** @Tabs ***************/
@@ -83,7 +83,7 @@
   float: left;
   padding: 1em 2em;
   text-decoration: none;
-  color: #5f8196;
+  color: #678ca3;
   border-style: solid;
 }
 /* line 84, ../../../unisubs-design/sass/v1.scss */
@@ -239,7 +239,7 @@
   margin-left: -20px;
   margin-bottom: .5em;
   text-decoration: none;
-  color: #5f8196;
+  color: #678ca3;
   -moz-border-radius-topright: 5px;
   -webkit-border-top-right-radius: 5px;
   -o-border-top-right-radius: 5px;

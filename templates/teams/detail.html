@@ -6,7 +6,7 @@
     {{ team }} | Universal Subtitles
 {% endblock %}
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block css %}
     {{ block.super }}
@@ -28,46 +28,70 @@
 
 {% block main_content %}
 
-{% if team.header_html_text %}
-<div id="team_header_html" class="clearfix">
-  {{team.header_html_text|safe}}
-</div><!-- // team_header_html -->
-{% endif %}
-
-<h2 id="team_title">{{ team }} {% trans "Videos" %}</h2>
-
-{% if team.page_content %}
-  <div class="team_html clearfix">
-    {{ team.page_content|force_escape|markdown }}
-  </div>    
-{% endif %}
-
-<div style="margin-top: 6px;" class="grid_8 alpha">
-    {% if not team.page_content and team.video %}
-        {% widget widget_params %}
+    {% comment %}
+    {% if team.header_html_text %}
+    <div id="team_header_html" class="clearfix">
+      {{team.header_html_text|safe}}
+    </div><!-- // team_header_html -->
     {% endif %}
-    
-    <div id="videos-tab">
-        {% if allow_noone_language %}
-            {% invite_friends_to_team team %}
+
+    <h2 id="team_title">{{ team }} {% trans "Videos" %}</h2>
+
+    {% if team.page_content %}
+      <div class="team_html clearfix">
+        {{ team.page_content|force_escape|markdown }}
+      </div>    
+    {% endif %}
+    {% endcomment %}
+
+    <h2 id="team_title">{{ team }}</h2>
+
+    {% with "videos" as current %}
+        {% include "teams/_team_tabs.html" %}
+    {% endwith %}
+
+    <div class="view grid_9 alpha">
+        {% if not team.page_content and team.video %}
+            {% widget widget_params %}
         {% endif %}
+        
+        {% comment %}
+        <div id="videos-tab">
+            {% if allow_noone_language %}
+                {% invite_friends_to_team team %}
+            {% endif %}
 
-        <ul class="big_list">
-            {% for md_obj in team_video_md_list %}
-            <li>
-                {% team_video_detail md_obj %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% if is_paginated %}{% paginator %}{% endif %}
-    </div>
-</div>
+            <ul class="big_list">
+                {% for md_obj in team_video_md_list %}
+                <li>
+                    {% team_video_detail md_obj %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% if is_paginated %}{% paginator %}{% endif %}
+        </div>
 
-<div class="grid_4 omega">
-    <div id="sidebar_team_detail">
-    {% include "teams/_team_detail.html" %}
+        {% endcomment %}
+
+        
+        {% if team_video_md_list %}
+            <ul class="videos listing">
+                {% for md_obj in team_video_md_list %}
+                    <li>
+                        {% team_video_detail md_obj %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if is_paginated %}{% paginator %}{% endif %}
+        {% else %}
+            <p class="empty">{% trans "Sorry, no videos here..." %}</p>
+        {% endif %}
     </div>
-    {% team_activity team %}
-</div>
+
+    <div class="controls grid_3 omega">
+        {% include "teams/_filters_videos.html" %}
+        <p><a href="" class="button primary">Join this Team</a></p>
+        <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
+    </div>
 
 {% endblock %}

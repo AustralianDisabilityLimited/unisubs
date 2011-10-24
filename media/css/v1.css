@@ -7,45 +7,77 @@
 /* line 19, ../../../unisubs-design/sass/v1.scss */
 .v1 .notation {
   font-size: .95em;
-  color: #98abb0;
+  color: #788b90;
 }
 
 /* line 24, ../../../unisubs-design/sass/v1.scss */
 .v1 .button {
-  display: block;
   margin: 1em 0;
-  font-size: 1.25em;
-  padding: 1em;
-  text-decoration: none;
-  background: #0f517a;
-  color: #fff;
+  padding: .5em;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -o-border-radius: 5px;
   -ms-border-radius: 5px;
   -khtml-border-radius: 5px;
   border-radius: 5px;
+  background-color: #0f517a;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #136aa1), color-stop(100%, #0f517a));
+  background-image: -webkit-linear-gradient(#136aa1, #0f517a);
+  background-image: -moz-linear-gradient(#136aa1, #0f517a);
+  background-image: -o-linear-gradient(#136aa1, #0f517a);
+  background-image: -ms-linear-gradient(#136aa1, #0f517a);
+  background-image: linear-gradient(#136aa1, #0f517a);
+  border: 1px solid #0c4a70;
+  text-shadow: 1px 1px 1px #0c4a70;
+  text-decoration: none;
   text-align: center;
+  color: #fff;
+}
+/* line 36, ../../../unisubs-design/sass/v1.scss */
+.v1 .button:hover {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #136aa1), color-stop(100%, #0c4061));
+  background-image: -webkit-linear-gradient(#136aa1, #0c4061);
+  background-image: -moz-linear-gradient(#136aa1, #0c4061);
+  background-image: -o-linear-gradient(#136aa1, #0c4061);
+  background-image: -ms-linear-gradient(#136aa1, #0c4061);
+  background-image: linear-gradient(#136aa1, #0c4061);
+}
+/* line 40, ../../../unisubs-design/sass/v1.scss */
+.v1 .button.primary {
+  font-size: 1.25em;
+  padding: 1em;
 }
 
-/* line 36, ../../../unisubs-design/sass/v1.scss */
+/* line 46, ../../../unisubs-design/sass/v1.scss */
+.v1 .controls .button {
+  display: block;
+}
+
+/* line 50, ../../../unisubs-design/sass/v1.scss */
 .v1 .team-banner {
   margin-bottom: 2em;
 }
 
+/* line 54, ../../../unisubs-design/sass/v1.scss */
+.v1 .view .empty {
+  padding: 2em 1em;
+  font-size: 18px;
+  color: #788b90;
+}
+
 /*************** @Tabs ***************/
-/* line 47, ../../../unisubs-design/sass/v1.scss */
+/* line 67, ../../../unisubs-design/sass/v1.scss */
 .v1 .tabs {
   float: left;
   width: 100%;
   padding: 0;
   border-bottom: 1px solid #e2e8e9;
 }
-/* line 53, ../../../unisubs-design/sass/v1.scss */
+/* line 73, ../../../unisubs-design/sass/v1.scss */
 .v1 .tabs li {
   display: inline;
 }
-/* line 56, ../../../unisubs-design/sass/v1.scss */
+/* line 76, ../../../unisubs-design/sass/v1.scss */
 .v1 .tabs li a {
   display: block;
   float: left;
@@ -54,12 +86,12 @@
   color: #788b90;
   border-style: solid;
 }
-/* line 64, ../../../unisubs-design/sass/v1.scss */
+/* line 84, ../../../unisubs-design/sass/v1.scss */
 .v1 .tabs li a:hover {
   border-bottom-width: 2px;
   margin-bottom: -1px;
 }
-/* line 69, ../../../unisubs-design/sass/v1.scss */
+/* line 89, ../../../unisubs-design/sass/v1.scss */
 .v1 .tabs li.current a {
   color: #485b60;
   font-weight: bold;
@@ -68,31 +100,31 @@
 }
 
 /*************** @Listings ***************/
-/* line 86, ../../../unisubs-design/sass/v1.scss */
+/* line 106, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing {
   padding: 0;
 }
-/* line 89, ../../../unisubs-design/sass/v1.scss */
+/* line 109, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li {
   position: relative;
   padding: 2em 1em;
   border-bottom: 1px dotted #c2c8c9;
 }
-/* line 94, ../../../unisubs-design/sass/v1.scss */
+/* line 114, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 {
   font-size: 13px;
   padding-bottom: 5px;
 }
-/* line 98, ../../../unisubs-design/sass/v1.scss */
+/* line 118, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 a {
   text-decoration: none;
 }
-/* line 101, ../../../unisubs-design/sass/v1.scss */
+/* line 121, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 a:hover {
   border-width: 0 0 1px 0;
   border-style: dotted;
 }
-/* line 108, ../../../unisubs-design/sass/v1.scss */
+/* line 128, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .thumb {
   position: absolute;
   top: 2em;
@@ -105,7 +137,7 @@
   -khtml-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 115, ../../../unisubs-design/sass/v1.scss */
+/* line 135, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions {
   position: absolute;
   top: 2em;
@@ -113,48 +145,51 @@
   width: 120px;
   padding: 0;
 }
-/* line 118, ../../../unisubs-design/sass/v1.scss */
+/* line 138, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions li {
   padding: 0;
   text-align: right;
   color: #98abb0;
 }
-/* line 124, ../../../unisubs-design/sass/v1.scss */
+/* line 144, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions a {
+  color: #586b70;
+  text-decoration: none;
+}
+/* line 149, ../../../unisubs-design/sass/v1.scss */
+.v1 .listing > li .actions li > a {
   display: block;
   padding: .5em 0;
-  text-decoration: none;
-  color: #586b70;
 }
-/* line 130, ../../../unisubs-design/sass/v1.scss */
-.v1 .listing > li .actions a:after {
+/* line 153, ../../../unisubs-design/sass/v1.scss */
+.v1 .listing > li .actions li > a:after {
   content: ' →';
 }
 
-/* line 138, ../../../unisubs-design/sass/v1.scss */
+/* line 161, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.videos > li {
   min-height: 3em;
   padding-left: 120px;
   padding-right: 150px;
 }
-/* line 143, ../../../unisubs-design/sass/v1.scss */
+/* line 166, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.videos > li .thumb {
   width: 100px;
   height: 60px;
 }
 
-/* line 149, ../../../unisubs-design/sass/v1.scss */
+/* line 172, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li {
   padding-left: 65px;
   padding-right: 150px;
 }
-/* line 153, ../../../unisubs-design/sass/v1.scss */
+/* line 176, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li .thumb {
   width: 45px;
   height: 45px;
 }
 
-/* line 159, ../../../unisubs-design/sass/v1.scss */
+/* line 182, ../../../unisubs-design/sass/v1.scss */
 .v1 .activity li .timestamp {
   position: absolute;
   top: 2em;
@@ -166,7 +201,7 @@
 }
 
 /*************** @Controls ***************/
-/* line 167, ../../../unisubs-design/sass/v1.scss */
+/* line 190, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls {
   width: 199px;
   padding-left: 20px;
@@ -180,16 +215,16 @@
   background-image: -ms-linear-gradient(left, #f5f5f5, #ffffff 5%, #ffffff);
   background-image: linear-gradient(left, #f5f5f5, #ffffff 5%, #ffffff);
 }
-/* line 179, ../../../unisubs-design/sass/v1.scss */
+/* line 202, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul {
   padding: 0;
   margin: 2em 0 1em;
 }
-/* line 183, ../../../unisubs-design/sass/v1.scss */
+/* line 206, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li {
   padding: 0;
 }
-/* line 187, ../../../unisubs-design/sass/v1.scss */
+/* line 210, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a {
   position: relative;
   display: block;
@@ -211,7 +246,7 @@
   -khtml-border-bottom-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-/* line 197, ../../../unisubs-design/sass/v1.scss */
+/* line 220, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a:hover {
   background-color: #f9fafb;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #e8ecee), color-stop(5%, #f3f6f6), color-stop(100%, #f3f6f6));
@@ -221,14 +256,14 @@
   background-image: -ms-linear-gradient(left, #e8ecee, #f3f6f6 5%, #f3f6f6);
   background-image: linear-gradient(left, #e8ecee, #f3f6f6 5%, #f3f6f6);
 }
-/* line 206, ../../../unisubs-design/sass/v1.scss */
+/* line 229, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a span {
   position: absolute;
   top: .75em;
   right: .75em;
   color: #b8cbd0;
 }
-/* line 213, ../../../unisubs-design/sass/v1.scss */
+/* line 236, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a {
   background-color: #edf1f2;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #e2e8e9), color-stop(5%, #edf1f2), color-stop(100%, #edf1f2));
@@ -239,7 +274,7 @@
   background-image: linear-gradient(left, #e2e8e9, #edf1f2 5%, #edf1f2);
   color: #586b70;
 }
-/* line 222, ../../../unisubs-design/sass/v1.scss */
+/* line 245, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a:hover {
   background-color: #e8ecee;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #dce3e5), color-stop(5%, #e8ecee), color-stop(100%, #e8ecee));
@@ -249,36 +284,36 @@
   background-image: -ms-linear-gradient(left, #dce3e5, #e8ecee 5%, #e8ecee);
   background-image: linear-gradient(left, #dce3e5, #e8ecee 5%, #e8ecee);
 }
-/* line 231, ../../../unisubs-design/sass/v1.scss */
+/* line 254, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a span {
   color: #98abb0;
 }
 
 /*************** @Forms ***************/
-/* line 245, ../../../unisubs-design/sass/v1.scss */
+/* line 268, ../../../unisubs-design/sass/v1.scss */
 .v1 form {
   padding: 1em 0;
 }
-/* line 248, ../../../unisubs-design/sass/v1.scss */
+/* line 271, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset {
   padding-bottom: 2em;
 }
-/* line 251, ../../../unisubs-design/sass/v1.scss */
+/* line 274, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset legend {
   font-weight: bold;
   padding-bottom: .5em;
 }
-/* line 256, ../../../unisubs-design/sass/v1.scss */
+/* line 279, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input {
   padding: 4px;
 }
-/* line 260, ../../../unisubs-design/sass/v1.scss */
+/* line 283, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset label {
   display: block;
   width: 100%;
   margin-top: 2em;
 }
-/* line 265, ../../../unisubs-design/sass/v1.scss */
+/* line 288, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type="text"], .v1 form fieldset textarea {
   display: block;
   width: 100%;
@@ -290,27 +325,37 @@
   -khtml-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 271, ../../../unisubs-design/sass/v1.scss */
+/* line 294, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='checkbox'] {
   margin: 0 4px 0 0;
 }
-/* line 275, ../../../unisubs-design/sass/v1.scss */
+/* line 298, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='file'] {
   padding: 0;
 }
-/* line 279, ../../../unisubs-design/sass/v1.scss */
+/* line 302, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset select {
   padding: 4px;
   width: 100%;
 }
-/* line 285, ../../../unisubs-design/sass/v1.scss */
-.v1 form .omega {
+
+/* line 310, ../../../unisubs-design/sass/v1.scss */
+.v1 .alpha .omega {
   margin-left: 60px;
 }
-/* line 289, ../../../unisubs-design/sass/v1.scss */
-.v1 form div.submit {
+
+/* line 314, ../../../unisubs-design/sass/v1.scss */
+.v1 div.submit {
   margin-top: 2em;
   padding-top: 1em;
   border-top: 1px solid #e2e8e9;
   text-align: right;
+}
+
+/*************** @Dashboard ***************/
+/* line 323, ../../../unisubs-design/sass/v1.scss */
+.v1 .dashboard h2 {
+  margin: 0;
+  padding-bottom: .5em;
+  border-bottom: 1px solid #e2e8e9;
 }

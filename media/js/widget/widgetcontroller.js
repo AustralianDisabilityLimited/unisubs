@@ -22,13 +22,14 @@ goog.provide('unisubs.widget.WidgetController');
  * @constructor
  *
  */
-unisubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab) {
+unisubs.widget.WidgetController = function(videoURL, videoPlayer, videoTab, opt_forStreamer) {
     goog.events.EventTarget.call(this);
     // TODO: when all VideoSource implementations support getVideoURL,
     // remove videoURL from the parameters for this constructor.
     this.videoURL_ = videoURL;
     this.videoPlayer_ = videoPlayer;
     this.videoTab_ = videoTab;
+    this.forStreamer_ = !!opt_forStreamer;
 };
 goog.inherits(unisubs.widget.WidgetController, goog.events.EventTarget);
 
@@ -77,6 +78,8 @@ unisubs.widget.WidgetController.prototype.initializeStateImpl_ = function(result
 
     var popupMenu = new unisubs.widget.DropDown(
         videoID, dropDownContents, this.videoTab_);
+
+    popupMenu.setForStreamer(this.forStreamer_);
 
     this.videoTab_.showContent(popupMenu.hasSubtitles(),
                                subtitleState);

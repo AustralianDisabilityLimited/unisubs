@@ -157,47 +157,6 @@
     }
     
 </style> 
-<script> 
-$(function(){
-    $('<img width=0 height=0>').error(function() {
-       $("#youtube_blocked").css("visibility", "visible").css("left", "0px").css("position", "relative");
-       $("#idOVideo").hide();
-       VideoStats.prepareAlternativePlayer(); // If YouTube is hidden, use the flv player for statistics
-    }).attr('src', 'http://www.youtube.com/favicon.ico?' + Math.random()).appendTo('#page-container');
-    $('#video_dropdown').css('display', 'inline-block');
-    var menu = $('#video_dropdown ol').menu();
- 
-    // Set the width explicitly before positioning it absolutely to satisfy IE7.
-    menu.width(menu.width()).hide().css('position', 'absolute');
- 
-    menu.bind("menuselect", function(e, ui){
-        window.location.href = ui.item.children('a').attr('href');
-    });
-    $(document).bind("click focusin", function(e){
-        if ($(e.target).closest("#video_dropdown").length == 0) {
-            menu.hide();
-        }
-    });
-    var button = $('#video_dropdown > a').button({
-        icons: {
-            secondary: 'ui-icon-triangle-1-s'
-        }
-    }).show().click(function(e){
-        if (menu.css('display') == 'none')
-            menu.show().menu("activate", e, $('#video_dropdown li[data-selected=selected]')).focus();
-        else
-            menu.hide();
-        e.preventDefault();
-    });
-});
- 
- 
-    $(function(){VideoStats.startLoggingProgress();});
- 
- 
-</script> 
- 
- 
 	<!-- New, faster Google Analytics async tag START --> 
 	<script type="text/javascript"> 
  

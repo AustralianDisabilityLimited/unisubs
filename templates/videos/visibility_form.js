@@ -3,7 +3,7 @@
 
 var formDiv = $("<div class='msg_modal_wrap language_modal clearfix visibility-form-container' data-modal='visibility-form' id='visibility-form'><a href='#close' class='close'>{% trans 'Close' %} </a></div>");
 var shown = false;
-var loadingMarkup = '<img align="absmiddle" width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>';
+var loadingMarkup = '<img class="placeholder" align="absmiddle" width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>';
 function showVisibilityForm(url, reqType){
     var data = "";
     if ($(".visibility-form-container").length > 0){

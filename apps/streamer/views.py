@@ -35,6 +35,14 @@ def youtubedemo(request):
           'scripts': scripts },
         context_instance=RequestContext(request))
 
+def youtubenotranscriptdemo(request):
+    scripts = [widget.full_path(s) for s in settings.JS_WIDGETIZER[:-1]]
+    return render_to_response(
+        'streamer/youtubenotranscriptdemo.html',
+        { 'js_use_compiled': settings.COMPRESS_MEDIA,
+          'scripts': scripts },
+        context_instance=RequestContext(request))
+
 def overlayytdemo(request):
     return _overlaydemo(request, 'streamer/overlayytdemo.html')
 

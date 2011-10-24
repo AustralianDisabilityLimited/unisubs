@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Universal Subtitles\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-16 01:31-0500\n"
+"POT-Creation-Date: 2011-10-23 01:31-0500\n"
 "PO-Revision-Date: 2010-11-30 05:45+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,6 +317,34 @@ msgstr ""
 msgid "Armenian"
 msgstr ""
 
+#: settings.py:117 utils/translation_names.py:28
+msgid "Bislama"
+msgstr ""
+
+#: settings.py:118
+msgid "French (Canada)"
+msgstr ""
+
+#: settings.py:119 utils/translation_names.py:135
+msgid "Serbo-Croatian"
+msgstr ""
+
+#: settings.py:120 utils/translation_names.py:89
+msgid "Lao"
+msgstr ""
+
+#: settings.py:121 utils/translation_names.py:16
+msgid "Aromanian"
+msgstr ""
+
+#: settings.py:122 utils/translation_names.py:151
+msgid "Tagalog"
+msgstr ""
+
+#: settings.py:123 utils/translation_names.py:169
+msgid "Uzbek"
+msgstr ""
+
 #: apps/auth/admin.py:13 templates/statistic/users_statistic.html:12
 #: templates/teams/edit_members.html:93 templates/teams/edit_members.html:141
 msgid "Username"
@@ -352,53 +380,53 @@ msgstr ""
 msgid "Retired user"
 msgstr ""
 
-#: apps/auth/models.py:270
+#: apps/auth/models.py:271
 msgid "Add comment"
 msgstr ""
 
-#: apps/auth/models.py:271
+#: apps/auth/models.py:272
 msgid "Start subtitles"
 msgstr ""
 
-#: apps/auth/models.py:272
+#: apps/auth/models.py:273
 msgid "Start translation"
 msgstr ""
 
-#: apps/auth/models.py:273
+#: apps/auth/models.py:274
 msgid "Edit subtitles"
 msgstr ""
 
-#: apps/auth/models.py:274
+#: apps/auth/models.py:275
 msgid "Edit translation"
 msgstr ""
 
-#: apps/auth/models.py:331
+#: apps/auth/models.py:332
 msgid "understand enough"
 msgstr ""
 
-#: apps/auth/models.py:332
+#: apps/auth/models.py:333
 msgid "understand 99%"
 msgstr ""
 
-#: apps/auth/models.py:333
+#: apps/auth/models.py:334
 msgid "write like a native"
 msgstr ""
 
-#: apps/auth/models.py:338
+#: apps/auth/models.py:339
 msgid "follow requests in language"
 msgstr ""
 
-#: apps/auth/models.py:353
+#: apps/auth/models.py:354
 msgid ""
 "This is date when start to display announcement. And only the last will be "
 "displayed."
 msgstr ""
 
-#: apps/auth/models.py:451
+#: apps/auth/models.py:452
 msgid "e-mail confirmation"
 msgstr ""
 
-#: apps/auth/models.py:452
+#: apps/auth/models.py:453
 msgid "e-mail confirmations"
 msgstr ""
 
@@ -660,32 +688,32 @@ msgstr ""
 msgid "in miles"
 msgstr ""
 
-#: apps/teams/admin.py:54
+#: apps/teams/admin.py:58
 #, python-format
 msgid "%(count)s messages sent"
 msgstr ""
 
-#: apps/teams/admin.py:56
+#: apps/teams/admin.py:60
 msgid "Fill all fields please."
 msgstr ""
 
-#: apps/teams/admin.py:57
+#: apps/teams/admin.py:61
 msgid "Send message"
 msgstr ""
 
-#: apps/teams/admin.py:61
+#: apps/teams/admin.py:65
 msgid "Feature teams"
 msgstr ""
 
-#: apps/teams/admin.py:65
+#: apps/teams/admin.py:69
 msgid "Unfeature teams"
 msgstr ""
 
-#: apps/teams/admin.py:74 apps/teams/admin.py:106 apps/teams/models.py:100
+#: apps/teams/admin.py:78 apps/teams/admin.py:110 apps/teams/models.py:100
 msgid "Team"
 msgstr ""
 
-#: apps/teams/admin.py:80 templates/videos/history.html:351
+#: apps/teams/admin.py:84 templates/videos/history.html:351
 msgid "User"
 msgstr ""
 
@@ -1212,157 +1240,157 @@ msgid ""
 "language you are uploading or a translation of it"
 msgstr ""
 
-#: apps/videos/models.py:1213
+#: apps/videos/models.py:1231
 #, python-format
 msgid ""
 "  rejected <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1218
+#: apps/videos/models.py:1236
 #, python-format
 msgid ""
 "  approved <a href=\"%(language_url)s\">%(language)s</a> subtitles for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1223
+#: apps/videos/models.py:1241
 #, python-format
 msgid "added video <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1225
+#: apps/videos/models.py:1243
 #, python-format
 msgid "<a href=\"%(video_url)s\">%(video_name)s</a> video added"
 msgstr ""
 
-#: apps/videos/models.py:1231
+#: apps/videos/models.py:1249
 #, python-format
 msgid "changed title for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1233
+#: apps/videos/models.py:1251
 #, python-format
 msgid "Title was changed for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1248
+#: apps/videos/models.py:1266
 #, python-format
 msgid ""
 "commented on <a href=\"%(comments_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1250
+#: apps/videos/models.py:1268
 #, python-format
 msgid ""
 "Comment added for <a href=\"%(comments_url)s\">%(language)s subtitles</a> "
 "for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1253
+#: apps/videos/models.py:1271
 #, python-format
 msgid "commented on <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1255
+#: apps/videos/models.py:1273
 #, python-format
 msgid "Comment added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1263
+#: apps/videos/models.py:1281
 #, python-format
 msgid ""
 "started <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1265
+#: apps/videos/models.py:1283
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> started for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1276
+#: apps/videos/models.py:1294
 #, python-format
 msgid ""
 "edited <a href=\"%(language_url)s\">%(language)s subtitles</a> for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1278
+#: apps/videos/models.py:1296
 #, python-format
 msgid ""
 "<a href=\"%(language_url)s\">%(language)s subtitles</a> edited for <a "
 "href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1284
+#: apps/videos/models.py:1302
 #, python-format
 msgid "added new URL for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1286
+#: apps/videos/models.py:1304
 #, python-format
 msgid "New URL added for <a href=\"%(video_url)s\">%(video_name)s</a>"
 msgstr ""
 
-#: apps/videos/models.py:1300
+#: apps/videos/models.py:1318
 #, python-format
 msgid ""
 "requested subtitles for <a href=\"%(video_url)s\">%(video_name)s</a> in "
 "%(language)s. %(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1302
+#: apps/videos/models.py:1320
 #, python-format
 msgid ""
 "New subtitles requested  for <a href=\"%(video_url)s\">%(video_name)s</a> in"
 " %(language)s. %(language_info)s%(description)s"
 msgstr ""
 
-#: apps/videos/models.py:1318
+#: apps/videos/models.py:1336
 msgid "add video"
 msgstr ""
 
-#: apps/videos/models.py:1319
+#: apps/videos/models.py:1337
 msgid "change title"
 msgstr ""
 
-#: apps/videos/models.py:1320
+#: apps/videos/models.py:1338
 msgid "comment"
 msgstr ""
 
-#: apps/videos/models.py:1321
+#: apps/videos/models.py:1339
 msgid "add version"
 msgstr ""
 
-#: apps/videos/models.py:1322
+#: apps/videos/models.py:1340
 msgid "add translation"
 msgstr ""
 
-#: apps/videos/models.py:1323
+#: apps/videos/models.py:1341
 msgid "add video url"
 msgstr ""
 
-#: apps/videos/models.py:1324
+#: apps/videos/models.py:1342
 msgid "request subtitles"
 msgstr ""
 
-#: apps/videos/models.py:1325
+#: apps/videos/models.py:1343
 msgid "approve version"
 msgstr ""
 
-#: apps/videos/models.py:1326
+#: apps/videos/models.py:1344
 msgid "add contributor"
 msgstr ""
 
-#: apps/videos/models.py:1327
+#: apps/videos/models.py:1345
 msgid "reject version"
 msgstr ""
 
-#: apps/videos/models.py:1515
+#: apps/videos/models.py:1533
 #, python-format
 msgid ""
 "This URL already <a href=\"%(url)s\">exists</a> as its own video in our "
@@ -5653,10 +5681,6 @@ msgstr ""
 msgid "Aragonese"
 msgstr ""
 
-#: utils/translation_names.py:16
-msgid "Aromanian"
-msgstr ""
-
 #: utils/translation_names.py:19
 msgid "Avar"
 msgstr ""
@@ -5679,10 +5703,6 @@ msgstr ""
 
 #: utils/translation_names.py:27
 msgid "Bihari"
-msgstr ""
-
-#: utils/translation_names.py:28
-msgid "Bislama"
 msgstr ""
 
 #: utils/translation_names.py:29
@@ -5877,10 +5897,6 @@ msgstr ""
 msgid "Kurdish"
 msgstr ""
 
-#: utils/translation_names.py:89
-msgid "Lao"
-msgstr ""
-
 #: utils/translation_names.py:90
 msgid "Latin"
 msgstr ""
@@ -6013,10 +6029,6 @@ msgstr ""
 msgid "Serbian"
 msgstr ""
 
-#: utils/translation_names.py:135
-msgid "Serbo-Croatian"
-msgstr ""
-
 #: utils/translation_names.py:136
 msgid "Setswana"
 msgstr ""
@@ -6063,10 +6075,6 @@ msgstr ""
 
 #: utils/translation_names.py:150
 msgid "Swedish"
-msgstr ""
-
-#: utils/translation_names.py:151
-msgid "Tagalog"
 msgstr ""
 
 #: utils/translation_names.py:152
@@ -6127,10 +6135,6 @@ msgstr ""
 
 #: utils/translation_names.py:168
 msgid "Uyghur"
-msgstr ""
-
-#: utils/translation_names.py:169
-msgid "Uzbek"
 msgstr ""
 
 #: utils/translation_names.py:170

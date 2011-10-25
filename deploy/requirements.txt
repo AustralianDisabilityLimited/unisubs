@@ -46,3 +46,4 @@ Sphinx==1.0.7
 -e git+https://github.com/sciyoshi/pyfacebook.git@be8e843c6eeedf0a03cf#egg=facebook
 vendor/Unidecode-0.04.9.tar.gz 
 M2Crypto==0.21.1
+vendor/django-templatetag-sugar.tar.gz

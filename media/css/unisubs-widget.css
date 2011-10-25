@@ -3538,6 +3538,7 @@ div.unisubs-substreamer div.unisubs-substreamer-controls {
 .unisubs-substreamer-controls .unisubs-search-container {
    position: absolute !important;
    display: block !important;
+   top: 0 !important;
    right: 5px !important;
    width: 210px !important;
 }
@@ -3583,4 +3584,8 @@ div.unisubs-transcript .highlighted {
 
 div.unisubs-transcript .highlighted-search {
    background-color: #ff0 !important;
+}
+
+div.unisubs-substreamer-controls a.resync {
+  float: left !important;
 }

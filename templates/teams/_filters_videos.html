@@ -1,8 +1,10 @@
 {% load i18n teams_tags %}
 
 <ul>
-    <li class="current"><a href="">Project 1</a></li>
-    <li><a href="">Project 2</a></li>
-    <li><a href="">Project 3</a></li>
-    <li><a href="">Project 4</a></li>
+	<li><a href="{{ team.get_absolute_url }}">All videos</a></li>
+	{%  team_projects team as projects %}
+
+	{% for project in projects %}
+		<li><a href="{% url teams:project_video_list slug=team.slug,project_slug=project.slug %}">{{ project }}</a></li>
+	{% endfor %}
 </ul>

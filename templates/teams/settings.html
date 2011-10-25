@@ -16,7 +16,14 @@
 {% endblock %}
 
 {% block main_content %}
-    {% with "videos" as current %}
+
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "settings" as current %}
         {% include "teams/_team_tabs.html" %}
     {% endwith %}
 
@@ -57,7 +64,9 @@ This is needed, since it's for the js templating
 
 <script id="projectPanel" type="text/html">
   <div class="panel-project">
-    <a  class="button project-add">Add Project</a>
+    <div class="tools">
+        <a class="button project-add">Add Project</a>
+    </div>
     <ul class="projects listing">
     </ul>
   </div>
@@ -89,9 +98,9 @@ This is needed, since it's for the js templating
         </div>
 
         <div class="grid_9 submit">
-          <a class="red_button project-delete">Delete</a>
-          <a class="blue_button project-save">Save</a>
-          <a class="blue_button project-cancel">Changed my mind just cancel</a>
+          <a class="button project-delete">Delete</a>
+          <a class="button project-save">Save</a>
+          <a class="button project-cancel">Changed my mind just cancel</a>
         </div>
     </form>
   </div>
@@ -224,7 +233,7 @@ This is needed, since it's for the js templating
     </ul>
 </script>
 <script id="tasksPanel" type="text/html">
-    <div class="panel-tasks">
+    <div class="tools panel-tasks">
         <form id="tasks_type_filter"></form>
 
         <form id="tasks_language_filter">
@@ -299,9 +308,11 @@ This is needed, since it's for the js templating
 
                 <form class="logo" action="{% endverbatim %}{% url teams:upload_logo team.slug %}{% verbatim %}" method="POST">
                     <fieldset>
-                        {% endverbatim %}{% csrf_token %}{% verbatim %}
-                        <img id="current_logo" src="" style="max-width: 100px; max-height: 100px; border: 1px solid black;"/>
-                        <br/>
+                        <legend>Logo/Banner</legend>
+                        {% endverbatim %}{% csrf_token %}
+                        {% if team.logo %}
+                            <img id="current_logo" src=""/>
+                        {% endif %}{% verbatim %}
                         <input type="file" id="basic_picture" name="logo" />
                         <button class="upload-picture">
                             <span>Upload a Logo</span>
@@ -344,7 +355,7 @@ This is needed, since it's for the js templating
 </script>
 
 <script id="workflow" type="text/html">
-    <form>
+    <fieldset>
         <label>Subtitle</label>
         <select name="perm_subtitle">
             <option value="20">Open to public</option>
@@ -378,8 +389,8 @@ This is needed, since it's for the js templating
             <option value="60">Owner only</option>
         </select>
 
-        <input type="submit" class="submit" value="Save Workflow Changes" name="save" />
-    </form>
+        <input type="submit" class="button submit" value="Save Workflow Changes" name="save" />
+    </fieldset>
 </script>
 
 {% endverbatim %}

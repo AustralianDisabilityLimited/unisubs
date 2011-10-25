@@ -44,13 +44,21 @@
     {% endif %}
     {% endcomment %}
 
-    <h2 id="team_title">{{ team }}</h2>
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
 
     {% with "videos" as current %}
         {% include "teams/_team_tabs.html" %}
     {% endwith %}
 
     <div class="view grid_9 alpha">
+        <div class="tools">
+            <a href="#" class="button">Add Videos</a>
+        </div>
+
         {% if not team.page_content and team.video %}
             {% widget widget_params %}
         {% endif %}

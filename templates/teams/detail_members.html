@@ -21,43 +21,49 @@
 
 {% block main_content %}
 
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
 
+    {% with "members" as current %}
+        {% include "teams/_team_tabs.html" %}
+    {% endwith %}
 
-<h2>{{ team }}</h2>
+    {% if team.video %}
+        {% widget widget_params %}
+    {% endif %}    
 
-{% with "members" as current %}
-    {% include "teams/_team_tabs.html" %}
-{% endwith %}
+    <div class="view grid_9 alpha">
+        <div class="tools">
+            <a href="#" class="button">Invite Members</a>
+        </div>
 
-{% if team.video %}
-    {% widget widget_params %}
-{% endif %}    
+        {% if is_paginated %}{% paginator %}{% endif %}
+        <ul class="members listing">
+            {% for member in team_member_list %}
+            <li>
+                <h3>
+                    <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
+                </h3>
+                <p>If viewing all, show role here. Otherwise, restrictions.</p>
+                <a href="{{ member.user.get_absolute_url }}" class="thumb"><img src="{{ member.user.avatar }}" alt="{{ member.user }} avatar"></a>
+                <ul class="actions">
+                    <li>
+                        <a href="">Send a message</a>
+                    </li>
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}{% paginator %}{% endif %}
+    </div>
 
-<div class="view grid_9 alpha">
-    {% if is_paginated %}{% paginator %}{% endif %}
-    <ul class="members listing">
-        {% for member in team_member_list %}
-        <li>
-            <h3>
-                <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
-            </h3>
-            <p>!! need descriptive info</p>
-            <a href="{{ member.user.get_absolute_url }}" class="thumb"><img src="{{ member.user.avatar }}" alt="{{ member.user }} avatar"></a>
-            <ul class="actions">
-                <li>
-                    <a href="">Send a message</a>
-                </li>
-            </ul>
-        </li>
-        {% endfor %}
-    </ul>
-    {% if is_paginated %}{% paginator %}{% endif %}
-</div>
-
-<div class="controls grid_3 omega">
-    
-    <p><a href="" class="button primary">Join this Team</a></p>
-    <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
-</div>
+    <div class="controls grid_3 omega">
+        {% include "teams/_filters_members.html" %}
+        <p><a href="" class="button primary">Join this Team</a></p>
+        <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
+    </div>
 
 {% endblock %}

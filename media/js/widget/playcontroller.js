@@ -25,7 +25,7 @@ goog.provide('unisubs.widget.PlayController');
 unisubs.widget.PlayController = function(
     videoID, videoSource, videoPlayer, videoTab, dropDown, opt_subtitleState) 
 {
-    goog.Disposable.call(this);
+    goog.events.EventTarget.call(this);
     this.videoID_ = videoID;
     this.videoSource_ = videoSource;
     this.videoPlayer_ = videoPlayer;
@@ -52,7 +52,9 @@ unisubs.widget.PlayController = function(
     this.nudgeShown_ = false;
     this.trackedURLs_ = new goog.structs.Set();
 };
-goog.inherits(unisubs.widget.PlayController, goog.Disposable);
+goog.inherits(unisubs.widget.PlayController, goog.events.EventTarget);
+
+unisubs.widget.PlayController.LANGUAGE_CHANGED = 'languagechanged';
 
 unisubs.widget.PlayController.prototype.setSubtitleController =
     function(subController)
@@ -97,8 +99,10 @@ unisubs.widget.PlayController.prototype.setUpSubs_ =
     this.nudgeShown_ = false;
     this.disposeComponents_();
     this.subtitleState_ = subtitleState;
+    this.subtitlesJSON_ = subtitleState.SUBTITLES;
     var captionSet = new unisubs.subtitle.EditableCaptionSet(
         subtitleState.SUBTITLES);
+    this.subMap_ = captionSet.makeMap();
     this.captionManager_ = 
         new unisubs.CaptionManager(this.videoPlayer_, captionSet);
     this.playEventHandler_ = new goog.events.EventHandler(this);
@@ -117,6 +121,14 @@ unisubs.widget.PlayController.prototype.setUpSubs_ =
                this.trackPlay_);
     if (this.videoPlayer_.isPlaying())
         this.trackPlay_();
+};
+
+unisubs.widget.PlayController.prototype.getSubtitlesJSON = function() {
+    return this.subtitlesJSON_;
+};
+
+unisubs.widget.PlayController.prototype.getSubMap = function() {
+    return this.subMap_;
 };
 
 unisubs.widget.PlayController.prototype.trackPlay_ = function() {
@@ -149,12 +161,19 @@ unisubs.widget.PlayController.prototype.languageSelected = function(videoLanguag
             that.videoTab_.showContent(
                 that.dropDown_.hasSubtitles(), subState);
             that.dropDown_.setCurrentSubtitleState(subState);
+            that.dispatchEvent(unisubs.widget.PlayController.LANGUAGE_CHANGED);
         });
+};
+
+unisubs.widget.PlayController.prototype.setCaptionDisplayStrategy = 
+    function(strategy) 
+{
+    this.captionDisplayStrategy_ = strategy;
 };
 
 unisubs.widget.PlayController.prototype.captionReached_ = function(event) {
     var c = event.caption;
-    this.videoPlayer_.showCaptionText(c ? c.getText() : '');
+    this.captionDisplayStrategy_(c);
 };
 
 unisubs.widget.PlayController.prototype.finished_ = function() {

@@ -32,19 +32,62 @@ unisubs.streamer.StreamBox.prototype.createDom = function() {
     unisubs.streamer.StreamBox.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.transcriptElem_ = $d('div', 'unisubs-transcript');
-    this.unisubsLink_ = 
+    this.resyncButton_ = $d('a', 'resync', 'resync');
+    unisubs.style.setVisibility(this.resyncButton_, false);
+    var unisubsLink = 
         $d('a', { 'href': '#' },
            $d('img', 
               { 'src': 
                 'http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png' } ));
+    this.videoTab_ = new unisubs.streamer.StreamerVideoTab(unisubsLink);
+    var leftArrow, rightArrow, resultCount;
+    var searchContainer = 
+        $d('span', 'unisubs-search-container',
+           $d('input', { 'className': 'unisubs-search', 'label': 'Search...' }),
+           leftArrow = unisubs.createLinkButton($d, '<'),
+           rightArrow = unisubs.createLinkButton($d, '>'),
+           resultCount = $d('span', 'resultcount'));
+    unisubs.style.setVisibility(leftArrow, false);
+    unisubs.style.setVisibility(rightArrow, false);
+    unisubs.style.setVisibility(resultCount, false);
     var substreamerElem = 
         $d('div', 'unisubs-substreamer',
            $d('div', 'unisubs-substreamer-controls', 
               $d('ul', null, 
-                 $d('li', null, this.unisubsLink_))),
+                 $d('li', null, unisubsLink)),
+              this.resyncButton_,
+             searchContainer),
            this.transcriptElem_);
     goog.dom.append(this.getElement(), substreamerElem);
+    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
+    this.streamBoxSearch_.decorate(searchContainer);
 };
+
+unisubs.streamer.StreamBox.prototype.decorateInternal = function(elem) {
+    unisubs.streamer.StreamBox.superClass_.decorateInternal.call(this, elem);
+    this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
+        'div', 'unisubs-transcript', elem)[0];
+    this.resyncButton_ = goog.dom.getElementsByTagNameAndClass(
+        'a', 'resync', elem)[0];
+    this.videoTab_ = new unisubs.streamer.StreamerVideoTab(
+        goog.dom.getElement("unisubs-logo"));
+    var subSpans = goog.dom.getElementsByTagNameAndClass(
+        'span', 'unisubs-sub', elem);
+    this.makeSubsAndSubMap_(subSpans);
+    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
+    var searchContainer = goog.dom.getElementsByTagNameAndClass(
+        null, 'unisubs-search-container', elem)[0];
+    this.streamBoxSearch_.decorate(searchContainer);
+    this.streamBoxSearch_.setTranscriptElemAndSubs(
+        this.transcriptElem_, this.subs_);
+};
+
+
+unisubs.streamer.StreamBox.prototype.getVideoTab = function() {
+    return this.videoTab_;
+};
+
+
 
 /**
  * @param {Array} subtitles json subs from server
@@ -60,23 +103,16 @@ unisubs.streamer.StreamBox.prototype.setSubtitles = function(subtitles) {
                   'id': 'usub-a-' + s['subtitle_id'] },
                 s['text']);
         });
-    goog.dom.append(this.transcriptElem_, subSpans);
+    goog.dom.removeChildren(this.transcriptElem_);
+    var elems = [];
+    for (var i = 0; i < subSpans.length; i++) {
+        elems.push(subSpans[i]);
+        if (i < subSpans.length - 1) {
+            elems.push(goog.dom.createTextNode(" "));
+        }
+    }
+    goog.dom.append(this.transcriptElem_, elems);
     this.makeSubsAndSubMap_(subSpans);
-};
-
-unisubs.streamer.StreamBox.prototype.decorateInternal = function(elem) {
-    unisubs.streamer.StreamBox.superClass_.decorateInternal.call(this, elem);
-    this.transcriptElem_ = goog.dom.getElementsByTagNameAndClass(
-        'div', 'unisubs-transcript', elem)[0];
-    this.resyncButton_ = goog.dom.getElementsByTagNameAndClass(
-        'a', 'resync', elem)[0];
-    var subSpans = goog.dom.getElementsByTagNameAndClass(
-        'span', 'unisubs-sub', elem);
-    this.makeSubsAndSubMap_(subSpans);
-    this.streamBoxSearch_ = new unisubs.streamer.StreamBoxSearch();
-    var searchContainer = goog.dom.getElementsByTagNameAndClass(
-        null, 'unisubs-search-container', elem)[0];
-    this.streamBoxSearch_.decorate(searchContainer);
     this.streamBoxSearch_.setTranscriptElemAndSubs(
         this.transcriptElem_, this.subs_);
 };

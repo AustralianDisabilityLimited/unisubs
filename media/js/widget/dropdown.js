@@ -77,7 +77,8 @@ unisubs.widget.DropDown.prototype.setCurrentSubtitleState = function(subtitleSta
     this.subtitleState_ = subtitleState;
     this.setCurrentLangClassName_();
     unisubs.style.showElement(this.improveSubtitlesLink_, !!subtitleState);
-    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = this.createDownloadSRTURL_();
+    goog.dom.getFirstElementChild(this.downloadSubtitlesLink_).href = 
+        this.createDownloadSRTURL_();
 };
 
 unisubs.widget.DropDown.prototype.createDom = function() {
@@ -105,6 +106,10 @@ unisubs.widget.DropDown.prototype.createLanguageList_ = function($d) {
     return container;
 };
 
+unisubs.widget.DropDown.prototype.setForStreamer = function(forStreamer) {
+    this.forStreamer_ = forStreamer;
+};
+
 unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.getDomHelper().removeChildren(this.languageList_);
@@ -117,9 +122,13 @@ unisubs.widget.DropDown.prototype.updateSubtitleStats_ = function() {
     goog.dom.setTextContent(
         this.subCountSpan_, '(' + this.subtitleCount_ + ' lines)');
 
-    goog.dom.append(
-        this.languageList_, 
-        this.subtitlesOff_);
+    if (!this.forStreamer_) {
+        // As Maggie pointed out, the "Subtitles off" link really has no 
+        // meaning in the streamer.
+        goog.dom.append(
+            this.languageList_, 
+            this.subtitlesOff_);
+    }
 
     if (this.shouldShowRequestLink_) {
         this.addLanguageListRequestLink_($d);
@@ -413,7 +422,7 @@ unisubs.widget.DropDown.prototype.hide = function() {
 };
 
 unisubs.widget.DropDown.prototype.show = function() {
-    unisubs.attachToLowerLeft(this.videoTab_.getMenuAnchor(),
+    unisubs.attachToLowerLeft(this.videoTab_.getAnchorElem(),
                                this.getElement());
     this.shown_ = true;
 };

@@ -28,7 +28,6 @@ from django.utils.safestring import mark_safe
 from django.core.cache import cache
 from django.db import models
 from django.db.models.signals import post_save
-from django.db.models import Q
 from django.db import IntegrityError
 from django.utils.dateformat import format as date_format
 from django.conf import settings
@@ -183,16 +182,24 @@ class Video(models.Model):
             title = url
 
         if title > 35:
-            title = title[:35]+'...'
-            
+            title = title[:35] + '...'
+
         return title
-    
+
     def update_view_counter(self):
-        st_video_view_handler_update.delay(video_id=self.video_id)
-    
+        try:
+            st_video_view_handler_update.delay(video_id=self.video_id)
+        except:
+            from sentry.client.models import client
+            client.create_from_exception()
+
     def update_subtitles_fetched(self, lang=None):
-        st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
-        
+        try:
+            st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+        except:
+            from sentry.client.models import client
+            client.create_from_exception()
+
         if lang:
             from videos.tasks import update_subtitles_fetched_counter_for_sl
             update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
@@ -568,7 +575,7 @@ class VideoMetadata(models.Model):
         if len(content) > 30:
             content = content[:30] + '...'
         return u'%s - %s: %s' % (self.video,
-                                 VIDEO_META_TYPE_NAMES[self.metadata_type],
+                                 self.get_metadata_type_display(),
                                  content)
 
     @classmethod
@@ -1156,7 +1163,25 @@ class Subtitle(models.Model):
         if self.pk:
             return u"(%4s) %s %s -> %s - syc = %s = %s -- Version %s" % (self.subtitle_order, self.subtitle_id,
                                           self.start_time, self.end_time, self.is_synced, self.subtitle_text, self.version_id)
-    
+
+START_OF_PARAGRAPH = 1
+
+SUBTITLE_META_CHOICES = (
+    (START_OF_PARAGRAPH, 'Start of pargraph'),
+)
+
+class SubtitleMetadata(models.Model):
+    subtitle = models.ForeignKey(Subtitle)
+    metadata_type = models.PositiveIntegerField(choices=SUBTITLE_META_CHOICES)
+    content = models.CharField(max_length=255)
+
+    created = models.DateTimeField(editable=False, auto_now_add=True)
+    modified = models.DateTimeField(editable=False, auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+        verbose_name_plural = 'subtitles metadata'
+
 from django.template.loader import render_to_string
 
 class ActionRenderer(object):

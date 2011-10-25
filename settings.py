@@ -95,7 +95,7 @@ ALL_LANGUAGES['ml'] = gettext_noop(u'Malayalam')
 ALL_LANGUAGES['or'] = gettext_noop(u'Oriya')
 ALL_LANGUAGES['gu'] = gettext_noop(u'Gujarati')
 ALL_LANGUAGES['as'] = gettext_noop(u'Assamese')
-ALL_LANGUAGES['tl'] = gettext_noop(u'Filipino')
+ALL_LANGUAGES['fil'] = gettext_noop(u'Filipino')
 ALL_LANGUAGES['si'] = gettext_noop(u'Sinhala')
 ALL_LANGUAGES['zh'] = gettext_noop(u'Chinese, Yue')
 ALL_LANGUAGES['oc'] = gettext_noop(u'Occitan')
@@ -115,12 +115,13 @@ ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
 ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
 ALL_LANGUAGES['hy'] = gettext_noop(u'Armenian')
 ALL_LANGUAGES['bi'] = gettext_noop(u'Bislama')
-ALL_LANGUAGES['fr_ca'] = gettext_noop(u'French (Canada)')
+ALL_LANGUAGES['fr-ca'] = gettext_noop(u'French (Canadian)')
 ALL_LANGUAGES['sh'] = gettext_noop(u'Serbo-Croatian')
 ALL_LANGUAGES['lo'] = gettext_noop(u'Lao')
-ALL_LANGUAGES['rup'] = gettext_noop(u'Aromanian')
+ALL_LANGUAGES['rup'] = gettext_noop(u'Macedo (Aromanian) Romanian')
 ALL_LANGUAGES['tl'] = gettext_noop(u'Tagalog')
 ALL_LANGUAGES['uz'] = gettext_noop(u'Uzbek')
+ALL_LANGUAGES['kk'] = gettext_noop(u'Kazakh')
 
 del ALL_LANGUAGES['no']
 ALL_LANGUAGES = tuple(i for i in ALL_LANGUAGES.items())
@@ -219,15 +220,17 @@ JS_CORE = \
      'js/startdialog/tolanguage.js',
      'js/startdialog/tolanguages.js',
      'js/startdialog/dialog.js',
-     'js/streamer/streamercontroller.js', 
      'js/streamer/streambox.js', 
      'js/streamer/streamboxsearch.js', 
      'js/streamer/streamsub.js', 
+     'js/streamer/streamervideotab.js', 
+     'js/streamer/streamerdecorator.js', 
      'js/requestdialog.js',
+     'js/widget/videotab.js',
+     'js/widget/hangingvideotab.js',
      'js/widget/subtitle/editablecaption.js',
      "js/widget/subtitle/editablecaptionset.js",
      'js/widget/logindialog.js',
-     'js/widget/videotab.js',
      'js/widget/howtovideopanel.js',
      'js/widget/dialog.js',
      'js/widget/captionmanager.js',
@@ -324,8 +327,7 @@ JS_WIDGETIZER_CORE.extend([
     'js/player/ooyalaplayer.js', 
     'js/player/wistiavideoplayer.js', 
     'js/player/brightcoveliteplayer.js', 
-    'js/player/soundcloudplayer.js', 
-    'js/streamer/streamerdecorator.js', 
+    'js/player/soundcloudplayer.js',
     'js/streamer/overlaycontroller.js'])
 
 JS_WIDGETIZER = list(JS_WIDGETIZER_CORE)
@@ -807,5 +809,12 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
-if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
-    INSTALLED_APPS += ("api",)
+_INTEGRATION_PATH = os.path.join(PROJECT_ROOT, 'unisubs-integration')
+_USE_INTEGRATION = os.path.exists(_INTEGRATION_PATH)
+if _USE_INTEGRATION:
+    sys.path.append(_INTEGRATION_PATH)
+
+if _USE_INTEGRATION:
+    for dirname in os.listdir(_INTEGRATION_PATH):
+        if os.path.isfile(os.path.join(_INTEGRATION_PATH, dirname, '__init__.py')):
+            INSTALLED_APPS += (dirname,)

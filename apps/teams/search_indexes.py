@@ -45,6 +45,7 @@ class TeamVideoLanguagesIndex(SearchIndex):
     video_completed_langs = MultiValueField(indexed=False)
     # list of completed language absolute urls. should have 1-1 mapping to video_compelted_langs
     video_completed_lang_urls = MultiValueField(indexed=False)
+    video_completed_lang_count = IntegerField(indexed=False)
 
     needs_moderation = BooleanField()
     latest_submission_date = DateTimeField(null=True)
@@ -95,6 +96,8 @@ class TeamVideoLanguagesIndex(SearchIndex):
             [sl.language for sl in completed_sls]
         self.prepared_data['video_completed_lang_urls'] = \
             [sl.get_absolute_url() for sl in completed_sls]
+        self.prepared_data['video_completed_lang_count'] = \
+            len(completed_sls)
         policy = obj.video.policy
         owned_by = None
         if policy and policy.belongs_to_team:

@@ -5,13 +5,17 @@
 </h3>
 <p>
   {% if search_record.description %}
-    {{ search_record.description|truncatechars:135|urlize }}.
+    {{ search_record.description|truncatewords:20|urlize }}.
   {% endif %}
 </p>
 <a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}" class="thumb"><img src="{{ search_record.thumbnail }}" alt="{{ search_record.title }} thumbnail"></a>
 <ul class="actions">
     <li>
-        <h4><a href="">{{ search_record.video_completed_langs }} languages</a></h4>
+        <h4>
+          <a href="">
+            {{ search_record.video_completed_lang_count }} language{{ search_record.video_completed_lang_count|pluralize }}
+          </a>
+        </h4>
     </li>
     <li>
       <a href="#" class="team_video_{{ search_record.team_video_pk }}">Add subtitles</a>

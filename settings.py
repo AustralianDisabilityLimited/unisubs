@@ -822,10 +822,17 @@ FEATURE_FLAGS  = {
     "REQUESTS": False,
 }
 
-if os.path.exists(os.path.join(PROJECT_ROOT, "api")):
-    INSTALLED_APPS += ("api",)
+_INTEGRATION_PATH = os.path.join(PROJECT_ROOT, 'unisubs-integration')
+_USE_INTEGRATION = os.path.exists(_INTEGRATION_PATH)
+if _USE_INTEGRATION:
+    sys.path.append(_INTEGRATION_PATH)
 
-#: if True will not try to load media (e.g. javascript files)
-# from third parties. If you're developing and have no net 
-# access, enable this setting on your local_settings.py
+if _USE_INTEGRATION:
+    for dirname in os.listdir(_INTEGRATION_PATH):
+        if os.path.isfile(os.path.join(_INTEGRATION_PATH, dirname, '__init__.py')):
+            INSTALLED_APPS += (dirname,)
+
+# If True will not try to load media (e.g. javascript files) from third parties.
+# If you're developing and have no net access, enable this setting on your
+# settings_local.py
 RUN_LOCALLY = False

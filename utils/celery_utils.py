@@ -4,18 +4,19 @@ from celery.task.base import extract_exec_options
 
 TaskBase = app_or_default().Task
 
+
 class Task(TaskBase):
     """
     This Task class does not close publisher connection and publisher is catched.
     We don't want create new connection every time, because it is slowly.
     """
-    
+
     @classmethod
     def apply_async(self, args=None, kwargs=None, countdown=None,
             eta=None, task_id=None, publisher=None, connection=None,
             connect_timeout=None, router=None, expires=None, queues=None,
             **options):
-        
+
         router = self.app.amqp.Router(queues)
         conf = self.app.conf
 
@@ -46,17 +47,18 @@ class Task(TaskBase):
                                      **options)
 
         return self.AsyncResult(task_id)
-            
+
     @classmethod
     def get_publisher(self, connection=None, exchange=None,
             connect_timeout=None, exchange_type=None, **options):
-        
+
         if not hasattr(self, '_publisher'):
             self._publisher = super(TaskBase, self).get_publisher(connection, exchange,
                     connect_timeout, exchange_type, **options)
 
         return self._publisher
-            
+
+
 def task(*args, **kwargs):
     kwargs.setdefault('base', Task)
     return task_decorator(*args, **kwargs)

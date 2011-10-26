@@ -21,19 +21,22 @@ celery_logger = logging.getLogger('celery.task')
 celery_logger.addHandler(SentryHandler())  
 def process_failure_signal(exception, traceback, sender, task_id,  
                            signal, args, kwargs, einfo, **kw):  
-    exc_info = (type(exception), exception, traceback)  
-    celery_logger.error(  
-        'Celery job exception: %s(%s)' % (exception.__class__.__name__, exception),  
-        exc_info=exc_info,  
-        extra={  
-            'data': {  
-                'task_id': task_id,  
-                'sender': sender,  
-                'args': args,  
-                'kwargs': kwargs,  
+    exc_info = (type(exception), exception, traceback)
+    try:
+        celery_logger.error(
+            'Celery job exception: %s(%s)' % (exception.__class__.__name__, exception),  
+            exc_info=exc_info,  
+            extra={  
+                'data': {  
+                    'task_id': task_id,  
+                    'sender': sender,  
+                    'args': args,  
+                    'kwargs': kwargs,  
+                }  
             }  
-        }  
-    )  
+        )
+    except:
+        pass
 task_failure.connect(process_failure_signal)  
 
 @periodic_task(run_every=crontab(hour=3, day_of_week=1))

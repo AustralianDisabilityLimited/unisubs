@@ -724,8 +724,8 @@ class ViewsTest(WebUseTest):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len_before, Video.objects.count())
-        self.assertEqual(response['Location'], 'http://testserver'+video.video_link())
-    
+        self.assertEqual(response['Location'], 'http://testserver' + video.get_absolute_url())
+
     def test_video_url_create(self):
         self._login()
         v = Video.objects.all()[:1].get()

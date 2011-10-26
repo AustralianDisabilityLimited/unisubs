@@ -196,14 +196,14 @@ class Video(models.Model):
     def update_subtitles_fetched(self, lang=None):
         try:
             st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+
+            if lang:
+                from videos.tasks import update_subtitles_fetched_counter_for_sl
+                update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
         except:
             from sentry.client.models import client
             client.create_from_exception()
 
-        if lang:
-            from videos.tasks import update_subtitles_fetched_counter_for_sl
-            update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
-        
     def get_thumbnail(self):
         if self.s3_thumbnail:
             return self.s3_thumbnail.url
@@ -308,8 +308,7 @@ class Video(models.Model):
                 save_thumbnail_in_s3.delay(obj.pk)
 
                 Action.create_video_handler(obj, user)
-                
-                SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
+
                 #Save video url
                 video_url_obj = VideoUrl()
                 if vt.video_id:

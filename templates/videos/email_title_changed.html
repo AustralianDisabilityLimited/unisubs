@@ -14,8 +14,11 @@
     {% endif %}
     
     {% trans "The new title is" %} <a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}">{{ new_title }}</a>. 
-    
-    {% trans "If this is incorrect, mouseover the title on" %} 
-    <a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}">{% trans "this page" %}</a> {% trans 'and click "edit title"' %}.
+    <br/><br/>
+    {% trans "If this is incorrect, go to " %} 
+    <a href="http://{{ domain }}{{ video.get_absolute_url|rmlocale }}">{% trans "the video page" %}</a> 
+    {% blocktrans %}
+    and click 'edit title' to update it. If you're unable to edit the title, click 'Help' in the main menu to submit a support request.
+    {% endblocktrans %}
 </p>
 {% endblock %}

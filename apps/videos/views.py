@@ -169,7 +169,7 @@ improve subtitles, click the button below the video.'''))
         
         if video_form.created:
             messages.info(request, message=_(u'''Existing subtitles will be imported in a few minutes.'''))            
-        return redirect(video.video_link())
+        return redirect(video.get_absolute_url())
     return render_to_response('videos/create.html', context,
                               context_instance=RequestContext(request))
 

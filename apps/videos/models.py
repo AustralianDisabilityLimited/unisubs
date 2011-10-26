@@ -308,8 +308,7 @@ class Video(models.Model):
                 save_thumbnail_in_s3.delay(obj.pk)
 
                 Action.create_video_handler(obj, user)
-                
-                SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
+
                 #Save video url
                 video_url_obj = VideoUrl()
                 if vt.video_id:

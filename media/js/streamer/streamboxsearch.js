@@ -97,7 +97,7 @@ unisubs.streamer.StreamBoxSearch.prototype.handleSearchKey_ = function(e) {
     goog.array.forEach(
         this.subs_, 
         function(s) { s.reset(); });
-    var searchText = this.searchInput_.getValue();
+    var searchText = this.searchInput_.getValue().toLowerCase();
     if (searchText != "") {
         goog.dom.annotate.annotateTerms(
             this.transcriptElem_, [[searchText, false]],

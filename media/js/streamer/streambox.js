@@ -32,24 +32,22 @@ unisubs.streamer.StreamBox.prototype.createDom = function() {
     unisubs.streamer.StreamBox.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
     this.transcriptElem_ = $d('div', 'unisubs-transcript');
-    this.resyncButton_ = $d('a', 'resync', 'resync');
+    this.resyncButton_ = $d('a', 'resync', 'Re-sync');
     unisubs.style.setVisibility(this.resyncButton_, false);
     var unisubsLink = 
-        $d('a', { 'href': '#' },
+        $d('a', { 'href': '#', 'id': 'unisubs-logo' },
            $d('img', 
               { 'src': 
-                'http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png' } ));
+                unisubs.imageAssetURL('widget_button.png') } ));
     this.videoTab_ = new unisubs.streamer.StreamerVideoTab(unisubsLink);
-    var leftArrow, rightArrow, resultCount;
+    var prevArrow, nextArrow, resultCount;
     var searchContainer = 
-        $d('span', 'unisubs-search-container',
-           $d('input', { 'className': 'unisubs-search', 'label': 'Search...' }),
-           leftArrow = unisubs.createLinkButton($d, '<'),
-           rightArrow = unisubs.createLinkButton($d, '>'),
-           resultCount = $d('span', 'resultcount'));
-    unisubs.style.setVisibility(leftArrow, false);
-    unisubs.style.setVisibility(rightArrow, false);
-    unisubs.style.setVisibility(resultCount, false);
+        $d('div', 'unisubs-search-container',
+           $d('div', 'unisubs-search-input',
+              $d('input', { 'className': 'unisubs-search', 'label': 'Search...' }),
+                 resultCount = $d('span', 'resultcount')),
+           prevArrow = unisubs.createLinkButton($d, '↑'),
+           nextArrow = unisubs.createLinkButton($d, '↓'));
     var substreamerElem = 
         $d('div', 'unisubs-substreamer',
            $d('div', 'unisubs-substreamer-controls', 

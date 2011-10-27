@@ -238,13 +238,15 @@ def _reload_app_server(dir=None):
     and also that we make the server reload code (currently
     with mod_wsgi this is touching the wsgi file)
     """
-    with cd('{0}/unisubs'.format(env.web_dir)):
+    with cd('{0}/unisubs'.format(dir or env.web_dir)):
         run('python deploy/create_commit_file.py')
         run('touch deploy/unisubs.wsgi')
 
 def reload_app_servers():
-    _execute_on_all_hosts(_reload_app_server)
-
+    for host in env.web_hosts:
+        env.host_string = host
+        _reload_app_server()
+    
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host

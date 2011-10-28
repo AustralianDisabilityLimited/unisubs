@@ -222,5 +222,6 @@ def team_projects(context, team, varname):
 
     """
     context[varname] = Project.objects.for_team(team)
+    return ""
     
 

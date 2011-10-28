@@ -188,18 +188,14 @@ class Video(models.Model):
 
     def update_view_counter(self):
         try:
-            st_video_view_handler_update.delay(video_id=self.video_id)
+            st_video_view_handler_update.delay(self.video_id)
         except:
             from sentry.client.models import client
             client.create_from_exception()
 
     def update_subtitles_fetched(self, lang=None):
         try:
-            st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
-
-            if lang:
-                from videos.tasks import update_subtitles_fetched_counter_for_sl
-                update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
+            st_sub_fetch_handler_update.delay(self.video_id, lang.pk)
         except:
             from sentry.client.models import client
             client.create_from_exception()

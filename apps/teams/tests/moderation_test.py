@@ -174,7 +174,7 @@ if feature_is_on('MODERATION'):
             self.assertEquals(self.video.moderated_by, self.team)
 
         def test_create_moderation_only_for_members(self):
-            member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MEMBER)
+            member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_CONTRIBUTOR)
             member.save()
             e = None
             try:
@@ -205,7 +205,7 @@ if feature_is_on('MODERATION'):
             member = TeamMember(user=self.user, team=self.team, role=TeamMember.ROLE_MANAGER)
             member.save()
             add_moderation(self.video, self.team, self.user)
-            member.role = TeamMember.ROLE_MEMBER
+            member.role = TeamMember.ROLE_CONTRIBUTOR
             member.save()
             e = None
             self.assertRaises(SuspiciousOperation, remove_moderation, *(self.video, self.team, self.user))

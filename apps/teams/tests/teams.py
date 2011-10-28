@@ -857,8 +857,8 @@ class TestJqueryRpc(TestCase):
         other_user_tm = TeamMember(team=self.team, user=other_user)
         other_user_tm.save()
         
-        self.assertEqual(other_user_tm.role, TeamMember.ROLE_MEMBER)
-        self.assertEqual(user_tm.role, TeamMember.ROLE_MEMBER)
+        self.assertEqual(other_user_tm.role, TeamMember.ROLE_CONTRIBUTOR)
+        self.assertEqual(user_tm.role, TeamMember.ROLE_CONTRIBUTOR)
         
         response = self.rpc.promote_user(self.team.pk, other_user_tm.pk, TeamMember.ROLE_MANAGER, AnonymousUser())
         if not isinstance(response, Error):

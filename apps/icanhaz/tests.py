@@ -78,7 +78,7 @@ class BusinessLogic(BasicDataTest):
         )
         with self.assertRaises(Exception):
             policy = VideoVisibilityPolicy.objects.create_for_video(
-                video,
+                self.video,
                 VideoVisibilityPolicy.SITE_VISIBILITY_PUBLIC,
                 self.team1,
             )

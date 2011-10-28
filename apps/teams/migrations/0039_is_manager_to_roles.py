@@ -12,7 +12,7 @@ class Migration(DataMigration):
             if t.is_manager:
                 t.role = "manager"
             else:
-                t.role = "member"
+                t.role = "contributor"
             t.save()    
     
     def backwards(self, orm):

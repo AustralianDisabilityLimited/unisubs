@@ -43,7 +43,12 @@ import datetime
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 from apps.teams.moderation_const import WAITING_MODERATION
+from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RAW, \
+      LANG_PERMISSIONS_RAW, _prepare_perms_tuples
 
+def get_perm_names(model, perms):
+    return [("%s-%s-%s" % (model._meta.app_label, model._meta.object_name, p[0]), p[1],) for p in perms]
+    
 
 class TeamManager(models.Manager):
     
@@ -105,6 +110,11 @@ class Team(models.Model):
         ordering = ['-name']
         verbose_name = _(u'Team')
         verbose_name_plural = _(u'Teams')
+
+
+       
+
+
     
     def __unicode__(self):
         return self.name
@@ -159,27 +169,24 @@ class Team(models.Model):
         return 'http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
     
 
+    def _is_role(self, user, role):
+        if not user.is_authenticated():
+            return False
+        return self.members.filter(user=user, role=role).exists()
+        
     def is_manager(self, user):
-        if not user.is_authenticated():
-            return False
-        return self.members.filter(user=user, role=TeamMember.ROLE_MANAGER).exists()
-    
+        return self._is_role(user, TeamMember.ROLE_MANAGER)
+
     def is_member(self, user):
-        if not user.is_authenticated():
-            return False
-        return self.members.filter(user=user).exists()
+        return self._is_role(user, None)
     
     
 
     def is_contributor(self, user, authenticated=True):
         """
-        Contibutors can add new subs to moderated videos and bypass moderation all together 
+        Contibutors can add new subs videos but they migh need to be moderated
         """
-        if authenticated and  not user.is_authenticated():
-            return False        
-        return self.members.filter(role__in=
-                                   [TeamMember.ROLE_CONTRIBUTOR, TeamMember.ROLE_MANAGER],
-                                    user=user).exists()
+        return self._is_role(user, TeamMember.ROLE_CONTRIBUTOR)
     
     def can_remove_video(self, user, team_video=None):
         if not user.is_authenticated():
@@ -402,6 +409,9 @@ class Team(models.Model):
                  'video_policy': self.video_policy,
                  'logo': self.logo_thumbnail() if self.logo else None,
                  'workflow_enabled': self.workflow_enabled, }
+# this needs to be constructed after the model definition since we need a
+# reference to the class itself
+Team._meta.permissions = _prepare_perms_tuples(TEAM_PERMISSIONS_RAW, Team)
 
 class ProjectManager(models.Manager):
 
@@ -455,8 +465,13 @@ class Project(models.Model):
                 ("team", "name",),
                 ("team", "slug",),
         )
+        
     
     
+# this needs to be constructed after the model definition since we need a
+# reference to the class itself
+Project._meta.permissions = _prepare_perms_tuples(PROJECT_PERMISSIONS_RAW, Project)
+
 class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
     video = models.ForeignKey(Video)
@@ -781,6 +796,11 @@ class TeamVideoLanguage(models.Model):
 
         return tasks.exists()
 
+    class Meta:
+        pass
+
+        
+TeamVideoLanguage._meta.permissions = _prepare_perms_tuples(LANG_PERMISSIONS_RAW, TeamVideoLanguage)
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)
@@ -803,20 +823,53 @@ class TeamMemderManager(models.Manager):
         return self.get_query_set().filter(role=TeamMember.ROLE_MANAGER)
     
 class TeamMember(models.Model):
+    # can delete/rename team
+    # can manage team/project settings
+    # can assign roles
+    # can assign tasks
+    # can add videos
+    # can manage video settings
+    # can message all members
+    # can accept/decline assignments
+    # can perform manager review and peer review 
+    ROLE_OWNER = "owner"
+
+
+    # can manage team/project settings
+    # can assign roles to non-admins
+    # can assign tasks
+    # can add videos
+    # can manage video settings
+    # can message all members
+    # can accept/decline assignments
+    # can perform manager review and peer review 
+    ROLE_ADMIN = "admin"
     # migration 0039 depends on these values
+    # can manage team/project settings
+    # can assign roles to non-admins
+    # can assign tasks
+    # can add videos
+    # can manage video settings
+    # can message all members
+    # can accept/decline assignments
+    # can perform manager review and peer review 
     ROLE_MANAGER = "manager"
-    ROLE_MEMBER = "member"
+
+    # can accept/decline assignments
+    # can perform peer review
+    # can view hidden videos
     ROLE_CONTRIBUTOR = "contribuitor"
     
     ROLES = (
         (ROLE_MANAGER, _("Manager")),
-        (ROLE_MEMBER, _("Member")),
+        (ROLE_OWNER, _("Owner")),
         (ROLE_CONTRIBUTOR, _("Contributor")),
+        (ROLE_ADMIN, _("Admin")),
     )
     
     team = models.ForeignKey(Team, related_name='members')
     user = models.ForeignKey(User)
-    role = models.CharField(max_length=16, default=ROLE_MEMBER, choices=ROLES)
+    role = models.CharField(max_length=16, default=ROLE_CONTRIBUTOR, choices=ROLES)
     changes_notification = models.BooleanField(default=True)
     
     objects = TeamMemderManager()
@@ -835,15 +888,11 @@ class TeamMember(models.Model):
         return self.role == 'manager'
 
 
+        
     def promote_to_manager(self, saves=True):
         self.role = TeamMember.ROLE_MANAGER
         if saves:
-            self.save()
-
-    def promote_to_member(self, saves=True):
-        self.role = TeamMember.ROLE_MEMBER
-        if saves:
-            self.save()
+            self.save()    
 
     def promote_to_contributor(self, saves=True):
         self.role = TeamMember.ROLE_CONTRIBUTOR

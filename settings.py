@@ -479,6 +479,7 @@ INSTALLED_APPS = (
     'subrequests',
     'doorman',
     'icanhaz',
+    'guardian',
     'unisubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 
@@ -539,6 +540,7 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
 
 SKIP_SOUTH_TESTS = True

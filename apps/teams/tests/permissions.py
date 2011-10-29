@@ -47,6 +47,9 @@ class BaseTestPermission(TestCase):
         self.team  = Team.objects.all()[0]
         self.video = self.team.videos.all()[0]
         self.user = User.objects.all()[0]
+        
+        self.owner, c= TeamMember.objects.get_or_create(
+            user= User.objects.all()[2], role=TeamMember.ROLE_OWNER, team=self.team)
 
 class TestRules(BaseTestPermission):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
@@ -65,25 +68,27 @@ class TestRules(BaseTestPermission):
             
     def test_roles_assignable(self):
         
-        user = User.objects.filter(teammember__isnull=True)[0]
+        user = User.objects.filter(teams__isnull=True)[0]
         team = self.team
-        member = add_role(self.team, user, None, None, TeamMember.ROLE_OWNER)
+        member = add_role(self.team, user, self.owner,TeamMember.ROLE_OWNER)
         self.assertItemsEqual(roles_assignable_to(team, user, ROLE_OWNER), [
             ROLE_OWNER, ROLE_ADMIN, ROLE_MANAGER, ROLE_CONTRIBUTOR
         ])
-        remove_role(team, user, None, None, TeamMember.ROLE_OWNER)
+        remove_role(team, user, TeamMember.ROLE_OWNER)
         
-        member = add_role(self.team, user, None, None, TeamMember.ROLE_ADMIN)
+        member = add_role(self.team, user, self.owner, TeamMember.ROLE_ADMIN)
         self.assertItemsEqual(roles_assignable_to(team, user, ROLE_ADMIN), [
              ROLE_ADMIN, ROLE_MANAGER, ROLE_CONTRIBUTOR
         ])
-        remove_role(team, user, None, None, TeamMember.ROLE_ADMIN)
-        member = add_role(self.team, user, None, None, TeamMember.ROLE_MANAGER)
+        remove_role(team, user, TeamMember.ROLE_ADMIN)
+        team = refresh_obj(team)
+        member = add_role(self.team, user, self.owner, TeamMember.ROLE_MANAGER)
         self.assertItemsEqual(roles_assignable_to(team , user, ROLE_MANAGER), [
              ROLE_MANAGER, ROLE_CONTRIBUTOR
         ])
-        remove_role(team, user, None, None, TeamMember.ROLE_MANAGER)
-        member = add_role(self.team, user, None, None, TeamMember.ROLE_CONTRIBUTOR)
+        remove_role(team, user, TeamMember.ROLE_MANAGER)
+        team = refresh_obj(team)
+        member = add_role(self.team, user, self.owner,TeamMember.ROLE_CONTRIBUTOR)
         self.assertItemsEqual(roles_assignable_to(team, user, ROLE_CONTRIBUTOR), [
               ROLE_CONTRIBUTOR
         ])
@@ -100,8 +105,8 @@ class TestRules(BaseTestPermission):
             ACCEPT_ASSIGNMENT_PERM[0] ,
         ))
     def test_owner_has_it_all(self):
-        user = User.objects.filter(teammember__isnull=True)[0]
-        add_role(self.team, user, None, None, TeamMember.ROLE_OWNER)
+        user = User.objects.filter(teams__isnull=True)[0]
+        add_role(self.team, user, self.owner,TeamMember.ROLE_OWNER)
 
         self._test_perms(self.team,
                          user, [
@@ -143,8 +148,8 @@ class TestRules(BaseTestPermission):
         return
         
     def test_admin_team_wide(self):
-        user = User.objects.filter(teammember__isnull=True)[0]
-        add_role(self.team, user, None, None, TeamMember.ROLE_ADMIN)
+        user = User.objects.filter(teams__isnull=True)[0]
+        add_role(self.team, user, self.owner,TeamMember.ROLE_ADMIN)
 
         
         self._test_perms(self.team,
@@ -172,9 +177,9 @@ class TestRules(BaseTestPermission):
           
 
     def test_manager_for_team(self):
-        user = User.objects.filter(teammember__isnull=True)[0]
+        user = User.objects.filter(teams__isnull=True)[0]
         project = self.team.default_project
-        add_role(self.team, user, None, None, TeamMember.ROLE_MANAGER)
+        add_role(self.team, user, self.owner,TeamMember.ROLE_MANAGER)
             
         self._test_perms(self.team,
                          user, [
@@ -191,9 +196,9 @@ class TestRules(BaseTestPermission):
                          ])
         
     def test_manager_for_project(self):
-        user = User.objects.filter(teammember__isnull=True)[0]
+        user = User.objects.filter(teams__isnull=True)[0]
         project = self.team.default_project
-        add_role(self.team, user, project, None, TeamMember.ROLE_MANAGER)
+        add_role(self.team, user, self.owner, TeamMember.ROLE_MANAGER, project )
             
         self._test_perms(self.team,
                          user, [
@@ -223,10 +228,9 @@ class TestRules(BaseTestPermission):
 
     def test_can_assign_roles(self):
         # for role assignment, we need more specific testing
-        pass
-        user = User.objects.filter(teammember__isnull=True)[0]
+        user = User.objects.filter(teams__isnull=True)[0]
         project = self.team.default_project
-        add_role(self.team, user, project, None, TeamMember.ROLE_MANAGER)
-        self.assertTrue(can_assign_roles(self.team, user, project, None, TeamMember.ROLE_MANAGER))
-        self.assertFalse(can_assign_roles(self.team, user, project, None, TeamMember.ROLE_OWNER))
+        add_role(self.team, user, self.owner,TeamMember.ROLE_ADMIN, project)
+        self.assertTrue(can_assign_roles(self.team, user,  project, role=ROLE_CONTRIBUTOR))
+        self.assertFalse(can_assign_roles(self.team, user,   project, role=ROLE_OWNER))
     

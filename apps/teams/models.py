@@ -24,6 +24,8 @@
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
 from utils.amazon import S3EnabledImageField
@@ -862,16 +864,17 @@ class TeamMember(models.Model):
     ROLE_CONTRIBUTOR = ROLE_CONTRIBUTOR
     
     ROLES = (
-        (ROLE_MANAGER, _("Manager")),
         (ROLE_OWNER, _("Owner")),
-        (ROLE_CONTRIBUTOR, _("Contributor")),
+        (ROLE_MANAGER, _("Manager")),
         (ROLE_ADMIN, _("Admin")),
+        (ROLE_CONTRIBUTOR, _("Contributor")),
     )
     
     team = models.ForeignKey(Team, related_name='members')
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='user')
     role = models.CharField(max_length=16, default=ROLE_CONTRIBUTOR, choices=ROLES)
     changes_notification = models.BooleanField(default=True)
+
     
     objects = TeamMemderManager()
 
@@ -888,7 +891,6 @@ class TeamMember(models.Model):
         # return self.role in ('Admin', 'Owner')
         return self.role == 'manager'
 
-
         
     def promote_to_manager(self, saves=True):
         self.role = TeamMember.ROLE_MANAGER
@@ -902,7 +904,58 @@ class TeamMember(models.Model):
         
     class Meta:
         unique_together = (('team', 'user'),)
+
+class MembershipNarrowingManager(models.Manager):
+
+    def get_for_team(self, team, user):
+        return self.filter(membership__id_in=[x.id for x in team.members.filter(user=user)])
+        
+    def for_type(self, model):
+        return self.filter(content_type=ContentType.objects.get_for_model(model))
+        
+    def get_for_projects(self, member):
+        return self.for_type(Project).filter(member=member)
+        
+    def get_for_langs(self, member):
+        return self.for_type(TeamVideoLanguage).filter(member=member)
+
+    def create(self, member, narrowing, added_by):
+        return MembershipNarrowing.objects.get_or_create(
+            content_type = ContentType.objects.get_for_model(narrowing),
+            object_pk = narrowing.pk,
+            member = member,
+            added_by=added_by)[0]
+        
+class MembershipNarrowing(models.Model):
+    """
+    Represent narrowings that can be made on memberships.
+    A membership permission might be applyed to an entire
+    team, or be narrowed to projet or to a language.
+    """
+    member = models.ForeignKey(TeamMember, related_name="narrowings")
+    content_type = models.ForeignKey(ContentType,
+        related_name="content_type_set_for_%(class)s")
+    object_pk = models.TextField('object ID')
+    content = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+
+    created = models.DateTimeField(auto_now_add=True, blank=None)
+    modified = models.DateTimeField(auto_now=True, blank=None)
+    added_by = models.ForeignKey(TeamMember, related_name="narrowing_includer")
+    allowed_types = [ContentType.objects.get_for_model(m) for m in \
+                     [Team, Project, TeamVideoLanguage]]
     
+    objects = MembershipNarrowingManager()
+    
+    def __unicode__(self):
+        return u"Permission restriction for %s and %s " % (
+            self.member, self.content)
+
+    def save(self, *args, **kwargs):
+        if False and self.content_type not in MembershipNarrowing.allowed_types:
+            raise ValueError("MembershipNarrowing cannot be assigned to %s, allowed types are %s"
+            % (self.content, MembershipNarrowing.allowed_types))
+        super(MembershipNarrowing, self).save(*args, **kwargs)   
+        
 class Application(models.Model):
     team = models.ForeignKey(Team, related_name='applications')
     user = models.ForeignKey(User, related_name='team_applications')

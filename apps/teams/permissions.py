@@ -48,17 +48,25 @@ ROLES_ORDER, ROLE_OWNER, ROLE_MANAGER, ROLE_CONTRIBUTOR, ROLE_ADMIN
 def can_rename_team(team, user):
     return team.is_owner(user)
 
+    
 def _passes_test(team, user, project, lang, perm_name):
-    
-    target = lang or project or team
-    perm_name = _normalized_perm_name(perm_name[0], target)
-    
-    if  _owner(team, user):
-                return True
-    return user.has_perm(perm_name, team) or \
-           user.has_perm(perm_name, project) or \
-           user.has_perm(perm_name, lang)
-    return False
+    if isinstance(perm_name, tuple):
+        perm_name = perm_name[0]
+    member = team.members.get(user=user)
+    #print 'checking team=%s, user=%s, project=%s, lang=%s, perm_name=%s' % (team, user, project, lang, perm_name), member.role
+    if member.role == ROLE_OWNER:
+        # short circuit logic for onwers, as they can do anything
+        return True
+    # first we check if this role has (withouth narrowning)
+    # the permission asked. E.g. contribuitor cannot rename
+    # a team
+
+    for model in [x for x in (team, project, lang) if x]:
+        if model_has_permission(member, perm_name, model) is False:
+           continue 
+        from teams.models import MembershipNarrowing
+        if MembershipNarrowing.objects.for_type(model).filter(member=member).exists():
+            return True
     
 def _check_perms( perm_name,):
     def wrapper(func):
@@ -90,21 +98,17 @@ def _perms_equal_or_lower(role):
     return ROLES_ORDER[ROLES_ORDER.index(role):]
 
 def roles_assignable_to(team, user, project=None, lang=None):
-    target = lang or project or team
     roles_for_user = set([x.role for x in team.members.filter(user=user)])
     higer_role = ROLES_ORDER[max([ROLES_ORDER.index(x) for x in roles_for_user ])]
         
     return _perms_equal_or_lower(higer_role)
     
 def can_assign_roles(team, user, project=None, lang=None,  role=None):
-    from teams.models import TeamMember
+    member = team.members.get(user=user)
     # only owner can assing owner role!
-    is_owner = team.members.filter(
-            user=user,
-            role = ROLE_OWNER).exists()
-    if is_owner:
+    if member.role == ROLE_OWNER:
         return True
-    elif  role == TeamMember.ROLE_OWNER:
+    elif  role == ROLE_OWNER:
         return False
     can_do =  _passes_test(team, user, project, lang, ASSIGN_ROLE_PERM)    
     if can_do:
@@ -147,28 +151,25 @@ def can_peer_review(team, user, project=None, lang=None):
 def can_edit_subs_for(team, user, project=None, lang=None):
     pass
 
+                               
+def model_has_permission(member, perm_name, model):
+    return perm_name in _perms_for(member.role, model)
+                               
 def _perms_for(role, model):
     return [x[0] for x in RULES[role].\
             intersection(model._meta.permissions)]
     
-def add_role(team, cuser, project=None, lang=None, role=None):
+def add_role(team, cuser, added_by,  role, project=None, lang=None):
     from teams.models import TeamMember
-
-    target = lang or project or team
-    
-    print "roles %s%s, can -> %s" % (role, target, _perms_for(role, target))
-    
-    
-    [ assign(p, cuser.user_ptr, target) for p in _perms_for(role, target)]
     member, created = TeamMember.objects.get_or_create(
         user=cuser,team=team, role=role)
+    member.save()
     return member 
 
-def remove_role(team, user, project=None, lang=None,
-                role=None):
-    from teams.models import TeamMember
-
-    role = role or TeamMember.ROLE_CONTRIBUTOR
+def remove_role(team, user, role, project=None, lang=None):
+    role = role or ROLE_CONTRIBUTOR
     team.members.filter(user=user, role=role).delete()
-    target = lang or project or team
-    [remove_perm(p, user, target) for p in _perms_for(role, target)]
+
+def add_narrowing(team, user, narrowing):
+    from teams.models import MembershipNarrowing
+    MembershipNarrowing.objects.create(team.members.get(user=user), narrowing)

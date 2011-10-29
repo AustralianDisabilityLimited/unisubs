@@ -135,7 +135,7 @@ class Rpc(BaseRpc):
         return return_value
 
     def track_subtitle_play(self, request, video_id):
-        st_widget_view_statistic_update.delay(video_id)
+        st_widget_view_statistic_update.delay(video_id=video_id)
         return { 'response': 'ok' }
 
     def _find_remote_autoplay_language(self, request):

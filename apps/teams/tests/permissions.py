@@ -32,7 +32,8 @@ from apps.teams.permissions import remove_role, add_role, \
      can_edit_subs_for, can_peer_review, can_manager_review, \
      can_accept_assignments, can_message_all_members,  \
      can_change_team_settings, can_change_video_settings, can_add_video, \
-     can_assign_taks, can_assign_roles
+     can_assign_taks, can_assign_roles, can_change_video_settings, _perms_for, \
+     roles_assignable_to
 from apps.teams.permissions_const import *
 from django.core.exceptions import SuspiciousOperation
 
@@ -56,12 +57,48 @@ class TestRules(BaseTestPermission):
     def _test_perms(self, team, user,
                     funcs_true, funcs_false, project=None, lang=None):
         for func in funcs_true:
-            print func.__name__
-            self.assertTrue(func(team, user, project, lang))
+            self.assertTrue(func(team, user, project, lang), func.__name__)
         
         for func in funcs_false:
-            self.assertFalse(func(team, user, project, lang))
+            res = func(team, user, project, lang)
+            self.assertFalse(res, func.__name__)
             
+    def test_roles_assignable(self):
+        
+        user = User.objects.filter(teammember__isnull=True)[0]
+        team = self.team
+        member = add_role(self.team, user, None, None, TeamMember.ROLE_OWNER)
+        self.assertItemsEqual(roles_assignable_to(team, user, ROLE_OWNER), [
+            ROLE_OWNER, ROLE_ADMIN, ROLE_MANAGER, ROLE_CONTRIBUTOR
+        ])
+        remove_role(team, user, None, None, TeamMember.ROLE_OWNER)
+        
+        member = add_role(self.team, user, None, None, TeamMember.ROLE_ADMIN)
+        self.assertItemsEqual(roles_assignable_to(team, user, ROLE_ADMIN), [
+             ROLE_ADMIN, ROLE_MANAGER, ROLE_CONTRIBUTOR
+        ])
+        remove_role(team, user, None, None, TeamMember.ROLE_ADMIN)
+        member = add_role(self.team, user, None, None, TeamMember.ROLE_MANAGER)
+        self.assertItemsEqual(roles_assignable_to(team , user, ROLE_MANAGER), [
+             ROLE_MANAGER, ROLE_CONTRIBUTOR
+        ])
+        remove_role(team, user, None, None, TeamMember.ROLE_MANAGER)
+        member = add_role(self.team, user, None, None, TeamMember.ROLE_CONTRIBUTOR)
+        self.assertItemsEqual(roles_assignable_to(team, user, ROLE_CONTRIBUTOR), [
+              ROLE_CONTRIBUTOR
+        ])
+        
+    def test_perms_for_manager(self):
+        # project
+        print 
+        self.assertItemsEqual(_perms_for(TeamMember.ROLE_MANAGER, Team), (
+            ASSIGN_TASKS_PERM[0],
+            ADD_VIDEOS_PERM[0] ,
+            EDIT_VIDEO_SETTINGS_PERM[0],
+            PERFORM_MANAGER_REVIEW_PERM[0] ,
+            PERFORM_PEER_REVIEW_PERM[0],
+            ACCEPT_ASSIGNMENT_PERM[0] ,
+        ))
     def test_owner_has_it_all(self):
         user = User.objects.filter(teammember__isnull=True)[0]
         add_role(self.team, user, None, None, TeamMember.ROLE_OWNER)
@@ -113,7 +150,6 @@ class TestRules(BaseTestPermission):
         self._test_perms(self.team,
                          user, [
                              can_change_team_settings,
-                             can_assign_roles,
                              can_assign_taks,
                              can_change_team_settings,
                              can_accept_assignments,
@@ -124,7 +160,6 @@ class TestRules(BaseTestPermission):
         self._test_perms(self.team,
                          user, [
                              can_change_team_settings,
-                             can_assign_roles,
                              can_assign_taks,
                              can_change_team_settings,
                              can_message_all_members,
@@ -136,36 +171,62 @@ class TestRules(BaseTestPermission):
         lang = team_video.video.subtitle_language()
           
 
-    def test_admin_for_project(self):
+    def test_manager_for_team(self):
         user = User.objects.filter(teammember__isnull=True)[0]
         project = self.team.default_project
-        add_role(self.team, user, project, None, TeamMember.ROLE_ADMIN)
-        print get_objects_for_user(user, ASSIGN_TASKS_PERM, klass=project)
-        for p in PROJECT_PERMISSIONS_RAW:
-            print "%s %s" % (p[0], user.has_perm(p[0], project))
+        add_role(self.team, user, None, None, TeamMember.ROLE_MANAGER)
             
         self._test_perms(self.team,
                          user, [
-                             can_peer_review,
-                             can_assign_roles,
-                             can_manager_review,
                              can_assign_taks,
+                             can_add_video,
+                             can_change_video_settings, 
+                             can_peer_review,
+                             can_manager_review,
                              can_accept_assignments,
-                             can_message_all_members,
                          ],[
                              can_change_team_settings,
-                         ], project)
+                             can_assign_roles,
+                             can_message_all_members,
+                         ])
+        
+    def test_manager_for_project(self):
+        user = User.objects.filter(teammember__isnull=True)[0]
+        project = self.team.default_project
+        add_role(self.team, user, project, None, TeamMember.ROLE_MANAGER)
+            
         self._test_perms(self.team,
                          user, [
-
-                         ], [
-                             can_change_team_settings,
-                             can_assign_roles,
                              can_assign_taks,
+                             can_add_video,
+                             can_change_video_settings,
+                             can_peer_review,
+                             can_manager_review,
+                             can_accept_assignments,
+                         ],[
                              can_change_team_settings,
                              can_message_all_members,
+                         ], project)
+        # project wise, we can't do anything'
+        self._test_perms(self.team,
+                         user, [
+                         ],[
+                             can_change_team_settings,
                              can_accept_assignments,
-                             can_manager_review,
+                             can_message_all_members,
+                             can_assign_taks,
+                             can_add_video,
+                             can_change_video_settings,
                              can_peer_review,
-                         ]  )
-        team_video = TeamVideo.objects.filter(team=self.team)[0]  
+                             can_manager_review,
+                             ])
+
+    def test_can_assign_roles(self):
+        # for role assignment, we need more specific testing
+        pass
+        user = User.objects.filter(teammember__isnull=True)[0]
+        project = self.team.default_project
+        add_role(self.team, user, project, None, TeamMember.ROLE_MANAGER)
+        self.assertTrue(can_assign_roles(self.team, user, project, None, TeamMember.ROLE_MANAGER))
+        self.assertFalse(can_assign_roles(self.team, user, project, None, TeamMember.ROLE_OWNER))
+    

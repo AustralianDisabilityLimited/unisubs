@@ -44,7 +44,8 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 from apps.teams.moderation_const import WAITING_MODERATION
 from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RAW, \
-      LANG_PERMISSIONS_RAW, _prepare_perms_tuples
+      LANG_PERMISSIONS_RAW, _prepare_perms_tuples, ROLE_ADMIN, \
+      ROLE_OWNER, ROLE_CONTRIBUTOR, ROLE_MANAGER
 
 def get_perm_names(model, perms):
     return [("%s-%s-%s" % (model._meta.app_label, model._meta.object_name, p[0]), p[1],) for p in perms]
@@ -832,7 +833,7 @@ class TeamMember(models.Model):
     # can message all members
     # can accept/decline assignments
     # can perform manager review and peer review 
-    ROLE_OWNER = "owner"
+    ROLE_OWNER = ROLE_OWNER
 
 
     # can manage team/project settings
@@ -843,7 +844,7 @@ class TeamMember(models.Model):
     # can message all members
     # can accept/decline assignments
     # can perform manager review and peer review 
-    ROLE_ADMIN = "admin"
+    ROLE_ADMIN = ROLE_ADMIN
     # migration 0039 depends on these values
     # can manage team/project settings
     # can assign roles to non-admins
@@ -853,12 +854,12 @@ class TeamMember(models.Model):
     # can message all members
     # can accept/decline assignments
     # can perform manager review and peer review 
-    ROLE_MANAGER = "manager"
+    ROLE_MANAGER = ROLE_MANAGER
 
     # can accept/decline assignments
     # can perform peer review
     # can view hidden videos
-    ROLE_CONTRIBUTOR = "contribuitor"
+    ROLE_CONTRIBUTOR = ROLE_CONTRIBUTOR
     
     ROLES = (
         (ROLE_MANAGER, _("Manager")),

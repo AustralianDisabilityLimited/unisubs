@@ -42,7 +42,8 @@ from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RA
 EDIT_PROJECT_SETTINGS_PERM , ASSIGN_ROLE_PERM , ASSIGN_TASKS_PERM , \
 ADD_VIDEOS_PERM , EDIT_VIDEO_SETTINGS_PERM , MESSAGE_ALL_MEMBERS_PERM  , \
 ACCEPT_ASSIGNMENT_PERM , PERFORM_MANAGER_REVIEW_PERM , \
-PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, _normalized_perm_name, RULES
+PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, _normalized_perm_name, RULES,\
+ROLES_ORDER, ROLE_OWNER, ROLE_MANAGER, ROLE_CONTRIBUTOR, ROLE_ADMIN
 
 def can_rename_team(team, user):
     return team.is_owner(user)
@@ -67,11 +68,10 @@ def _check_perms( perm_name,):
     return wrapper
             
 def _is_owner(func):
-    from teams.models import TeamMember
     def wrapper(team, user, *args, **kwargs):
         if team.members.filter(
             user=user,
-            role = TeamMember.ROLE_OWNER).exists():
+            role = ROLE_OWNER).exists():
             return True
         return func(team, user, *args, **kwargs)
     return wraps(func)(wrapper)
@@ -86,12 +86,33 @@ def _owner(team, user):
 def can_change_team_settings(team, user, project=None, lang=None, role=None) :
     return False
 
-def can_assign_roles(team, user, project=None, lang=None, role=None):
+def _perms_equal_or_lower(role):
+    return ROLES_ORDER[ROLES_ORDER.index(role):]
+
+def roles_assignable_to(team, user, project=None, lang=None):
+    target = lang or project or team
+    roles_for_user = set([x.role for x in team.members.filter(user=user)])
+    higer_role = ROLES_ORDER[max([ROLES_ORDER.index(x) for x in roles_for_user ])]
+        
+    return _perms_equal_or_lower(higer_role)
+    
+def can_assign_roles(team, user, project=None, lang=None,  role=None):
     from teams.models import TeamMember
     # only owner can assing owner role!
-    if role == TeamMember.ROLE_OWNER:
+    is_owner = team.members.filter(
+            user=user,
+            role = ROLE_OWNER).exists()
+    if is_owner:
+        return True
+    elif  role == TeamMember.ROLE_OWNER:
         return False
-    return _passes_test(team, user, project, lang, ASSIGN_ROLE_PERM)    
+    can_do =  _passes_test(team, user, project, lang, ASSIGN_ROLE_PERM)    
+    if can_do:
+        # makes sure we allow only <= new roles assignment, e.g
+        # a project owner can assign any other role, but a manager
+        # cannot assign admins nor owners
+        return role in roles_assignable_to(team, user,project, lang)
+    return False
 
 
 @_check_perms(ASSIGN_TASKS_PERM)
@@ -127,14 +148,15 @@ def can_edit_subs_for(team, user, project=None, lang=None):
     pass
 
 def _perms_for(role, model):
-    return [perm[0] for perm in RULES[role] if perm in model._meta.permissions] 
+    return [x[0] for x in RULES[role].\
+            intersection(model._meta.permissions)]
     
 def add_role(team, cuser, project=None, lang=None, role=None):
     from teams.models import TeamMember
 
     target = lang or project or team
     
-    print "roles %s, can -> %s" % (role, _perms_for(role, target))
+    print "roles %s%s, can -> %s" % (role, target, _perms_for(role, target))
     
     
     [ assign(p, cuser.user_ptr, target) for p in _perms_for(role, target)]
@@ -147,6 +169,6 @@ def remove_role(team, user, project=None, lang=None,
     from teams.models import TeamMember
 
     role = role or TeamMember.ROLE_CONTRIBUTOR
-    team.member.fiter(user=user, role=role).delete()
+    team.members.filter(user=user, role=role).delete()
     target = lang or project or team
     [remove_perm(p, user, target) for p in _perms_for(role, target)]

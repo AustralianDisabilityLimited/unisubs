@@ -40,9 +40,8 @@ import datetime
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 from apps.teams.moderation_const import WAITING_MODERATION
-from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RAW, \
-      LANG_PERMISSIONS_RAW, ROLE_ADMIN, \
-      ROLE_OWNER, ROLE_CONTRIBUTOR, ROLE_MANAGER
+from teams.permissions_const import TEAM_PERMISSIONS, PROJECT_PERMISSIONS, \
+      LANG_PERMISSIONS, ROLE_ADMIN, ROLE_OWNER, ROLE_CONTRIBUTOR, ROLE_MANAGER
 
 def get_perm_names(model, perms):
     return [("%s-%s-%s" % (model._meta.app_label, model._meta.object_name, p[0]), p[1],) for p in perms]
@@ -412,7 +411,7 @@ class Team(models.Model):
                  'workflow_enabled': self.workflow_enabled, }
 # this needs to be constructed after the model definition since we need a
 # reference to the class itself
-Team._meta.permissions = TEAM_PERMISSIONS_RAW
+Team._meta.permissions = TEAM_PERMISSIONS
 
 class ProjectManager(models.Manager):
 
@@ -466,12 +465,8 @@ class Project(models.Model):
                 ("team", "name",),
                 ("team", "slug",),
         )
+        permissions = PROJECT_PERMISSIONS
         
-    
-    
-# this needs to be constructed after the model definition since we need a
-# reference to the class itself
-Project._meta.permissions = PROJECT_PERMISSIONS_RAW
 
 class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
@@ -798,10 +793,9 @@ class TeamVideoLanguage(models.Model):
         return tasks.exists()
 
     class Meta:
-        pass
+        permissions = LANG_PERMISSIONS
 
         
-TeamVideoLanguage._meta.permissions = LANG_PERMISSIONS_RAW
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)
@@ -824,41 +818,9 @@ class TeamMemderManager(models.Manager):
         return self.get_query_set().filter(role=TeamMember.ROLE_MANAGER)
     
 class TeamMember(models.Model):
-    # can delete/rename team
-    # can manage team/project settings
-    # can assign roles
-    # can assign tasks
-    # can add videos
-    # can manage video settings
-    # can message all members
-    # can accept/decline assignments
-    # can perform manager review and peer review 
     ROLE_OWNER = ROLE_OWNER
-
-
-    # can manage team/project settings
-    # can assign roles to non-admins
-    # can assign tasks
-    # can add videos
-    # can manage video settings
-    # can message all members
-    # can accept/decline assignments
-    # can perform manager review and peer review 
     ROLE_ADMIN = ROLE_ADMIN
-    # migration 0039 depends on these values
-    # can manage team/project settings
-    # can assign roles to non-admins
-    # can assign tasks
-    # can add videos
-    # can manage video settings
-    # can message all members
-    # can accept/decline assignments
-    # can perform manager review and peer review 
     ROLE_MANAGER = ROLE_MANAGER
-
-    # can accept/decline assignments
-    # can perform peer review
-    # can view hidden videos
     ROLE_CONTRIBUTOR = ROLE_CONTRIBUTOR
     
     ROLES = (

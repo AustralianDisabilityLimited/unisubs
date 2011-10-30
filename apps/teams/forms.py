@@ -371,7 +371,7 @@ class TaskAssignForm(forms.Form):
 
         self.team = team
         self.member = member
-        self.fields['assignee'].queryset = User.objects.filter(teammember__team=team)
+        self.fields['assignee'].queryset = User.objects.filter(user__team=team)
 
 
     def clean_task(self):

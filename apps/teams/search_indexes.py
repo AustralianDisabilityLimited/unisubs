@@ -95,6 +95,7 @@ class TeamVideoLanguagesIndex(SearchIndex):
             [sl.language for sl in completed_sls]
         self.prepared_data['video_completed_lang_urls'] = \
             [sl.get_absolute_url() for sl in completed_sls]
+
         policy = obj.video.policy
         owned_by = None
         if policy and policy.belongs_to_team:

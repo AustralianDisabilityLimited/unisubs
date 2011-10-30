@@ -6,7 +6,7 @@
     {{ team }} | Universal Subtitles
 {% endblock %}
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block css %}
     {{ block.super }}
@@ -20,42 +20,50 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="grid_8 alpha">
-    <h2>
-        <a href="{{ team.get_absolute_url }}">{{ team }}</a> 
-        {% trans "Members" %}
-    </h2>
-    
+
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "members" as current %}
+        {% include "teams/_team_tabs.html" %}
+    {% endwith %}
+
     {% if team.video %}
         {% widget widget_params %}
     {% endif %}    
-    
-    <div id="members-tab">
+
+    <div class="view grid_9 alpha">
+        <div class="tools">
+            <a href="#" class="button">Invite Members</a>
+        </div>
+
         {% if is_paginated %}{% paginator %}{% endif %}
-        <ul class="big_list">
+        <ul class="members listing">
             {% for member in team_member_list %}
             <li>
-                <span class="user_thumb">
-                    <img src="{{ member.user.avatar }}" />
-                </span>
-                <div class="info">
-                    <h4><a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a></h4>
-                    {% if member.user.biography %}
-                    <p>
-                        {{ member.user.biography|truncatewords:25|linebreaksbr }}
-                    </p>
-                    {% endif %}
-                </div>
+                <h3>
+                    <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
+                </h3>
+                <p>If viewing all, show role here. Otherwise, restrictions.</p>
+                <a href="{{ member.user.get_absolute_url }}" class="thumb"><img src="{{ member.user.avatar }}" alt="{{ member.user }} avatar"></a>
+                <ul class="actions">
+                    <li>
+                        <a href="">Send a message</a>
+                    </li>
+                </ul>
             </li>
             {% endfor %}
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
     </div>
-</div>
 
-<div class="grid_4 omega">
-    {% include "teams/_team_detail.html" %}
-    {% team_activity team %}
-</div>
+    <div class="controls grid_3 omega">
+        {% include "teams/_filters_members.html" %}
+        <p><a href="" class="button primary">Join this Team</a></p>
+        <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
+    </div>
 
 {% endblock %}

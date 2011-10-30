@@ -6,6 +6,7 @@ def media(request):
 
     """
     return {
+        'MEDIA_URL': settings.MEDIA_URL, 
         'STATIC_URL': settings.STATIC_URL, 
         "STATIC_URL_BASE": settings.STATIC_URL_BASE,
         "COMPRESS_MEDIA": settings.COMPRESS_MEDIA }

@@ -9,29 +9,34 @@
 
 
 
-{% block body_attrs %}class="new-teams"{% endblock %}
+{% block body_attrs %}class="v1 teams"{% endblock %}
 
 {% block title %}
     {{ team }} {% trans 'Settings' %} | Universal Subtitles
 {% endblock %}
 
 {% block main_content %}
-    <div class="hd">
-        <h2>{{ team.name }}</h2>
-        {% with "settings" as active %}
-            {% include 'teams/_edit_top_navigation.html' %}
-        {% endwith %}
-    </div>
 
-    <div class="panel-holder grid_9 alpha">
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "settings" as current %}
+        {% include "teams/_team_tabs.html" %}
+    {% endwith %}
+
+    <div class="panel-holder view grid_9 alpha">
       <div class="tab panel-projects" style="display:none">
       </div>
       {% include "teams/_basic_settings.html" %}
 
     </div>
 
-    <div class=" grid_3 omega ">
-      <ul class="view-filter sub-settings-panel">
+    <div class="controls grid_3 omega ">
+        
+      <ul class="sub-settings-panel">
       </ul>
     </div>
 
@@ -45,7 +50,7 @@ $(window).load(function(){
 
 <!-- templates -->
 <script id="IMAGE_PRELOADER" type="text/html">
-  <img  width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+  <img class="placeholder" width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
 </script>
 {% comment %}  Whatever is inside the verbatim tag does not run through
 django's var subtitution, so the final template is render as it's written bellow.
@@ -59,7 +64,9 @@ This is needed, since it's for the js templating
 
 <script id="projectPanel" type="text/html">
   <div class="panel-project">
-    <a  class="button project-add">Add Project</a>
+    <div class="tools">
+        <a class="button project-add">Add Project</a>
+    </div>
     <ul class="projects listing">
     </ul>
   </div>
@@ -68,26 +75,33 @@ This is needed, since it's for the js templating
 <script id="projectEditPanel" type="text/html">
   <div class="project-edit-panel modal-window-bg">
     <form action="#">
-      <h3> Change project {{name}}</h3>
-      <label for="name">Name</label>
-      <input type="text" name="name" class="clearfix" value="{{name}}"/>
+        <div class="grid_4 alpha">
+            <fieldset>
+              <legend> Change project {{name}}</legend>
+              <label for="name">Name</label>
+              <input type="text" name="name" class="clearfix" value="{{name}}"/>
 
-      <label for="name">Description</label>
+              <label for="name">Description</label>
 
-      <textarea  name="description" class="clearfix" >{{description}}</textarea>
-      <input type="hidden" value='{{pk}}' name="pk"/>
-      <input type="hidden" value='{{order}}' name="order"/>
-      <input type="hidden" value='{{slug}}' name="slug"/>
-      <div class="clearfix"/>
-      <b> Workflows</b>
-      <label for="workflow_enabled">Moderate this project's subtitles. Wil override the team's workflow if exists.</p>
-<input type="checkbox"  name="workflow_enabled" {{#workflow_enabled}}checked="checked"{{/workflow_enabled}}/>
+              <textarea  name="description" class="clearfix" >{{description}}</textarea>
+              <input type="hidden" value='{{pk}}' name="pk"/>
+              <input type="hidden" value='{{order}}' name="order"/>
+              <input type="hidden" value='{{slug}}' name="slug"/>
+            </fieldset>
+        </div>
+        <div class="grid_4 omega">
+            <fieldset>
+              <legend>Workflows</legend>
+              <p class="notation">Moderate this project's subtitles. Will override the team's workflow if exists.</p>
+              <label for="workflow_enabled"><input type="checkbox"  name="workflow_enabled" {{#workflow_enabled}}checked="checked"{{/workflow_enabled}}/> Enable workflows</label>
+            </fieldset>
+        </div>
 
-
-      <a class="red_button project-delete">Delete</a>
-      <a class="blue_button project-save">Save</a>
-      <a class="blue_button project-cancel">Changed my mind just cancel</a>
-
+        <div class="grid_9 submit">
+          <a class="button project-delete">Delete</a>
+          <a class="button project-save">Save</a>
+          <a class="button project-cancel">Changed my mind just cancel</a>
+        </div>
     </form>
   </div>
 </script>
@@ -219,7 +233,7 @@ This is needed, since it's for the js templating
     </ul>
 </script>
 <script id="tasksPanel" type="text/html">
-    <div class="panel-tasks">
+    <div class="tools panel-tasks">
         <form id="tasks_type_filter"></form>
 
         <form id="tasks_language_filter">
@@ -233,39 +247,45 @@ This is needed, since it's for the js templating
 <script id="guidelinesPanel" type="text/html">
     <div class="panel-guidelines">
         <form id="guidelines_messages_form">
-            <div class="messages">
-                <h3>Custom messages</h3>
-                <p class="description">
-                    Customize the messages sent to your users.
-                    The text you enter will preceed the default system message.
-                </p>
+            <div class="grid_4 alpha messages">
+                <fieldset>
+                    <legend>Custom messages</legend>
+                    <p class="notation">
+                        Customize the messages sent to your users.
+                        The text you enter will preceed the default system message.
+                    </p>
 
-                <label for="id_messages_join">When a member joins the team</label><br/>
-                <textarea id="id_messages_join" name="messages_join"></textarea><br/>
+                    <label for="id_messages_invite">When a member is invited to join the team</label>
+                    <textarea id="id_messages_invite" name="messages_invite"></textarea>
 
-                <label for="id_messages_manager">When a member is given the Manager role</label><br/>
-                <textarea id="id_messages_manager" name="messages_manager"></textarea><br/>
+                    <label for="id_messages_manager">When a member is given the Manager role</label>
+                    <textarea id="id_messages_manager" name="messages_manager"></textarea>
 
-                <label for="id_messages_admin">When a member is given the Admin role</label><br/>
-                <textarea id="id_messages_admin" name="messages_admin"></textarea><br/>
+                    <label for="id_messages_admin">When a member is given the Admin role</label>
+                    <textarea id="id_messages_admin" name="messages_admin"></textarea>
+                </fieldset>
             </div>
-            <div class="guidelines">
-                <h3>Guidelines</h3>
-                <p class="description">
-                    Add guidelines to be displayed to your users when completing tasks.
-                </p>
+            <div class="grid_4 omega guidelines">
+                <fieldset>
+                    <legend>Guidelines</legend>
+                    <p class="notation">
+                        Add guidelines to be displayed to your users when completing tasks.
+                    </p>
 
-                <label for="id_guidelines_subtitle">When creating subtitles</label><br/>
-                <textarea id="id_guidelines_subtitle" name="guidelines_subtitle"></textarea><br/>
+                    <label for="id_guidelines_subtitle">When creating subtitles</label>
+                    <textarea id="id_guidelines_subtitle" name="guidelines_subtitle"></textarea>
 
-                <label for="id_guidelines_translate">When translating</label><br/>
-                <textarea id="id_guidelines_translate" name="guidelines_translate"></textarea><br/>
+                    <label for="id_guidelines_translate">When translating</label>
+                    <textarea id="id_guidelines_translate" name="guidelines_translate"></textarea>
 
-                <label for="id_guidelines_review">When reviewing</label><br/>
-                <textarea id="id_guidelines_review" name="guidelines_review"></textarea><br/>
+                    <label for="id_guidelines_review">When reviewing</label>
+                    <textarea id="id_guidelines_review" name="guidelines_review"></textarea>
+                </fieldset>
             </div>
 
-            <input type="submit" class="submit" value="Save Changes" name="save" />
+            <div class="grid_9 submit">
+                <input type="submit" class="submit" value="Save Changes" name="save" />
+            </div>
         </form>
     </div>
 </script>
@@ -273,56 +293,69 @@ This is needed, since it's for the js templating
 <script id="basicPanel" type="text/html">
     <div class="panel-basic">
         <div id="basic_settings_form">
-            <form class="team-settings">
-                <h3>Team Details</h3>
+            <div class="grid_4 alpha">
+                <form class="team-settings">
+                    <fieldset>
+                            <legend>Team Details</legend>
 
-                <label for="basic_name">Name</label>
-                <input id="basic_name" type="text" name="name" value="" />
+                            <label for="basic_name">Name</label>
+                            <input id="basic_name" type="text" name="name" value="" />
 
-                <label for="basic_description">Description</label>
-                <textarea id="basic_description" name="name"></textarea>
-            </form>
+                            <label for="basic_description">Description</label>
+                            <textarea id="basic_description" name="name"></textarea>
+                        </fieldset>
+                </form>
 
-            <form class="logo" action="{% endverbatim %}{% url teams:upload_logo team.slug %}{% verbatim %}" method="POST">
-                <div style="float: left; clear: both; margin: 30px 0;">
-                    {% endverbatim %}{% csrf_token %}{% verbatim %}
-                    <img id="current_logo" src="" style="max-width: 100px; max-height: 100px; border: 1px solid black;"/>
-                    <br/>
-                    <input type="file" id="basic_picture" name="logo" />
-                    <button class="green_button small upload-picture">
-                        <span>Upload a Logo</span>
-                    </button>
-                </div>
-                <p class="help">Max size 000x000</p>
-            </form>
+                <form class="logo" action="{% endverbatim %}{% url teams:upload_logo team.slug %}{% verbatim %}" method="POST">
+                    <fieldset>
+                        <legend>Logo/Banner</legend>
+                        {% endverbatim %}{% csrf_token %}
+                        {% if team.logo %}
+                            <img id="current_logo" src=""/>
+                        {% endif %}{% verbatim %}
+                        <input type="file" id="basic_picture" name="logo" />
+                        <button class="upload-picture">
+                            <span>Upload a Logo</span>
+                        </button>
+                        <p class="notation">Max size 000x000</p>
+                    </fieldset>
+                </form>
+            </div>
 
-            <form class="team-settings">
-                <h3>Permissions</h3>
+            <div class="grid_4 omega">
+                <form class="team-settings">
+                    <fieldset>
+                        <legend>Permissions</legend>
 
-                <label for="id_membership_policy">Who can join</label>
-                {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
+                        <label for="id_membership_policy">Who can join</label>
+                        {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
 
-                <label for="id_video_policy">Who can add videos</label>
-                {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
-            </form>
+                        <label for="id_video_policy">Who can add videos</label>
+                        {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
+                    </fieldset>
+                </form>
 
-            <form class="team-settings">
-                <h3>Workflows</h3>
-                <p class="help">Moderate subtitles on your videos</p>
+                <form class="team-settings">
+                    <fieldset>
+                        <legend>Workflows</legend>
+                        <p class="notation">Moderate subtitles on your videos</p>
 
-                <input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/>
-                <label for="basic_workflows_enabled">Enable workflows</label>
-            </form>
+                        <label for="basic_workflows_enabled"><input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/> Enable workflows</label>
+                    </fieldset>
+                </form>
 
-            <form action="" class="workflow" method="post"></form>
-
-            <form class="team-settings"><input type="submit" class="submit" value="Save Changes" name="save" /></form>
+                <form action="" class="workflow" method="post"></form>
+            </div>
+            
+            <div class="grid_9 submit">
+                <form class="team-settings"><input type="submit" class="submit" value="Save Changes" name="save" /></form>
+            </div>
         </div>
     </div>
 </script>
 
 <script id="workflow" type="text/html">
-    <form>
+    <fieldset>
         <label>Subtitle</label>
         <select name="perm_subtitle">
             <option value="20">Open to public</option>
@@ -356,8 +389,8 @@ This is needed, since it's for the js templating
             <option value="60">Owner only</option>
         </select>
 
-        <input type="submit" class="submit" value="Save Workflow Changes" name="save" />
-    </form>
+        <input type="submit" class="button submit" value="Save Workflow Changes" name="save" />
+    </fieldset>
 </script>
 
 {% endverbatim %}

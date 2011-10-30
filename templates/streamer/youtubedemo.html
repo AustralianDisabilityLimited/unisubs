@@ -1,5 +1,8 @@
 {% extends "streamer/streamerdemobase.html" %}
 {% block content %}
+  <p>
+    Note this page contains a &lt;div class=&quot;unisubs-substreamer&quot;&gt; element directly underneath the video.
+  </p>
   <object id="idOVideo" name="idOVideo" width="600" height="360"> 
     <param name="movie" value="http://www.youtube.com/v/1lxm-e0hMTw?hl=en_US&fs=1&rel=0&hd=1&border=0&enablejsapi=1"> 
     <param name="allowFullScreen" value="true"> 
@@ -10,16 +13,17 @@
   <div class="unisubs-substreamer">
     <div class="unisubs-substreamer-controls">
       <ul> 
-        <li><a href="" id="unisubs-logo"><img src="http://f.cl.ly/items/390R0c261l0u431c0j35/unisubs.png" alt="Universal Subtitles" /></a></li> 
+        <li><a href="" id="unisubs-logo"><img src="{{ STATIC_URL }}images/widget_button.png" alt="Universal Subtitles" /></a></li> 
         {# <li><a href="" id="edit-link">Edit Transcript</a></li> #}
       </ul> 
-      <a class="resync" href="javascript:void(0)" style="visibility: hidden !important">resync</a>
-      <span class="unisubs-search-container">
-        <input class="unisubs-search" label="Search..."/>
-        <a href="javascript:void(0)" style="visibility: hidden !important">&lt;</a>
-        <a href="javascript:void(0)" style="visibility: hidden !important">&gt;</a>
-        <span class="resultcount" style="visibility: hidden !important"></span>
-      </span>
+      <a class="resync" href="javascript:void(0)" style="visibility: hidden !important">Re-sync</a>
+      <div class="unisubs-search-container">
+        <div class="unisubs-search-input">
+          <input class="unisubs-search" label="Search..."/>
+          <span class="resultcount"></span>
+        </div>
+        <a href="javascript:void(0)" class="prev">↑</a><a href="javascript:void(0)" class="next">↓</a>
+      </div>
     </div>
     <div class="unisubs-transcript">
       {% for sub in subs %}

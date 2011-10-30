@@ -28,7 +28,6 @@ from django.utils.safestring import mark_safe
 from django.core.cache import cache
 from django.db import models
 from django.db.models.signals import post_save
-from django.db.models import Q
 from django.db import IntegrityError
 from django.utils.dateformat import format as date_format
 from django.conf import settings
@@ -183,20 +182,24 @@ class Video(models.Model):
             title = url
 
         if title > 35:
-            title = title[:35]+'...'
-            
+            title = title[:35] + '...'
+
         return title
-    
+
     def update_view_counter(self):
-        st_video_view_handler_update.delay(video_id=self.video_id)
-    
+        try:
+            st_video_view_handler_update.delay(self.video_id)
+        except:
+            from sentry.client.models import client
+            client.create_from_exception()
+
     def update_subtitles_fetched(self, lang=None):
-        st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
-        
-        if lang:
-            from videos.tasks import update_subtitles_fetched_counter_for_sl
-            update_subtitles_fetched_counter_for_sl.delay(sl_pk=lang.pk)
-        
+        try:
+            st_sub_fetch_handler_update.delay(self.video_id, lang.pk)
+        except:
+            from sentry.client.models import client
+            client.create_from_exception()
+
     def get_thumbnail(self):
         if self.s3_thumbnail:
             return self.s3_thumbnail.url
@@ -301,8 +304,7 @@ class Video(models.Model):
                 save_thumbnail_in_s3.delay(obj.pk)
 
                 Action.create_video_handler(obj, user)
-                
-                SubtitleLanguage(video=obj, is_original=True, is_forked=True).save()
+
                 #Save video url
                 video_url_obj = VideoUrl()
                 if vt.video_id:

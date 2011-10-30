@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
-from teams.models import Team, Invite, TeamVideo
+from teams.models import Team, Invite, TeamVideo, Project
 from videos.models import Action, Video
 from apps.widget import video_cache
 from django.conf import settings
@@ -33,6 +33,9 @@ from django.utils.http import urlquote
 from widget.views import base_widget_params
 from django.utils import simplejson as json
 from django.utils.http import urlquote
+
+from templatetag_sugar.register import tag
+from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -197,3 +200,28 @@ def render_team_leave(context, team, button_size="huge"):
     context['team'] = team
     context['button_size'] = button_size
     return context
+
+@tag(register, [Variable(), Constant("as"), Name()])
+def team_projects(context, team, varname):
+    """
+    Sets the project list on the context, but only the non default
+    hidden projects.
+    Usage:
+    {%  team_projects team as projects %}
+        {% for project in projects %}
+            project
+        {% endfor %}
+    If you do want to loop through all project:
+
+    {% for p in team.project_set.all %}
+      {% if p.is_default_project %}
+         blah
+      {% else %}
+    {%endif %}
+    {% endfor %} 
+
+    """
+    context[varname] = Project.objects.for_team(team)
+    return ""
+    
+

@@ -67,7 +67,8 @@ def _copy_subtitles(fromlang, tolang, maxout=None):
 def _add_lang_to_video(video, props,  translated_from=None):
 
     if props.get('is_original', False):
-        video.subtitle_language().delete()
+        sl = video.subtitle_language()
+        sl and sl.delete()
     sub_lang = SubtitleLanguage(
         video=video,
         is_original = props.get('is_original', False),

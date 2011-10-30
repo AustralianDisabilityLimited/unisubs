@@ -218,6 +218,19 @@ def _git_pull():
     run('chmod g+w -R .git 2> /dev/null; /bin/true')
     _clear_permissions('.')
 
+def _git_checkout(commit):
+    run('git fetch')
+    run('git checkout --force %s' % commit)
+    run('chgrp pcf-web -R .git 2> /dev/null; /bin/true')
+    run('chmod g+w -R .git 2> /dev/null; /bin/true')
+    _clear_permissions('.')
+
+
+def _get_optional_repo_version(repo):
+    with open(os.path.join(env.web_dir, 'unisubs', 'optional', repo)) as f:
+        return f.read().strip()
+
+
 def _reload_app_server(dir=None):
     """
     Reloading the app server will both make sure we have a
@@ -225,13 +238,15 @@ def _reload_app_server(dir=None):
     and also that we make the server reload code (currently
     with mod_wsgi this is touching the wsgi file)
     """
-    with cd('{0}/unisubs'.format(env.web_dir)):
+    with cd('{0}/unisubs'.format(dir or env.web_dir)):
         run('python deploy/create_commit_file.py')
         run('touch deploy/unisubs.wsgi')
 
 def reload_app_servers():
-    _execute_on_all_hosts(_reload_app_server)
-
+    for host in env.web_hosts:
+        env.host_string = host
+        _reload_app_server()
+    
 def add_disabled():
     for host in env.web_hosts:
         env.host_string = host
@@ -241,6 +256,18 @@ def remove_disabled():
     for host in env.web_hosts:
         env.host_string = host
         run('rm {0}/unisubs/disabled'.format(env.web_dir))
+
+def update_integration():
+    '''Update the integration repo to the version recorded in the site repo.
+
+    At the moment it is assumed that the optional/unisubs-integration file
+    exists, and that the unisubs-integration repo has already been cloned down.
+
+    TODO: Run this from update_web automatically
+    '''
+    commit = _get_optional_repo_version('unisubs-integration')
+    with cd(os.path.join(env.web_dir, 'unisubs', 'unisubs-integration')):
+        _git_checkout(commit)
 
 def update_web():
     """

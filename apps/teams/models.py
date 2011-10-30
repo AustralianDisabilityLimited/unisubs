@@ -16,12 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-#  Based on: http://www.djangosnippets.org/snippets/73/
-#
-#  Modified by Sean Reifschneider to be smarter about surrounding page
-#  link context.  For usage documentation see:
-#
-#     http://www.tummy.com/Community/Articles/django-pagination/
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.contrib.contenttypes.models import ContentType
@@ -40,6 +34,7 @@ from utils.panslugify import pan_slugify
 from haystack.query import SQ
 from haystack import site
 from utils.translation import SUPPORTED_LANGUAGES_DICT
+from utils import get_object_or_none
 import datetime 
 
 ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
@@ -988,7 +983,10 @@ class Invite(models.Model):
         self.delete()
     
     def render_message(self, msg):
-        return render_to_string('teams/_invite_message.html', {'invite': self})
+        message = get_object_or_none(Setting, team=self.team,
+                                     key=Setting.KEY_IDS['messages_invite'])
+        return render_to_string('teams/_invite_message.html',
+                                {'invite': self, 'custom_message': message})
     
     def message_json_data(self, data, msg):
         data['can-reaply'] = False
@@ -1005,7 +1003,7 @@ def invite_send_message(sender, instance, created, **kwargs):
         msg.author = instance.author
         msg.save()
     
-post_save.connect(invite_send_message, Invite)
+post_save.connect(invite_send_message, Invite, dispatch_uid="teams.invite.send_invite")
 
 
 class Workflow(models.Model):
@@ -1064,12 +1062,15 @@ class Workflow(models.Model):
 
         '''
 
+
         if not workflows:
             team_id = Workflow._get_target_team_id(id, type)
             workflows = list(Workflow.objects.filter(team=team_id))
+        else:
+            team_id = workflows[0].team.pk
 
         if not workflows:
-            return None
+            return Workflow(team=Team.objects.get(pk=team_id))
 
         if type == 'team_video':
             try:
@@ -1079,11 +1080,8 @@ class Workflow(models.Model):
                 # If there's no video-specific workflow for this video, there
                 # might be a workflow for its project, so we'll start looking
                 # for that instead.
-                try:
-                    team_video = TeamVideo.objects.get(pk=id)
-                    id, type = team_video.project.id, 'project'
-                except TeamVideo.DoesNotExist:
-                    return None
+                team_video = TeamVideo.objects.get(pk=id)
+                id, type = team_video.project.id, 'project'
 
         if type == 'project':
             try:
@@ -1325,7 +1323,7 @@ class SettingManager(models.Manager):
 
 class Setting(models.Model):
     KEY_CHOICES = (
-        (100, 'messages_join'),
+        (100, 'messages_invite'),
         (101, 'messages_manager'),
         (102, 'messages_admin'),
         (200, 'guidelines_subtitle'),

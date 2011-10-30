@@ -1,4 +1,32 @@
 {% if not js_use_compiled %}
+  <script type="text/javascript">
+    var d = document, w = window;
+
+    var readyArrayName = "unisubsReady";
+    var readyArray = w[readyArrayName] = w[readyArrayName] || [];
+
+    var readyFuncName = "unisubsPlayerReady";
+    w[readyFuncName] = function(code, args) {
+        readyArray.push([code, args]);
+    };
+
+    function addReadyListener(callback, code) {
+        var oldReady = w[callback] || function() {};
+        w[callback] = function() {
+            try {
+                oldReady.apply(null, arguments);
+            }
+            catch (e) {
+                // don't care
+            }
+            w[readyFuncName](code, arguments);
+        };
+    }
+
+    addReadyListener("onYouTubePlayerReady", "y");
+    addReadyListener("us_ooyala_callback", "o");
+    addReadyListener("onTemplateLoaded", "b");
+  </script>
   {% include "widget/_js_base_dependencies.html" %}
   <script>
     goog.require('goog.debug.FancyWindow');

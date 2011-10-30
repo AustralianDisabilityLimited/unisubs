@@ -4,6 +4,11 @@
     <a href="{{ invite.team.get_absolute_url }}">{{ invite.team }}</a>
     <a href="{% url teams:accept_invite invite.pk %}">{% trans 'Join' %}</a>
     <a href="{% url teams:deny_invite invite.pk %}">{% trans 'Deny' %}</a>
+    {% if custom_message %}
+        <p>
+            {{ custom_message.data }}
+        </p>
+    {% endif %}
     {% if invite.note %}
     <p>
         {{ invite.note }}

@@ -30,15 +30,21 @@ LANGUAGEPAIR_RE = re.compile(r"([a-zA-Z\-]+)_([a-zA-Z_\-]+)_(.*)")
 LANGUAGE_RE = re.compile(r"S_([a-zA-Z\-]+)")
 
 from apps.teams.tests.teamstestsutils import refresh_obj, reset_solr, rpc
+from apps.teams.permissions import add_role
 
 from django.conf import settings
 
-
+def fix_teams_roles(teams=None):
+    for t in teams or Team.objects.all():
+       for member in t.members.all():
+           add_role(t, member.user,  t.members.all()[0], member.role)
+           
 class TestNotification(TestCase):
     
     fixtures = ["test.json"]
     
     def setUp(self):
+        fix_teams_roles()
         self.team = Team(name='test', slug='test')
         self.team.save()
         
@@ -151,6 +157,8 @@ class TeamDetailMetadataTest(TestCase):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
     
     def setUp(self):
+        
+        fix_teams_roles()
         self.auth = {
             "username": u"admin",
             "password": u"admin"
@@ -266,6 +274,7 @@ class TeamsTest(TestCase):
     fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
     
     def setUp(self):
+        fix_teams_roles()
         self.auth = {
             "username": u"admin",
             "password": u"admin"
@@ -847,6 +856,7 @@ from django.contrib.auth.models import AnonymousUser
 class TestJqueryRpc(TestCase):
     
     def setUp(self):
+        fix_teams_roles()
         self.team = Team(name='Test', slug='test')
         self.team.save()
         self.user = User.objects.all()[:1].get()
@@ -946,6 +956,7 @@ class TeamsDetailQueryTest(TestCase):
     fixtures = ["staging_users.json"]
     
     def setUp(self):
+        fix_teams_roles()
         self.auth = {
             "username": u"admin",
             "password": u"admin"

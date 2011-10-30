@@ -42,6 +42,7 @@ from teams.search_indexes import TeamVideoLanguagesIndex
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 
+from teams.permissions import can_add_video
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -361,7 +362,7 @@ def _check_add_video_permission(request, team):
     if not team.is_member(request.user):
         raise Http404
 
-    if not team.can_add_video(request.user):
+    if not can_add_video(team, request.user):
         messages.error(request, _(u'You can\'t add video.'))
         return {
             'team': team
@@ -373,7 +374,10 @@ def add_video(request, slug):
     team = Team.get(slug, request.user)
 
     resp = _check_add_video_permission(request, team)
+    
     if resp:
+        print "failed, team.video_policy=%s, request.user=%s, is_ember:%s, members %s" %(team.video_policy, request.user, team.is_member(request.user), team.members.all())
+        print team.members.get(user=request.user).role
         return resp
     
     initial = {

@@ -167,16 +167,19 @@ class Team(models.Model):
         return 'http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
     
 
-    def _is_role(self, user, role):
+    def _is_role(self, user, role=None):
         if not user.is_authenticated():
             return False
-        return self.members.filter(user=user, role=role).exists()
+        qs = self.members.filter(user=user)
+        if role:
+            qs = qs.filter(role=role)
+        return qs.exists()
         
     def is_manager(self, user):
         return self._is_role(user, TeamMember.ROLE_MANAGER)
 
     def is_member(self, user):
-        return self._is_role(user, None)
+        return self._is_role(user)
     
     
 
@@ -897,6 +900,12 @@ class TeamMember(models.Model):
         if saves:
             self.save()        
         
+    def save(self, *args, **kwargs):
+        creating = self.pk is None
+        super(TeamMember, self).save(*args, **kwargs)
+        if creating:
+            MembershipNarrowing.objects.create_for_member(self)
+            
     class Meta:
         unique_together = (('team', 'user'),)
 
@@ -914,6 +923,13 @@ class MembershipNarrowingManager(models.Manager):
     def get_for_langs(self, member):
         return self.for_type(TeamVideoLanguage).filter(member=member)
 
+    def create_for_member(self, member):
+        return MembershipNarrowing.objects.get_or_create(
+            content_type = ContentType.objects.get_for_model(member.team),
+            object_pk = member.pk,
+            member = member,
+            added_by=None)[0]
+        
     def create(self, member, narrowing, added_by):
         return MembershipNarrowing.objects.get_or_create(
             content_type = ContentType.objects.get_for_model(narrowing),
@@ -935,7 +951,7 @@ class MembershipNarrowing(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, blank=None)
     modified = models.DateTimeField(auto_now=True, blank=None)
-    added_by = models.ForeignKey(TeamMember, related_name="narrowing_includer")
+    added_by = models.ForeignKey(TeamMember, related_name="narrowing_includer", null=True, blank=True)
     allowed_types = [ContentType.objects.get_for_model(m) for m in \
                      [Team, Project, TeamVideoLanguage]]
     

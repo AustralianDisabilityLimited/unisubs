@@ -13,7 +13,6 @@ from haystack import site
 #@periodic_task(run_every=timedelta(seconds=60))
 def add_videos_notification(*args, **kwargs):
     from teams.models import TeamVideo, Team
-    
     domain = Site.objects.get_current().domain
     
     qs = Team.objects.filter(teamvideo__created__gt=F('last_notification_time')).distinct()
@@ -25,7 +24,7 @@ def add_videos_notification(*args, **kwargs):
         team.save()
 
         members = team.users.filter(changes_notification=True, is_active=True) \
-            .filter(teammember__changes_notification=True).distinct()
+            .filter(user__changes_notification=True).distinct()
 
         subject = _(u'New %(team)s videos ready for subtitling!') % dict(team=team)
 

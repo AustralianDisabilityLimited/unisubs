@@ -126,9 +126,10 @@ def can_assign_roles(team, user, project=None, lang=None,  role=None):
 def can_assign_taks(team, user, project=None, lang=None):
     pass
     
-@_check_perms(ADD_VIDEOS_PERM)
-def can_add_video(team, user, project, lang=None):
-    pass
+def can_add_video(team, user, project=None, lang=None):
+    if not team.video_policy :
+        return True
+    return _passes_test(team, user, project, lang, ADD_VIDEOS_PERM)
 
 @_check_perms(EDIT_VIDEO_SETTINGS_PERM)
 def can_change_video_settings(team, user, project, lang):
@@ -165,7 +166,8 @@ def _perms_for(role, model):
 def add_role(team, cuser, added_by,  role, project=None, lang=None):
     from teams.models import TeamMember
     member, created = TeamMember.objects.get_or_create(
-        user=cuser,team=team, role=role)
+        user=cuser,team=team, defaults={'role':role})
+    member.role = role
     member.save()
     narrowing = lang or project or team
     add_narrowing_to_member(member, narrowing, added_by)

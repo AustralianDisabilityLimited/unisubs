@@ -53,7 +53,6 @@ def _passes_test(team, user, project, lang, perm_name):
     if isinstance(perm_name, tuple):
         perm_name = perm_name[0]
     member = team.members.get(user=user)
-    #print 'checking team=%s, user=%s, project=%s, lang=%s, perm_name=%s' % (team, user, project, lang, perm_name), member.role
     if member.role == ROLE_OWNER:
         # short circuit logic for onwers, as they can do anything
         return True
@@ -63,7 +62,7 @@ def _passes_test(team, user, project, lang, perm_name):
 
     for model in [x for x in (team, project, lang) if x]:
         if model_has_permission(member, perm_name, model) is False:
-           continue 
+            continue 
         from teams.models import MembershipNarrowing
         if MembershipNarrowing.objects.for_type(model).filter(member=member).exists():
             return True
@@ -164,12 +163,18 @@ def add_role(team, cuser, added_by,  role, project=None, lang=None):
     member, created = TeamMember.objects.get_or_create(
         user=cuser,team=team, role=role)
     member.save()
+    narrowing = lang or project or team
+    add_narrowing_to_member(member, narrowing, added_by)
     return member 
 
 def remove_role(team, user, role, project=None, lang=None):
     role = role or ROLE_CONTRIBUTOR
     team.members.filter(user=user, role=role).delete()
 
-def add_narrowing(team, user, narrowing):
+def add_narrowing_to_member(member, narrowing, added_by):
     from teams.models import MembershipNarrowing
-    MembershipNarrowing.objects.create(team.members.get(user=user), narrowing)
+    MembershipNarrowing.objects.create(member, narrowing, added_by)
+    
+def add_narrowing(team, user, narrowing, added_by):
+    from teams.models import MembershipNarrowing
+    return add_narrowing_to_member(team.members.get(user=user), narrowing. added_by)

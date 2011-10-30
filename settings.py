@@ -480,7 +480,6 @@ INSTALLED_APPS = (
     'subrequests',
     'doorman',
     'icanhaz',
-    'guardian',
     'unisubs' #dirty hack to fix http://code.djangoproject.com/ticket/5494 ,
 )
 

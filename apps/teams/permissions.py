@@ -40,11 +40,11 @@ from django.utils.functional import  wraps
 from guardian.shortcuts import assign, remove_perm, get_objects_for_user
 
 from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RAW, \
-      LANG_PERMISSIONS_RAW, _prepare_perms_tuples,  EDIT_TEAM_SETTINGS_PERM , \
+      LANG_PERMISSIONS_RAW,   EDIT_TEAM_SETTINGS_PERM , \
 EDIT_PROJECT_SETTINGS_PERM , ASSIGN_ROLE_PERM , ASSIGN_TASKS_PERM , \
 ADD_VIDEOS_PERM , EDIT_VIDEO_SETTINGS_PERM , MESSAGE_ALL_MEMBERS_PERM  , \
 ACCEPT_ASSIGNMENT_PERM , PERFORM_MANAGER_REVIEW_PERM , \
-PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, _normalized_perm_name, RULES,\
+PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, RULES,\
 ROLES_ORDER, ROLE_OWNER, ROLE_MANAGER, ROLE_CONTRIBUTOR, ROLE_ADMIN
 
 from teams.models import MembershipNarrowing, Team

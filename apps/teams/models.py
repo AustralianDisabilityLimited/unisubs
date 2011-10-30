@@ -41,7 +41,7 @@ ALL_LANGUAGES = [(val, _(name))for val, name in settings.ALL_LANGUAGES]
 
 from apps.teams.moderation_const import WAITING_MODERATION
 from teams.permissions_const import TEAM_PERMISSIONS_RAW, PROJECT_PERMISSIONS_RAW, \
-      LANG_PERMISSIONS_RAW, _prepare_perms_tuples, ROLE_ADMIN, \
+      LANG_PERMISSIONS_RAW, ROLE_ADMIN, \
       ROLE_OWNER, ROLE_CONTRIBUTOR, ROLE_MANAGER
 
 def get_perm_names(model, perms):
@@ -412,7 +412,7 @@ class Team(models.Model):
                  'workflow_enabled': self.workflow_enabled, }
 # this needs to be constructed after the model definition since we need a
 # reference to the class itself
-Team._meta.permissions = _prepare_perms_tuples(TEAM_PERMISSIONS_RAW, Team)
+Team._meta.permissions = TEAM_PERMISSIONS_RAW
 
 class ProjectManager(models.Manager):
 
@@ -471,7 +471,7 @@ class Project(models.Model):
     
 # this needs to be constructed after the model definition since we need a
 # reference to the class itself
-Project._meta.permissions = _prepare_perms_tuples(PROJECT_PERMISSIONS_RAW, Project)
+Project._meta.permissions = PROJECT_PERMISSIONS_RAW
 
 class TeamVideo(models.Model):
     team = models.ForeignKey(Team)
@@ -801,7 +801,7 @@ class TeamVideoLanguage(models.Model):
         pass
 
         
-TeamVideoLanguage._meta.permissions = _prepare_perms_tuples(LANG_PERMISSIONS_RAW, TeamVideoLanguage)
+TeamVideoLanguage._meta.permissions = LANG_PERMISSIONS_RAW
 
 class TeamVideoLanguagePair(models.Model):
     team_video = models.ForeignKey(TeamVideo)

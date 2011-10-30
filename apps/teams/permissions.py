@@ -47,7 +47,7 @@ ACCEPT_ASSIGNMENT_PERM , PERFORM_MANAGER_REVIEW_PERM , \
 PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, _normalized_perm_name, RULES,\
 ROLES_ORDER, ROLE_OWNER, ROLE_MANAGER, ROLE_CONTRIBUTOR, ROLE_ADMIN
 
-from teams.models import MembershipNarrowing
+from teams.models import MembershipNarrowing, Team
 
 def can_rename_team(team, user):
     return team.is_owner(user)
@@ -179,7 +179,14 @@ def remove_role(team, user, role, project=None, lang=None):
 
 
 def add_narrowing_to_member(member, narrowing, added_by):
-    MembershipNarrowing.objects.create(member, narrowing, added_by)
+    """
+    If adding any a narrowing one must remove any Team objects
+    that will allow an user to execute actions on anything
+    withing that team
+    """
+    if not isinstance(narrowing, Team):
+       MembershipNarrowing.objects.for_type(Team).filter(member=member).delete()
+    return MembershipNarrowing.objects.create(member, narrowing, added_by)
     
 def add_narrowing(team, user, narrowing, added_by):
     return add_narrowing_to_member(team.members.get(user=user), narrowing. added_by)

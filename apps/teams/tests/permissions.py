@@ -213,7 +213,7 @@ class TestRules(BaseTestPermission):
                              can_change_team_settings,
                              can_message_all_members,
                          ], project)
-        # project wise, we can't do anything'
+        # attached to project, on the team itself, not much we could do
         self._test_perms(self.team,
                          user, [
                          ],[

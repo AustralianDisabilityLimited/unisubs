@@ -34,6 +34,7 @@ from icanhaz.projects_decorators import raise_forbidden_project
 from icanhaz.projects import can_edit_project
 from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm, WorkflowForm
 from teams.project_forms import ProjectForm
+from teams.permissions import list_narrowings
 
 class TeamsApiClass(object):
 
@@ -499,6 +500,13 @@ class TeamsApiV2Class(object):
         else:
             return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
+    def member_info_list(self, team_slug, member_pk):
+        team = Team.objects.get(slug=team_slug)
+        member = team.members.get(pk=member_pk)
+        return {
+            "role" : member.role,
+            "narrowings": list_narrowings(team, member.user, [Project, TeamVideoLanguage])
+        }
 
 TeamsApiV2 = TeamsApiV2Class()
 

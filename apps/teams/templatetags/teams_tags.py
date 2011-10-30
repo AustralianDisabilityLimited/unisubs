@@ -37,6 +37,8 @@ from django.utils.http import urlquote
 from templatetag_sugar.register import tag
 from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
+from apps.teams.permissions import list_narrowings
+
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
 
@@ -224,4 +226,7 @@ def team_projects(context, team, varname):
     context[varname] = Project.objects.for_team(team)
     return ""
     
-
+@tag(register, [Variable(), Constant("as"), Name()])
+def member_projects(context, member, varname):
+    context[varname] = list_narrowings(member.team, member.user, [Project])
+    return ""

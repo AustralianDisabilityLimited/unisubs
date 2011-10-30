@@ -47,7 +47,14 @@
                 <h3>
                     <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
                 </h3>
-                <p>If viewing all, show role here. Otherwise, restrictions.</p>
+                <p>
+                  {% member_projects member as member_project %}
+                  {% for project in member_project %}
+                    {{project.name}},
+                  {% empty %}
+                    All projects
+                  {% endfor %}
+ </p>
                 <a href="{{ member.user.get_absolute_url }}" class="thumb"><img src="{{ member.user.avatar }}" alt="{{ member.user }} avatar"></a>
                 <ul class="actions">
                     <li>

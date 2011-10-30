@@ -32,8 +32,10 @@
 # What this means is there is a performance hit. In the worst case cenario
 # we're running three checks instead of 1. This is fine, because we
 # are only checking things this way on data writing operations which are a
-# minirity of traffic.
+# minority of traffic.
 
+
+from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import  wraps
 from guardian.shortcuts import assign, remove_perm, get_objects_for_user
 
@@ -44,6 +46,8 @@ ADD_VIDEOS_PERM , EDIT_VIDEO_SETTINGS_PERM , MESSAGE_ALL_MEMBERS_PERM  , \
 ACCEPT_ASSIGNMENT_PERM , PERFORM_MANAGER_REVIEW_PERM , \
 PERFORM_PEER_REVIEW_PERM  , EDIT_SUBS_PERM, _normalized_perm_name, RULES,\
 ROLES_ORDER, ROLE_OWNER, ROLE_MANAGER, ROLE_CONTRIBUTOR, ROLE_ADMIN
+
+from teams.models import MembershipNarrowing
 
 def can_rename_team(team, user):
     return team.is_owner(user)
@@ -171,10 +175,31 @@ def remove_role(team, user, role, project=None, lang=None):
     role = role or ROLE_CONTRIBUTOR
     team.members.filter(user=user, role=role).delete()
 
+
 def add_narrowing_to_member(member, narrowing, added_by):
-    from teams.models import MembershipNarrowing
     MembershipNarrowing.objects.create(member, narrowing, added_by)
     
 def add_narrowing(team, user, narrowing, added_by):
-    from teams.models import MembershipNarrowing
     return add_narrowing_to_member(team.members.get(user=user), narrowing. added_by)
+
+
+def remove_narrowings(team, user, narrowings):
+    try:
+        iter(narrowings)
+    except TypeError:
+        narrowings = [narrowings]
+    member = team.members.get(user=user)
+    [MembershipNarrowing.objects.get(
+        object_pk=x.pk,
+        content_type=ContentType.objects.get_for_model(x),
+        member=member) for x in narrowings]
+    
+         
+def list_narrowings(team, user, models):
+   data = {}
+   for model in models:
+       data[model._meta.object_name] = \
+           MembershipNarrowing.objects.for_type(model).filter(
+               member=team.members.get(user=user))
+    
+

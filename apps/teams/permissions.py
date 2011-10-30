@@ -107,6 +107,11 @@ def roles_assignable_to(team, user, project=None, lang=None):
     return _perms_equal_or_lower(higer_role)
     
 def can_assign_roles(team, user, project=None, lang=None,  role=None):
+    """
+    Checks if the user can generally assing roles for that model
+    (team or project or lang), but also that he can only assign 'lesser'
+    roles than his own.
+    """
     member = team.members.get(user=user)
     # only owner can assing owner role!
     if member.role == ROLE_OWNER:
@@ -210,5 +215,6 @@ def list_narrowings(team, user, models):
        data[model._meta.object_name] = \
            MembershipNarrowing.objects.for_type(model).filter(
                member=team.members.get(user=user))
+   return data    
     
 

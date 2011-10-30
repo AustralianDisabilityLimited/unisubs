@@ -16,6 +16,7 @@ Contents:
    demos
    deployment-guide
    feature-flags
+   permissions
 
 
 Indices and tables

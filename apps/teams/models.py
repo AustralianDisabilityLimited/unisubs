@@ -914,11 +914,30 @@ class MembershipNarrowing(models.Model):
     created = models.DateTimeField(auto_now_add=True, blank=None)
     modified = models.DateTimeField(auto_now=True, blank=None)
     added_by = models.ForeignKey(TeamMember, related_name="narrowing_includer", null=True, blank=True)
-    allowed_types = [ContentType.objects.get_for_model(m) for m in \
-                     [Team, Project, TeamVideoLanguage]]
     
     objects = MembershipNarrowingManager()
     
+    @property
+    @classmethod
+    def allowed_types(self):
+        """
+        Cache the content types where we allow narrowing to occur. This
+        should not be needed to change at run time. If it ever does, just
+        clear _cached_allowed_types
+        This cannot simply be declared on the model class since by the
+        time them class is defined we might or might not have loaded the
+        other models (+ contenty type), this means that we can have
+        an error related to import order and it is not very predictable,
+        e.g. would fail when running the unit tests on sqlite but not on
+        msyql
+        """
+        if not MembershipNarrowing._cached_allowed_types:
+
+            MembershipNarrowing._cached_allowed_types = \
+                         [ContentType.objects.get_for_model(m) for m in \
+                          [Team, Project, TeamVideoLanguage]]
+        return MembershipNarrowing._cached_allowed_types
+        
     def __unicode__(self):
         return u"Permission restriction for %s and %s " % (
             self.member, self.content)

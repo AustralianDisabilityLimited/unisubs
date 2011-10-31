@@ -114,8 +114,8 @@
                         {% if not member.user == user and member.user.email %}
                             {% send_message_form member.user 'True' %}
                         {% endif %}
-                            {% member_projects member as member_project % }
-                            {% form project in member_project %}
+                            {% member_projects member as member_project %}
+                            {% for project in member_project %}
                               {{project.name}},
                             {%empty%}
                               All projects

@@ -228,5 +228,6 @@ def team_projects(context, team, varname):
     
 @tag(register, [Variable(), Constant("as"), Name()])
 def member_projects(context, member, varname):
-    context[varname] = list_narrowings(member.team, member.user, [Project])
+    narrowings = list_narrowings(member.team, member.user, [Project])
+    context[varname]   = narrowings['Project']
     return ""

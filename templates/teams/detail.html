@@ -28,22 +28,6 @@
 
 {% block main_content %}
 
-    {% comment %}
-    {% if team.header_html_text %}
-    <div id="team_header_html" class="clearfix">
-      {{team.header_html_text|safe}}
-    </div><!-- // team_header_html -->
-    {% endif %}
-
-    <h2 id="team_title">{{ team }} {% trans "Videos" %}</h2>
-
-    {% if team.page_content %}
-      <div class="team_html clearfix">
-        {{ team.page_content|force_escape|markdown }}
-      </div>    
-    {% endif %}
-    {% endcomment %}
-
     {% if team.logo %}
         <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
     {% else %}
@@ -51,36 +35,17 @@
     {% endif %}
 
     {% with "videos" as current %}
-        {% include "teams/_team_tabs.html" %}
+        {% include "teams/_tabs.html" %}
     {% endwith %}
 
     <div class="view grid_9 alpha">
         <div class="tools">
-            <a href="#" class="button">Add Videos</a>
+            <a href="{% url teams:add_video team.slug %}" class="button">{% trans "Add Videos" %}</a>
         </div>
 
         {% if not team.page_content and team.video %}
             {% widget widget_params %}
         {% endif %}
-        
-        {% comment %}
-        <div id="videos-tab">
-            {% if allow_noone_language %}
-                {% invite_friends_to_team team %}
-            {% endif %}
-
-            <ul class="big_list">
-                {% for md_obj in team_video_md_list %}
-                <li>
-                    {% team_video_detail md_obj %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% if is_paginated %}{% paginator %}{% endif %}
-        </div>
-
-        {% endcomment %}
-
         
         {% if team_video_md_list %}
             <ul class="videos listing">
@@ -98,8 +63,7 @@
 
     <div class="controls grid_3 omega">
         {% include "teams/_filters_videos.html" %}
-        <p><a href="" class="button primary">Join this Team</a></p>
-        <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
+        
     </div>
 
 {% endblock %}

@@ -1,10 +1,19 @@
 {% load i18n teams_tags %}
 
 <ul>
+
+	{% comment %}
+		TODO: If no project is selected, then this LI should have a class of "current"
+	{% endcomment %}
+
 	<li><a href="{{ team.get_absolute_url }}">All videos</a></li>
 	{%  team_projects team as projects %}
 
 	{% for project in projects %}
+
+	{% comment %}
+		TODO: If this project is selected, then this LI should have a class of "current"
+	{% endcomment %}
 		<li><a href="{% url teams:project_video_list slug=team.slug,project_slug=project.slug %}">{{ project }}</a></li>
 	{% endfor %}
 </ul>

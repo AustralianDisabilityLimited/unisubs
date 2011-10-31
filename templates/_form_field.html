@@ -1,0 +1,10 @@
+{% comment %}
+	TODO: If it's a checkbox, reverse these
+{% endcomment %}
+	{{ field.label_tag }}
+	{{ field }}
+
+{% if field.help_text %}
+	<p class="notation">{{ field.help_text }}</p>
+{% endif %}
+{{ field.errors }}

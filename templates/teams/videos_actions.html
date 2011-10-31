@@ -17,7 +17,7 @@
     {% endif %}
 
     {% with "activity" as current %}
-        {% include "teams/_team_tabs.html" %}
+        {% include "teams/_tabs.html" %}
     {% endwith %}
 
     <div class="view grid_9 alpha">
@@ -33,7 +33,12 @@
     </div>
 
     <div class="controls grid_3 omega">
-        
+        <ul>
+            <li><a href="">All Activity</a></li>
+            <li><a href="">Videos Activity</a></li>
+            <li><a href="">Members Activity</a></li>
+            <li><a href="">Tasks Activity</a></li>
+        </ul>
     </div>
 
 {% endblock %}

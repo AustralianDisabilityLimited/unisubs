@@ -1,8 +1,8 @@
-{% extends "settings.html" %}
+{% extends "base.html" %}
 
 {% load i18n teams_tags widget media_compressor %}
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block title %}
     {% trans 'Team video' %} | Universal Subtitles
@@ -13,27 +13,52 @@
      {% include_bundle "widget-css"%}
 {% endblock %}
 
-{% block settings_content %}
-    <div class="hd">
-        <h2>{{ team }}</h2>
-        {% with "videos" as active %}
-            {% include 'teams/_edit_top_navigation.html' %}
-        {% endwith %}
-    </div>
-    <div class="padding">
+{% block main_content %}
+    
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "videos" as current %}
+        {% include "teams/_tabs.html" %}
+    {% endwith %}
+
+    <div class="view grid_9 alpha">
         <form method='post' action="." enctype="multipart/form-data" class="add-video">
             <h3>{% trans 'Add video' %}</h3>
-            {# <h4> #}
-            {#     {% trans 'or' %} #}
-            {#     <a href="{% url teams:add_videos slug=team.slug %}"> #}
-            {#         {% trans 'add multiple videos' %} #}
-            {#     </a> #}
-            {# </h4> #}
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="ft">
-                <button class="blue_button small"><span>{% trans 'Save' %}</span></button>
+            <div class="grid_4 alpha">
+                <fieldset>
+                    {% include "_form_field.html" with field=form.video_url %}
+                    {% include "_form_field.html" with field=form.title %}
+                    {% include "_form_field.html" with field=form.description %}
+                </fieldset>
+            </div>
+
+            <div class="grid_4 omega">
+                <fieldset>
+                    {% include "_form_field.html" with field=form.language %}
+                    {% include "_form_field.html" with field=form.thumbnail %}
+                </fieldset>
+            </div>
+
+            <div class="grid_9 submit">
+                <button>{% trans 'Save' %}</button>
             </div>
         </form>
+    </div>
+    <div class="controls grid_3 omega">
+        <ul>
+            <li class="current">
+                <a href="{% url teams:add_video slug=team.slug %}">{% trans "Add a Video" %}</a>
+            </li>
+            <li>
+                <a href="{% url teams:add_videos slug=team.slug %}">{% trans "Add Multiple Videos" %}</a>
+            </li>
+            <li>
+                <a href="{{ team.get_absolute_url }}">← {% trans "Back to Videos" %}</a>
+            </li>
+        </ul>
     </div>
 {% endblock %}

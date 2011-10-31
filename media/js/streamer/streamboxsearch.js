@@ -43,15 +43,22 @@ unisubs.streamer.StreamBoxSearch.prototype.setTranscriptElemAndSubs =
  * elem must have a very particular internal structure. It has to contain exactly
  * four elements: an input box, a "previous" link, a "next" link, and a span to
  * show result counts.
+ *
+ * CZ: I've changed the structure of the markup here, and have altered the code
+ * below to match it. elem now contains a div (children[0]) with two children
+ * of its own—the search input (grandchildren[0]) and the results span
+ * (grandchildren[1])—and then the prev/next results links (children[1] and 
+ * children[2], respectively)
  */
 unisubs.streamer.StreamBoxSearch.prototype.decorateInternal = function(elem) {
     unisubs.streamer.StreamBoxSearch.superClass_.decorateInternal.call(this, elem);
     var children = goog.dom.getChildren(elem);
+    var grandchildren = goog.dom.getChildren(children[0]);
     this.searchInput_ = new goog.ui.LabelInput();
-    this.searchInput_.decorate(children[0]);
+    this.searchInput_.decorate(grandchildren[0]);
     this.previousResultLink_ = children[1];
     this.nextResultLink_ = children[2];
-    this.resultCountElem_ = children[3];
+    this.resultCountElem_ = grandchildren[1];
 };
 
 unisubs.streamer.StreamBoxSearch.prototype.enterDocument = function() {
@@ -83,17 +90,14 @@ unisubs.streamer.StreamBoxSearch.prototype.navLinkClicked_ = function(e) {
 };
 
 unisubs.streamer.StreamBoxSearch.prototype.showSearchTools_ = function(show) {
-    goog.array.forEach([this.previousResultLink_, 
-                        this.nextResultLink_, 
-                        this.resultCountElem_],
-                       function(elem) { unisubs.style.setVisibility(elem, show); });
+    unisubs.style.setVisibility(this.resultCountElem_, show);
 };
 
 unisubs.streamer.StreamBoxSearch.prototype.handleSearchKey_ = function(e) {
     goog.array.forEach(
         this.subs_, 
         function(s) { s.reset(); });
-    var searchText = this.searchInput_.getValue();
+    var searchText = this.searchInput_.getValue().toLowerCase();
     if (searchText != "") {
         goog.dom.annotate.annotateTerms(
             this.transcriptElem_, [[searchText, false]],

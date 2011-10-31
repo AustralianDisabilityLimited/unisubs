@@ -111,7 +111,6 @@ class WidgetViewStatistic(VideoViewStatistic):
                 yield l[i:i+n]
         
         for chunk in chunks(updated_objects, 200):
-            print len(chunk)
             update_search_index_for_qs.delay(Video, [item.video_id for item in chunk])
             
 st_widget_view_statistic = WidgetViewStatistic()

@@ -475,7 +475,6 @@ class TeamsTest(TestCase):
 
     def test_detail_contents(self):
         team, new_team_video = self._create_new_team_video()
-        self.assertEqual(1, new_team_video.video.subtitlelanguage_set.count())
 
         reset_solr()
 
@@ -504,8 +503,11 @@ class TeamsTest(TestCase):
                             not response.context['allow_noone_language'])
 
     def test_detail_contents_unrelated_video(self):
+        from videos.models import SubtitleLanguage
+
         team, new_team_video = self._create_new_team_video()
-        en = new_team_video.video.subtitle_language()
+        en = SubtitleLanguage(video=new_team_video.video, language='en')
+        en.is_original = True
         en.is_complete = True
         en.save()
         self._set_my_languages('en', 'ru')

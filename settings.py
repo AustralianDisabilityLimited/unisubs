@@ -540,7 +540,6 @@ AUTHENTICATION_BACKENDS = (
    'auth.backends.TwitterBackend',
    'auth.backends.FacebookBackend',
    'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 SKIP_SOUTH_TESTS = True

@@ -23,7 +23,6 @@ from apps.videos import metadata_manager
 import re
 
 
-from guardian.shortcuts import assign, remove_perm, get_objects_for_user
 
 from apps.teams.tests.teamstestsutils import refresh_obj, reset_solr , rpc
 from apps.teams.models import Team, TeamMember

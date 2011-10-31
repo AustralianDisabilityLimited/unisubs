@@ -37,7 +37,6 @@
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import  wraps
-from guardian.shortcuts import assign, remove_perm, get_objects_for_user
 
 from teams.permissions_const import TEAM_PERMISSIONS, PROJECT_PERMISSIONS, \
       LANG_PERMISSIONS,   EDIT_TEAM_SETTINGS_PERM , \

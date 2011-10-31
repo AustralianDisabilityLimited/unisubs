@@ -124,6 +124,7 @@ def detail(request, slug, is_debugging=False, project_slug=None, languages=None)
     extra_context = widget.add_onsite_js_files({})
     extra_context.update({
         'team': team,
+        'project':project,
         'can_edit_video': team.can_edit_video(request.user)
     })
 

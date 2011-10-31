@@ -24,7 +24,6 @@ from server_local_settings import *
 DEBUG = False
 
 ADMINS = (
-    ('Adam Duston', 'adam@8planes.com'),
     ('Craig Zheng', 'craig@pculture.org'),
     ('universalsubtitles-errors', 'universalsubtitles-errors@pculture.org')
 )
@@ -32,7 +31,6 @@ ADMINS = (
 if INSTALLATION == DEV:
     SITE_ID = 13
     SITE_NAME = 'unisubsdev'
-    FEEDBACK_EMAILS.append('aduston@gmail.com')
     REDIS_DB = "3"
     EMAIL_SUBJECT_PREFIX = '[usubs-dev]'
     SENTRY_TESTING = True
@@ -116,9 +114,6 @@ DATABASES = {
 DATABASES.update(uslogging_db)
 
 USE_AMAZON_S3 = AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and DEFAULT_BUCKET
-
-EMAIL_BCC_LIST = EMAIL_BCC_LIST.append('hwilson+notifications@gmail.com')
-
 
 try:
     from settings_local import *

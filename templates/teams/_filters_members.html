@@ -1,8 +1,30 @@
 {% load i18n teams_tags %}
 
 <ul>
-    <li class="current"><a href="">All Members</a></li>
-    <li><a href="">Admins</a></li>
-    <li><a href="">Managers</a></li>
-    <li><a href="">Contributors</a></li>
+
+	{% comment %}
+		TODO: If no role is selected, then this LI should have a class of "current"
+	{% endcomment %}
+
+    <li>
+    	<a href="{% url teams:detail_members team.slug %}">All Members</a>
+    </li>
+
+    {% comment %}
+		TODO: For each role, if selected, LI should have a class of "current"
+		TODO: Need working links for role filters
+	{% endcomment %}
+
+    <li>
+    	<a href="">Admins</a>
+    </li>
+
+    <li>
+    	<a href="">Managers</a>
+    </li>
+
+    <li>
+    	<a href="">Contributors</a>
+    </li>
+
 </ul>

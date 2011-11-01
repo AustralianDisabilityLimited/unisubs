@@ -1,6 +1,6 @@
-{% extends "settings.html" %}
+{% extends "base.html" %}
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% load i18n teams_tags paginator %}
 
@@ -8,44 +8,56 @@
     {{ team }} {% trans 'Team Aplications' %} | Universal Subtitles
 {% endblock %}
 
-{% block settings_content %}
-    <div class="hd">
-        <h2>{{ team.name }}</h2>
-        {% with "application" as active %}
-            {% include 'teams/_tabs.html' %}
-        {% endwith %}
-        {% if is_paginated %}{% paginator %}{% endif %}
+{% block main_content %}
+
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "members" as current %}
+        {% include 'teams/_tabs.html' %}
+    {% endwith %}
+
+    <div class="view grid_9 alpha">
+
+        {% if applications_list %}
+            {% if is_paginated %}{% paginator %}{% endif %}
+            <ul class="members listing">
+                {% for item in applications_list %}
+                    <li>
+                        <h3>
+                            <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
+                        </h3>
+                        {% if item.note %}
+                            <p>
+                                {{ item.note }}
+                            </p>
+                        {% endif %}
+                        <a href="{{ item.user.get_absolute_url }}" class="thumb"><img src="{{ item.user.avatar }}" alt="{{ item.user }} avatar"></a>
+                        {% if team|can_approve_application:user %}
+                            <ul class="actions">
+                                <li>
+                                    <a href="{% url teams:approve_application team.slug item.user.pk %}">{% trans 'Approve' %}</a>
+                                </li>
+                                <li>
+                                    <a href="{% url teams:deny_application team.slug item.user.pk %}">{% trans 'Deny' %}</a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if is_paginated %}{% paginator %}{% endif %}
+        {% else %}
+            <p class="empty">{% trans "There are no applications right now" %}...</p>
+        {% endif %}
     </div>
-    <table>
-        <tbody>
-            {% for item in applications_list %}
-            <tr>
-                <td>
-                    <a href="{{ item.user.get_absolute_url }}">
-                        <strong>{{ item.user }}</strong>
-                    </a>
-                    {% if item.note %}
-                    <p>
-                        {{ item.note }}
-                    </p>
-                    {% endif %}
-                    {% if team|can_approve_application:user %}
-                    <div class="small grey">
-                        <a href="{% url teams:approve_application team.slug item.user.pk %}">{% trans 'Approve' %}</a>
-                        | <a href="{% url teams:deny_application team.slug item.user.pk %}">{% trans 'Deny' %}</a>
-                    </div>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>
-                    {% trans 'There are no applicants at this time.' %}
-                </td>
-            </tr>                
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="controls grid_3 omega">
+        {% include "teams/_filters_members.html" %}
+        {% include "teams/_actions.html" %}
     </div>
-    <div class="clearfix"></div>
+    
 {% endblock %}

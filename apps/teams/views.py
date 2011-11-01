@@ -662,7 +662,7 @@ def join_team(request, slug):
         if not team.is_open():
             messages.error(request, _(u'This team is not open.'))
         else:
-            TeamMember(team=team, user=user).save()
+            TeamMember(team=team, user=user, role=TeamMember.ROLE_CONTRIBUTOR).save()
             messages.success(request, _(u'You are now a member of this team.'))
     
     return redirect(team)

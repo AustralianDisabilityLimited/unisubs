@@ -1,8 +1,10 @@
-{% comment %}
-	TODO: If it's a checkbox, reverse these
-{% endcomment %}
+{% if widget_type != "checkbox"}
 	{{ field.label_tag }}
 	{{ field }}
+{% else %}
+	{{ field.label_tag }}
+	{{ field }}
+{% endif %}}
 
 {% if field.help_text %}
 	<p class="notation">{{ field.help_text }}</p>

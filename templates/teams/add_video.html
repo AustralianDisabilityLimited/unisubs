@@ -39,6 +39,7 @@
             <div class="grid_4 omega">
                 <fieldset>
                     {% include "_form_field.html" with field=form.language %}
+                    {% include "_form_field.html" with field=form.project %}
                     {% include "_form_field.html" with field=form.thumbnail %}
                 </fieldset>
             </div>
@@ -46,6 +47,7 @@
             <div class="grid_9 submit">
                 <button>{% trans 'Save' %}</button>
             </div>
+            {% csrf_token %}
         </form>
     </div>
     <div class="controls grid_3 omega">

@@ -545,7 +545,7 @@ def applications(request, slug):
     team = Team.get(slug, request.user)
     
     if not team.is_member(request.user):
-        raise Http404
+        return  HttpResponseForbidden("Not allowed")
     
     qs = team.applications.all()
         

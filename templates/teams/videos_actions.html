@@ -21,15 +21,19 @@
     {% endwith %}
 
     <div class="view grid_9 alpha">
-        {% if is_paginated %}{% paginator %}{% endif %}
-        <ul class="activity listing">
-            {% with 1 as medium_thumb %}
-                {% for item in videos_action_list %}
-                    <li>{{ item.render }}</li>
-                {% endfor %}
-            {% endwith %}
-        </ul>
-        {% if is_paginated %}{% paginator %}{% endif %}
+        {% if videos_action_list %}
+            {% if is_paginated %}{% paginator %}{% endif %}
+            <ul class="activity listing">
+                {% with 1 as medium_thumb %}
+                    {% for item in videos_action_list %}
+                        <li>{{ item.render }}</li>
+                    {% endfor %}
+                {% endwith %}
+            </ul>
+            {% if is_paginated %}{% paginator %}{% endif %}
+        {% else %}
+            <p class="empty">{% trans "Sorry, no activity yet" %}...</p>
+        {% endif %}
     </div>
 
     <div class="controls grid_3 omega">

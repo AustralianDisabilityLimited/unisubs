@@ -671,14 +671,13 @@ def join_team(request, slug):
 def leave_team(request, slug):
     team = get_object_or_404(Team, slug=slug)
     user = request.user
-    
     try:
         tm = TeamMember.objects.get(team=team, user=user)
         
         if not team.members.exclude(pk=tm.pk).exists():
             messages.error(request, _(u'You are last member of this team.'))
-        elif not team.members.filter(role=TeamMember.ROLE_MANAGER).exclude(pk=tm.pk).exists():
-            messages.error(request, _(u'You are last manager of this team.'))
+        elif not team.members.filter(role=TeamMember.ROLE_OWNER).exclude(pk=tm.pk).exists():
+            messages.error(request, _(u'You are last admin of this team.'))
         else:
             tm.delete()
             messages.success(request, _(u'You have left this team.'))

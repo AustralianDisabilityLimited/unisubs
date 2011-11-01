@@ -1,17 +1,19 @@
 {% load i18n teams_tags %}
-   {% if team|is_team_member:user %}
-        {% render_team_leave team %}
-        <p style="clear: both; padding-top: 10px;">
-            <a href="{{ team.get_edit_url }}" class="your-team">{% trans "Manager's Settings & Controls" %}</a><br/>
-        </p>
-    {% else %}
-        {% if team.is_open %}
-            {% render_team_join team %}
-        {% endif %}
-        {% if user.is_authenticated and team.is_by_application %}
-            {% include "teams/_application_form.html" %}
-        {% endif %}
-    {% endif %} 
+
+{% if team|is_team_member:user %}
+    {% render_team_leave team %}
+{% else %}
+    {% if team.is_open %}
+        {% render_team_join team %}
+    {% endif %}
+    {% if user.is_authenticated and team.is_by_application %}
+
+    	{% comment %}
+    		TODO: If I've applied, I shouldn't see this... Maybe instead we show a placeholder that says 'application pending'
+    	{% endcomment %}
+        {% include "teams/_application_form.html" %}
+    {% endif %}
+{% endif %} 
   
 
 <p class="notation">{% trans "Want to create your own captioning and translation team? Contact Dean Jansen" %}, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags widget media_compressor %}
+{% load i18n teams_tags widget media_compressor form_helpers %}
 
 {% block body_attrs %}id="teams" class="v1"{% endblock %}
 
@@ -38,8 +38,8 @@
 
             <div class="grid_4 omega">
                 <fieldset>
-                    {% include "_form_field.html" with field=form.feed_url %}
-                    {% include "_form_field.html" with field=form.save_feed %}
+                  {% smart_field_render form.feed_url %}
+                  {% smart_field_render form.save_feed%}
                 </fieldset>
             </div>
             <div class="grid_9 submit">

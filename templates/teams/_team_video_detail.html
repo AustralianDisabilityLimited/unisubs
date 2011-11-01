@@ -12,9 +12,11 @@
 <ul class="actions">
     <li>
         <h4>
-          <a href="">
-            {{ search_record.video_completed_langs|length }} language{{ search_record.video_completed_langs|length|pluralize }}
-          </a>
+            {% if search_record.video_completed_langs %}
+              <a href="">{{ search_record.video_completed_langs|length }} language{{ search_record.video_completed_langs|length|pluralize }}</a>
+            {% else %}
+              {% trans "No subtitles yet" %}
+            {% endif %}
         </h4>
     </li>
     <li>

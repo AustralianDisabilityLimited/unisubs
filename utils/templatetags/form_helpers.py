@@ -5,7 +5,7 @@ register = template.Library()
 
 from django.forms.widgets import CheckboxInput
 
-@register.inclusion_tag("templates/_form_field.html")
+@register.inclusion_tag("_form_field.html")
 def smart_field_render(field):
     """
     Renders a form field in different label / input orders
@@ -18,8 +18,9 @@ def smart_field_render(field):
 
     {% smart_field_render form.my_field %}'
     """
-    widget_class = field.widget.__class__
-    print widget_class
+
+    widget_class = field.form.fields[field.name].widget.__class__
+
     widget_types = {
         CheckboxInput : 'checkbox'
     }

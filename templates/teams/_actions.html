@@ -1,0 +1,29 @@
+{% load i18n teams_tags %}
+
+{% comment %}
+    
+    TODO:
+    {% if [user is not member and team allows joins] %}
+
+      <p><a class="button primary" onclick="return confirm('{% trans "Do you really wish to join this team?" %}')" href="{% url teams:join_team team.slug %}">{% trans "Join this Team" %}</a></p>
+    
+    {% endif %}
+
+    TODO:
+    {% if [user is not member and team allows applications] %}
+
+    Behavior should probably be to show application in a modal
+
+      <p><a class="button primary" href="">{% trans "Apply to Join %}</a></p>
+    
+    {% endif %}
+
+    {% if [user is a member] %}
+
+        <p><a class="button" onclick="return confirm('{% trans "Do you really wish to leave this team?" %}')" href="{% url teams:leave_team team.slug %}">{% trans "Leave Team" %}</a></p>
+    
+    {% endif %}
+
+{% endcomment %}
+
+<p class="notation">{% trans "Want to create your own captioning and translation team? Contact Dean Jansen" %}, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>

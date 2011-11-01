@@ -42,7 +42,7 @@
                         <h4>{% trans "My Teams" %}</h4>
                         {% for t in user_teams %}
                         <li  {% if team == t %}class="active"{% endif %}>
-                            <a href="{% url teams:settings slug=t.slug %}">{{ t }}</a>
+                            <a href="{% url teams:detail slug=t.slug %}">{{ t }}</a>
                         </li>
                         {% endfor %}
                     </div>

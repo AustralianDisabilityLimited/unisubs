@@ -2,8 +2,7 @@
 	{{ field.label_tag }}
 	{{ field }}
 {% else %}
-	{{ field }}
-	{{ field.label_tag }}
+	<label for="{{ field.html_name }}">{{ field }} {{ field.label }}</label>
 {% endif %}
 
 {% if field.help_text %}

@@ -18,9 +18,9 @@ vendor/sorl-thumbnail-3.2.5.tar.gz
 vendor/gdata-2.0.10.tar.gz
 vendor/django-math-captcha-0.1.tar.gz
 vendor/BeautifulSoup-3.2.0.tar.gz
-vendor/kombu-1.1.6.fixed.tar.gz
-vendor/celery-2.2.7.zip
-vendor/django-celery-2.2.4.tar.gz
+vendor/kombu-1.4.3.tar.gz
+vendor/celery-2.3.3.tar.gz
+vendor/django-celery-2.3.3.tar.gz
 oauth==1.0.1
 oauth2==1.2.0
 pyOpenSSL==0.9

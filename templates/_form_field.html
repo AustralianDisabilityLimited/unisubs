@@ -1,10 +1,10 @@
-{% if widget_type != "checkbox"}
+{% if widget_type != "checkbox" %}
 	{{ field.label_tag }}
 	{{ field }}
 {% else %}
-	{{ field.label_tag }}
 	{{ field }}
-{% endif %}}
+	{{ field.label_tag }}
+{% endif %}
 
 {% if field.help_text %}
 	<p class="notation">{{ field.help_text }}</p>

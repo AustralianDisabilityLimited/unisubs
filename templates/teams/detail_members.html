@@ -36,9 +36,12 @@
     {% endif %}    
 
     <div class="view grid_9 alpha">
-        <div class="tools">
-            <a href="#" class="button">Invite Members</a>
-        </div>
+
+        {% if team|can_invite_to_team:user %}
+            <div class="tools">
+                <a href="#" class="button">Invite Members</a>
+            </div>
+        {% endif %}
 
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="members listing">
@@ -69,8 +72,7 @@
 
     <div class="controls grid_3 omega">
         {% include "teams/_filters_members.html" %}
-        <p><a href="" class="button primary">Join this Team</a></p>
-        <p class="notation">Want to create your own captioning and translation team? <a href="">Learn more.</a></p>
+        {% include "teams/_actions.html" %}
     </div>
 
 {% endblock %}

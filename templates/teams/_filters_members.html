@@ -26,9 +26,13 @@
     <li>
     	<a href="">Contributors</a>
     </li>
+
+    {% comment %}
+        Let's wrap this in a conditional so that only admins/owners can see it
+    {% endcomment %}
     <li>
       <a href="{% url teams:applications slug=team.slug %}"> 
-        Applications ({{team.applications.all.count }})
+        Applications <span>{{team.applications.all.count }}</span>
         </a>
-      </li>
+    </li>
 </ul>

@@ -1,8 +1,8 @@
-{% extends "settings.html" %}
+{% extends "base.html" %}
 
 {% load i18n teams_tags widget media_compressor %}
 
-{% block body_attrs %}id="teams"{% endblock %}
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block title %}
     {% trans 'Edit team video' %} | Universal Subtitles
@@ -10,39 +10,47 @@
 
 {% block css %}
     {{ block.super }}
-     {% include_bundle "widget-css"%}
-     {% include_bundle "jquery-ui"%}
 {% endblock %}
 
 {% block scripts %}
     {{ block.super }}
-    {% include_bundle "unisubs-onsite-compiled" %}
-    {% include_bundle "js-jqueryui-datepicker"%}
 {% endblock %}
 
-{% block settings_content %}
-    <div class="hd">
-        <h2>{{ team }}</h2>
-        {% with "videos" as active %}
-            {% include 'teams/_tabs.html' %}
-        {% endwith %}
-    </div>
-        <div class="padding">
-            <form method='post' action="." enctype="multipart/form-data">
-            {% widget widget_params %}
-            {{ form.as_p }}
-            {% csrf_token %}              
+{% block main_content %}
+    
+    {% with "videos" as active %}
+        {% include 'teams/_tabs.html' %}
+    {% endwith %}
+
+    <div class="view grid_9 alpha">
+        <form method='post' action="." enctype="multipart/form-data">
+
+            <h3>{% trans 'Edit video' %}: <em>{{ team_video.title }}</em></h3>
+            <div class="grid_4 alpha">
+                <fieldset>
+                    {% include "_form_field.html" with field=form.video_url %}
+                    {% include "_form_field.html" with field=form.title %}
+                    {% include "_form_field.html" with field=form.description %}
+                </fieldset>
+            </div>
+
+            <div class="grid_4 omega">
+                <fieldset>
+                    {% include "_form_field.html" with field=form.project %}
+                    {% include "_form_field.html" with field=form.thumbnail %}
+                </fieldset>
+            </div>
+                 
             {% if form.is_moderated_by_other_team %}
                 {% blocktrans %} This video is being moderated by team {% endblocktrans %} <a href="{% url teams:detail slug=form.is_moderated_by_other_team.slug %}">{{form.is_moderated_by_other_team}}</a>.
-
-
             {% endif %}
 
-            <div class="ft">
-                <button class="green_button small"><span>{% trans 'Save' %}</span></button>
+            <div class="grid_9 submit">
+                <button>{% trans 'Save' %}</button>
             </div>
-            </form>
-        </div>
+            {% csrf_token %} 
+        </form>
+    </div>
     <script type="text/javascript"> 
       {% include "teams/team_video.js" %}
     </script>

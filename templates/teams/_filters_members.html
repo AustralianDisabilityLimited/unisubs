@@ -26,5 +26,9 @@
     <li>
     	<a href="">Contributors</a>
     </li>
-
+    <li>
+      <a href="{% url teams:applications slug=team.slug %}"> 
+        Applications ({{team.applications.all.count }})
+        </a>
+      </li>
 </ul>

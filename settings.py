@@ -502,6 +502,7 @@ BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
 BROKER_USER = AWS_ACCESS_KEY_ID = ""
 BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY = ""
 BROKER_VHOST = AWS_QUEUE_PREFIX = 'UNISUB' #Prefix for queues, should be DEV or STAGING 
+BROKER_POOL_LIMIT = 10
 
 #################
 

@@ -1,4 +1,4 @@
-from utils.celery_utils import task
+from celery.task import task
 from utils import send_templated_email
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 from haystack import site
 
 @periodic_task(run_every=crontab(minute=0, hour=6))
-#@periodic_task(run_every=timedelta(seconds=60))
 def add_videos_notification(*args, **kwargs):
     from teams.models import TeamVideo, Team
     domain = Site.objects.get_current().domain

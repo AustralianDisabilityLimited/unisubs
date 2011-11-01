@@ -1,8 +1,8 @@
 {% if widget_type != "checkbox" %}
-	 -> THIS IS NOT CHECKBOX{{ field.label_tag }} 
-	{{ field }} -<
+	 {{ field.label_tag }} 
+	{{ field }}
 {% else %}
-	-> this is A CHECKBOX -> <label for="{{ field.html_name }}">{{ field }} {{ field.label }}</label><-
+	<label for="{{ field.html_name }}">{{ field }} {{ field.label }}</label>
 {% endif %}
 
 {% if field.help_text %}

@@ -39,9 +39,11 @@
     {% endwith %}
 
     <div class="view grid_9 alpha">
-        <div class="tools">
-            <a href="{% url teams:add_video team.slug %}" class="button">{% trans "Add Videos" %}</a>
-        </div>
+        {% if team|can_add_video_to_team:user %}
+            <div class="tools">
+                <a href="{% url teams:add_video team.slug %}" class="button">{% trans "Add Videos" %}</a>
+            </div>
+        {% endif %}
 
         {% if not team.page_content and team.video %}
             {% widget widget_params %}

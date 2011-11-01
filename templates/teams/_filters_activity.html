@@ -1,0 +1,28 @@
+{% load i18n teams_tags %}
+
+<ul>
+
+	{% comment %}
+		TODO: If no filter is selected, then this LI should have a class of "current"
+	{% endcomment %}
+
+    <li>
+    	<a href="{% url teams:videos_actions team.slug %}">{% trans "All Activity" %}</a>
+    </li>
+
+    {% comment %}
+		TODO: For each role, if selected, LI should have a class of "current"
+		TODO: Need working links for role filters
+		TODO (CZ): Need to revisit the language of these links. Seem unclear.
+	{% endcomment %}
+
+    <li>
+    	<a href="">{% trans "Videos Activity" %}</a>
+    </li>
+    <li>
+    	<a href="">{% trans "Members Activity" %}</a>
+    </li>
+    <li>
+    	<a href="">{% trans "Tasks Activity" %}</a>
+    </li>
+</ul>

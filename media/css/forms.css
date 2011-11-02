@@ -385,45 +385,37 @@ form.message button{
 #messages{
   top: 0px;
   text-align: center;
-  
   margin: 20px 0;
-  padding: 20px; 0;
-  
+  padding: 20px 0;
   -moz-border-radius: 5px;  
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  
-  background: #fff;
-  
+  background: #f3f6f8;
   line-height: 1em !important;
-  
   font-weight: bold;
   color: #3b6068;
-  
-  box-shadow:0px 1px 2px #555;
-  -moz-box-shadow: 0px 1px 2px #555;
-  -webkit-box-shadow: 0px 1px 2px #555;
   position: relative;
+  border: 1px solid #dce2e5;
   }
 
 
 
 #messages #closeBut{
-right: -6px;
-top: -6px !important;
-position: absolute;
-  -moz-border-radius: 30px;  
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-height: 21px;
-width: 21px;
-  box-shadow:inset 0px 1px 2px #fe928c;
-  -moz-box-shadow:inset 0px 1px 2px #fe928c;
-  -webkit-box-shadow:inset 0px 1px 2px #fe928c;
-  background: url(../images/sprite.png) -3px -259px no-repeat !important;
-
-border: 1px solid #7e1504;
+  color: inherit;
+  right: 5px;
+  top: 5px !important;
+  position: absolute;
+  -moz-border-radius: 3px;  
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  height: 20px;
+  width: 20px;
+  text-decoration: none;
   }
+
+#messages #closeBut:hover {
+  color: #CF616D;
+}
 
 #messages .error {
     color: #f21;

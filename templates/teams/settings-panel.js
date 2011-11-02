@@ -235,9 +235,9 @@ var ProjectPanel  = AsyncPanel.$extend({
         scope = this;
         TeamsApiV2.project_list(TEAM_SLUG, this.onProjectListLoaded);
         this.projects = [];
-        this.projectListing = $(".projects.listing", this.el);
         
     },
+    
     addProject: function(pModel){
         var isNew = true;
         _.each(this.projects, function(m){
@@ -256,7 +256,9 @@ var ProjectPanel  = AsyncPanel.$extend({
         }
     },
     renderProjectList: function(){
-        
+        if (!this.projectListing) {
+            this.projectListing = $(".projects.listing", $(this.el).eq(0).parent());
+        }
         $("li", this.projectListing).remove();
         _.each(this.projects, function(x){
             var item = new ProjectListItem(x)
@@ -267,7 +269,7 @@ var ProjectPanel  = AsyncPanel.$extend({
     onEditRequested: function(e, model){
         e.preventDefault();
         this.projectEditPanel  = new ProjectEditPanel(model);
-        this.el.prepend(this.projectEditPanel.el);
+        this.el.eq(0).prepend(this.projectEditPanel.el);
         this.projectEditPanel.show();
         this.projectListing.hide()
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
@@ -308,6 +310,11 @@ var ProjectPanel  = AsyncPanel.$extend({
         this._hideEditPanel();
         this.removeProject(p);
         this.renderProjectList();
+    },
+    hide : function(){
+        this.el.each(function(i,o){
+            $(o).remove();
+        });
     }
 });
 
@@ -832,7 +839,11 @@ var TabViewer = Class.$extend({
             this.currentItem.showPanel(false);
             this.currentItem.markActive(false);
             if (this.currentKlass){
-                this.currentKlass.el.hide();
+                if (_.isFunction(this.currentKlass.hide)){
+                    this.currentKlass.hide();
+                }else{
+                    this.currentKlass.el.hide();
+                }
             }
         }
         _.each(this.menuItems, function(x){

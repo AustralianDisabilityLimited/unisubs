@@ -21,7 +21,7 @@
 }
 
 /* line 33, ../../../unisubs-design/sass/v1.scss */
-.v1 .button, .v1 button {
+.v1 .button, .v1 .content button, .v1 .form-container button {
   margin: 1em 0;
   padding: .5em;
   -moz-border-radius: 3px;
@@ -45,7 +45,7 @@
   color: #fff;
 }
 /* line 46, ../../../unisubs-design/sass/v1.scss */
-.v1 .button:hover, .v1 button:hover {
+.v1 .button:hover, .v1 .content button:hover, .v1 .form-container button:hover {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #136aa1), color-stop(100%, #0c4061));
   background-image: -webkit-linear-gradient(#136aa1, #0c4061);
   background-image: -moz-linear-gradient(#136aa1, #0c4061);
@@ -54,7 +54,7 @@
   background-image: linear-gradient(#136aa1, #0c4061);
 }
 /* line 50, ../../../unisubs-design/sass/v1.scss */
-.v1 .button.primary, .v1 button.primary {
+.v1 .button.primary, .v1 .content button.primary, .v1 .form-container button.primary {
   font-size: 1.25em;
   padding: 1em;
   -moz-border-radius: 4px;
@@ -65,7 +65,7 @@
   border-radius: 4px;
 }
 /* line 56, ../../../unisubs-design/sass/v1.scss */
-.v1 .button.reduced, .v1 button.reduced {
+.v1 .button.reduced, .v1 .content button.reduced, .v1 .form-container button.reduced {
   background-color: #dce2e5;
   border-color: #b7c3c9;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f3f6f8), color-stop(100%, #dce2e5));
@@ -78,7 +78,7 @@
   color: #678ca3;
 }
 /* line 63, ../../../unisubs-design/sass/v1.scss */
-.v1 .button.reduced:hover, .v1 button.reduced:hover {
+.v1 .button.reduced:hover, .v1 .content button.reduced:hover, .v1 .form-container button.reduced:hover {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dce2e5), color-stop(100%, #b7c3c9));
   background-image: -webkit-linear-gradient(#dce2e5, #b7c3c9);
   background-image: -moz-linear-gradient(#dce2e5, #b7c3c9);

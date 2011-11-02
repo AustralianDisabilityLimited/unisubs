@@ -242,6 +242,55 @@ This is needed, since it's for the js templating
     </div>
 </script>
 
+<script id="permissionsPanel" type="text/html">
+    <div class="panel-permissions">
+        <form class="permissions">
+            <div class="grid_4 alpha messages">
+                <fieldset>
+                    <legend>Membership</legend>
+
+                    <label for="id_membership_policy">Who can join</label>
+                    <select><option>Blah</option></select>
+                    {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
+
+                    <label for="id_invite_policy">Who can invite members</label>
+                    <select><option>Blah</option></select>
+                </fieldset>
+                <fieldset>
+                    <legend>Contributions</legend>
+                    <label for="id_video_policy">Who can add videos</label>
+                    <select><option>Blah</option></select>
+                    {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
+
+                    <label for="id_membership_policy">Who can subtitle videos</label>
+                    <select><option>Blah</option></select>
+
+                    <label for="id_membership_policy">Who can translate videos</label>
+                    <select><option>Blah</option></select>
+
+                </fieldset>
+            </div>
+            <div class="grid_4 omega guidelines">
+                <fieldset>
+                    <legend>Management</legend>
+                    <label for="id_membership_policy">Who can review subtitles</label>
+                    <select><option>Blah</option></select>
+
+                    <label for="id_membership_policy">Who can approve subtitles</label>
+                    <select><option>Blah</option></select>
+
+                    <label for="id_membership_policy">Who can assign tasks</label>
+                    <select><option>Blah</option></select>
+                </fieldset>
+            </div>
+
+            <div class="grid_9 submit">
+                <input type="submit" class="submit" value="Save Changes" name="save" />
+            </div>
+        </form>
+    </div>
+</script>
+
 <script id="guidelinesPanel" type="text/html">
     <div class="panel-guidelines">
         <form id="guidelines_messages_form">
@@ -321,17 +370,6 @@ This is needed, since it's for the js templating
             </div>
 
             <div class="grid_4 omega">
-                <!--<form class="team-settings">
-                    <fieldset>
-                        <legend>Permissions</legend>
-
-                        <label for="id_membership_policy">Who can join</label>
-                        {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
-
-                        <label for="id_video_policy">Who can add videos</label>
-                        {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
-                    </fieldset>
-                </form>-->
 
                 <form class="team-settings">
                     <fieldset>

@@ -160,6 +160,9 @@ def can_edit_subs_for(team, user, project=None, lang=None):
     pass
 
                                
+def can_view_settings_tab(team, user):
+    return team.members.filter(user=user,role__in =[ROLE_ADMIN, ROLE_OWNER]).exists()
+    
 def model_has_permission(member, perm_name, model):
     return perm_name in _perms_for(member.role, model)
                                

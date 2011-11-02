@@ -38,6 +38,7 @@ from templatetag_sugar.register import tag
 from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
 from apps.teams.permissions import list_narrowings
+from apps.teams.permissions import can_view_settings_tab as _can_view_settings_tab
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -231,3 +232,8 @@ def member_projects(context, member, varname):
     narrowings = list_narrowings(member.team, member.user, [Project])
     context[varname]   = narrowings['Project']
     return ""
+
+    
+@register.filter
+def can_view_settings_tab(team, user):
+   return _can_view_settings_tab(team, user)

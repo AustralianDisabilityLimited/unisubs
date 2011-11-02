@@ -42,7 +42,7 @@
         "model": "teams.teammember", 
         "fields": {
             "user": 9999, 
-            "role": "manager", 
+            "role": "owner", 
             "team": 1
         }
     },      

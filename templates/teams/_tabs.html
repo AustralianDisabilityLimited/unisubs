@@ -22,13 +22,13 @@
                 {% trans "Tasks" %}
             </a>
 	    </li>
-        {% comment %}
-            TODO: Don't show this item if user is not an admin/owner
-        {% endcomment %}
-	    <li{% if current == "settings" %} class="current" {% endif %}>
-	    	<a href="{% url teams:settings slug=team.slug %}">
-                {% trans "Settings" %}
-            </a>
-	    </li>
+        
+        {% if team|can_view_settings_tab:user %}   
+    	    <li{% if current == "settings" %} class="current" {% endif %}>
+    	    	<a href="{% url teams:settings slug=team.slug %}">
+                    {% trans "Settings" %}
+                </a>
+    	    </li>
+        {% endif %}
 	{% endif %}
 </ul>

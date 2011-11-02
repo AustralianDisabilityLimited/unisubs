@@ -424,7 +424,11 @@ class TeamsApiV2Class(object):
     def project_edit(self, team_slug, project_pk, name,
                      slug, description, order, workflow_enabled, user):
         team = get_object_or_404(Team, slug=team_slug)
-        project = get_object_or_404(Project, team=team, pk=project_pk)
+        if project_pk:
+            project = get_object_or_404(Project, team=team, pk=project_pk)
+        else:
+            project = None
+        
         if can_edit_project(team, user, project) is False:
             return {"success":False, "message": "This team member cannot edit project"}
         # insert a new project as the last one

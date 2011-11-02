@@ -1,13 +1,12 @@
 {% load i18n teams_tags %}
   
 <h3>
-  <a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title }}</a>
+  <a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title|truncatewords:9 }}</a>
+  {% if search_record.project_name != "_root" %}
+      <span class="descriptor">{{ search_record.project_name }}</span>
+  {% endif %}
 </h3>
-{% if search_record.project_name != "_root" %}
-    <p>{{ search_record.project_name }}</p>
-{% else %}
-    <p>Default Project</p>
-{% endif %}
+
 <p>
   {% if search_record.description %}
     {{ search_record.description|truncatewords:20|urlize }}.

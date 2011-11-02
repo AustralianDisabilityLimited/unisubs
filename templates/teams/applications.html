@@ -29,11 +29,11 @@
                     <li>
                         <h3>
                             <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
+                            {% for lang in item.user.get_languages %}
+                                <span class="descriptor">{{ lang.get_language_display }}</span>
+                            {% endfor %}
                         </h3>
                         <p>
-                        {% for lang in item.user.get_languages %}
-                            <span class="descriptor">{{ lang.language }}</span>
-                        {% endfor %}
                         {% if item.note %}
                             {{ item.note|truncatewords:15|urlize }}
                         {% endif %}
@@ -59,7 +59,9 @@
     </div>
 
     <div class="controls grid_3 omega">
-        {% include "teams/_filters_members.html" %}
+        {% with "applicants" as current %}
+            {% include "teams/_filters_members.html" %}
+        {% endwith %}
         {% include "teams/_actions.html" %}
     </div>
     

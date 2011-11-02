@@ -23,11 +23,12 @@ from django.template.defaultfilters import urlize, linebreaks, force_escape
 from django.shortcuts import render_to_response, redirect
 from django.utils.http import cookie_date
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from videos import models
 from widget.srt_subs import captions_and_translations_to_srt, captions_to_srt, SSASubtitles
 import simplejson as json
-from simplejson.decoder import JSONDecodeError, JSONDecodeError
+from simplejson.decoder import JSONDecodeError
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 import widget
@@ -105,12 +106,19 @@ def onsite_widget(request):
         if not 'effectiveVideoURL' in config:
             config['effectiveVideoURL'] = video.get_video_url()
 
-        team_videos = list(video.teamvideo_set.all()[:1])
+        team_videos = list(video.teamvideo_set.all().select_related('team')[:1])
         if team_videos:
+            team = team_videos[0].team
+
             config['guidelines'] = dict(
                     [(s.key_name.split('_', 1)[-1],
                       linebreaks(urlize(force_escape(s.data))))
-                     for s in team_videos[0].team.settings.guidelines()])
+                     for s in team.settings.guidelines()
+                     if s.data.strip()])
+
+            # TODO: Go to the tasks panel once the history stuff is implemented
+            config['team_url'] = reverse('teams:settings',
+                                         kwargs={'slug': team.slug})
         else:
             config['guidelines'] = {}
 
@@ -138,7 +146,7 @@ def onsite_widget_resume(request):
     if not video_id:
         raise Http404
 
-    video = get_object_or_404(models.Video, video_id=video_id)
+    get_object_or_404(models.Video, video_id=video_id)
 
     context['widget_params'] = json.dumps(config)
     general_settings = {}
@@ -157,7 +165,6 @@ def widget_demo(request):
         context['help_mode'] = True
     else:
         context['help_mode'] = False
-        spaces = ' ' * 9
         params = base_widget_params(request)
         context['embed_js_url'] = \
             "http://{0}/embed{1}.js".format(

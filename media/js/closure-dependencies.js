@@ -1,6 +1,6 @@
 // Universal Subtitles, universalsubtitles.org
 //
-// Copyright (C) 2010 Participatory Culture Foundation
+// Copyright (C) 2011 Participatory Culture Foundation
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,6 +22,7 @@ goog.require("goog.json.Serializer");
 goog.require("goog.dom.DomHelper");
 goog.require("goog.events.BrowserEvent");
 goog.require("goog.ui.Button");
+goog.require("goog.dom.forms");
 goog.require("goog.ui.LabelInput");
 goog.require("goog.net.XhrIo");
 goog.require("goog.net.Jsonp");

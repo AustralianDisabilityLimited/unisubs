@@ -22,12 +22,12 @@ goog.provide('unisubs.subtitle.ReviewRightPanel');
 * @extends unisubs.RightPanel
 */
 unisubs.subtitle.ReviewRightPanel = function(serverModel,
-                                                  helpContents,
-                                                  extraHelp,
-                                                  legendKeySpecs,
-                                                  showRestart,
-                                                  doneStrongText,
-                                                  doneText) {
+                                             helpContents,
+                                             extraHelp,
+                                             legendKeySpecs,
+                                             showRestart,
+                                             doneStrongText,
+                                             doneText) {
     unisubs.RightPanel.call(this, serverModel, helpContents, extraHelp,
                              legendKeySpecs,
                              showRestart, doneStrongText, doneText);

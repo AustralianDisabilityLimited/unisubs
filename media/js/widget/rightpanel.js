@@ -59,6 +59,15 @@ unisubs.RightPanel = function(serverModel,
     this.showSaveExit = true;
 
     /**
+     * Whether to show the "Done? ... >" button. Should be overridden by sub
+     * classes as needed.
+     *
+     * @protected
+     * @type {boolean}
+     */
+    this.showDoneButton = true;
+
+    /**
      * Non-null iff the mouse has just been pressed on one of the legend keys
      * and not released or moved away from the legend key yet.
      * @type {?string}
@@ -211,6 +220,9 @@ unisubs.RightPanel.prototype.appendLegendClearInternal = function($d, legendDiv)
 unisubs.RightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
     // dear subclasses, override me if you want. love, rightpanel.
 };
+unisubs.RightPanel.prototype.appendCustomButtonsInternal = function($d, el) {
+    // dear subclasses, override me if you want. love, rightpanel.
+};
 unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.loginDiv_ = $d('div');
     this.loadingGif_ = $d('img',
@@ -248,7 +260,12 @@ unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     this.getHandler().listen(
         this.downloadLink_, 'click', this.downloadClicked_);
 
-    goog.dom.append(stepsDiv, this.doneAnchor_);
+    this.appendCustomButtonsInternal($d, el);
+
+    if (this.showDoneButton) {
+        goog.dom.append(stepsDiv, this.doneAnchor_);
+        this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
+    } 
 
     if (this.showSaveExit) {
         var saveAndExitAnchor = $d(
@@ -263,7 +280,6 @@ unisubs.RightPanel.prototype.appendStepsContents_ = function($d, el) {
     }
 
     goog.dom.append(el, stepsDiv);
-    this.getHandler().listen(this.doneAnchor_, 'click', this.doneClicked_);
     this.updateLoginState();
 };
 unisubs.RightPanel.prototype.legendKeyClicked_ = function(keyCode, modifiers, event) {

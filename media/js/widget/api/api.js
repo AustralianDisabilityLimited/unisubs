@@ -72,10 +72,20 @@ unisubs.api.openUnisubsDialogWithSettings =
         unisubs.DEBUG = true;
     }
     unisubs.widget.WidgetController.makeGeneralSettings(generalSettings);
-    if (config['returnURL'])
+    if (config['returnURL']) {
         unisubs.returnURL = config['returnURL'];
+    }
     if (config['guidelines']) {
         unisubs.guidelines = config['guidelines'];
+    }
+    if (config['team_url']) {
+        unisubs.team_url = config['team_url'];
+    }
+    if (config['mode']) {
+        unisubs.mode = config['mode'];
+    }
+    if (config['task']) {
+        unisubs.task_id = config['task'];
     }
     unisubs.IS_NULL = !!config['nullWidget'];
     var videoSource = 

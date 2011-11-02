@@ -34,6 +34,23 @@ unisubs.subtitle.EditRightPanel = function(serverModel,
                              doneText);
 };
 goog.inherits(unisubs.subtitle.EditRightPanel, unisubs.RightPanel);
+
+unisubs.subtitle.EditRightPanel.prototype.appendHelpContentsInternal = function($d, el) {
+    var backLink = $d('a', {'href': '#'}, 'click here');
+    this.getHandler().listenOnce(
+        backLink, 'click', this.backClickedInternal);
+    var helpDiv = $d('div', 'unisubs-help-heading',
+                     $d('h2', null, "EDIT: Edit existing subtitles"));
+    el.appendChild(helpDiv);
+    el.appendChild($d('p', null,
+                      goog.dom.createTextNode(
+                          'Double click on any subtitle to edit its text. To add more text, '),
+                      backLink,
+                      goog.dom.createTextNode(' for TYPING mode.')));
+    el.appendChild($d('p', null, 'Adjust subtitle timing by dragging their edges in the timeline to the left and watching the results.'));
+    el.appendChild($d('p', null, 'You can also edit timing by rolling over any timestamp, and clicking the left/right buttons that appear.  After you click, your change will play back.'));
+    el.appendChild($d('p', null, 'Hitting the DOWN ARROW will set the start of the next subtitle.'));
+};
 unisubs.subtitle.EditRightPanel.prototype.appendHelpContentsInternal = function($d, el) {
     var backLink = $d('a', {'href': '#'}, 'click here');
     this.getHandler().listenOnce(

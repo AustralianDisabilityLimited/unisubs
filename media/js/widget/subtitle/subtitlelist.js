@@ -24,10 +24,12 @@ goog.provide('unisubs.subtitle.SubtitleList');
  * @param {unisubs.subtitle.EditableCaptionSet} captionSet
  */
 unisubs.subtitle.SubtitleList = function(videoPlayer, captionSet,
-                                          displayTimes, opt_showBeginMessage) {
+                                          displayTimes, opt_showBeginMessage,
+                                          readOnly) {
     goog.ui.Component.call(this);
     this.videoPlayer_ = videoPlayer;
     this.captionSet_ = captionSet;
+    this.readOnly_ = readOnly;
     this.displayTimes_ = displayTimes;
     this.currentActiveSubtitle_ = null;
     /**
@@ -49,8 +51,14 @@ unisubs.subtitle.SubtitleList.prototype.createDom = function() {
     var dh = this.getDomHelper();
     var $d = goog.bind(dh.createDom, dh);
     var $t = goog.bind(dh.createTextNode, dh);
-    this.setElementInternal($d('ul', 'unisubs-titlesList'));
-    if (this.captionSet_.count() == 0 && this.showBeginMessage_) {
+
+    var list_class = 'unisubs-titlesList';
+    if (this.readOnly_) {
+        list_class += ' read-only';
+    }
+    this.setElementInternal($d('ul', list_class));
+
+    if (this.captionSet_.count() === 0 && this.showBeginMessage_) {
         this.showingBeginMessage_ = true;
         goog.dom.classes.add(this.getElement(), 'unisubs-beginTab');
         this.getElement().appendChild(
@@ -58,9 +66,8 @@ unisubs.subtitle.SubtitleList.prototype.createDom = function() {
                $t('To begin, press TAB to play'),
                $d('br'),
                $t('and start typing!')));
-    }
-    else {
-        this.addAddButton_();
+    } else {
+        this.readOnly_ || this.addAddButton_();
         var i;
         for (i = 0; i < this.captionSet_.count(); i++)
             this.addSubtitle(this.captionSet_.caption(i), false, true);
@@ -107,8 +114,9 @@ unisubs.subtitle.SubtitleList.prototype.enterDocument = function() {
             this.captionSet_,
             et.DELETE,
             this.captionDeleted_);
-    if (this.addSubtitleButton_)
+    if (this.addSubtitleButton_ && !this.readOnly_) {
         this.listenForAdd_();
+    }
 };
 unisubs.subtitle.SubtitleList.prototype.captionsCleared_ = function(event) {
     this.subtitleMap_ = {};
@@ -131,7 +139,8 @@ unisubs.subtitle.SubtitleList.prototype.createNewSubWidget_ =
         editableCaption,
         this.captionSet_,
         goog.bind(this.setCurrentlyEditing_, this),
-        this.displayTimes_);
+        this.displayTimes_,
+        this.readOnly_);
 };
 /**
  *
@@ -145,10 +154,11 @@ unisubs.subtitle.SubtitleList.prototype.addSubtitle =
         goog.dom.removeChildren(this.getElement());
         goog.dom.classes.remove(this.getElement(), 'unisubs-beginTab');
         this.showingBeginMessage_ = false;
-        this.addAddButton_();
+        this.readOnly_ || this.addAddButton_();
     }
+    var dest_offset = this.getChildCount() - (this.readOnly_ ? 0 : 1);
     var subtitleWidget = this.createNewSubWidget_(subtitle);
-    this.addChildAt(subtitleWidget, this.getChildCount() - 1, true);
+    this.addChildAt(subtitleWidget, dest_offset, true);
     this.subtitleMap_[subtitle.getCaptionID()] = subtitleWidget;
     if (opt_scrollDown && typeof(opt_scrollDown) == 'boolean')
         this.scrollToCaption(subtitle.getCaptionID());
@@ -177,7 +187,7 @@ unisubs.subtitle.SubtitleList.prototype.setLastSub_ = function() {
     if (subWidget == this.lastSub_)
         return;
     this.lastSubMouseHandler_.removeAll();
-    if (subWidget != null) {
+    if (subWidget != null && !this.readOnly_) {
         var et = goog.events.EventType;
         this.lastSubMouseHandler_.
             listen(subWidget.getElement(),

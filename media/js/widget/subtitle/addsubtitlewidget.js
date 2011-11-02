@@ -23,7 +23,6 @@ goog.provide('unisubs.subtitle.AddSubtitleWidget');
 */
 unisubs.subtitle.AddSubtitleWidget = function() {
     goog.ui.Component.call(this);
-
 };
 goog.inherits(unisubs.subtitle.AddSubtitleWidget, goog.ui.Component);
 

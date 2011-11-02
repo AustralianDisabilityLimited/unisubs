@@ -1190,11 +1190,20 @@ class Task(models.Model):
     TYPE_NAMES = dict(TYPE_CHOICES)
     TYPE_IDS = dict([choice[::-1] for choice in TYPE_CHOICES])
 
+    APPROVED_CHOICES = (
+        (10, 'In Progress'),
+        (20, 'Approved'),
+        (30, 'Rejected'),
+    )
+    APPROVED_NAMES = dict(APPROVED_CHOICES)
+    APPROVED_IDS = dict([choice[::-1] for choice in APPROVED_CHOICES])
+
     type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 
     team = models.ForeignKey(Team)
     team_video = models.ForeignKey(TeamVideo)
-    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True, db_index=True)
+    language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True,
+                                db_index=True)
     assignee = models.ForeignKey(User, blank=True, null=True)
 
     deleted = models.BooleanField(default=False)
@@ -1202,6 +1211,11 @@ class Task(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     modified = models.DateTimeField(auto_now=True, editable=False)
     completed = models.DateTimeField(blank=True, null=True)
+
+    # Review and Approval -specific fields
+    approved = models.PositiveIntegerField(choices=APPROVED_CHOICES,
+                                           null=True, blank=True)
+    body = models.TextField(blank=True, default="")
 
     def __unicode__(self):
         return u'%d' % self.id

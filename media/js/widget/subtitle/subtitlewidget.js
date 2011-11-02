@@ -30,7 +30,8 @@ goog.provide('unisubs.subtitle.SubtitleWidget');
 unisubs.subtitle.SubtitleWidget = function(subtitle,
                                             subtitleSet,
                                             editingFn,
-                                            displayTimes) {
+                                            displayTimes,
+                                            readOnly) {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
     this.subtitleSet_ = subtitleSet;
@@ -38,6 +39,7 @@ unisubs.subtitle.SubtitleWidget = function(subtitle,
     this.displayTimes_ = displayTimes;
     this.keyHandler_ = null;
     this.timeSpinner_ = null;
+    this.readOnly_ = readOnly;
     this.insertDeleteButtonsShowing_ = false;
 };
 goog.inherits(unisubs.subtitle.SubtitleWidget, goog.ui.Component);
@@ -47,20 +49,31 @@ unisubs.subtitle.SubtitleWidget.prototype.getContentElement = function() {
 };
 unisubs.subtitle.SubtitleWidget.prototype.createDom = function() {
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.deleteButton_ = this.createDeleteButton_($d);
-    this.insertButton_ = this.createInsertButton_($d);
-    goog.style.showElement(this.deleteButton_, false);
-    goog.style.showElement(this.insertButton_, false);
+    if (!this.readOnly_) {
+        this.deleteButton_ = this.createDeleteButton_($d);
+        this.insertButton_ = this.createInsertButton_($d);
+        goog.style.showElement(this.deleteButton_, false);
+        goog.style.showElement(this.insertButton_, false);
+
+        this.setElementInternal(
+            $d('li', null,
+            this.contentElement_,
+            this.titleElem_ =
+            $d('span', {'className':'unisubs-title'},
+                this.titleElemInner_ =
+                $d('span')),
+            this.deleteButton_,
+            this.insertButton_));
+    } else {
+        this.setElementInternal(
+            $d('li', null,
+            this.contentElement_,
+            this.titleElem_ =
+            $d('span', {'className':'unisubs-title'},
+                this.titleElemInner_ =
+                $d('span'))));
+    }
     this.contentElement_ = $d('span', 'unisubs-timestamp');
-    this.setElementInternal(
-        $d('li', null,
-           this.contentElement_,
-           this.titleElem_ =
-           $d('span', {'className':'unisubs-title'},
-              this.titleElemInner_ =
-              $d('span')),
-           this.deleteButton_,
-           this.insertButton_));
     if (!this.displayTimes_) {
         goog.dom.classes.add(this.titleElem_, 'unisubs-title-notime');
         unisubs.style.showElement(this.contentElement_, false);
@@ -89,17 +102,19 @@ unisubs.subtitle.SubtitleWidget.prototype.createInsertButton_ = function($d) {
 unisubs.subtitle.SubtitleWidget.prototype.enterDocument = function() {
     unisubs.subtitle.SubtitleWidget.superClass_.enterDocument.call(this);
     var et = goog.events.EventType;
-    this.getHandler().
-        listen(
-            this.subtitle_,
-            unisubs.subtitle.EditableCaption.CHANGE,
-            this.updateValues_).
-        listen(this.titleElem_, et.CLICK, this.clicked_).
-        listen(this.getElement(),
-               [et.MOUSEOVER, et.MOUSEOUT],
-               this.mouseOverOut_).
-        listen(this.deleteButton_, et.CLICK, this.deleteClicked_).
-        listen(this.insertButton_, et.CLICK, this.insertClicked_);
+
+    if (!this.readOnly_) {
+        this.getHandler().listen(this.deleteButton_, et.CLICK, this.deleteClicked_)
+                         .listen(this.insertButton_, et.CLICK, this.insertClicked_)
+                         .listen(this.titleElem_, et.CLICK, this.clicked_)
+                         .listen(this.getElement(),
+                                [et.MOUSEOVER, et.MOUSEOUT],
+                                this.mouseOverOut_)
+                         .listen(this.subtitle_,
+                                 unisubs.subtitle.EditableCaption.CHANGE,
+                                 this.updateValues_);
+    }
+
     if (this.timeSpinner_)
         this.getHandler().listen(
             this.timeSpinner_,
@@ -155,8 +170,10 @@ unisubs.subtitle.SubtitleWidget.prototype.showInsertDeleteButtons_ =
         return;
     this.insertDeleteButtonsShowing_ = show;
 
-    goog.style.showElement(this.deleteButton_, show);
-    goog.style.showElement(this.insertButton_, show);
+    if (!this.readOnly_) {
+        goog.style.showElement(this.deleteButton_, show);
+        goog.style.showElement(this.insertButton_, show);
+    }
 };
 unisubs.subtitle.SubtitleWidget.prototype.clicked_ = function(event) {
     if (this.showingTextarea_)

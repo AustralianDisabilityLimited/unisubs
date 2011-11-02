@@ -9,8 +9,7 @@
     {% if user.is_authenticated and team.is_by_application %}
         {% if not team|has_applicant:user %}
             {% include "teams/_application_form.html" %}
-         {% else %}
-            Your're application is being reviewed, thank you.
+         {% else %}<p class="action-replacement">Your application is pending</p>
          {% endif %}
     {% endif %}
 {% endif %} 

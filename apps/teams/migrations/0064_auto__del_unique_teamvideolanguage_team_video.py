@@ -7,19 +7,6 @@ from django.db import models
 class Migration(SchemaMigration):
     
     def forwards(self, orm):
-        
-        # Adding model 'MembershipNarrowing'
-        db.create_table('teams_membershipnarrowing', (
-            ('created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('object_pk', self.gf('django.db.models.fields.TextField')()),
-            ('modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('member', self.gf('django.db.models.fields.related.ForeignKey')(related_name='narrowings', to=orm['teams.TeamMember'])),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='content_type_set_for_membershipnarrowing', to=orm['contenttypes.ContentType'])),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('added_by', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='narrowing_includer', null=True, to=orm['teams.TeamMember'])),
-        ))
-        db.send_create_signal('teams', ['MembershipNarrowing'])
-
         # Removing unique constraint on 'TeamVideoLanguage', fields ['team_video', 'subtitle_language']
         db.delete_unique('teams_teamvideolanguage', ['team_video_id', 'subtitle_language_id'])
 

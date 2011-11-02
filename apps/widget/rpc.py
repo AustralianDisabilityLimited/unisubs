@@ -1,7 +1,6 @@
-
 # Universal Subtitles, universalsubtitles.org
 # 
-# Copyright (C) 2010 Participatory Culture Foundation
+# Copyright (C) 2011 Participatory Culture Foundation
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -17,15 +16,11 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-from django.db.models import ObjectDoesNotExist
 from videos import models
 from widget.models import SubtitlingSession
-from datetime import datetime
-import re
 import simplejson as json
 import widget
 from widget.base_rpc import BaseRpc
-from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.db.models import Sum
 from widget import video_cache
@@ -36,6 +31,8 @@ from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 from icanhaz.models import VideoVisibilityPolicy
 from django.utils import translation
+from widget.forms import FinishReviewForm
+from utils.forms import flatten_errorlists
 
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
@@ -359,10 +356,14 @@ class Rpc(BaseRpc):
             user_message = "Your changes have been saved. It will take a minute or so for your subtitles to appear."
         elif new_version and is_moderated(new_version):
             if user_can_moderate(language.video, user) is False:
-                user_message = """This video is moderated by %s. 
+                user_message = ("This video is moderated by %s. \n\n"
 
-You will not see your subtitles in our widget when you leave this page, they will only appear on our site. We have saved your work for the team moderator to review. After they approve your subtitles, they will show up on our site and in the widget.
-""" % (new_version.video.moderated_by.name)
+                                "You will not see your subtitles in our widget "
+                                "when you leave this page, they will only appear "
+                                "on our site. We have saved your work for the team "
+                                "moderator to review. After they approve your subtitles, "
+                                "they will show up on our site and in the widget."
+                ) % (new_version.video.moderated_by.name)
         return {
             'user_message': user_message,
             'response': 'ok' }
@@ -417,7 +418,24 @@ You will not see your subtitles in our widget when you leave this page, they wil
             session.user = request.user
         session.save()
         return session
-    
+
+
+    def finish_review(self, request, task_id=None, body=None, approved=None):
+        data = {'task': task_id, 'body': body, 'approved': approved}
+
+        form = FinishReviewForm(request, data)
+
+        if form.is_valid():
+            task = form.cleaned_data['task']
+            task.body = form.cleaned_data['body']
+            task.approved = form.cleaned_data['approved']
+            task.save()
+
+            return {'response': 'ok'}
+        else:
+            return {'error_msg': _(u'\n'.join(flatten_errorlists(form.errors)))}
+
+
     def _find_base_language(self, base_language):
         if base_language:
             video = base_language.video

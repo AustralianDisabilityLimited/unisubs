@@ -333,3 +333,4 @@ def _send_letter_caption(caption_version):
         send_templated_email(user.email, subject, 
                              'videos/email_notification_non_editors.html',
                              context, fail_silently=not settings.DEBUG)        
+

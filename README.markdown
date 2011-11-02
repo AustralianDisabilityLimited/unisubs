@@ -72,3 +72,12 @@ standard Django one, you just have to run (while the virtualenv is activated):
     pip install werkzeug
 
 And then use `./dev-runserver.sh plus` to run it.
+
+### bpython shell
+
+If you want to use the awesome bpython shell instead of the normal one you just
+need to run (while the virtualenv is activated):
+
+    pip install bpython
+
+Now when you run `pm shell` it will use bpython automatically.

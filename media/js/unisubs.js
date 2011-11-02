@@ -54,6 +54,21 @@ unisubs.currentUsername = null;
 unisubs.returnURL = null;
 
 /**
+ * @type {?object}
+ */
+unisubs.guidelines = {};
+
+/**
+ * @type {?string}
+ */
+unisubs.team_url = '';
+
+/**
+ * @type {?object}
+ */
+unisubs.mode = null;
+
+/**
  * Current version of embed code. Set when widget gets inital 
  * state from server. Corresponds to value in settings.EMBED_JS_VERSION
  * in Django settings.py file.

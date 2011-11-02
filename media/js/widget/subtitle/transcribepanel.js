@@ -68,7 +68,7 @@ unisubs.subtitle.TranscribePanel.prototype.addElems_ = function(el) {
     this.addChild(this.lineEntry_ = new unisubs.subtitle.TranscribeEntry(
         this.videoPlayer_), true);
     this.addChild(this.subtitleList_ = new unisubs.subtitle.SubtitleList(
-        this.videoPlayer_, this.captionSet_, false, true), true);
+        this.videoPlayer_, this.captionSet_, false, true, false), true);
     this.setPlayMode(unisubs.UserSettings.getStringValue(
         unisubs.UserSettings.Settings.VIDEO_SPEED_MODE) ||
                      unisubs.subtitle.TranscribePanel.PlayMode.PLAY_STOP);

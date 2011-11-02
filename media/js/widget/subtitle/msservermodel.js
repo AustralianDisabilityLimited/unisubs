@@ -148,7 +148,7 @@ unisubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function() {
     if (goog.isDefAndNotNull(this.captionSet_.title) && 
         this.captionSet_.title != initialCaptionSet.title) {
         args['new_title'] = this.captionSet_.title;
-        atLeastOneThingChanged = true;;
+        atLeastOneThingChanged = true;
     }
     if (goog.isDefAndNotNull(this.captionSet_.completed) && 
         this.captionSet_.completed != initialCaptionSet.completed) {
@@ -202,6 +202,29 @@ unisubs.subtitle.MSServerModel.prototype.finish =
             failureCallback(opt_status);
         },
         true);
+};
+
+unisubs.subtitle.MSServerModel.prototype.finishReview = function(data) {
+    unisubs.Rpc.call(
+        'finish_review', 
+        data,
+        function(result) {
+            if (result['response'] != 'ok') {
+                // this should never happen.
+                alert('Problem saving review. Response: ' +
+                      result["response"]);
+                failureCallback(200);
+            }
+            else {
+                that.finished_ = true;
+                successCallback(result["user_message"]);
+            }
+        }, 
+        function(opt_status) {
+            failureCallback(opt_status);
+        },
+        true);
+
 };
 
 unisubs.subtitle.MSServerModel.prototype.getEmbedCode = function() {

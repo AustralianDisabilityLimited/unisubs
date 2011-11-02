@@ -674,7 +674,7 @@ class SubtitleLanguage(models.Model):
         else:
             return self.is_complete
 
-    def get_widget_url(self):
+    def get_widget_url(self, mode=None):
         # duplicates unisubs.widget.SubtitleDialogOpener.prototype.openDialogOrRedirect_
         video = self.video
         video_url = video.get_video_url()
@@ -684,7 +684,8 @@ class SubtitleLanguage(models.Model):
             "effectiveVideoURL": video_url,
             "languageCode": self.language,
             "subLanguagePK": self.pk,
-            "originalLanguageCode": video.language }
+            "originalLanguageCode": video.language,
+            "mode": mode, }
         if self.is_dependent():
             config['baseLanguagePK'] = self.standard_language and self.standard_language.pk
         return reverse('onsite_widget')+'?config='+urlquote_plus(json.dumps(config))

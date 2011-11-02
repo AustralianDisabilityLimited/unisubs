@@ -966,11 +966,32 @@ class Application(models.Model):
     class Meta:
         unique_together = (('team', 'user'),)
     
+    def _send_approve_message(self):
+        msg = Message()
+        msg.subject = ugettext(u'Your application to %s was approved!') % self.team.name
+        msg.content = ugettext(u"Congratulations, you're now a member of %s!") % self.team.name
+        msg.user = self.user
+        msg.object = self.team
+        msg.author = User.get_anonymous()
+        msg.save()
+
+    def _send_deny_message(self):
+        msg = Message()
+        msg.subject = ugettext(u'Your application to %s was denied.') % self.team.name
+        msg.content = ugettext(u"Sorry, your application to %s was rejected.") % self.team.name
+        msg.user = self.user
+        msg.object = self.team
+        msg.author = User.get_anonymous()
+        msg.save()
+
+
     def approve(self):
         TeamMember.objects.get_or_create(team=self.team, user=self.user)
+        self._send_approve_message()
         self.delete()
     
     def deny(self):
+        self._send_deny_message()
         self.delete()
         
 class Invite(models.Model):

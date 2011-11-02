@@ -34,11 +34,9 @@
         <h2 id="team_title">{{ team }}</h2>
     {% endif %}
 
-    {% if team|can_view_settings_tab:user %}    
-        {% with "videos" as current %}
-            {% include "teams/_tabs.html" %}
-        {% endwith %}
-    {% endif %}
+    {% with "videos" as current %}
+        {% include "teams/_tabs.html" %}
+    {% endwith %}
 
     <div class="view grid_9 alpha">
         {% if team|can_add_video_to_team:user %}

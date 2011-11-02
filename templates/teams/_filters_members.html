@@ -1,7 +1,7 @@
 {% load i18n teams_tags %}
 
 <ul>
-    <li {% if not role %}class="current"{% endif %}>
+    <li {% if not role and current != "applicants" %}class="current"{% endif %}>
         <a href="{% url teams:detail_members team.slug %}">All Members</a>
     </li>
 

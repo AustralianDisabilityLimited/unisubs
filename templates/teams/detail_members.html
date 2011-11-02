@@ -48,7 +48,10 @@
             {% for member in team_member_list %}
             <li>
                 <h3>
-                    <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
+                    <a href="{{ member.user.get_absolute_url }}">
+                        {{ member.user }}
+                        {% if member.user == user %}(You){% endif %}
+                    </a>
                     {% for lang in member.user.get_languages %}
                         <span class="descriptor">{{ lang.get_language_display }}</span>
                     {% endfor %}
@@ -77,6 +80,7 @@
     </div>
 
     <div class="controls grid_3 omega">
+        <form><fieldset><input type="text" value="Search..."/></fieldset></form>
         {% include "teams/_filters_members.html" %}
         {% include "teams/_actions.html" %}
     </div>

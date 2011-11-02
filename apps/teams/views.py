@@ -285,16 +285,16 @@ def create(request):
 @login_required
 def team_settings(request, slug):
     team = Team.get(slug, request.user)
-    member = team.members.get(user=request.user)
 
     if not team.is_member(request.user):
-        raise Http404
+        return HttpResponseForbidden("You cannot view this team")
 
     if not team.is_manager(request.user):
         return {
             'team': team
         }
 
+    member = team.members.get(user=request.user)
     if request.method == 'POST':
         if request.user.is_staff:
             form = EditTeamFormAdmin(request.POST, request.FILES, instance=team)

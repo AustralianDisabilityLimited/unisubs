@@ -23,7 +23,7 @@
 #
 #     http://www.tummy.com/Community/Articles/django-pagination/
 from django import template
-from teams.models import Team, Invite, TeamVideo, Project
+from teams.models import Team, Invite, TeamVideo, Project, TeamMember
 from videos.models import Action, Video
 from apps.widget import video_cache
 from django.conf import settings
@@ -241,3 +241,36 @@ def can_view_settings_tab(team, user):
 @register.filter
 def has_applicant(team, user):
     return team.applications.filter(user=user).exists()
+
+def _team_members(team, role, countOnly):
+    qs = team.members.filter(role=role) 
+    if countOnly:
+        qs = qs.count()
+    return qs
+    
+@register.filter
+def contributors(team, countOnly=False):
+    return _team_members(team, TeamMember.ROLE_CONTRIBUTOR, countOnly)
+    
+@register.filter
+def managers(team, countOnly=False):
+    return _team_members(team, TeamMember.ROLE_MANAGER, countOnly)
+    
+    
+@register.filter
+def admins(team, countOnly=False):
+    return _team_members(team, TeamMember.ROLE_ADMIN, countOnly)
+
+    
+@register.filter
+def owners(team, countOnly=False):
+    return _team_members(team, TeamMember.ROLE_OWNER, countOnly)
+
+@register.filter
+def members(team, countOnly=False):
+    qs = team.members.all()
+    if countOnly:
+        qs = qs.count()
+    return qs
+
+    

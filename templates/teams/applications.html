@@ -30,11 +30,14 @@
                         <h3>
                             <a href="{{ item.user.get_absolute_url }}">{{ item.user }}</a>
                         </h3>
+                        <p>
+                        {% for lang in item.user.get_languages %}
+                            <span class="descriptor">{{ lang.language }}</span>
+                        {% endfor %}
                         {% if item.note %}
-                            <p>
-                                {{ item.note }}
-                            </p>
+                            {{ item.note|truncatewords:15|urlize }}
                         {% endif %}
+                        </p>
                         <a href="{{ item.user.get_absolute_url }}" class="thumb"><img src="{{ item.user.avatar }}" alt="{{ item.user }} avatar"></a>
                         {% if team|can_approve_application:user %}
                             <ul class="actions">

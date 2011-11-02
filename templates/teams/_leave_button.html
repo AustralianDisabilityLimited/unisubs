@@ -1,2 +1,2 @@
 {% load i18n %}
-<a class="button" onclick="return confirm('{% trans "Do you really wish to leave this team?" %}')" href="{% url teams:leave_team team.slug %}">{% trans "Leave this team" %}</a>
+<a class="button reduced" onclick="return confirm('{% trans "Do you really wish to leave this team?" %}')" href="{% url teams:leave_team team.slug %}">{% trans "Leave this team" %}</a>

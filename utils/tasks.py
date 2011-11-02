@@ -1,5 +1,4 @@
-from utils.celery_utils import task
-
+from celery.task import task
 from utils import send_templated_email
 
 @task

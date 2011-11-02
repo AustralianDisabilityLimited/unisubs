@@ -1,6 +1,6 @@
 from haystack import indexes
 from django.db.models import signals
-from utils.celery_utils import task
+from celery.task import task
 from haystack import site
 from haystack.exceptions import NotRegistered
 from haystack.utils import get_identifier

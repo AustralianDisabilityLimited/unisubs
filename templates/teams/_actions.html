@@ -10,7 +10,8 @@
         {% if team.is_by_application %}
             {% if not team|has_applicant:user %}
                 {% include "teams/_application_form.html" %}
-            {% else %}<p class="action-replacement">Your application is pending</p>
+            {% else %}
+                <p class="action-replacement">Your application is pending</p>
             {% endif %}
         {% endif %}
     {% else %}

@@ -7,11 +7,11 @@
         {% render_team_join team %}
     {% endif %}
     {% if user.is_authenticated and team.is_by_application %}
-
-    	{% comment %}
-    		TODO: If I've applied, I shouldn't see this... Maybe instead we show a placeholder that says 'application pending'
-    	{% endcomment %}
-        {% include "teams/_application_form.html" %}
+        {% if not team|has_applicant:user %}
+            {% include "teams/_application_form.html" %}
+         {% else %}
+            Your're application is being reviewed, thank you.
+         {% endif %}
     {% endif %}
 {% endif %} 
   

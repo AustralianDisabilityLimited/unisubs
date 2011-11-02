@@ -231,7 +231,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.onProjectDeleted = _.bind(this.onProjectDeleted, this);
         this.onEditRequested = _.bind(this.onEditRequested, this);
         this.el = ich.projectPanel();
-        $("a.project-add", this.el).click(this.onNewProjectClicked);
+        this.projectAddButton =  $("a.project-add", this.el).click(this.onNewProjectClicked);
         scope = this;
         TeamsApiV2.project_list(TEAM_SLUG, this.onProjectListLoaded);
         this.projects = [];
@@ -273,6 +273,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)
         this.projectEditPanel.el.bind(ON_PROJECT_CANCELED, this.onProjectCanceled);
         this.projectEditPanel.el.bind(ON_PROJECT_DELETED, this.onProjectDeleted);
+        $(this.projectAddButton).hide();
         return false;
     },
     onProjectListLoaded: function(data){
@@ -292,6 +293,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.projectEditPanel.el.unbind(ON_PROJECT_CANCELED);
         this.projectEditPanel.el.unbind(ON_PROJECT_DELETED);
         this.projectListing.show()
+        $(this.projectAddButton).show();
         
     },
     onProjectCanceled: function(e){

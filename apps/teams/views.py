@@ -219,7 +219,7 @@ def completed_videos(request, slug):
                        extra_context=extra_context, 
                        template_object_name='team_video')    
 
-def detail_members(request, slug):
+def detail_members(request, slug, role=None):
     #just other tab of detail view
     q = request.REQUEST.get('q')
     
@@ -230,11 +230,15 @@ def detail_members(request, slug):
         qs = qs.filter(Q(user__first_name__icontains=q)|Q(user__last_name__icontains=q) \
                        |Q(user__username__icontains=q)|Q(user__biography__icontains=q))
 
+    if role:
+        qs = qs.filter(role=role)
+
     extra_context = widget.add_onsite_js_files({})  
 
     extra_context.update({
         'team': team,
-        'query': q
+        'query': q,
+        'role': role,
     })
     
     if team.video:

@@ -14,19 +14,21 @@ ALARM_EMAIL = settings.ALARM_EMAIL
 if not isinstance(ALARM_EMAIL, (list, tuple)):
     ALARM_EMAIL = [ALARM_EMAIL]
 
+
 def send_alarm_email(version, type):
         subject = u'Alert: %s [%s]' % (version.language.video, type)
         url = version.language.get_absolute_url()
         message = u'Language: http://%s%s' % (Site.objects.get_current().domain, url)
         if version.user:
-            message += 'User: %s' %  version.user
-        send_mail(subject, message, from_email=settings.SERVER_EMAIL, recipient_list=ALARM_EMAIL, 
-                  fail_silently=True)    
+            message += u'User: %s' % version.user
+        send_mail(subject, message, from_email=settings.SERVER_EMAIL, recipient_list=ALARM_EMAIL,
+                  fail_silently=True)
+
 
 def check_subtitle_version(version):
     if not ALARM_EMAIL:
         return
-    
+
     prev_version = version.prev_version()
 
     if not prev_version:

@@ -3,14 +3,19 @@
 {% if team|is_team_member:user %}
     {% render_team_leave team %}
 {% else %}
-    {% if team.is_open %}
-        {% render_team_join team %}
-    {% endif %}
-    {% if user.is_authenticated and team.is_by_application %}
-        {% if not team|has_applicant:user %}
-            {% include "teams/_application_form.html" %}
-         {% else %}<p class="action-replacement">Your application is pending</p>
-         {% endif %}
+    {% if user.is_authenticated %}
+        {% if team.is_open %}
+            {% render_team_join team %}
+        {% endif %}
+        {% if team.is_by_application %}
+            {% if not team|has_applicant:user %}
+                {% include "teams/_application_form.html" %}
+            {% else %}
+                <p class="action-replacement">Your application is pending</p>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <a class="button primary" href="{% url auth:login %}?next={{ request.path_info|urlencode }}">{% trans "Sign in to Join Team" %}</a>
     {% endif %}
 {% endif %} 
   

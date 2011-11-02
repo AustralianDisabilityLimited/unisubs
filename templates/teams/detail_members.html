@@ -49,6 +49,9 @@
             <li>
                 <h3>
                     <a href="{{ member.user.get_absolute_url }}">{{ member.user }}</a>
+                    {% for lang in member.user.get_languages %}
+                        <span class="descriptor">{{ lang.get_language_display }}</span>
+                    {% endfor %}
                 </h3>
                 <p>
                     {{ member.role|capfirst }}

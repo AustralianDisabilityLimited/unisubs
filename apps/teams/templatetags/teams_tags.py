@@ -237,3 +237,7 @@ def member_projects(context, member, varname):
 @register.filter
 def can_view_settings_tab(team, user):
    return _can_view_settings_tab(team, user)
+
+@register.filter
+def has_applicant(team, user):
+    return team.applications.filter(user=user).exists()

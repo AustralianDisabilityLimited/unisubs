@@ -310,7 +310,7 @@ Enter a link to any compatible video, or to any video page on our site.''')
         if video:
             team.video = video
         team.save()
-        TeamMember(team=team, user=user, role=TeamMember.ROLE_MANAGER).save()
+        TeamMember.objects.create_first_member(team=team, user=user)
         return team
     
 class EditTeamForm(BaseVideoBoundForm):

@@ -31,7 +31,7 @@ from utils.forms import flatten_errorlists
 from utils.translation import SUPPORTED_LANGUAGES_DICT
 
 from icanhaz.projects_decorators import raise_forbidden_project
-from icanhaz.projects import can_edit_project
+from teams.permissions import can_edit_project
 from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm, WorkflowForm
 from teams.project_forms import ProjectForm
 from teams.permissions import list_narrowings
@@ -93,21 +93,6 @@ class TeamsApiClass(object):
 TeamsApi = TeamsApiClass()
 
 
-def _user_can_edit_project(team_slug, project_pk, user):
-    """
-    Ideally we could use the decorator at projects_decorators,
-    but since the magic rpc already messes with the argument order
-    and namins, we'd end up using args and kwargs, therefore loosing
-    all the fun. damn rpc.
-    """
-    team = get_object_or_404(Team, slug=team_slug)
-    project = None
-    if project_pk is not None:
-        project = get_object_or_404(Project, team=team, pk=project_pk)
-
-    if not can_edit_project(user, team, project):
-        return raise_forbidden_project(request)
-    return team, project
 
 def _project_to_dict(p):
     d  = model_to_dict(p, fields=["name", "slug", "order", "description", "pk", "workflow_enabled"])
@@ -429,8 +414,8 @@ class TeamsApiV2Class(object):
 
 
     # Projects
-    def project_list(self, team_slug,  project_pk, user):
-        team, project = _user_can_edit_project(team_slug, project_pk, user)
+    def project_list(self, team_slug,   user):
+        team = get_object_or_404(Team, slug=team_slug)
         project_objs = []
         for p in Project.objects.for_team(team):
             project_objs.append(_project_to_dict(p))
@@ -438,7 +423,10 @@ class TeamsApiV2Class(object):
 
     def project_edit(self, team_slug, project_pk, name,
                      slug, description, order, workflow_enabled, user):
-        team, project = _user_can_edit_project(team_slug, project_pk, user)
+        team = get_object_or_404(Team, slug=team_slug)
+        project = get_object_or_404(Project, team=team, pk=project_pk)
+        if can_edit_project(team, user, project) is False:
+            return {"success":False, "message": "This team member cannot edit project"}
         # insert a new project as the last one
         if bool(order):
             num_projects = team.project_set.exclude(pk=project_pk).count()
@@ -468,7 +456,11 @@ class TeamsApiV2Class(object):
                  )   
 
     def project_delete(self, team_slug, project_pk, user):        
-        team, project = _user_can_edit_project(team_slug, project_pk, user)
+        
+        team = get_object_or_404(Team, slug=team_slug)
+        project = get_object_or_404(Project, team=team, pk=project_pk)
+        if can_edit_project(team, user, project) is False:
+            return {"success":False, "message": "This team member cannot edit project"}
         videos_affected = project.teamvideo_set.all().update(project=team.default_project)
         project.delete()
         return dict(

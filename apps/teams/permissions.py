@@ -141,8 +141,11 @@ def can_peer_review(team, user, project=None, lang=None):
 @_check_perms(EDIT_SUBS_PERM)    
 def can_edit_subs_for(team, user, project=None, lang=None):
     pass
-
-                               
+    
+@_check_perms(EDIT_PROJECT_SETTINGS_PERM)
+def can_edit_project(team, user, project, lang=None):
+    pass
+    
 def can_view_settings_tab(team, user):
     return team.members.filter(user=user,role__in =[ROLE_ADMIN, ROLE_OWNER]).exists()
     

@@ -3,6 +3,11 @@
 <h3>
   <a href="{% url teams:team_video team_video_pk=search_record.team_video_pk %}">{{ search_record.title }}</a>
 </h3>
+{% if search_record.project_name != "_root" %}
+    <p>{{ search_record.project_name }}</p>
+{% else %}
+    <p>Default Project</p>
+{% endif %}
 <p>
   {% if search_record.description %}
     {{ search_record.description|truncatewords:20|urlize }}.

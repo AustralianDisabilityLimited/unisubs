@@ -233,7 +233,7 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.el = ich.projectPanel();
         $("a.project-add", this.el).click(this.onNewProjectClicked);
         scope = this;
-        TeamsApiV2.project_list(TEAM_SLUG, null, this.onProjectListLoaded);
+        TeamsApiV2.project_list(TEAM_SLUG, this.onProjectListLoaded);
         this.projects = [];
         this.projectListing = $(".projects.listing", this.el);
         

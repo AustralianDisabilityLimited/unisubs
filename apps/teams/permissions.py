@@ -16,23 +16,6 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
-# The team permission is a combination of roles and objects.
-# A tean onwer can do anything.
-# A team admin can do anything, but assign new admins. An admin can have
-# that role for a team or a project.
-# A manager can do less, and can have it's priviledges attached to a teamd,
-# a project or a language.
-# A contribuitor can do less, and can have it's priviledges attached to a teamd,
-# a project or a language.
-# The list of permissions for each object can be seen on their models
-# (e.g. teams.models.Project)).
-# So basically, what the permission checking done is:
-# - if owner: can do anything
-# - Else will check if user has specific permission for team, or project or lang.
-# What this means is there is a performance hit. In the worst case cenario
-# we're running three checks instead of 1. This is fine, because we
-# are only checking things this way on data writing operations which are a
-# minority of traffic.
 
 
 from django.contrib.contenttypes.models import ContentType
@@ -60,7 +43,7 @@ def _passes_test(team, user, project, lang, perm_name):
         # short circuit logic for onwers, as they can do anything
         return True
     # first we check if this role has (withouth narrowning)
-    # the permission asked. E.g. contribuitor cannot rename
+    # the permission asked. E.g. contributor cannot rename
     # a team
 
     for model in [x for x in (team, project, lang) if x]:

@@ -34,7 +34,7 @@ EDIT_SUBS_PERM = ("edit_subs", "Edit subs")
 ROLE_ADMIN = "admin"
 ROLE_OWNER = 'owner'
 ROLE_MANAGER = 'manager'
-ROLE_CONTRIBUTOR = 'contribuitor'
+ROLE_CONTRIBUTOR = 'contributor'
 
 #: Permissions that can be assigned to a model    
 TEAM_PERMISSIONS = (
@@ -108,7 +108,7 @@ RULES[ROLE_CONTRIBUTOR] =  set((
 
 #: We need to know what role is more important than the others, so that
 #: we never allow a lower priviledge membership to assign highter roles
-#: a contribuitor cannot assign a manager nor admin. Each row bellow can
+#: a contributor cannot assign a manager nor admin. Each row bellow can
 #: assign roles to it's right (higher index)
 ROLES_ORDER = [ROLE_OWNER, ROLE_ADMIN, ROLE_MANAGER, ROLE_CONTRIBUTOR]
 

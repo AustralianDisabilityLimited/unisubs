@@ -168,7 +168,7 @@ class Migration(SchemaMigration):
             'Meta': {'unique_together': "(('team', 'user'),)", 'object_name': 'TeamMember'},
             'changes_notification': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'role': ('django.db.models.fields.CharField', [], {'default': "'contribuitor'", 'max_length': '16'}),
+            'role': ('django.db.models.fields.CharField', [], {'default': "'contributor'", 'max_length': '16'}),
             'team': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'members'", 'to': "orm['teams.Team']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'user'", 'to': "orm['auth.CustomUser']"})
         },

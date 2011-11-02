@@ -580,7 +580,7 @@ if feature_is_on('MODERATION'):
             res =  self._get_widget_moderation_status(video_url.url)
             self.assertTrue(res["is_moderated"])
 
-        def test_contribuitors_do_bypass_moderation(self):
+        def test_contributors_do_bypass_moderation(self):
             lang = self.video.subtitle_language()
             member, created = TeamMember.objects.get_or_create(user=self.user, team=self.team)
             member.role=TeamMember.ROLE_MANAGER

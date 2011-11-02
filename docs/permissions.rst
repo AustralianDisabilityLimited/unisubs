@@ -7,7 +7,7 @@ Permissions are a combination of roles and narrowings.
 that role for a team or a project.
 - A manager can do less, and can have it's priviledges attached to a teamd, 
 a project or a language.
-- A contribuitor can do less, and can have it's priviledges attached to a teamd,
+- A contributor can do less, and can have it's priviledges attached to a teamd,
 a project or a language.
 
 The list of permissions for each object can be seen on their models

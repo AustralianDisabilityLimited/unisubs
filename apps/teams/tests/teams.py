@@ -823,7 +823,7 @@ class TeamsTest(TestCase):
         self.failUnlessEqual(response.status_code, 200)
 
         tm,c = TeamMember.objects.get_or_create(user=self.user, team=team)
-        tm.promote_to_manager()
+        tm.role = TeamMember.ADMIN
         
         url = reverse("teams:remove_member", kwargs={"user_pk": user2.pk, "slug": team.slug})
         response = self.client.post(url)

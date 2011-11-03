@@ -287,7 +287,7 @@ def create(request):
     }
 
 @render_to('teams/settings.html')
-#@login_required
+@login_required
 def team_settings(request, slug):
     team = Team.get(slug, request.user)
 

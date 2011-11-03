@@ -296,7 +296,7 @@ class Video(models.Model):
                 if user:
                     Action.create_video_handler(video_url_obj.video, user)
                 return video_url_obj.video, False
-            except models.ObjectDoesNotExist:
+            except VideoUrl.DoesNotExist:
                 obj = Video()
                 obj = vt.set_values(obj)
                 if obj.title:
@@ -310,25 +310,23 @@ class Video(models.Model):
                 Action.create_video_handler(obj, user)
 
                 #Save video url
-                video_url_obj = VideoUrl()
-                if vt.video_id:
-                    video_url_obj.videoid = vt.video_id
-                video_url_obj.url = vt.convert_to_video_url()
-                video_url_obj.type = vt.abbreviation
-                video_url_obj.original = True
-                video_url_obj.primary = True
-                video_url_obj.added_by = user
-                video_url_obj.video = obj
-                video_url_obj.save()
-                
+                defaults = {
+                    'type': vt.abbreviation,
+                    'original': True,
+                    'primary': True,
+                    'added_by': user,
+                    'video': obj
+                }
+                video_url_obj, created = VideoUrl.objects.get_or_create(url=vt.convert_to_video_url(),
+                                                                        defaults=defaults)
+                assert video_url_obj.video == obj
                 obj.update_search_index()
-                
                 video, created = obj, True
-        
+
         user and user.follow_new_video and video.followers.add(user)
-        
+
         return video, created
-        
+
     @property
     def language(self):
         ol = self._original_subtitle_language()

@@ -591,12 +591,17 @@ class TeamsTest(TestCase):
         self.assertEqual(team.video.user, self.user)
         self.assertTrue(team.video.title)
         
-    def test_views(self):
+    def test_all_views(self):
         self.client.login(**self.auth)
         
+        team = Team(
+           slug="new-team",
+            membership_policy=4,
+            video_policy =1,
+           name="New-name") 
+        team.save()
+        tm = TeamMember.objects.create_first_member(team, self.user) 
         #------- create ----------
-        response = self.client.get(reverse("teams:create"))
-        self.failUnlessEqual(response.status_code, 200)
         
         data = {
             "description": u"",
@@ -607,9 +612,6 @@ class TeamsTest(TestCase):
             "slug": u"new-team",
             "name": u"New team"
         }
-        response = self.client.post(reverse("teams:create"), data)
-        self.failUnlessEqual(response.status_code, 302)
-        team = Team.objects.get(slug=data['slug'])
 
         #---------- index -------------
         response = self.client.get(reverse("teams:index"))
@@ -628,36 +630,7 @@ class TeamsTest(TestCase):
         response = self.client.get(reverse("teams:index"), {'o': 'my'})
         self.failUnlessEqual(response.status_code, 200)
                 
-        #---------- edit ------------
-        url = reverse("teams:settings", kwargs={"slug": team.slug})
-        response = self.client.get(url)
-
-        self.failUnlessEqual(response.status_code, 200)
-        
-        data = {
-            "logo": open(path.join(settings.MEDIA_ROOT, "test/71600102.jpg"), "rb")
-        }
-        url = reverse("teams:edit_logo", kwargs={"slug": team.slug})
-        response = self.client.post(url, data)
-        self.failUnlessEqual(response.status_code, 200)
-        team = Team.objects.get(pk=team.pk)
-        self.assertTrue(team.logo)
-        
-        data = {
-            "name": u"New team",
-            "video_url": u"http://www.youtube.com/watch?v=tGsHDUdw8As",
-            "membership_policy": u"4",
-            "video_policy": u"1",
-            "description": u"",
-            "logo": open(path.join(settings.MEDIA_ROOT, "test/71600102.jpg"), "rb")
-        }
-        url = reverse("teams:settings", kwargs={"slug": team.slug})
-        response = self.client.post(url, data)
-        self.failUnlessEqual(response.status_code, 302)
-        video = Video.objects.get(videourl__type=VIDEO_TYPE_YOUTUBE, videourl__videoid='tGsHDUdw8As')
-        team = Team.objects.get(pk=team.pk)
-        self.assertEqual(team.video, video)
-        
+       
         #-------------- edit members ---------------
         url = reverse("teams:edit_members", kwargs={"slug": team.slug})
         response = self.client.get(url)

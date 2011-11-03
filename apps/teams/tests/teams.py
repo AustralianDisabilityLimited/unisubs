@@ -296,6 +296,10 @@ class TeamsTest(TestCase):
         old_video_count = Video.objects.count()
         
         url = reverse("teams:add_video", kwargs={"slug": team.slug})
+        # the lowest permission level where one can add videos
+        member = team.members.get(user=self.user)
+        member.role = TeamMember.ROLE_MANAGER 
+        member.save()
         response = self.client.post(url, data)
         new_count = TeamVideo.objects.count()
         self.assertEqual(old_count+1, new_count)
@@ -317,7 +321,6 @@ class TeamsTest(TestCase):
 
     def _create_new_team_video(self):
         self.client.login(**self.auth)
-        
         response = self.client.get(reverse("teams:create"))
         
         data = {

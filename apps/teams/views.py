@@ -43,7 +43,7 @@ from teams.permissions import can_view_settings_tab
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 
-from teams.permissions import can_add_video
+from teams.permissions import can_add_video, can_assign_roles
 
 TEAMS_ON_PAGE = getattr(settings, 'TEAMS_ON_PAGE', 12)
 HIGHTLIGHTED_TEAMS_ON_PAGE = getattr(settings, 'HIGHTLIGHTED_TEAMS_ON_PAGE', 10)
@@ -469,30 +469,27 @@ def team_video(request, team_video_pk):
 def remove_video(request, team_video_pk):
     team_video = get_object_or_404(TeamVideo, pk=team_video_pk)
 
-    if not team_video.team.is_member(request.user):
-        raise Http404
-    
-    if team_video.can_remove(request.user):
-        team_video.delete()
-        return {
-            'success': True
-        }        
-    else:
+    #TODO: check if this should be on a project levl
+    if not can_add_video(team_video.team, request.user):
         return {
             'success': False,
             'error': ugettext('You can\'t remove video')
         }
+    
+    team_video.delete()
+    return {
+        'success': True
+    }        
+    
         
 @render_to_json
 @login_required
 def remove_member(request, slug, user_pk):
     team = Team.get(slug, request.user)
 
-    if not team.is_member(request.user):
-        raise Http404
-
-    if team.is_manager(request.user):
-        user = get_object_or_404(User, pk=user_pk)
+    member = get_object_or_404(TeamMember, team=team, user__pk=user_pk)
+    if can_assign_roles(team , request.user, role=member.role):
+        user = member.user
         if not user == request.user:
             TeamMember.objects.filter(team=team, user=user).delete()
             return {

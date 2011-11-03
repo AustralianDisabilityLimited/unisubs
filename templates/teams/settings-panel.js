@@ -535,6 +535,13 @@ var GuidelinesPanel  = AsyncPanel.$extend({
     }
 });
 
+var PermissionsPanel = AsyncPanel.$extend({
+    __init__: function() {
+        // Render template
+        this.el = ich.permissionsPanel();
+    }
+});
+
 // Tasks ----------------------------------------------------------------------
 var TaskModel = Class.$extend({
     __init__: function(data) {
@@ -916,7 +923,7 @@ function boostrapTabs(){
     var buttons = [
         {label:"Basic Settings", panelSelector:".panel-basic", klass:BasicPanel},
         {label:"Guidelines and messages", panelSelector:".panel-guidelines", klass:GuidelinesPanel},
-        {label:"Display Settings", panelSelector:".panel-display", klass:null},
+        {label:"Permissions", panelSelector:".panel-permissions", klass:PermissionsPanel},
         {label:"Projects", panelSelector:".panel-projects", klass:ProjectPanel},
         {label:"Tasks", panelSelector:".panel-tasks", klass:TasksPanel}
     ];

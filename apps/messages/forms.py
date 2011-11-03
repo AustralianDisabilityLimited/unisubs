@@ -32,6 +32,8 @@ from teams.models import Team
 from django.db.models import Count
 from utils.translation import get_simple_languages_list
 
+from teams.permissions import can_message_all_members
+
 class SendMessageForm(forms.ModelForm, AjaxForm):
     
     class Meta:
@@ -97,8 +99,9 @@ class SendTeamMessageForm(forms.ModelForm, AjaxForm):
         
     def clean_team(self):
         team = self.cleaned_data['team']
-        
-        if not team.is_manager(self.author):
+
+        # TODO: integrate with per project messaging
+        if can_message_all_members(team, self.author):
             raise forms.ValidationError(_(u'You are not manager of this team.'))
         
         return team

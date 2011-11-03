@@ -123,7 +123,7 @@ def can_change_video_settings(team, user, project, lang):
     pass
 
 @_check_perms(MESSAGE_ALL_MEMBERS_PERM)
-def can_message_all_members(team, user, project, lang=None):
+def can_message_all_members(team, user, project=None, lang=None):
     pass
 
 @_check_perms(ACCEPT_ASSIGNMENT_PERM)

@@ -319,6 +319,21 @@ def team_settings(request, slug):
         'settings_form': SettingsForm(),
     }
 
+@render_to('teams/invite_members.html')
+@login_required
+def invite_members(request, slug):
+    team = Team.get(slug, request.user)
+
+    """ TODO: Permissions check?
+    if not can_invite_members(team, request.user):
+        return HttpResponseForbidden("You cannot invite new members for this team")
+    """
+
+    """ TODO: Add form and whatnot below? """
+    return {
+        'team': team,
+    }
+
 @login_required
 def edit_logo(request, slug):
     team = Team.get(slug, request.user)

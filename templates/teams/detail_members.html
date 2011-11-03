@@ -39,7 +39,7 @@
 
         {% if team|can_invite_to_team:user %}
             <div class="tools">
-                <a href="#" class="button">Invite Members</a>
+                <a href="{% url teams:invite_members slug=team.slug %}" class="button">Invite Members</a>
             </div>
         {% endif %}
 

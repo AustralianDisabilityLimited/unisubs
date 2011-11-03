@@ -454,7 +454,7 @@
 }
 /* line 407, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset {
-  padding-bottom: 4em;
+  padding-bottom: 3em;
 }
 /* line 410, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset legend {
@@ -470,9 +470,14 @@
 .v1 form fieldset label {
   display: block;
   width: 100%;
-  padding-top: 1em;
+  padding: 1em 0 .25em;
 }
-/* line 425, ../../../unisubs-design/sass/v1.scss */
+/* line 424, ../../../unisubs-design/sass/v1.scss */
+.v1 form fieldset label .notation {
+  float: right;
+  margin-right: -8px;
+}
+/* line 430, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type="text"], .v1 form fieldset textarea {
   display: block;
   width: 100%;
@@ -484,39 +489,39 @@
   -khtml-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 431, ../../../unisubs-design/sass/v1.scss */
+/* line 436, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='checkbox'] {
   margin: 0 4px 0 0;
 }
-/* line 435, ../../../unisubs-design/sass/v1.scss */
+/* line 440, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='file'] {
   display: block;
   width: 100%;
   padding: 0;
 }
-/* line 440, ../../../unisubs-design/sass/v1.scss */
+/* line 445, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset select {
   margin-bottom: 1em;
   padding: 4px;
   width: 100%;
 }
-/* line 446, ../../../unisubs-design/sass/v1.scss */
+/* line 451, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset textarea {
   height: 5em;
 }
 
-/* line 453, ../../../unisubs-design/sass/v1.scss */
+/* line 458, ../../../unisubs-design/sass/v1.scss */
 .v1 .panel-holder form {
   float: left;
   width: 100%;
   clear: both;
 }
 
-/* line 459, ../../../unisubs-design/sass/v1.scss */
+/* line 464, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow {
   margin-top: -3em;
 }
-/* line 462, ../../../unisubs-design/sass/v1.scss */
+/* line 467, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow fieldset {
   padding: 0 1em;
   background: #dce2e5;
@@ -527,12 +532,12 @@
   -khtml-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 467, ../../../unisubs-design/sass/v1.scss */
+/* line 472, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow fieldset .button {
   margin-top: 2em;
 }
 
-/* line 473, ../../../unisubs-design/sass/v1.scss */
+/* line 478, ../../../unisubs-design/sass/v1.scss */
 .v1 .permissions .workflow {
   margin-top: 1em;
   padding: 0 1em;
@@ -545,51 +550,51 @@
   border-radius: 4px;
 }
 
-/* line 480, ../../../unisubs-design/sass/v1.scss */
+/* line 485, ../../../unisubs-design/sass/v1.scss */
 .v1 .alpha .omega {
   margin-left: 60px;
 }
 
-/* line 484, ../../../unisubs-design/sass/v1.scss */
+/* line 489, ../../../unisubs-design/sass/v1.scss */
 .v1 div.submit {
   margin-top: 2em;
   padding-top: 1em;
   border-top: 1px solid #dce2e5;
   text-align: right;
 }
-/* line 490, ../../../unisubs-design/sass/v1.scss */
+/* line 495, ../../../unisubs-design/sass/v1.scss */
 .v1 div.submit input {
   padding: 4px;
 }
 
-/* line 495, ../../../unisubs-design/sass/v1.scss */
+/* line 500, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form {
   margin-left: -10px;
 }
-/* line 498, ../../../unisubs-design/sass/v1.scss */
+/* line 503, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset {
   padding: 0;
 }
-/* line 501, ../../../unisubs-design/sass/v1.scss */
+/* line 506, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset input {
   width: 190px;
   padding: .5em;
   color: #a0b2bd;
   border-color: #dce2e5;
 }
-/* line 507, ../../../unisubs-design/sass/v1.scss */
+/* line 512, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset input:focus {
   border-color: #678ca3;
 }
 
 /*************** @Dashboard ***************/
-/* line 516, ../../../unisubs-design/sass/v1.scss */
+/* line 521, ../../../unisubs-design/sass/v1.scss */
 .v1.dashboard h2 {
   margin: 0;
   padding-bottom: .5em;
 }
 
-/* line 521, ../../../unisubs-design/sass/v1.scss */
+/* line 526, ../../../unisubs-design/sass/v1.scss */
 .v1.dashboard .row {
   clear: both;
   margin: 2em 0 0;

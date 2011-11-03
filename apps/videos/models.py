@@ -317,6 +317,8 @@ class Video(models.Model):
                     'added_by': user,
                     'video': obj
                 }
+                if vt.video_id:
+                    defaults['videoid'] = vt.video_id
                 video_url_obj, created = VideoUrl.objects.get_or_create(url=vt.convert_to_video_url(),
                                                                         defaults=defaults)
                 assert video_url_obj.video == obj

@@ -63,9 +63,9 @@ This is needed, since it's for the js templating
 </script>
 
 <script id="projectPanel" type="text/html">
-  <div class="tools panel-project">
-        <a class="button project-add">Add Project</a>
-  </div>
+    <div class="tools panel-project">
+      <a class="button project-add">Add Project</a>
+    </div>
     <ul class="projects listing">
     </ul>
 </script>
@@ -247,40 +247,87 @@ This is needed, since it's for the js templating
         <form class="permissions">
             <div class="grid_4 alpha messages">
                 <fieldset>
-                    <legend>Membership</legend>
+                    <legend>Basic Permissions</legend>
 
-                    <label for="id_membership_policy">Who can join</label>
-                    <select><option>Blah</option></select>
+                    <label for="id_membership_policy">How can users join your team?</label>
                     {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
 
-                    <label for="id_invite_policy">Who can invite members</label>
-                    <select><option>Blah</option></select>
-                </fieldset>
-                <fieldset>
-                    <legend>Contributions</legend>
-                    <label for="id_video_policy">Who can add videos</label>
-                    <select><option>Blah</option></select>
+                    <label for="id_video_policy">Who can add/remove videos?</label>
                     {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
 
-                    <label for="id_membership_policy">Who can subtitle videos</label>
-                    <select><option>Blah</option></select>
+                </fieldset>
+                <fieldset>
 
-                    <label for="id_membership_policy">Who can translate videos</label>
-                    <select><option>Blah</option></select>
+                    <legend>Subtitling Permissions</legend>
+
+                    <label for="id_subtitle_policy">Transcribe original language</label>
+                    <select>
+                        <option>Anyone</option>
+                        <option>Any team member</option>
+                        <option>Only managers and admins</option>
+                        <option>Only admins</option>
+                    </select>
+
+                    <label for="id_translate_policy">Translate subtitles</label>
+                    <select>
+                        <option>Anyone</option>
+                        <option>Any team member</option>
+                        <option>Only managers and admins</option>
+                        <option>Only admins</option>
+                    </select>
+
+                    <label for="id_translate_policy">Edit completed subtitles</label>
+                    <select>
+                        <option>Anyone</option>
+                        <option>Any team member</option>
+                        <option>Only managers and admins</option>
+                        <option>Only admins</option>
+                    </select>
 
                 </fieldset>
             </div>
             <div class="grid_4 omega guidelines">
                 <fieldset>
-                    <legend>Management</legend>
-                    <label for="id_membership_policy">Who can review subtitles</label>
-                    <select><option>Blah</option></select>
+                    <legend>Workflow</legend>
+                    <p class="notation">Moderate subtitles and automate tasks</p>
+                    <label for="basic_workflows_enabled"><input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled" checked="checked"/> Enable workflows</label>
 
-                    <label for="id_membership_policy">Who can approve subtitles</label>
-                    <select><option>Blah</option></select>
+                        <div class="workflow">
+                            <label>When a video is added...</label>
+                            <select>
+                                <option>Do nothing</option>
+                                <option>Request transcription</option>
+                            </select>
 
-                    <label for="id_membership_policy">Who can assign tasks</label>
-                    <select><option>Blah</option></select>
+                            <label>When a transcription is finished...</label>
+                            <select>
+                                <option>Do nothing</option>
+                                <option>Request translations</option>
+                            </select>
+
+                            <label>Subtitle review</label>
+                            <select>
+                                <option>Don't require review</option>
+                                <option>Request peer review</option>
+                                <option>Manager or admin must review</option>
+                                <option>Admin must review</option>
+                            </select>
+
+                            <label>Subtitle approval</label>
+                            <select>
+                                <option>Don't require approval</option>
+                                <option>Request peer approval</option>
+                                <option>Manager or admin must approve</option>
+                                <option>Admin must approve</option>
+                            </select>
+
+                            <label>Who can assign tasks?</label>
+                            <select>
+                                <option>Any team member</option>
+                                <option>Managers and admins</option>
+                                <option>Admins only</option>
+                            </select>
+                        </div>
                 </fieldset>
             </div>
 

@@ -269,7 +269,7 @@ var ProjectPanel  = AsyncPanel.$extend({
     onEditRequested: function(e, model){
         e.preventDefault();
         this.projectEditPanel  = new ProjectEditPanel(model);
-        this.el.eq(0).prepend(this.projectEditPanel.el);
+        this.el.eq(0).parent().append(this.projectEditPanel.el);
         this.projectEditPanel.show();
         this.projectListing.hide()
         this.projectEditPanel.el.bind(ON_PROJECT_SAVED, this.onProjectSaved)

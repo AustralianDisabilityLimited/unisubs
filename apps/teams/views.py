@@ -39,6 +39,7 @@ from django.utils import simplejson as json
 from utils.amazon import S3StorageError
 from utils.translation import get_user_languages_from_request
 from teams.search_indexes import TeamVideoLanguagesIndex
+from teams.permissions import can_view_settings_tab
 from widget.rpc import add_general_settings
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -286,17 +287,12 @@ def create(request):
     }
 
 @render_to('teams/settings.html')
-@login_required
+#@login_required
 def team_settings(request, slug):
     team = Team.get(slug, request.user)
 
-    if not team.is_member(request.user):
+    if not can_view_settings_tab(team, request.user):
         return HttpResponseForbidden("You cannot view this team")
-
-    if not team.is_manager(request.user):
-        return {
-            'team': team
-        }
 
     member = team.members.get(user=request.user)
     if request.method == 'POST':

@@ -259,6 +259,8 @@ class AddTeamVideosFromFeedForm(AddFromFeedForm):
             except TeamVideo.DoesNotExist:
                 tv = TeamVideo(video=video, team=self.team, added_by=self.user,
                                project=project)
+                tv.title = video.title
+                tv.description = video.description
                 tv.save()
                 tv_created = True
             team_videos.append((tv, tv_created))

@@ -44,6 +44,7 @@ unisubs.Dialog = function(videoSource) {
     this.idleTimer_ = new goog.Timer(60000);
     this.idleTimer_.start();
     this.minutesIdle_ = 0;
+    this.ignoreLock_ = unisubs.mode === 'review';
 };
 goog.inherits(unisubs.Dialog, goog.ui.Dialog);
 
@@ -112,9 +113,13 @@ unisubs.Dialog.prototype.idleTimerTick_ = function() {
 
 unisubs.Dialog.prototype.showIdleWarning_ = function() {
     this.idleTimer_.stop();
-    var serverModel = this.getServerModel();
-    if (!serverModel)
+    if (this.ignoreLock_) {
         return;
+    }
+    var serverModel = this.getServerModel();
+    if (!serverModel) {
+        return;
+    }
     var dropLockDialog = new unisubs.widget.DropLockDialog(
         serverModel, this.makeJsonSubs());
     this.getHandler().listen(

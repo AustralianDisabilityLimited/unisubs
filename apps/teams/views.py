@@ -707,7 +707,7 @@ def perform_task(request):
     if not task.perform_allowed(member):
         return HttpResponseForbidden(_(u'You are not allowed to perform this task.'))
 
-    task.assignee = member
+    task.assignee = request.user
     task.save()
 
     # ... perform task ...

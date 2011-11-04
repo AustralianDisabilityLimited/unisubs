@@ -310,7 +310,7 @@ class TeamsApiV2Class(object):
         member = task.team.members.get(user=user)
 
         form = TaskAssignForm(task.team, member,
-                    data={'task': task_id, 'assignee': assignee_id})
+                              data={'task': task_id, 'assignee': assignee_id})
         if form.is_valid():
             assignee = User.objects.get(pk=assignee_id) if assignee_id else None
 
@@ -503,6 +503,7 @@ class TeamsApiV2Class(object):
             "role" : member.role,
             "narrowings": list_narrowings(team, member.user, [Project, TeamVideoLanguage])
         }
+
 
 TeamsApiV2 = TeamsApiV2Class()
 

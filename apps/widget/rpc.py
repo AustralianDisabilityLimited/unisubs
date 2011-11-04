@@ -16,6 +16,7 @@
 # along with this program.  If not, see 
 # http://www.gnu.org/licenses/agpl-3.0.html.
 
+from datetime import datetime
 from videos import models
 from widget.models import SubtitlingSession
 import simplejson as json
@@ -33,6 +34,7 @@ from icanhaz.models import VideoVisibilityPolicy
 from django.utils import translation
 from widget.forms import FinishReviewForm
 from utils.forms import flatten_errorlists
+from teams.models import Task
 
 from utils import send_templated_email
 from statistic.tasks import st_widget_view_statistic_update
@@ -430,6 +432,10 @@ class Rpc(BaseRpc):
             task = form.cleaned_data['task']
             task.body = form.cleaned_data['body']
             task.approved = form.cleaned_data['approved']
+
+            if task.approved in (Task.APPROVED_IDS['Rejected'], Task.APPROVED_IDS['Approved']):
+                task.completed = datetime.now()
+
             task.save()
 
             return {'response': 'ok'}

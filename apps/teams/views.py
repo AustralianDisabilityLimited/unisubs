@@ -236,10 +236,23 @@ def detail_members(request, slug, role=None):
 
     extra_context = widget.add_onsite_js_files({})  
 
+    # if we are a member that can also edit roles, we create a dict of
+    # roles that we can assign, this will vary from user to user, since
+    # let's say an admin can change roles, but not for anyone above him
+    # the owner, for example
+    assignable_roles = []
+    if can_assign_roles(team, request.user):
+        for member in qs:
+            if can_assign_roles(
+                team,
+                request.user, project=None, lang=None,
+                role=member.role):
+                assignable_roles.append(member)
     extra_context.update({
         'team': team,
         'query': q,
         'role': role,
+        'assignable_roles': assignable_roles,
     })
     
     if team.video:

@@ -19,7 +19,8 @@
 from collections import defaultdict
 from auth.models import CustomUser as User
 from teams.models import Team, TeamMember, Application, Workflow, \
-     Project, TeamVideo, Task, Setting, TeamVideoLanguage, ALL_LANGUAGES
+     Project, TeamVideo, Task, Setting, TeamVideoLanguage, ALL_LANGUAGES, \
+     MembershipNarrowing
 from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
@@ -35,7 +36,7 @@ from icanhaz.projects_decorators import raise_forbidden_project
 from teams.permissions import can_edit_project
 from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm, WorkflowForm
 from teams.project_forms import ProjectForm
-from teams.permissions import list_narrowings, roles_assignable_to
+from teams.permissions import list_narrowings, roles_assignable_to, can_assign_roles
 
 class TeamsApiClass(object):
 
@@ -518,7 +519,7 @@ class TeamsApiV2Class(object):
         for p in Project.objects.for_team(team):
             data = dict(pk=p.pk, name=p.name)
             if p in project_narrowings:
-                data['active'] = True
+                data['selected'] = "selected"
             projects.append(data)
                        
         langs = []
@@ -526,6 +527,7 @@ class TeamsApiV2Class(object):
             data = dict(val=[0], name=l[1])
             if l[0] in languages:
                 data['pk'] = languages[l[0]]
+                data['selected'] ='selected' 
             langs.append(data)
         return {
             "roles" : verbose_roles,
@@ -533,7 +535,23 @@ class TeamsApiV2Class(object):
             "projects": projects
         }
 
-
+    def save_role(self, team_slug, member_pk, role, \
+                       projects, languages, user=None):
+        team = Team.objects.get(slug=team_slug)
+        member = team.members.get(pk=member_pk)
+        if can_assign_roles(team, user,None, None, role ):
+            for project_pk in projects:
+                MembershipNarrowing.objects.get_or_create(
+                    content=team.project_set.get(pk=project_pk,member=member))
+            for lang_id in languages:
+                MembershipNarrowing.objects.get_or_create(
+                    content=TeamVideoLanguage.objects.get(
+                        language=lang_id),
+                        team=team)
+        return {
+             "success":True
+         }       
+        
 TeamsApiV2 = TeamsApiV2Class()
 
 rpc_router = RpcRouter('teams:rpc_router', {

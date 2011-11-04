@@ -11,6 +11,7 @@
 {% block css %}
     {{ block.super }}
      {% include_bundle "widget-css"%}
+     {% include_bundle "css-teams-settings-panel"%}
 {% endblock %}
 
 {% block scripts %}
@@ -109,22 +110,25 @@
     <div class="clearfix"></div>
     <label>Project Restriction:</label>
       <select data-placeholder="Choose-selected..." style="width:350px;" 
-              multiple class="chzn-select">
+              multiple class="chzn-select projects">
       {{#projects}}
-          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
+          <option {{#selected}}selected="selected"{{/selected}} value="{{pk}}">{{name}}</option>
       {{/projects}}
       </select>
     
     <div class="clearfix"></div>
     <label>Language Restriction:</label>
       <select data-placeholder="Choose-selected..." style="width:350px;" 
-              multiple class="chzn-select">
+              multiple class="chzn-select langs">
       {{#languages}}
-          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
+          <option {{#selected}}selected="selected"{{/selected}} value="{{code}}">{{name}}</option>
       {{/languages}}
       </select>
     
-    <div class="clearfix"></div>
+    <div class="clearfix">
+      <a class="button small action-close" > Cancel</a>
+      <a class="button small action-save" > Save</a>
+    </div>
     </div>
 {% endverbatim %}
 </script>

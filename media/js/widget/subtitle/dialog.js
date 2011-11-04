@@ -162,7 +162,7 @@ unisubs.subtitle.Dialog.prototype.setState_ = function(state) {
         this.getTimelinePanelInternal().addChild(
             new unisubs.timeline.Timeline(
                 1, this.timelineSubtitleSet_,
-                this.getVideoPlayerInternal()), true);
+                this.getVideoPlayerInternal(), false), true);
     }
     if (state == s.REVIEW)
         this.showDownloadLink_();

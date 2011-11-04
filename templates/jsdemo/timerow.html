@@ -82,7 +82,7 @@
                         unisubs.subtitle.EditableCaption.CHANGE, 
                         logSubEvent);
 
-    var timeline = new unisubs.timeline.Timeline(1, subtitleSet, stubVideoPlayer);
+    var timeline = new unisubs.timeline.Timeline(1, subtitleSet, stubVideoPlayer, false);
     var container = new goog.ui.Component();
     container.decorate(goog.dom.$('timeline'));
     container.addChild(timeline, true);

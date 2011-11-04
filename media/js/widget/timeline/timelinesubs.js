@@ -21,10 +21,11 @@ goog.provide('unisubs.timeline.TimelineSubs');
 * @constructor
 * @extends goog.ui.Component
 */
-unisubs.timeline.TimelineSubs = function(subtitleSet, pixelsPerSecond) {
+unisubs.timeline.TimelineSubs = function(subtitleSet, pixelsPerSecond, readOnly) {
     goog.ui.Component.call(this);
     this.subtitleSet_ = subtitleSet;
     this.pixelsPerSecond_ = pixelsPerSecond;
+    this.readOnly_ = readOnly;
     /**
      * Map of caption id to TimelineSub
      */
@@ -66,7 +67,7 @@ unisubs.timeline.TimelineSubs.prototype.removeListener_ = function(event) {
 };
 unisubs.timeline.TimelineSubs.prototype.addSub_ = function(sub) {
     var timelineSub = new unisubs.timeline.TimelineSub(
-        sub, this.pixelsPerSecond_, 0);
+        sub, this.pixelsPerSecond_, 0, this.readOnly_);
     this.addChild(timelineSub, true);
     this.subs_[sub.getEditableCaption().getCaptionID()] = timelineSub;
 };

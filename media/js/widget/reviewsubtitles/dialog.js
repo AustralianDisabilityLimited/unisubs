@@ -58,9 +58,8 @@ unisubs.reviewsubtitles.Dialog.prototype.createDom = function() {
 
     this.timelineSubtitleSet_ = new unisubs.timeline.SubtitleSet(this.captionSet_, this.getVideoPlayerInternal());
     this.getTimelinePanelInternal().addChild(
-        new unisubs.timeline.Timeline(
-            1, this.timelineSubtitleSet_,
-            this.getVideoPlayerInternal()), true);
+        new unisubs.timeline.Timeline(1, this.timelineSubtitleSet_,
+                                      this.getVideoPlayerInternal(), true), true);
 };
 
 unisubs.reviewsubtitles.Dialog.prototype.showGuidelines_ = function() {

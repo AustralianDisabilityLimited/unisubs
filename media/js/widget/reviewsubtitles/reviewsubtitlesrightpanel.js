@@ -75,15 +75,18 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendMiddleContents
     handler.listen(this.editedVersionLink_, 'click', this.editedVersionLinkClicked_);
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendCustomButtonsInternal = function($d, el) {
-    this.approveButton_ = $d('a', {'class': 'unisubs-done'}, 'Approve');
     this.sendBackButton_ = $d('a', {'class': 'unisubs-done'}, 'Send Back');
+    this.saveForLaterButton_ = $d('a', {'class': 'unisubs-done'}, 'Save for Later');
+    this.approveButton_ = $d('a', {'class': 'unisubs-done'}, 'Approve');
 
     el.appendChild(this.sendBackButton_);
+    el.appendChild(this.saveForLaterButton_);
     el.appendChild(this.approveButton_);
 
     var handler = this.getHandler();
-    handler.listen(this.approveButton_, 'click', this.approveButtonClicked_);
     handler.listen(this.sendBackButton_, 'click', this.sendBackButtonClicked_);
+    handler.listen(this.saveForLaterButton_, 'click', this.saveForLaterButtonClicked_);
+    handler.listen(this.approveButton_, 'click', this.approveButtonClicked_);
 };
 
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.approveButtonClicked_ = function(e){
@@ -93,6 +96,14 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.approveButtonClicked
         'task_id': unisubs.task_id,
         'body': goog.dom.forms.getValue(this.bodyInput_),
         'approved': unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_['Approved']});
+};
+unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.saveForLaterButtonClicked_ = function(e){
+    e.preventDefault();
+
+    this.serverModel_.finishReview({
+        'task_id': unisubs.task_id,
+        'body': goog.dom.forms.getValue(this.bodyInput_),
+        'approved': unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_['In Progress']});
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.sendBackButtonClicked_ = function(e){
     e.preventDefault();

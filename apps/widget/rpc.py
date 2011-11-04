@@ -436,6 +436,7 @@ class Rpc(BaseRpc):
             if task.approved in (Task.APPROVED_IDS['Rejected'], Task.APPROVED_IDS['Approved']):
                 task.completed = datetime.now()
 
+            task.subtitle_language.release_writelock()
             task.save()
 
             return {'response': 'ok'}

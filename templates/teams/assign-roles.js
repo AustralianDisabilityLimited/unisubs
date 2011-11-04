@@ -41,7 +41,18 @@
         },
         save: function(e){
             e.preventDefault();
-            return false;
+            var languages = $("select.langs", this.el) .val();
+            var projects = $("select.projects", this.el) .val();
+            var role = $("select.roles", this.el).val();
+            TeamsApiV2.save_role(
+                this.teamSlug,
+                this.pk,
+                role,
+                projects,
+                languages, 
+                this.hide
+            )
+           return false;
         },
         hide:function(e){
             if (e){

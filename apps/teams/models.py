@@ -862,15 +862,6 @@ class TeamMember(models.Model):
         return self.role == 'manager'
 
         
-    def promote_to_manager(self, saves=True):
-        self.role = TeamMember.ROLE_MANAGER
-        if saves:
-            self.save()    
-
-    def promote_to_contributor(self, saves=True):
-        self.role = TeamMember.ROLE_CONTRIBUTOR
-        if saves:
-            self.save()        
         
     def save(self, *args, **kwargs):
         creating = self.pk is None

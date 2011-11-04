@@ -19,7 +19,7 @@
 from collections import defaultdict
 from auth.models import CustomUser as User
 from teams.models import Team, TeamMember, Application, Workflow, \
-     Project, TeamVideo, Task, Setting, TeamVideoLanguage
+     Project, TeamVideo, Task, Setting, TeamVideoLanguage, ALL_LANGUAGES
 from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
@@ -505,14 +505,31 @@ class TeamsApiV2Class(object):
         # over the client side templating
         verbose_roles = [{"val":x[0], "name":x[1]} for x in TeamMember.ROLES if x[0] in roles]
         narrowings =list_narrowings(team, member.user, [Project, TeamVideoLanguage], lists=True) 
-        languages = [{'pk':x.content.pk,"name":x.content.language} 
-                     for x in narrowings["TeamVideoLanguage"]]
+        languages = {}
+
+        for x in narrowings["TeamVideoLanguage"]:
+            languages[x.content.language] = x.contant.pk
                      
-        projects = [{'pk':x.content.pk,"name":x.content.name} 
-                     for x in narrowings["Project"]]
+                     
+                         
+        project_narrowings = [x.content for x in narrowings["Project"]]
+        
+        projects = []
+        for p in Project.objects.for_team(team):
+            data = dict(pk=p.pk, name=p.name)
+            if p in project_narrowings:
+                data['active'] = True
+            projects.append(data)
+                       
+        langs = []
+        for  l in ALL_LANGUAGES:
+            data = dict(val=[0], name=l[1])
+            if l[0] in languages:
+                data['pk'] = languages[l[0]]
+            langs.append(data)
         return {
             "roles" : verbose_roles,
-            "languages": languages,
+            "languages":langs ,
             "projects": projects
         }
 

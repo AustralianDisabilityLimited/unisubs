@@ -108,20 +108,21 @@
       </select>
     <div class="clearfix"></div>
     <label>Project Restriction:</label>
-    <ul class="projects">
+      <select data-placeholder="Choose-selected..." style="width:350px;" 
+              multiple class="chzn-select">
       {{#projects}}
-          <li data-pk="{{pk}}">{{name}}</option>
+          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
       {{/projects}}
-      </ul>
+      </select>
     
     <div class="clearfix"></div>
     <label>Language Restriction:</label>
-    <ul class="langs">
+      <select data-placeholder="Choose-selected..." style="width:350px;" 
+              multiple class="chzn-select">
       {{#languages}}
-          <li data-pk="{{pk}}">{{name}}</option>
+          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
       {{/languages}}
-      <li>
-      </ul>
+      </select>
     
     <div class="clearfix"></div>
     </div>
@@ -130,5 +131,6 @@
 <script type="text/javascript" >
   {% include "teams/assign-roles.js" %}
 </script>    
+
 {% endif %}
 {% endblock %}

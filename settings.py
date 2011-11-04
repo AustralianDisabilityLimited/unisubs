@@ -810,6 +810,8 @@ MEDIA_BUNDLES = {
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",
             "js/libs/underscore.js",
+            "js/libs/chosen.js",
+            "js/libs/chosen.jquery.min.js",
             "js/jquery.mod.js",
          )
     },

@@ -802,14 +802,23 @@ MEDIA_BUNDLES = {
         "closure_deps": "js/closure-dependencies.js",
         "files": JS_MODERATION_DASHBOARD,
     },
+    "css-teams-settings-panel":{
+        "type":"css",
+        "files":(
+            "css/chosen.css",
+            "css/unisubs-widget.css",
+         ),
+    },
     "js-teams-settings-panel":{
         "type":"js",
         "optimizations": "WHITESPACE_ONLY",
-        "closure_deps": "",
+    "closure_deps": "",
         "files": (
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",
             "js/libs/underscore.js",
+            "js/libs/chosen.js",
+            "js/libs/chosen.jquery.min.js",
             "js/jquery.mod.js",
          )
     },

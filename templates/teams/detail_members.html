@@ -112,7 +112,7 @@
       <select data-placeholder="Choose-selected..." style="width:350px;" 
               multiple class="chzn-select">
       {{#projects}}
-          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
+          <option {{#selected}}selected="selected"{{/selected}} value="{{pk}}">{{name}}</option>
       {{/projects}}
       </select>
     
@@ -121,11 +121,14 @@
       <select data-placeholder="Choose-selected..." style="width:350px;" 
               multiple class="chzn-select">
       {{#languages}}
-          <option data-active="{{active}}" val="{{pk}}">{{name}}</option>
+          <option {{#selected}}selected="selected"{{/selected}} value="{{code}}">{{name}}</option>
       {{/languages}}
       </select>
     
-    <div class="clearfix"></div>
+    <div class="clearfix">
+      <a class="button small action-close" > Cancel</a>
+      <a class="button small action-save" > Save</a>
+    </div>
     </div>
 {% endverbatim %}
 </script>

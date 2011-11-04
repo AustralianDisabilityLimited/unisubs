@@ -518,7 +518,7 @@ class TeamsApiV2Class(object):
         for p in Project.objects.for_team(team):
             data = dict(pk=p.pk, name=p.name)
             if p in project_narrowings:
-                data['active'] = True
+                data['selected'] = "selected"
             projects.append(data)
                        
         langs = []
@@ -526,6 +526,7 @@ class TeamsApiV2Class(object):
             data = dict(val=[0], name=l[1])
             if l[0] in languages:
                 data['pk'] = languages[l[0]]
+                data['selected'] ='selected' 
             langs.append(data)
         return {
             "roles" : verbose_roles,

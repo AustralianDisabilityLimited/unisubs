@@ -31,6 +31,8 @@
             });
             $("a.close", this.el).click(this.hide);
             $("body").append(this.el);
+            $(".chzn-select", this.el).chosen();
+            
         },
         hide:function(e){
             if (e){

@@ -17,7 +17,7 @@
 {% block scripts %}
     {{ block.super }}
     {% include_bundle "unisubs-onsite-compiled" %}
-    <script src="{{ STATIC_URL }}js/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/libs/chosen.jquery.min.js" type="text/javascript"></script>
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
     <script type="text/javascript">
         var GLOBAL_WIDGET_SETTINGS = {{ general_settings|safe }};

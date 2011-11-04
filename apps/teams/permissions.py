@@ -98,8 +98,6 @@ def can_assign_roles(team, user, project=None, lang=None,  role=None):
     # only owner can assing owner role!
     if member.role == ROLE_OWNER:
         return True
-    elif  role == ROLE_OWNER:
-        return False
     can_do =  _passes_test(team, user, project, lang, ASSIGN_ROLE_PERM)    
     if can_do:
         # makes sure we allow only <= new roles assignment, e.g
@@ -197,12 +195,12 @@ def remove_narrowings(team, user, narrowings):
         member=member) for x in narrowings]
     
          
-def list_narrowings(team, user, models):
+def list_narrowings(team, user, models, lists=False):
    data = {}
    for model in models:
-       data[model._meta.object_name] = \
-           MembershipNarrowing.objects.for_type(model).filter(
+       items =  MembershipNarrowing.objects.for_type(model).filter(
                member=team.members.get(user=user))
+       data[model._meta.object_name] = items if not lists else list(items)
    return data    
     
 

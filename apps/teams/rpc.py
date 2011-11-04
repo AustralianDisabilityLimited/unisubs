@@ -18,7 +18,8 @@
 
 from collections import defaultdict
 from auth.models import CustomUser as User
-from teams.models import Team, TeamMember, Application, Workflow, Project, TeamVideo, Task, Setting
+from teams.models import Team, TeamMember, Application, Workflow, \
+     Project, TeamVideo, Task, Setting, TeamVideoLanguage
 from videos.models import SubtitleLanguage
 
 from django.shortcuts import get_object_or_404
@@ -34,7 +35,7 @@ from icanhaz.projects_decorators import raise_forbidden_project
 from teams.permissions import can_edit_project
 from teams.forms import TaskAssignForm, TaskDeleteForm, GuidelinesMessagesForm, SettingsForm, WorkflowForm
 from teams.project_forms import ProjectForm
-from teams.permissions import list_narrowings
+from teams.permissions import list_narrowings, roles_assignable_to
 
 class TeamsApiClass(object):
 
@@ -496,12 +497,16 @@ class TeamsApiV2Class(object):
         else:
             return Error(_(u'\n'.join(flatten_errorlists(form.errors))))
 
-    def member_info_list(self, team_slug, member_pk):
+    def member_role_info(self, team_slug, member_pk, user=None):
         team = Team.objects.get(slug=team_slug)
         member = team.members.get(pk=member_pk)
+        roles =  roles_assignable_to(team, member.user)
+        verbose_roles = [x for x in TeamMember.ROLES if x[0] in roles]
+        narrowings =list_narrowings(team, member.user, [Project, TeamVideoLanguage], lists=True) 
+        print narrowings, verbose_roles
         return {
-            "role" : member.role,
-            "narrowings": list_narrowings(team, member.user, [Project, TeamVideoLanguage])
+            "roles" : verbose_roles,
+            "narrowings": narrowings 
         }
 
 

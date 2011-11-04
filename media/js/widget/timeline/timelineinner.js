@@ -28,7 +28,7 @@ goog.provide('unisubs.timeline.TimelineInner');
  *     major ticks.
  * @param {unisubs.timeline.SubtitleSet} subtitleSet
  */
-unisubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet) {
+unisubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet, readOnly) {
     goog.ui.Component.call(this);
     this.timeline_ = timeline;
     this.spacing_ = spacing;
@@ -36,6 +36,7 @@ unisubs.timeline.TimelineInner = function(timeline, spacing, subtitleSet) {
     this.pixelsPerSecond_ = unisubs.timeline.TimeRowUL.PX_PER_TICK / spacing;
     this.left_ = 0;
     this.time_ = 0;
+    this.readOnly_ = readOnly;
 };
 goog.inherits(unisubs.timeline.TimelineInner, goog.ui.Component);
 unisubs.timeline.TimelineInner.prototype.createDom = function() {
@@ -45,7 +46,8 @@ unisubs.timeline.TimelineInner.prototype.createDom = function() {
     this.addChild(this.timerow_, true);
     this.timelineSubs_ = new unisubs.timeline.TimelineSubs(
         this.subtitleSet_,
-        this.pixelsPerSecond_);
+        this.pixelsPerSecond_,
+        this.readOnly_);
     this.addChild(this.timelineSubs_, true);
 };
 unisubs.timeline.TimelineInner.prototype.ensureVisible = function(time) {

@@ -22,7 +22,7 @@ goog.provide('unisubs.timeline.TimelineSub');
 * @extends goog.ui.Component
 */
 unisubs.timeline.TimelineSub = function(
-    subtitle, pixelsPerSecond, opt_pixelOffset)
+    subtitle, pixelsPerSecond, opt_pixelOffset, readOnly)
 {
     goog.ui.Component.call(this);
     this.subtitle_ = subtitle;
@@ -30,6 +30,7 @@ unisubs.timeline.TimelineSub = function(
     this.pixelOffset_ = opt_pixelOffset ? opt_pixelOffset : 0;
     this.editing_ = false;
     this.documentEventHandler_ = new goog.events.EventHandler(this);
+    this.readOnly_ = readOnly;
 };
 goog.inherits(unisubs.timeline.TimelineSub, goog.ui.Component);
 /**
@@ -73,11 +74,17 @@ unisubs.timeline.TimelineSub.prototype.enterDocument = function() {
                this.updateValues_);
 };
 unisubs.timeline.TimelineSub.prototype.onMouseOver_ = function(event) {
+    if (this.readOnly_) {
+        return;
+    }
     if (!unisubs.timeline.TimelineSub.currentlyEditing_)
         this.setGrabberVisibility_(true);
     this.mouseOver_ = true;
 };
 unisubs.timeline.TimelineSub.prototype.onMouseOut_ = function(event) {
+    if (this.readOnly_) {
+        return;
+    }
     if (event.relatedTarget &&
         !goog.dom.contains(this.getElement(), event.relatedTarget)) {
         if (!this.editing_)

@@ -28,11 +28,12 @@ goog.require('goog.style.cursor');
  *     major ticks.
  * @param {unisubs.timeline.SubtitleSet} subtitleSet
  */
-unisubs.timeline.Timeline = function(spacing, subtitleSet, videoPlayer) {
+unisubs.timeline.Timeline = function(spacing, subtitleSet, videoPlayer, readOnly) {
     goog.ui.Component.call(this);
     this.spacing_ = spacing;
     this.subtitleSet_ = subtitleSet;
     this.videoPlayer_ = videoPlayer;
+    this.readOnly_ = readOnly;
 };
 goog.inherits(unisubs.timeline.Timeline, goog.ui.Component);
 unisubs.timeline.Timeline.prototype.createDom = function() {
@@ -42,7 +43,7 @@ unisubs.timeline.Timeline.prototype.createDom = function() {
     el.className = 'unisubs-timeline';
     el.appendChild($d('div', 'top', ' '));
     this.timelineInner_ = new unisubs.timeline.TimelineInner(
-        this, this.spacing_, this.subtitleSet_);
+        this, this.spacing_, this.subtitleSet_, this.readOnly_);
     this.addChild(this.timelineInner_, true);
     el.appendChild($d('div', 'marker'));
 };
@@ -53,7 +54,7 @@ unisubs.timeline.Timeline.prototype.reset_ = function() {
     this.removeChild(this.timelineInner_, true);
     this.timelineInner_.dispose();
     this.timelineInner_ = new unisubs.timeline.TimelineInner(
-        this, this.spacing_, this.subtitleSet_);
+        this, this.spacing_, this.subtitleSet_, this.readOnly_);
     this.addChild(this.timelineInner_, true);
 };
 unisubs.timeline.Timeline.prototype.enterDocument = function() {

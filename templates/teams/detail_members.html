@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator widget media_compressor %}
+{% load i18n teams_tags paginator widget media_compressor verbatim_templatetag %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -15,8 +15,13 @@
 
 {% block scripts %}
     {{ block.super }}
+     {% if assignable_roles %}
+          
+        {% include_bundle "js-teams-settings-panel" %}
+{% endif %}
     {% include_bundle "unisubs-onsite-compiled" %}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>     
+    
 {% endblock %}
 
 {% block main_content %}
@@ -42,10 +47,10 @@
                 <a href="#" class="button">Invite Members</a>
             </div>
         {% endif %}
-
         {% if is_paginated %}{% paginator %}{% endif %}
         <ul class="members listing">
             {% for member in team_member_list %}
+            {% with member.pk as mpk%}
             <li>
                 <h3>
                     <a href="{{ member.user.get_absolute_url }}">
@@ -57,7 +62,9 @@
                     {% endfor %}
                 </h3>
                 <p>
-                    {{ member.role|capfirst }}
+                  {{ member.role|capfirst }} {% if member in assignable_roles%} 
+                  <a class="button edit-role" data-team-slug="{{team.slug}}" data-member-pk="{{member.pk}}" >Edit ME</a>{%endif%}
+                  
                     {% member_projects member as member_project %}
                     {% if member_project %}
                         (
@@ -72,8 +79,10 @@
                     <li>
                         <a href="">Send a message</a>
                     </li>
+                      
                 </ul>
             </li>
+            {% endwith %}
             {% endfor %}
         </ul>
         {% if is_paginated %}{% paginator %}{% endif %}
@@ -85,4 +94,41 @@
         {% include "teams/_actions.html" %}
     </div>
 
+{% if assignable_roles %}
+    
+<script id="editRoleDialog" type="text/html">
+  {% verbatim %}
+  <div>
+    <a class="close">X</a>
+    <label>Role:</label>
+    <select class="roles">
+      {{#roles}}
+      <option val="{{val}}">{{name}}</option>
+      {{/roles}}
+      </select>
+    <div class="clearfix"></div>
+    <label>Project Restriction:</label>
+    <ul class="projects">
+      {{#projects}}
+          <li data-pk="{{pk}}">{{name}}</option>
+      {{/projects}}
+      </ul>
+    
+    <div class="clearfix"></div>
+    <label>Language Restriction:</label>
+    <ul class="langs">
+      {{#languages}}
+          <li data-pk="{{pk}}">{{name}}</option>
+      {{/languages}}
+      <li>
+      </ul>
+    
+    <div class="clearfix"></div>
+    </div>
+{% endverbatim %}
+</script>
+<script type="text/javascript" >
+  {% include "teams/assign-roles.js" %}
+</script>    
+{% endif %}
 {% endblock %}

@@ -1,4 +1,5 @@
-from django.utils import simplejson
+import datetime, time
+import json as json
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from inspect import getargspec
@@ -6,6 +7,30 @@ from Cookie import SimpleCookie
 from django.utils.datastructures import MultiValueDict
 from urllib import urlencode, quote
 from django.utils.encoding import smart_str
+from django.db import models
+from django.core.serializers.json import DateTimeAwareJSONEncoder
+from django.utils.functional import Promise
+from django.utils.encoding import force_unicode
+
+class LazyEncoder(DateTimeAwareJSONEncoder):
+    """
+    Smarter encoder that can encode a few data types tipically found
+    in django code such as datetimes, promises and querysets
+    """
+    def default(self, obj):
+        if isinstance(obj, Promise) :
+            return force_unicode(obj)
+        elif isinstance(obj, datetime.datetime):
+            return time.strftime("%d-%m-%Y %H-%M-%S")
+        elif isinstance(obj, models.query.ValuesQuerySet):
+            self.default(list(obj))
+        elif isinstance(obj, models.query.QuerySet):
+            self.default(list(obj))
+        try:
+            return super(LazyEncoder, self).default(obj)
+        except:
+            raise
+
 
 class RpcMultiValueDict(MultiValueDict):
     """
@@ -109,12 +134,12 @@ class RpcRouter(object):
     
             if requests['upload']:
                 requests['data'].append(request.FILES)
-                output = simplejson.dumps(self.call_action(requests, user))
+                output = json.dumps(self.call_action(requests, user))
                 return HttpResponse('<textarea>%s</textarea>' \
                                     % output)
         else:
             try:
-                requests = simplejson.loads(request.POST.keys()[0])
+                requests = json.loads(request.POST.keys()[0])
             except (ValueError, KeyError, IndexError):
                 requests = []
             
@@ -136,8 +161,7 @@ class RpcRouter(object):
                 mr['result'] = dict(mr['result'])
                 
             output.append(mr)
-        
-        response.content = simplejson.dumps(output)
+        response.content = json.dumps(output, cls=LazyEncoder)
             
         return response 
     
@@ -173,7 +197,7 @@ class RpcRouter(object):
         Just set this in template after ExtJs including:
         <script src="{% url api_url_name %}"></script>  
         """        
-        obj = simplejson.dumps(self, cls=RpcRouterJSONEncoder, url_args=args, url_kwargs=kwargs)
+        obj = json.dumps(self, cls=RpcRouterJSONEncoder, url_args=args, url_kwargs=kwargs)
         return HttpResponse('jQuery.Rpc.addProvider(%s)' % obj, mimetype="text/javascript")
 
     def call_action(self, rd, request, *args, **kwargs):
@@ -249,7 +273,7 @@ class RpcRouter(object):
                 'message': unicode(e)
             }  
 
-class RpcRouterJSONEncoder(simplejson.JSONEncoder):
+class RpcRouterJSONEncoder(json.JSONEncoder):
     """
     JSON Encoder for RpcRouter
     """

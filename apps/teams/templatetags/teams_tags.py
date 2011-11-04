@@ -38,7 +38,7 @@ from templatetag_sugar.register import tag
 from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
 from apps.teams.permissions import list_narrowings
-from apps.teams.permissions import can_view_settings_tab as _can_view_settings_tab
+from apps.teams.permissions import can_view_settings_tab as _can_view_settings_tab, roles_assignable_to
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -273,4 +273,8 @@ def members(team, countOnly=False):
         qs = qs.count()
     return qs
 
-    
+@register.filter    
+def get_assignable_roles(team, user):
+    roles =  roles_assignable_to(team, user)
+    verbose_roles = [x for x in TeamMember.ROLES if x[0] in roles]
+    return verbose_roles

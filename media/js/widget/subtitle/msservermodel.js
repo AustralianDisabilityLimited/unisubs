@@ -1,19 +1,19 @@
 // Universal Subtitles, universalsubtitles.org
-// 
+//
 // Copyright (C) 2010 Participatory Culture Foundation
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see 
+// along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
 /**
@@ -35,7 +35,7 @@ goog.provide('unisubs.subtitle.MSServerModel');
  * @param {unisubs.subtitle.EditableCaptionSet} editableCaptionSet
  */
 unisubs.subtitle.MSServerModel = function(
-    sessionPK, videoID, videoURL, 
+    sessionPK, videoID, videoURL,
     editableCaptionSet)
 {
     goog.Disposable.call(this);
@@ -63,7 +63,7 @@ unisubs.subtitle.MSServerModel.currentInstance = null;
 /*
  * URL for the widget's embed javascript.
  * Set by unisubs.EmbeddableWidget when widget first loads.
- * @type {string} 
+ * @type {string}
  */
 unisubs.subtitle.MSServerModel.EMBED_JS_URL = null;
 
@@ -88,7 +88,7 @@ unisubs.subtitle.MSServerModel.prototype.startTimer = function() {
 unisubs.subtitle.MSServerModel.prototype.timerTick_ = function(e) {
     unisubs.Rpc.call(
         'regain_lock',
-        { 'session_pk': this.sessionPK_  }, 
+        { 'session_pk': this.sessionPK_  },
         function(result) {
             if (result['response'] != 'ok') {
                 // this should never happen.
@@ -145,19 +145,19 @@ unisubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function() {
             subtitles, function(s) { return s.json; });
         atLeastOneThingChanged = true;
     }
-    if (goog.isDefAndNotNull(this.captionSet_.title) && 
+    if (goog.isDefAndNotNull(this.captionSet_.title) &&
         this.captionSet_.title != initialCaptionSet.title) {
         args['new_title'] = this.captionSet_.title;
         atLeastOneThingChanged = true;
     }
-    if (goog.isDefAndNotNull(this.captionSet_.completed) && 
+    if (goog.isDefAndNotNull(this.captionSet_.completed) &&
         this.captionSet_.completed != initialCaptionSet.completed) {
         args['completed'] = this.captionSet_.completed;
         atLeastOneThingChanged = true;
     }
     if (this.captionSet_.wasForkedDuringEdits()) {
         args['forked'] = true;
-        // a fork alone isn't sufficient to trigger a save, 
+        // a fork alone isn't sufficient to trigger a save,
         // so not setting atLeastOneThingChanged.
     }
     if (window['UNISUBS_THROW_EXCEPTION']) {
@@ -166,9 +166,9 @@ unisubs.subtitle.MSServerModel.prototype.makeFinishArgs_ = function() {
     return atLeastOneThingChanged ? args : null;
 };
 
-unisubs.subtitle.MSServerModel.prototype.finish = 
-    function(successCallback, failureCallback, 
-             opt_cancelCallback) 
+unisubs.subtitle.MSServerModel.prototype.finish =
+    function(successCallback, failureCallback,
+             opt_cancelCallback)
 {
     goog.asserts.assert(this.initialized_);
     goog.asserts.assert(!this.finished_);
@@ -184,7 +184,7 @@ unisubs.subtitle.MSServerModel.prototype.finish =
         return;
     }
     unisubs.Rpc.call(
-        'finished_subtitles', 
+        'finished_subtitles',
         args,
         function(result) {
             if (result['response'] != 'ok') {
@@ -197,16 +197,33 @@ unisubs.subtitle.MSServerModel.prototype.finish =
                 that.finished_ = true;
                 successCallback(result["user_message"]);
             }
-        }, 
+        },
         function(opt_status) {
             failureCallback(opt_status);
         },
         true);
 };
 
-unisubs.subtitle.MSServerModel.prototype.finishReview = function(data) {
+unisubs.subtitle.MSServerModel.prototype.fetchReviewData = function(taskId, successCallback) {
     unisubs.Rpc.call(
-        'finish_review', 
+        'fetch_review_data',
+        {'task_id': taskId},
+        function(result) {
+            if (result['response'] != 'ok') {
+                // this should never happen.
+                alert('Problem fetching review data. Response: ' + result["response"]);
+                failureCallback(200);
+            } else {
+                successCallback(result['body']);
+            }
+        }, function(opt_status) {
+            failureCallback(opt_status);
+        }, true);
+
+};
+unisubs.subtitle.MSServerModel.prototype.finishReview = function(data, successCallback) {
+    unisubs.Rpc.call(
+        'finish_review',
         data,
         function(result) {
             if (result['response'] != 'ok') {
@@ -214,16 +231,13 @@ unisubs.subtitle.MSServerModel.prototype.finishReview = function(data) {
                 alert('Problem saving review. Response: ' +
                       result["response"]);
                 failureCallback(200);
-            }
-            else {
+            } else {
                 that.finished_ = true;
                 successCallback(result["user_message"]);
             }
-        }, 
-        function(opt_status) {
+        }, function(opt_status) {
             failureCallback(opt_status);
-        },
-        true);
+        }, true);
 
 };
 

@@ -6,9 +6,7 @@
         __init__:function(pk, teamSlug){
             this.pk = pk;
             this.teamSlug = teamSlug;
-            this.el = ich.editRoleDialog(this);
             this.hide = _.bind(this.hide, this);
-            $("a.close", this.el).click(this.hide);
         },
         loadInfo: function(){
             
@@ -20,6 +18,8 @@
         },
         show: function(res){
             console.log(res)
+            
+            this.el = ich.editRoleDialog(res);
             $(this.el).show();
             $(this.el).css({
                 width:"200px",
@@ -29,6 +29,7 @@
                 top:"200px",
                 "background-color": "grey"
             });
+            $("a.close", this.el).click(this.hide);
             $("body").append(this.el);
         },
         hide:function(e){

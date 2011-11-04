@@ -51,6 +51,11 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendMiddleContents
     this.bodyInput_ = $d('textarea', {'class': 'unisubs-review-notes', 'id': 'unisubs-review-notes', 'name': 'notes'});
     el.appendChild(this.bodyInput_);
 
+    var that = this;
+    this.serverModel_.fetchReviewData(unisubs.task_id, function(body) {
+        goog.dom.forms.setValue(that.bodyInput_, body);
+    });
+
     el.appendChild($d('hr'));
 
     this.reassignLink_ = $d('a', {'href': unisubs.team_url}, 'reassign this task');

@@ -1219,6 +1219,7 @@ class Task(models.Model):
     )
     APPROVED_NAMES = dict(APPROVED_CHOICES)
     APPROVED_IDS = dict([choice[::-1] for choice in APPROVED_CHOICES])
+    APPROVED_FINISHED_IDS = (20, 30)
 
     type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 
@@ -1227,6 +1228,7 @@ class Task(models.Model):
     language = models.CharField(max_length=16, choices=ALL_LANGUAGES, blank=True,
                                 db_index=True)
     assignee = models.ForeignKey(User, blank=True, null=True)
+    subtitle_language = models.ForeignKey(SubtitleLanguage, blank=True, null=True)
 
     deleted = models.BooleanField(default=False)
 

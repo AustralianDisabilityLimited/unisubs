@@ -501,12 +501,19 @@ class TeamsApiV2Class(object):
         team = Team.objects.get(slug=team_slug)
         member = team.members.get(pk=member_pk)
         roles =  roles_assignable_to(team, member.user)
-        verbose_roles = [x for x in TeamMember.ROLES if x[0] in roles]
+        # massage the data format to make it easier to work with
+        # over the client side templating
+        verbose_roles = [{"val":x[0], "name":x[1]} for x in TeamMember.ROLES if x[0] in roles]
         narrowings =list_narrowings(team, member.user, [Project, TeamVideoLanguage], lists=True) 
-        print narrowings, verbose_roles
+        languages = [{'pk':x.content.pk,"name":x.content.language} 
+                     for x in narrowings["TeamVideoLanguage"]]
+                     
+        projects = [{'pk':x.content.pk,"name":x.content.name} 
+                     for x in narrowings["Project"]]
         return {
             "roles" : verbose_roles,
-            "narrowings": narrowings 
+            "languages": languages,
+            "projects": projects
         }
 
 

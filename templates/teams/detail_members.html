@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n teams_tags paginator widget media_compressor %}
+{% load i18n teams_tags paginator widget media_compressor verbatim_templatetag %}
 
 {% block title %}
     {{ team }} | Universal Subtitles
@@ -97,24 +97,35 @@
 {% if assignable_roles %}
     
 <script id="editRoleDialog" type="text/html">
+  {% verbatim %}
   <div>
     <a class="close">X</a>
     <label>Role:</label>
     <select class="roles">
-      
+      {{#roles}}
+      <option val="{{val}}">{{name}}</option>
+      {{/roles}}
       </select>
     <div class="clearfix"></div>
     <label>Project Restriction:</label>
     <ul class="projects">
+      {{#projects}}
+          <li data-pk="{{pk}}">{{name}}</option>
+      {{/projects}}
       </ul>
     
     <div class="clearfix"></div>
     <label>Language Restriction:</label>
     <ul class="langs">
+      {{#languages}}
+          <li data-pk="{{pk}}">{{name}}</option>
+      {{/languages}}
+      <li>
       </ul>
     
     <div class="clearfix"></div>
     </div>
+{% endverbatim %}
 </script>
 <script type="text/javascript" >
   {% include "teams/assign-roles.js" %}

@@ -433,7 +433,7 @@ class Rpc(BaseRpc):
             task.body = form.cleaned_data['body']
             task.approved = form.cleaned_data['approved']
 
-            if task.approved in (Task.APPROVED_IDS['Rejected'], Task.APPROVED_IDS['Approved']):
+            if task.approved in Task.APPROVED_FINISHED_IDS:
                 task.completed = datetime.now()
 
             task.subtitle_language.release_writelock()

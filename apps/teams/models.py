@@ -1219,6 +1219,7 @@ class Task(models.Model):
     )
     APPROVED_NAMES = dict(APPROVED_CHOICES)
     APPROVED_IDS = dict([choice[::-1] for choice in APPROVED_CHOICES])
+    APPROVED_FINISHED_IDS = (20, 30)
 
     type = models.PositiveIntegerField(choices=TYPE_CHOICES)
 

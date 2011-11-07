@@ -195,7 +195,8 @@ class Video(models.Model):
 
     def update_subtitles_fetched(self, lang=None):
         try:
-            st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=lang.pk)
+            sl_pk = lang.pk if lang else None
+            st_sub_fetch_handler_update.delay(video_id=self.video_id, sl_pk=sl_pk)
             if lang:
                 from videos.tasks import update_subtitles_fetched_counter_for_sl
 
@@ -207,21 +208,21 @@ class Video(models.Model):
     def get_thumbnail(self):
         if self.s3_thumbnail:
             return self.s3_thumbnail.url
-        
+
         if self.thumbnail:
             return self.thumbnail
-        
+
         return ''
-    
+
     def get_small_thumbnail(self):
         if self.s3_thumbnail:
             return self.s3_thumbnail.thumb_url(120, 90)
-                
+
         if self.small_thumbnail:
             return self.small_thumbnail
-        
-        return ''        
-    
+
+        return ''
+
     @models.permalink
     def video_link(self):
         return ('videos:history', [self.video_id])

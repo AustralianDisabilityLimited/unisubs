@@ -1,6 +1,6 @@
 # Universal Subtitles, universalsubtitles.org
 # 
-# Copyright (C) 2010 Participatory Culture Foundation
+# Copyright (C) 2011 Participatory Culture Foundation
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@ from gdata.youtube.service import YouTubeService
 from gdata.service import RequestError
 import re
 import httplib2
-from utils import YoutubeSubtitleParser, YoutubeXMLParser
+from utils import YoutubeXMLParser
 from base import VideoType, VideoTypeError
 from auth.models import CustomUser as User
 from datetime import datetime
@@ -30,7 +30,7 @@ from lxml import etree
 from django.conf import settings
 from django.utils.http import urlquote
 import logging
-from utils.celery_utils import task
+from celery.task import task
 
 logger = logging.getLogger('youtube')
 

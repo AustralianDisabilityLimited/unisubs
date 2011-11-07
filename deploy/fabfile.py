@@ -272,16 +272,16 @@ def _remove_pip_package(base_dir, package_name):
 def remove_pip_package(package_egg_name):
     _execute_on_all_hosts(lambda dir: _remove_pip_package(dir, package_egg_name))
 
-def _update_environment(base_dir):
+def _update_environment(base_dir, flags=''):
     with cd(os.path.join(base_dir, 'unisubs', 'deploy')):
         _git_pull()
         run('export PIP_REQUIRE_VIRTUALENV=true')
         # see http://lincolnloop.com/blog/2010/jul/1/automated-no-prompt-deployment-pip/
-        sudo('yes i | {0}/env/bin/pip install -E {0}/env/ -r requirements.txt'.format(base_dir), pty=True)
+        sudo('yes i | {0}/env/bin/pip install {1} -E {0}/env/ -r requirements.txt'.format(base_dir, flags), pty=True)
 
-def update_environment():
+def update_environment(flags=''):
     with Output("Updating virtualenv"):
-        _execute_on_all_hosts(lambda dir: _update_environment(dir))
+        _execute_on_all_hosts(lambda dir: _update_environment(dir, flags))
 
 def _clear_permissions(dir):
     sudo('chgrp pcf-web -R {0}'.format(dir))
@@ -398,7 +398,7 @@ def bounce_memcached():
             env.host_string = ADMIN_HOST
         else:
             env.host_string = DEV_HOST
-        sudo(env.memcached_bounce_cmd)
+        sudo(env.memcached_bounce_cmd, pty=False)
 
 def update_solr_schema():
     '''Update the Solr schema and rebuild the index.
@@ -438,7 +438,7 @@ def _bounce_celeryd():
     else:
         env.host_string = DEV_HOST
     if bool(env.celeryd_bounce_cmd):
-        sudo(env.celeryd_bounce_cmd)
+        sudo(env.celeryd_bounce_cmd, pty=False)
 
 def _update_static(dir):
     with cd(os.path.join(dir, 'unisubs')):

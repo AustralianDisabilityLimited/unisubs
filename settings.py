@@ -500,6 +500,7 @@ BROKER_BACKEND = 'kombu_backends.amazonsqs.Transport'
 BROKER_USER = AWS_ACCESS_KEY_ID = ""
 BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY = ""
 BROKER_VHOST = AWS_QUEUE_PREFIX = 'UNISUB' #Prefix for queues, should be DEV or STAGING 
+BROKER_POOL_LIMIT = 10
 
 #################
 
@@ -555,7 +556,7 @@ ACTIVITIES_ONPAGE = 20
 REVISIONS_ONPAGE = 20
 
 FEEDBACK_EMAIL = 'socmedia@pculture.org'
-FEEDBACK_EMAILS = [FEEDBACK_EMAIL, 'hwilson@gmail.com']
+FEEDBACK_EMAILS = [FEEDBACK_EMAIL]
 FEEDBACK_ERROR_EMAIL = 'universalsubtitles-errors@pculture.org'
 FEEDBACK_SUBJECT = 'Universal Subtitles Feedback'
 FEEDBACK_RESPONSE_SUBJECT = 'Thanks for trying Universal Subtitles'

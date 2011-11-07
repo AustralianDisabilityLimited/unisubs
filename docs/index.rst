@@ -16,6 +16,7 @@ Contents:
    demos
    deployment-guide
    feature-flags
+   i18n
 
 
 Indices and tables

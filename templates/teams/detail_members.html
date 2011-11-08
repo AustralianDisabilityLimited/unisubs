@@ -63,8 +63,7 @@
                     {% endfor %}
                 </h3>
                 <p>
-                  {{ member.role|capfirst }} {% if member in assignable_roles%} 
-                  <a class="button edit-role" data-team-slug="{{team.slug}}" data-member-pk="{{member.pk}}" >Edit ME</a>{%endif%}
+                  {{ member.role|capfirst }}
                   
                     {% member_projects member as member_project %}
                     {% if member_project %}
@@ -80,8 +79,19 @@
                     <li>
                         <a href="">Send a message</a>
                     </li>
-                      
                 </ul>
+                {% if can_assign_roles %}
+                  <ul class="admin-controls">
+                    <li>
+                      <input type="checkbox"/>
+                    </li>
+                    {% if member in assignable_roles%}
+                      <li>
+                        <a class="edit-role" data-team-slug="{{team.slug}}" data-member-pk="{{member.pk}}" >Edit</a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
             </li>
             {% endwith %}
             {% endfor %}

@@ -21,7 +21,19 @@
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>
     <script type="text/javascript">
         var GLOBAL_WIDGET_SETTINGS = {{ general_settings|safe }};
-        jQuery("select").chosen();
+
+        $(document).ready(function(){
+            jQuery("select", ".filters").chosen();
+
+            jQuery(":checkbox", ".admin-controls").bind('change', function(){
+                var menu = jQuery(this).parents('.admin-controls');
+                if(jQuery(this).attr('checked')) {
+                    menu.addClass('selected');
+                } else {
+                    menu.removeClass('selected');
+                }
+            });
+        });
     </script>
 {% endblock %}
 
@@ -63,9 +75,7 @@
         {% if team_video_md_list %}
             <ul class="videos listing">
                 {% for md_obj in team_video_md_list %}
-                    <li>
-                        {% team_video_detail md_obj %}
-                    </li>
+                    {% team_video_detail md_obj %}
                 {% endfor %}
             </ul>
             {% if is_paginated %}{% paginator %}{% endif %}

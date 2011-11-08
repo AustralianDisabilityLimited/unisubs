@@ -9,7 +9,7 @@ from os import path
 
 from django.conf import settings
 from apps.teams.models import Team, Invite, TeamVideo, \
-    Application, TeamMember, TeamVideoLanguage
+    Application, TeamMember, TeamVideoLanguage, TeamLanguagePreference
 from messages.models import Message
 from videos.models import Video, VIDEO_TYPE_YOUTUBE, SubtitleLanguage, Action
 from django.db.models import ObjectDoesNotExist
@@ -1001,3 +1001,56 @@ class TeamsDetailQueryTest(TestCase):
 
 
 
+class TestLanguagePreference(TestCase):
+    fixtures = ["staging_users.json", "staging_videos.json", "staging_teams.json"]
+    
+    def setUp(self):
+        fix_teams_roles()
+        self.auth = {
+            "username": u"admin",
+            "password": u"admin"
+        }
+        self.team = Team.objects.all()[0]
+        self.langs_set = set([x[0] for x in settings.ALL_LANGUAGES])
+        from apps.teams.cache import invalidate_lang_preferences
+        invalidate_lang_preferences(self.team)
+
+    def test_readable_lang(self):
+        # no tlp, should be all languages
+        generated =TeamLanguagePreference.objects._generate_readable(self.team )
+        cached =TeamLanguagePreference.objects.get_readable(self.team )
+        self.assertItemsEqual(self.langs_set, generated )
+        self.assertItemsEqual(self.langs_set, cached )
+        # create one blocked
+        tlp  = TeamLanguagePreference(team=self.team, language_code="en")
+        tlp.save()
+        # test generation
+        generated =TeamLanguagePreference.objects._generate_readable(self.team )
+        #test cache
+        cached =TeamLanguagePreference.objects.get_readable(self.team )
+        self.assertEquals(len(self.langs_set), len(generated)+1)
+        self.assertEquals(len(self.langs_set), len(cached)+1)
+        self.assertIn("en" , self.langs_set)
+        self.assertNotIn("en" , generated)
+        self.assertNotIn("en" , cached)
+        
+        
+    def test_writable_lang(self):
+        # no tlp, should be all languages
+        generated =TeamLanguagePreference.objects._generate_writable(self.team )
+        cached =TeamLanguagePreference.objects.get_writable(self.team )
+        self.assertItemsEqual(self.langs_set, generated )
+        self.assertItemsEqual(self.langs_set, cached )
+        # create one blocked
+        tlp  = TeamLanguagePreference(team=self.team, language_code="en")
+        tlp.save()
+        # test generation
+        generated =TeamLanguagePreference.objects._generate_writable(self.team )
+        #test cache
+        cached =TeamLanguagePreference.objects.get_writable(self.team )
+        self.assertEquals(len(self.langs_set), len(generated)+1)
+        self.assertEquals(len(self.langs_set), len(cached)+1)
+        self.assertIn("en" , self.langs_set)
+        self.assertNotIn("en" , generated)
+        self.assertNotIn("en" , cached)
+        

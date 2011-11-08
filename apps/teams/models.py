@@ -20,6 +20,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.exceptions import ValidationError
 from videos.models import Video, SubtitleLanguage
 from auth.models import CustomUser as User
 from utils.amazon import S3EnabledImageField
@@ -1387,3 +1388,74 @@ class Setting(models.Model):
     def key_name(self):
         return Setting.KEY_NAMES[self.key]
 
+class TeamLanguagePreferenceManager(models.Manager):
+
+    def _generate_writable(self, team):
+        langs_set = set([x[0] for x in settings.ALL_LANGUAGES])
+        tlp_allows_writes =  set([x['language_code'] for x in  self.for_team(team).filter(allow_writes=False).values("language_code")])
+        return langs_set- tlp_allows_writes
+            
+    def _generate_readable(self, team):
+        langs_set = set([x[0] for x in settings.ALL_LANGUAGES])
+        tlp_allows_reads =  set([x['language_code'] for x in self.for_team(team).filter(allow_reads=False).values(
+            "language_code")])
+        return langs_set - tlp_allows_reads
+            
+            
+    def for_team(self, team):
+        return self.get_query_set().filter(team=team)
+
+    def on_changed(cls, sender,  instance, *args, **kwargs):
+        from teams.cache import invalidate_lang_preferences
+        invalidate_lang_preferences(instance.team)
+
+    def get_readable(self, team):
+        from teams.cache import get_readable_langs
+        return get_readable_langs(team)
+        
+    def get_writable(self, team):
+        from teams.cache import get_writable_langs
+        return get_writable_langs(team)
+        
+class TeamLanguagePreference(models.Model):
+    """
+    Represent language preferences for a given team. A team might say,
+    for example that Yoruba translations do not translate a team, then
+    that language should not have tasks assigned to it, nor it should
+    allow roles to be narrowed to that language.
+
+    This is how settings should interact, TLP means that we have created
+    a TeamLanguagePreference for that team and language.
+    | Action                                                  | NO TLP | allow_read=True,  | allow_read=False,  |
+    |                                                         |        | allow_write=False | allow_write=False  |     
+    =============================================================================================================
+    | assignable as tasks                                     | X      |                   |                    |
+    | assignable as narrowing to a certain team member / role | X      |                   |                    |
+    | listed on the widget for viewing                        | X      | X                 |                    |
+    | listed on the widget for improving                      | X      |                   |                    |
+    | returned from the api read operations                   | X      | X                 |                    |
+    | upload  / write operations from the api                 | X      |                   |                    |
+    | show up on the start dialog                             | X      |                   |                    |
+
+    Allow read = False and allow_writes = False essentially means that
+    language is block for that team, while allow_write=False and
+    allow_read=True means we can read subs but cannot write subs
+    Allow_read=true and allow_write=true is invalid, just remove the row
+    all together.
+    """
+    team = models.ForeignKey(Team, related_name="lang_preferences")
+    language_code = models.CharField(max_length=16)
+    allow_reads = models.BooleanField()
+    allow_writes = models.BooleanField()
+
+    objects = TeamLanguagePreferenceManager()
+    
+    def clean(self, *args, **kwargs):
+        if self.allow_reads and self.allow_writes:
+            raise ValidationError("No sense in having all allowed, just remove the preference for this language")
+        super(TeamLanguagePreference, self).clean(*args, **kwargs)
+
+    def __unicode__(self):
+        return u"%s preference for team %s" % (self.language_code, self.team)
+
+post_save.connect(TeamLanguagePreference.objects.on_changed, TeamLanguagePreference)        

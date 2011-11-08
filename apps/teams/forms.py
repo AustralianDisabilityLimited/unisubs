@@ -226,6 +226,8 @@ class AddTeamVideoForm(BaseVideoBoundForm):
         return obj
 
 class AddTeamVideosFromFeedForm(AddFromFeedForm):
+    VIDEOS_LIMIT = None
+
     def __init__(self, team, user, *args, **kwargs):
         self.team = team
         super(AddTeamVideosFromFeedForm, self).__init__(user, *args, **kwargs)

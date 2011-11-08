@@ -29,7 +29,6 @@ unisubs.subtitle.OnSavedDialog = function(msg, callback, mode) {
     this.callback_ = callback;
     this.msg_ = msg;
     this.mode_ = mode;
-
 };
 goog.inherits(unisubs.subtitle.OnSavedDialog, goog.ui.Dialog);
 

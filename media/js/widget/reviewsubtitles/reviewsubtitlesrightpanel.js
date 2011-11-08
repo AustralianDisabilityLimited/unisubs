@@ -24,12 +24,15 @@ goog.provide('unisubs.reviewsubtitles.ReviewSubtitlesRightPanel');
  * @extends unisubs.RightPanel
  */
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel = function(
-    serverModel, helpContents, legendKeySpecs, showRestart, doneStrongText, doneText) {
+    dialog, serverModel, helpContents, legendKeySpecs, showRestart, doneStrongText, doneText) {
     unisubs.RightPanel.call(this, serverModel, helpContents, null,
                             legendKeySpecs, showRestart, doneStrongText, doneText);
 
     this.showSaveExit = false;
     this.showDoneButton = false;
+
+    // TODO: See if there's a way to avoid the circular reference here.
+    this.dialog_ = dialog;
 };
 goog.inherits(unisubs.reviewsubtitles.ReviewSubtitlesRightPanel, unisubs.RightPanel);
 
@@ -89,9 +92,25 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendCustomButtonsI
     handler.listen(this.approveButton_, 'click', this.approveButtonClicked_);
 };
 
-
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.finish = function(approved, successCallback, failureCallback) {
+unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.finish = function(approved) {
     var approval_code = unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_[approved];
+    var dialog = this.dialog_;
+
+    var successCallback = function(serverMsg) {
+        unisubs.subtitle.OnSavedDialog.show(serverMsg, function() {
+            dialog.onWorkSaved(true);
+        }, 'review');
+    };
+
+    var failureCallback = function(opt_status) {
+        if (dialog.finishFailDialog_) {
+            dialog.finishFailDialog_.failedAgain(opt_status);
+        } else {
+            dialog.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
+                that.serverModel_.getCaptionSet(), opt_status,
+                goog.bind(dialog.saveWorkInternal, dialog, closeAfterSave));
+        }
+    };
 
     this.serverModel_.finishReview({
         'task_id': unisubs.task_id,

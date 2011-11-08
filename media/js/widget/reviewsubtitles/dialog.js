@@ -82,7 +82,7 @@ unisubs.reviewsubtitles.Dialog.prototype.createRightPanel_ = function() {
     var title = "Review Subtitles";
     var helpContents = new unisubs.RightPanel.HelpContents(title, ["Help goes here"]);
     return new unisubs.reviewsubtitles.ReviewSubtitlesRightPanel(
-        this.serverModel_, helpContents, [], false, "Done?", "Submit final Review");
+        this, this.serverModel_, helpContents, [], false, "Done?", "Submit final Review");
 };
 
 unisubs.reviewsubtitles.Dialog.prototype.captionReached_ = function(event) {
@@ -122,23 +122,7 @@ unisubs.reviewsubtitles.Dialog.prototype.isWorkSaved = function() {
 unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
     this.getRightPanelInternal().showLoading(true);
-    this.getRightPanelInternal().finish(
-        'In Progress',
-        function(serverMsg) {
-            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
-                that.onWorkSaved(closeAfterSave);
-            }, 'review');
-        },
-        function(opt_status) {
-            if (that.finishFailDialog_) {
-                that.finishFailDialog_.failedAgain(opt_status);
-            } else {
-                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
-                    that.serverModel_.getCaptionSet(), opt_status,
-                    goog.bind(that.saveWorkInternal, that, closeAfterSave));
-            }
-        }
-    );
+    this.getRightPanelInternal().finish('In Progress');
 };
 
 unisubs.reviewsubtitles.Dialog.prototype.onWorkSaved = function(closeAfterSave){

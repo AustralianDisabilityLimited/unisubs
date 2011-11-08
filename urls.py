@@ -124,7 +124,6 @@ urlpatterns = patterns(
      (r'^prototypes/', include('prototypes.urls', namespace='prototypes', 
                             app_name='prototypes')),
 )
-
 try:
     from services import urls
     urlpatterns += patterns('',
@@ -149,10 +148,19 @@ try:
 except ImportError:
     pass
 
+try:
+    from apiv2 import urls
+    urlpatterns += patterns('',
+        url(r'^api/2.0/', include('apiv2.urls', 'api2')),
+    )
+except ImportError:
+    pass
+    
 if feature_is_on('MODERATION'):
     urlpatterns += patterns("",
         (r'^moderation/', include('teams.moderation_urls', namespace="moderation")),
     )
+    
 if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',

@@ -127,7 +127,7 @@ unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterS
         function(serverMsg) {
             unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
                 that.onWorkSaved(closeAfterSave);
-            });
+            }, 'review');
         },
         function(opt_status) {
             if (that.finishFailDialog_) {

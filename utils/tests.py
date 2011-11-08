@@ -20,6 +20,7 @@
 from django.test import TestCase
 from videos.models import Video
 from utils.multi_query_set import MultiQuerySet
+from language_codes import LanguageCode
 
 
 class MultiQuerySetTest(TestCase):
@@ -113,3 +114,33 @@ class MultiQuerySetTest(TestCase):
         self.assertEqual(qs[3:7],
                          list(mqs[3:7]),
                          "MQS[3:7] (out-of-bounds endpoint) failed.")
+
+class LanguageCodeTest(TestCase):
+    def test_encode(self):
+        lc = LanguageCode('en', 'iso-639-1')
+
+        self.assertEqual('en', lc.encode('iso-639-1'),
+                         "Incorrect encoded value.")
+
+        lc = LanguageCode('bm', 'iso-639-1')
+
+        self.assertEqual('bm', lc.encode('iso-639-1'),
+                         "Incorrect encoded value.")
+
+        self.assertEqual('bam', lc.encode('unisubs'),
+                         "Incorrect encoded value.")
+
+
+    def test_aliases(self):
+        lc = LanguageCode('bm', 'iso-639-1')
+        aliases = lc.aliases()
+
+        self.assertIn('iso-639-1', aliases,
+                      "Alias not found.")
+        self.assertIn('unisubs', aliases,
+                      "Alias not found.")
+
+        self.assertEqual('bm', aliases['iso-639-1'],
+                         'Incorrect alias.')
+        self.assertEqual('bam', aliases['unisubs'],
+                         'Incorrect alias.')

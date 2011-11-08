@@ -17,6 +17,7 @@ Contents:
    deployment-guide
    feature-flags
    permissions
+   i18n
 
 
 Indices and tables

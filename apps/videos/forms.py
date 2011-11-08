@@ -436,7 +436,7 @@ class AddFromFeedForm(forms.Form, AjaxForm):
                 if vt:
                     self.video_types.append((vt, info))
 
-                if len(self.video_types) >= self.VIDEOS_LIMIT:
+                if self.VIDEOS_LIMIT and len(self.video_types) >= self.VIDEOS_LIMIT:
                     self.video_limit_routreach = True
                     break  
             

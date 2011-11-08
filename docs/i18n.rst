@@ -1,0 +1,37 @@
+Internationalization (i18n)
+###########################
+
+Unisubs has some complex requirements in terms of 18n. This is a rough guide of how things work.
+
+Django's system is `gnu's get text system <http://www.gnu.org/software/gettext/manual/gettext.html#Locale-Names>`_. For example::
+
+    pt
+
+The first two letters are the language code, according to `ISO 639-1 <http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes>`_ . In this case Portuguese.
+
+If the locale has variation as to the country, for example Portugal's Portuguese vs Brazilian's portuguese then the locale name is appended an underscore + the country two digit code, which is `ISO 3166 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_. Therefore the locales for portuguese speaking countries are::
+
+    pt_BR -> Brazilian Portuguese
+    pt_PT -> Portugal's Portuguese
+
+Some of the less common languages are not covered by ISO 639-1 but are  by `ISO 639-3 <http://en.wikipedia.org/wiki/ISO_639-3>`_.
+
+Guidelines
+===========
+
+Whenever we need to add a new language we need to check if ISO 639-1 covers it. If it does, it's the prefered way to handle this, as it would keep our code streamlined with Django's. If not, then we should prefer ISO 639-3.
+
+Updating Django
+===============
+One must be careful when updating the Django's version. As new locales are added between releases, we must check if the locale is already added on our end with a different encoding. If that happens, we'll have duplication . This has beaten us before.
+
+
+Partners
+=========
+Different partners might have different language requirements while mapping to their own internal systems. We should update this guide once we have more specifics on how we're implementing those mappings.
+
+
+
+
+
+ 

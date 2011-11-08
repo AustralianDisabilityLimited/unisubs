@@ -27,6 +27,7 @@ def rel(*x):
 gettext_noop = lambda s: s
 
 from django.conf import global_settings
+#: see doc/i18n
 lang_dict = dict(global_settings.LANGUAGES)
 lang_dict['es-ar'] = gettext_noop(u'Spanish, Argentinian')
 lang_dict['en-gb'] = gettext_noop(u'English, British')
@@ -115,7 +116,7 @@ ALL_LANGUAGES['tlh'] = gettext_noop(u'Klingon')
 ALL_LANGUAGES['mt'] = gettext_noop(u'Maltese')
 ALL_LANGUAGES['hy'] = gettext_noop(u'Armenian')
 ALL_LANGUAGES['bi'] = gettext_noop(u'Bislama')
-ALL_LANGUAGES['fr-ca'] = gettext_noop(u'French (Canadian)')
+ALL_LANGUAGES['fr-ca'] = gettext_noop(u'French, Canadian')
 ALL_LANGUAGES['sh'] = gettext_noop(u'Serbo-Croatian')
 ALL_LANGUAGES['lo'] = gettext_noop(u'Lao')
 ALL_LANGUAGES['rup'] = gettext_noop(u'Macedo (Aromanian) Romanian')

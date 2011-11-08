@@ -47,3 +47,4 @@ Sphinx==1.0.7
 vendor/Unidecode-0.04.9.tar.gz 
 M2Crypto==0.21.1
 vendor/django-templatetag-sugar.tar.gz
+vendor/django-tastypie-e8af3152.tar.gz

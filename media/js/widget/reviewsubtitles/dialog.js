@@ -114,3 +114,41 @@ unisubs.reviewsubtitles.Dialog.prototype.getSubtitleLanguage = function() {
 unisubs.reviewsubtitles.Dialog.prototype.getServerModel = function() {
     return this.serverModel_;
 };
+
+unisubs.reviewsubtitles.Dialog.prototype.isWorkSaved = function() {
+    return this.saved_ || false;
+};
+
+unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
+    var that = this;
+    this.getRightPanelInternal().showLoading(true);
+    this.getRightPanelInternal().finish(
+        'In Progress',
+        function(serverMsg) {
+            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
+                that.onWorkSaved(closeAfterSave);
+            });
+        },
+        function(opt_status) {
+            if (that.finishFailDialog_) {
+                that.finishFailDialog_.failedAgain(opt_status);
+            } else {
+                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
+                    that.serverModel_.getCaptionSet(), opt_status,
+                    goog.bind(that.saveWorkInternal, that, closeAfterSave));
+            }
+        }
+    );
+};
+
+unisubs.reviewsubtitles.Dialog.prototype.onWorkSaved = function(closeAfterSave){
+    this.saved_ = true;
+    unisubs.widget.ResumeEditingRecord.clear();
+    if (this.finishFailDialog_) {
+        this.finishFailDialog_.setVisible(false);
+        this.finishFailDialog_ = null;
+    }
+    if (closeAfterSave) {
+        this.setVisible(false);
+    }
+};

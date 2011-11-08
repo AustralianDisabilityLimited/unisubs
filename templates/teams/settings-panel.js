@@ -312,6 +312,9 @@ var ProjectPanel  = AsyncPanel.$extend({
         this.renderProjectList();
     },
     hide : function(){
+        if (this.projectEditPanel){
+            this.projectEditPanel.hide()
+        }
         this.el.each(function(i,o){
             $(o).remove();
         });

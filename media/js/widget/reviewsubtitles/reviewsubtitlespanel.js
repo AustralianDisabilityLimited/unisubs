@@ -48,37 +48,17 @@ goog.inherits(unisubs.reviewsubtitles.ReviewSubtitlesPanel, goog.ui.Component);
 unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.enterDocument = function() {
     unisubs.reviewsubtitles.ReviewSubtitlesPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
-    handler.listen(this.captionManager_,
-                   unisubs.CaptionManager.CAPTION,
-                   this.captionReached_);
+    handler.listen(this.captionManager_, unisubs.CaptionManager.CAPTION, this.captionReached_);
 };
 unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.createDom = function() {
     unisubs.reviewsubtitles.ReviewSubtitlesPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.getElement().appendChild(this.contentElem_ = $d('div'));
-    this.addChild(this.subtitleList_ = new unisubs.subtitle.SubtitleList(
-        this.videoPlayer_, this.subtitles_, true, false, true), true);
-};
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.getRightPanel = function() {
-    if (!this.rightPanel_) {
-        this.rightPanel_ = this.createRightPanelInternal();
-    }
-    return this.rightPanel_;
-};
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.makeKeySpecsInternal = function() {
-    var KC = goog.events.KeyCodes;
-    return [
-        new unisubs.RightPanel.KeySpec(
-            'unisubs-begin', 'unisubs-down', 'down',
-            'Tap when next subtitle should appear', KC.DOWN, 0),
-        new unisubs.RightPanel.KeySpec(
-            'unisubs-play', 'unisubs-tab', 'tab', 'Play/Pause', KC.TAB, 0),
-        new unisubs.RightPanel.KeySpec(
-            'unisubs-skip', 'unisubs-control', 'shift\n+\ntab',
-            'Skip Back 8 Seconds', KC.TAB,
-            unisubs.RightPanel.KeySpec.Modifier.SHIFT)
-    ];
 
+    this.getElement().appendChild(this.contentElem_ = $d('div'));
+
+    this.subtitleList_ = new unisubs.subtitle.SubtitleList(
+        this.videoPlayer_, this.subtitles_, true, false, true);
+    this.addChild(this.subtitleList_, true);
 };
 unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.captionReached_ = function(event) {
     var editableCaption = event.caption;

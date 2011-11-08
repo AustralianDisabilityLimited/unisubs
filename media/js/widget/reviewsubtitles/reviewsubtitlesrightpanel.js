@@ -89,34 +89,32 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendCustomButtonsI
     handler.listen(this.approveButton_, 'click', this.approveButtonClicked_);
 };
 
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.approveButtonClicked_ = function(e){
-    e.preventDefault();
+
+unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.finish = function(approved, successCallback, failureCallback) {
+    var approval_code = unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_[approved];
 
     this.serverModel_.finishReview({
         'task_id': unisubs.task_id,
         'body': goog.dom.forms.getValue(this.bodyInput_),
-        'approved': unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_['Approved']});
+        'approved': approval_code
+    }, successCallback, failureCallback);
+};
+unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.approveButtonClicked_ = function(e){
+    e.preventDefault();
+    this.finish('Approved');
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.saveForLaterButtonClicked_ = function(e){
     e.preventDefault();
-
-    this.serverModel_.finishReview({
-        'task_id': unisubs.task_id,
-        'body': goog.dom.forms.getValue(this.bodyInput_),
-        'approved': unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_['In Progress']});
+    this.finish('In Progress');
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.sendBackButtonClicked_ = function(e){
     e.preventDefault();
-
-    this.serverModel_.finishReview({
-        'task_id': unisubs.task_id,
-        'body': goog.dom.forms.getValue(this.bodyInput_),
-        'approved': unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_['Rejected']});
+    this.finish('Rejected');
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.reassignLinkClicked_ = function(e){
+    // TODO
 };
 unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.editedVersionLinkClicked_ = function(e){
     e.preventDefault();
-
-    alert("o hai");
+    // TODO
 };

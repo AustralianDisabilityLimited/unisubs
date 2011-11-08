@@ -443,7 +443,14 @@ class Rpc(BaseRpc):
             task.subtitle_language.release_writelock()
             task.save()
 
-            return {'response': 'ok'}
+            if form.cleaned_data['approved'] == Task.APPROVED_IDS['Approved']:
+                user_message =  'These subtitles have been approved and your notes have been sent to the author.'
+            elif form.cleaned_data['approved'] == Task.APPROVED_IDS['Rejected']:
+                user_message =  'These subtitles have been rejected and your notes have been sent to the author.'
+            else:
+                user_message =  'Your notes have been saved.'
+
+            return {'response': 'ok', 'user_message': user_message}
         else:
             return {'error_msg': _(u'\n'.join(flatten_errorlists(form.errors)))}
 

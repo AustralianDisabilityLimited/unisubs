@@ -20,10 +20,8 @@ goog.provide('unisubs.reviewsubtitles.Dialog');
 
 /**
  * @constructor
- *
  */
-unisubs.reviewsubtitles.Dialog = function(videoSource, serverModel,
-                                          subtitleState) {
+unisubs.reviewsubtitles.Dialog = function(videoSource, serverModel, subtitleState) {
     unisubs.Dialog.call(this, videoSource);
     unisubs.SubTracker.getInstance().start(true);
 
@@ -87,15 +85,11 @@ unisubs.reviewsubtitles.Dialog.prototype.createRightPanel_ = function() {
         this.serverModel_, helpContents, [], false, "Done?", "Submit final Review");
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.isWorkSaved = function() {
-    // TODO
-    return this.saved_ || !this.serverModel_.anySubtitlingWorkDone();
-};
-
 unisubs.reviewsubtitles.Dialog.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
+
 unisubs.reviewsubtitles.Dialog.prototype.enterDocument = function() {
     unisubs.reviewsubtitles.Dialog.superClass_.enterDocument.call(this);
     unisubs.Dialog.translationDialogOpen = false;
@@ -106,65 +100,6 @@ unisubs.reviewsubtitles.Dialog.prototype.enterDocument = function() {
             this.captionReached_);
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.handleApprove_ = function(e) {
-    e.preventDefault();
-    this.saveWork(true);
-};
-unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
-    var that = this;
-    this.getRightPanelInternal().showLoading(true);
-    this.serverModel_.finish(
-        function(serverMsg){
-            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
-                that.onWorkSaved(closeAfterSave);
-            })
-        },
-        function(opt_status) {
-            if (that.finishFailDialog_)
-                that.finishFailDialog_.failedAgain(opt_status);
-            else
-                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
-                    that.serverModel_.getCaptionSet(), opt_status,
-                    goog.bind(that.saveWorkInternal, that, closeAfterSave));
-        });
-};
-// unisubs.translate.Dialog.prototype.onWorkSaved = function() {
-//     if (this.finishFailDialog_) {
-//         this.finishFailDialog_.setVisible(false);
-//         this.finishFailDialog_ = null;
-//     }
-//     unisubs.widget.ResumeEditingRecord.clear();
-//     this.getRightPanelInternal().showLoading(false);
-//     this.saved_ = true;
-//     this.setVisible(false);
-// }
-
-unisubs.reviewsubtitles.Dialog.prototype.saveWorkImpl_ = function(closeAfterSave, isComplete) {
-    this.getRightPanelInternal().showLoading(true);
-
-    var that = this;
-    this.serverModel_.finish(
-        function(serverMsg){
-            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
-                that.onWorkSaved(closeAfterSave, isComplete);
-            });
-        },
-        function(opt_status) {
-            if (that.finishFailDialog_) {
-                that.finishFailDialog_.failedAgain(opt_status);
-            } else {
-                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
-                    that.captionSet_, opt_status,
-                    goog.bind(that.saveWorkImpl_, that, 
-                              closeAfterSave, isComplete));
-            }
-        },
-        function() {
-            that.doneButtonEnabled_ = true;
-            that.getRightPanelInternal().showLoading(false);
-        });
-};
-
 unisubs.reviewsubtitles.Dialog.prototype.disposeInternal = function() {
     unisubs.reviewsubtitles.Dialog.superClass_.disposeInternal.call(this);
     this.serverModel_.dispose();
@@ -172,14 +107,48 @@ unisubs.reviewsubtitles.Dialog.prototype.disposeInternal = function() {
     this.timelineSubtitleSet_ = null;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.getSubtitleLanguage = function(){
+unisubs.reviewsubtitles.Dialog.prototype.getSubtitleLanguage = function() {
     return this.subtitleState_.LANGUAGE;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.getServerModel = function(){
+unisubs.reviewsubtitles.Dialog.prototype.getServerModel = function() {
     return this.serverModel_;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.makeJsonSubs =  function () {
-    return this.serverModel_.getCaptionSet().makeJsonSubs();
+unisubs.reviewsubtitles.Dialog.prototype.isWorkSaved = function() {
+    return this.saved_ || false;
+};
+
+unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
+    var that = this;
+    this.getRightPanelInternal().showLoading(true);
+    this.getRightPanelInternal().finish(
+        'In Progress',
+        function(serverMsg) {
+            unisubs.subtitle.OnSavedDialog.show(serverMsg, function(){
+                that.onWorkSaved(closeAfterSave);
+            });
+        },
+        function(opt_status) {
+            if (that.finishFailDialog_) {
+                that.finishFailDialog_.failedAgain(opt_status);
+            } else {
+                that.finishFailDialog_ = unisubs.finishfaildialog.Dialog.show(
+                    that.serverModel_.getCaptionSet(), opt_status,
+                    goog.bind(that.saveWorkInternal, that, closeAfterSave));
+            }
+        }
+    );
+};
+
+unisubs.reviewsubtitles.Dialog.prototype.onWorkSaved = function(closeAfterSave){
+    this.saved_ = true;
+    unisubs.widget.ResumeEditingRecord.clear();
+    if (this.finishFailDialog_) {
+        this.finishFailDialog_.setVisible(false);
+        this.finishFailDialog_ = null;
+    }
+    if (closeAfterSave) {
+        this.setVisible(false);
+    }
 };

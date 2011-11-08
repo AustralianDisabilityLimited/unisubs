@@ -39,6 +39,7 @@ from templatetag_sugar.parser import Name, Variable, Constant, Optional, Model
 
 from apps.teams.permissions import list_narrowings
 from apps.teams.permissions import can_view_settings_tab as _can_view_settings_tab, roles_assignable_to
+from apps.teams.permissions import can_assign_roles as _can_assign_roles
 
 DEV_OR_STAGING = getattr(settings, 'DEV', False) or getattr(settings, 'STAGING', False)
 ACTIONS_ON_PAGE = getattr(settings, 'ACTIONS_ON_PAGE', 10)
@@ -238,6 +239,15 @@ def member_projects(context, member, varname):
 def can_view_settings_tab(team, user):
    return _can_view_settings_tab(team, user)
 
+@register.filter
+def can_assign_roles(team, user, project=None):
+    """
+    Usage {% if team|can_assign_roles:user %}
+           edit roles
+           {% endif %}
+    """
+    return _can_assign_roles(team, user, project)
+    
 @register.filter
 def has_applicant(team, user):
     return team.applications.filter(user=user).exists()

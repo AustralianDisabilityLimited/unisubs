@@ -16,10 +16,9 @@
 
 {% block scripts %}
     {{ block.super }}
-     {% if assignable_roles %}
-          
+    {% if assignable_roles %}
         {% include_bundle "js-teams-settings-panel" %}
-{% endif %}
+    {% endif %}
     {% include_bundle "unisubs-onsite-compiled" %}
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>     
     
@@ -45,6 +44,14 @@
 
         {% if team|can_invite_to_team:user %}
             <div class="tools">
+                <ul class="filters">
+                    <li>
+                        <select name="lang-filter" id="lang-filter">
+                            <option value="all">All languages</option>
+                            <option value="en">English</option>
+                        </select>
+                    </li>
+                </ul>
                 <a href="{% url teams:invite_members slug=team.slug %}" class="button">Invite Members</a>
             </div>
         {% endif %}

@@ -243,6 +243,8 @@ unisubs.widget.SubtitleDialogOpener.prototype.startEditingResponseHandler_ =
             sessionPK, this.videoID_, this.videoURL_, captionSet);
         if (unisubs.mode == 'review') {
             this.openSubtitleReviewingDialog(serverModel, subtitles);
+        } else if (unisubs.mode == 'approve') {
+            this.openSubtitleApproveDialog(serverModel, subtitles);
         } else if (subtitles.IS_ORIGINAL || subtitles.FORKED) {
             this.openSubtitlingDialog(serverModel, subtitles);
         } else {
@@ -268,6 +270,16 @@ unisubs.widget.SubtitleDialogOpener.prototype.openSubtitleReviewingDialog =
 
     subReviewDialog.setParentEventTarget(this);
     subReviewDialog.setVisible(true);
+};
+
+unisubs.widget.SubtitleDialogOpener.prototype.openSubtitleApproveDialog = 
+    function(serverModel, subtitleState) 
+{
+    this.subOpenFn_ && this.subOpenFn_();
+    var subApproveDialog = new unisubs.approvesubtitles.Dialog(this.videoSource_, serverModel, subtitleState);
+
+    subApproveDialog.setParentEventTarget(this);
+    subApproveDialog.setVisible(true);
 };
 
 unisubs.widget.SubtitleDialogOpener.prototype.openSubtitlingDialog = 

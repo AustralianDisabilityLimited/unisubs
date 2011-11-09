@@ -32,7 +32,7 @@ from uslogging.models import WidgetDialogLog
 from videos.tasks import video_changed_tasks
 from icanhaz.models import VideoVisibilityPolicy
 from django.utils import translation
-from widget.forms import FinishReviewForm
+from widget.forms import  FinishReviewForm, FinishApproveForm
 from utils.forms import flatten_errorlists
 from teams.models import Task
 
@@ -431,6 +431,38 @@ class Rpc(BaseRpc):
         data = {'task': task_id, 'body': body, 'approved': approved}
 
         form = FinishReviewForm(request, data)
+
+        if form.is_valid():
+            task = form.cleaned_data['task']
+            task.body = form.cleaned_data['body']
+            task.approved = form.cleaned_data['approved']
+
+            if task.approved in Task.APPROVED_FINISHED_IDS:
+                task.completed = datetime.now()
+
+            task.subtitle_language.release_writelock()
+            task.save()
+
+            if form.cleaned_data['approved'] == Task.APPROVED_IDS['Approved']:
+                user_message =  'These subtitles have been approved and your notes have been sent to the author.'
+            elif form.cleaned_data['approved'] == Task.APPROVED_IDS['Rejected']:
+                user_message =  'These subtitles have been rejected and your notes have been sent to the author.'
+            else:
+                user_message =  'Your notes have been saved.'
+
+            return {'response': 'ok', 'user_message': user_message}
+        else:
+            return {'error_msg': _(u'\n'.join(flatten_errorlists(form.errors)))}
+
+
+    def fetch_approve_data(self, request, task_id):
+        task = Task.objects.get(pk=task_id)
+        return {'response': 'ok', 'body': task.body}
+
+    def finish_approve(self, request, task_id=None, body=None, approved=None):
+        data = {'task': task_id, 'body': body, 'approved': approved}
+
+        form = FinishApproveForm(request, data)
 
         if form.is_valid():
             task = form.cleaned_data['task']

@@ -221,6 +221,24 @@ unisubs.subtitle.MSServerModel.prototype.fetchReviewData = function(taskId, succ
         }, true);
 
 };
+unisubs.subtitle.MSServerModel.prototype.fetchApproveData = function(taskId, successCallback) {
+    unisubs.Rpc.call(
+        'fetch_approve_data',
+        {'task_id': taskId},
+        function(result) {
+            if (result['response'] != 'ok') {
+                // this should never happen.
+                alert('Problem fetching approval data. Response: ' + result["response"]);
+                failureCallback(200);
+            } else {
+                successCallback(result['body']);
+            }
+        }, function(opt_status) {
+            failureCallback(opt_status);
+        }, true);
+
+};
+
 unisubs.subtitle.MSServerModel.prototype.finishReview = function(data, successCallback, failureCallback) {
     var that = this;
     unisubs.Rpc.call(
@@ -230,6 +248,30 @@ unisubs.subtitle.MSServerModel.prototype.finishReview = function(data, successCa
             if (result['response'] != 'ok') {
                 // this should never happen.
                 alert('Problem saving review. Response: ' +
+                      result["response"]);
+                failureCallback(200);
+            } else {
+                that.finished_ = true;
+                if (successCallback) {
+                    successCallback(result["user_message"]);
+                }
+            }
+        }, function(opt_status) {
+            if (failureCallback) {
+                failureCallback(opt_status);
+            }
+        }, true);
+
+};
+unisubs.subtitle.MSServerModel.prototype.finishApprove = function(data, successCallback, failureCallback) {
+    var that = this;
+    unisubs.Rpc.call(
+        'finish_approve',
+        data,
+        function(result) {
+            if (result['response'] != 'ok') {
+                // this should never happen.
+                alert('Problem saving approval. Response: ' +
                       result["response"]);
                 failureCallback(200);
             } else {

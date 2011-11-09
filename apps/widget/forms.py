@@ -33,3 +33,17 @@ class FinishReviewForm(forms.Form):
                 assignee=request.user)
 
 
+class FinishApproveForm(forms.Form):
+    task = forms.ModelChoiceField(Task.objects.all())
+    body = forms.CharField(max_length=1024, required=False)
+    approved = forms.TypedChoiceField(choices=Task.APPROVED_CHOICES, coerce=int,
+                                      empty_value=None)
+
+    def __init__(self, request, *args, **kwargs):
+        super(FinishApproveForm, self).__init__(*args, **kwargs)
+
+        self.fields['task'].queryset = Task.objects.filter(
+                deleted=False, completed=None, type=Task.TYPE_IDS['Approve'],
+                assignee=request.user)
+
+

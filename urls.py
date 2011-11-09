@@ -151,7 +151,7 @@ except ImportError:
 try:
     from apiv2 import urls
     urlpatterns += patterns('',
-        url(r'^api/2.0/', include('apiv2.urls', 'api2')),
+        url(r'^api2/', include('apiv2.urls', 'api2')),
     )
 except ImportError:
     pass

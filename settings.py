@@ -514,6 +514,7 @@ import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/widget'),
     re.compile('^/api'),
+    re.compile('^/api2'),
     re.compile('^/jstest'),
     re.compile('^/sitemap.*.xml'),
     #re.compile('^/crossdomain.xml'),

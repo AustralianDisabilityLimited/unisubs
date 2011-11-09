@@ -826,6 +826,18 @@ MEDIA_BUNDLES = {
             "js/jquery.mod.js",
          )
     },
+    "js-teams-tasks-panel":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "closure_deps": "",
+        "files": (
+            "js/libs/ICanHaz.js",
+            "js/libs/classy.js",
+            "js/libs/underscore.js",
+            "js/libs/chosen.jquery.min.js",
+            "js/jquery.mod.js",
+         )
+    },
     "debug-embed-js": {
         "type": "js",
         "optimizations": "WHITESPACE_ONLY",

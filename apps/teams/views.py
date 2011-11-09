@@ -332,6 +332,22 @@ def team_settings(request, slug):
         'settings_form': SettingsForm(),
     }
 
+@render_to('teams/tasks.html')
+def team_tasks(request, slug):
+    team = Team.get(slug, request.user)
+
+    if not can_view_settings_tab(team, request.user):
+        return HttpResponseForbidden("You cannot view this team")
+
+    member = team.members.get(user=request.user)
+
+    return {
+        'team': team,
+        'user_can_delete_tasks': member.can_delete_tasks(),
+        'user_can_assign_tasks': member.can_assign_tasks(),
+        'assign_form': TaskAssignForm(team, member),
+    }
+
 @render_to('teams/invite_members.html')
 @login_required
 def invite_members(request, slug):

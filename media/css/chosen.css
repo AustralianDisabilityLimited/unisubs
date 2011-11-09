@@ -1,14 +1,15 @@
 /* @group Base */
 .chzn-container {
-  font-size: 13px;
+  font-size: 12px;
   position: relative;
   display: inline-block;
   zoom: 1;
+  color: #3e6782;
   *display: inline;
 }
 .chzn-container .chzn-drop {
   background: #fff;
-  border: 1px solid #aaa;
+  border: 1px solid #b7c3c9;
   border-top: 0;
   position: absolute;
   top: 29px;
@@ -37,15 +38,15 @@
   -moz-background-clip   : padding;
   -webkit-background-clip: padding-box;
   background-clip        : padding-box;
-  border: 1px solid #aaa;
+  border: 1px solid #b7c3c9;
   display: block;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
-  height: 26px;
-  line-height: 26px;
+  height: 24px;
+  line-height: 24px;
   padding: 0 0 0 8px;
-  color: #444;
+  color: #678ca3;
   text-decoration: none;
 }
 .chzn-container-single .chzn-single span {
@@ -77,15 +78,15 @@
   -moz-background-clip   : padding;
   -webkit-background-clip: padding-box;
   background-clip        : padding-box;
-  background: #ccc;
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #ccc), color-stop(0.6, #eee));
-  background-image: -webkit-linear-gradient(center bottom, #ccc 0%, #eee 60%);
-  background-image: -moz-linear-gradient(center bottom, #ccc 0%, #eee 60%);
-  background-image: -o-linear-gradient(bottom, #ccc 0%, #eee 60%);
-  background-image: -ms-linear-gradient(top, #cccccc 0%,#eeeeee 60%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#eeeeee',GradientType=0 );
-  background-image: linear-gradient(top, #cccccc 0%,#eeeeee 60%);
-  border-left: 1px solid #aaa;
+  background: #dce2e5;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #dce2e5), color-stop(1, #f3f6f8));
+  background-image: -webkit-linear-gradient(center bottom, #dce2e5 0%, #f3f6f8 100%);
+  background-image: -moz-linear-gradient(center bottom, #dce2e5 0%, #f3f6f8 100%);
+  background-image: -o-linear-gradient(bottom, #dce2e5 0%, #f3f6f8 100%);
+  background-image: -ms-linear-gradient(top, #dce2e5 0%,#f3f6f8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dce2e5', endColorstr='#f3f6f8',GradientType=0 );
+  background-image: linear-gradient(top, #dce2e5 0%,#f3f6f8 100%);
+  border-left: 1px solid #b7c3c9;
   position: absolute;
   right: 0;
   top: 0;
@@ -117,7 +118,7 @@
   margin: 1px 0;
   padding: 4px 20px 4px 5px;
   outline: 0;
-  border: 1px solid #aaa;
+  border: 1px solid #b7c3c9;
   font-family: sans-serif;
   font-size: 1em;
 }
@@ -146,7 +147,7 @@
   background-image: -ms-linear-gradient(top, #ffffff 85%,#eeeeee 99%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
   background-image: linear-gradient(top, #ffffff 85%,#eeeeee 99%);
-  border: 1px solid #aaa;
+  border: 1px solid #b7c3c9;
   margin: 0;
   padding: 0;
   cursor: text;
@@ -165,7 +166,7 @@
   padding: 0;
 }
 .chzn-container-multi .chzn-choices .search-field input {
-  color: #666;
+  color: #486f87;
   background: transparent !important;
   border: 0 !important;
   padding: 5px;
@@ -177,7 +178,7 @@
   box-shadow        : none;
 }
 .chzn-container-multi .chzn-choices .search-field .default {
-  color: #999;
+  color: #a0b2bd;
 }
 .chzn-container-multi .chzn-choices .search-choice {
   -webkit-border-radius: 3px;
@@ -194,8 +195,8 @@
   background-image: -ms-linear-gradient(top, #e4e4e4 0%,#eeeeee 70%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4e4e4', endColorstr='#eeeeee',GradientType=0 );
   background-image: linear-gradient(top, #e4e4e4 0%,#eeeeee 70%);
-  color: #333;
-  border: 1px solid #b4b4b4;
+  color: #678ca3;
+  border: 1px solid #dce2e5;
   line-height: 13px;
   padding: 3px 19px 3px 6px;
   margin: 3px 0 3px 5px;
@@ -250,7 +251,7 @@
   display: list-item;
 }
 .chzn-container .chzn-results .highlighted {
-  background: #3875d7;
+  background: #678ca3;
   color: #fff;
 }
 .chzn-container .chzn-results li em {
@@ -266,7 +267,7 @@
 }
 .chzn-container .chzn-results .group-result {
   cursor: default;
-  color: #999;
+  color: #a0b2bd;
   font-weight: bold;
 }
 .chzn-container .chzn-results .group-option {
@@ -283,10 +284,10 @@
   -moz-box-shadow   : 0 0 5px rgba(0,0,0,.3);
   -o-box-shadow     : 0 0 5px rgba(0,0,0,.3);
   box-shadow        : 0 0 5px rgba(0,0,0,.3);
-  border: 1px solid #5897fb;
+  border: 1px solid #b7c3c9;
 }
 .chzn-container-active .chzn-single-with-drop {
-  border: 1px solid #aaa;
+  border: 1px solid #b7c3c9;
   -webkit-box-shadow: 0 1px 0 #fff inset;
   -moz-box-shadow   : 0 1px 0 #fff inset;
   -o-box-shadow     : 0 1px 0 #fff inset;
@@ -318,10 +319,10 @@
   -moz-box-shadow   : 0 0 5px rgba(0,0,0,.3);
   -o-box-shadow     : 0 0 5px rgba(0,0,0,.3);
   box-shadow        : 0 0 5px rgba(0,0,0,.3);
-  border: 1px solid #5897fb;
+  border: 1px solid #b7c3c9;
 }
 .chzn-container-active .chzn-choices .search-field input {
-  color: #111 !important;
+  color: #3e6782 !important;
 }
 /* @end */
 

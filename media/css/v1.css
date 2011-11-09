@@ -206,59 +206,50 @@
 .v1 .view .tools .filters > li select {
   width: 140px;
 }
-/* line 178, ../../../unisubs-design/sass/v1.scss */
-.v1 .view .tools .filters .chzn-container {
-  font-size: 12px;
-}
-/* line 181, ../../../unisubs-design/sass/v1.scss */
-.v1 .view .tools .filters .chzn-container .chzn-single {
-  height: 24px;
-  line-height: 24px;
-}
 
 /*************** @Listings ***************/
-/* line 198, ../../../unisubs-design/sass/v1.scss */
+/* line 189, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing {
   padding: 0;
 }
-/* line 201, ../../../unisubs-design/sass/v1.scss */
+/* line 192, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li {
   position: relative;
   padding: 2em 1em;
   border-bottom: 1px dotted #b7c3c9;
 }
-/* line 206, ../../../unisubs-design/sass/v1.scss */
+/* line 197, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 {
   position: relative;
   font-size: 13px;
   padding-bottom: .25em;
   line-height: 1.5em;
 }
-/* line 212, ../../../unisubs-design/sass/v1.scss */
+/* line 203, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 a {
   text-decoration: none;
   margin-right: .5em;
 }
-/* line 216, ../../../unisubs-design/sass/v1.scss */
+/* line 207, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li h3 a:hover {
   border-width: 0 0 1px 0;
   border-style: dotted;
 }
-/* line 223, ../../../unisubs-design/sass/v1.scss */
+/* line 214, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li p {
   margin: .5em 0;
 }
-/* line 227, ../../../unisubs-design/sass/v1.scss */
+/* line 218, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .thumb {
   position: absolute;
   top: 2em;
   left: 0;
 }
-/* line 231, ../../../unisubs-design/sass/v1.scss */
+/* line 222, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .thumb img {
   border: 1px solid #b7c3c9;
 }
-/* line 236, ../../../unisubs-design/sass/v1.scss */
+/* line 227, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions {
   position: absolute;
   top: 2em;
@@ -266,27 +257,27 @@
   width: 120px;
   padding: 0;
 }
-/* line 239, ../../../unisubs-design/sass/v1.scss */
+/* line 230, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions li {
   padding: 0;
   text-align: right;
   color: #a0b2bd;
 }
-/* line 245, ../../../unisubs-design/sass/v1.scss */
+/* line 236, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions a {
   color: #486f87;
   text-decoration: none;
 }
-/* line 250, ../../../unisubs-design/sass/v1.scss */
+/* line 241, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions li > a {
   display: block;
   padding: .5em 0;
 }
-/* line 254, ../../../unisubs-design/sass/v1.scss */
+/* line 245, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .actions li > a:after {
   content: ' →';
 }
-/* line 260, ../../../unisubs-design/sass/v1.scss */
+/* line 251, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .descriptor {
   font-size: 11px;
   font-weight: normal;
@@ -301,7 +292,7 @@
   border: 1px solid #dce2e5;
   color: #7692a3;
 }
-/* line 270, ../../../unisubs-design/sass/v1.scss */
+/* line 261, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls {
   display: none;
   position: absolute;
@@ -329,19 +320,19 @@
   box-shadow: #a0b2bd 0px 0px 8px;
   border: 1px solid #a0b2bd;
 }
-/* line 282, ../../../unisubs-design/sass/v1.scss */
+/* line 273, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls.selected {
   display: block;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
-/* line 287, ../../../unisubs-design/sass/v1.scss */
+/* line 278, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls li {
   display: block;
   float: left;
   padding: 0;
 }
-/* line 292, ../../../unisubs-design/sass/v1.scss */
+/* line 283, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls li a {
   display: block;
   float: left;
@@ -351,61 +342,61 @@
   border-left: 1px solid #a0b2bd;
   cursor: pointer;
 }
-/* line 305, ../../../unisubs-design/sass/v1.scss */
+/* line 296, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls li input[type="checkbox"] {
   margin: 5px 7px;
 }
-/* line 310, ../../../unisubs-design/sass/v1.scss */
+/* line 301, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li .admin-controls:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
-/* line 315, ../../../unisubs-design/sass/v1.scss */
+/* line 306, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing > li:hover .admin-controls {
   display: block;
 }
 
-/* line 321, ../../../unisubs-design/sass/v1.scss */
+/* line 312, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.videos > li {
   min-height: 5em;
   padding-left: 120px;
   padding-right: 150px;
 }
-/* line 326, ../../../unisubs-design/sass/v1.scss */
+/* line 317, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.videos > li .thumb {
   width: 100px;
   height: 60px;
 }
-/* line 330, ../../../unisubs-design/sass/v1.scss */
+/* line 321, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.videos > li .thumb img {
   height: 60px;
 }
 
-/* line 336, ../../../unisubs-design/sass/v1.scss */
+/* line 327, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li {
   min-height: 4em;
   padding-left: 65px;
   padding-right: 150px;
 }
-/* line 341, ../../../unisubs-design/sass/v1.scss */
+/* line 332, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li .thumb {
   width: 45px;
   height: 45px;
 }
-/* line 345, ../../../unisubs-design/sass/v1.scss */
+/* line 336, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li .thumb img {
   height: 45px;
 }
-/* line 350, ../../../unisubs-design/sass/v1.scss */
+/* line 341, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.members > li.current {
   background: #f6f6e4;
 }
 
-/* line 355, ../../../unisubs-design/sass/v1.scss */
+/* line 346, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.activity > li {
   padding-right: 150px;
 }
-/* line 358, ../../../unisubs-design/sass/v1.scss */
+/* line 349, ../../../unisubs-design/sass/v1.scss */
 .v1 .listing.activity > li .timestamp {
   position: absolute;
   top: 2em;
@@ -418,7 +409,7 @@
 }
 
 /*************** @Controls ***************/
-/* line 368, ../../../unisubs-design/sass/v1.scss */
+/* line 359, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls {
   width: 199px;
   padding-left: 20px;
@@ -432,16 +423,16 @@
   background-image: -ms-linear-gradient(left, #f5f5f5, #ffffff 5%, #ffffff);
   background-image: linear-gradient(left, #f5f5f5, #ffffff 5%, #ffffff);
 }
-/* line 380, ../../../unisubs-design/sass/v1.scss */
+/* line 371, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul {
   padding: 0;
   margin: 2em 0 3em;
 }
-/* line 384, ../../../unisubs-design/sass/v1.scss */
+/* line 375, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li {
   padding: 0;
 }
-/* line 388, ../../../unisubs-design/sass/v1.scss */
+/* line 379, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a {
   position: relative;
   display: block;
@@ -463,7 +454,7 @@
   -khtml-border-bottom-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-/* line 398, ../../../unisubs-design/sass/v1.scss */
+/* line 389, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a:hover {
   background-color: #f9fafb;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #e8ecee), color-stop(5%, #f3f6f6), color-stop(100%, #f3f6f6));
@@ -473,14 +464,14 @@
   background-image: -ms-linear-gradient(left, #e8ecee, #f3f6f6 5%, #f3f6f6);
   background-image: linear-gradient(left, #e8ecee, #f3f6f6 5%, #f3f6f6);
 }
-/* line 407, ../../../unisubs-design/sass/v1.scss */
+/* line 398, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li a span {
   position: absolute;
   top: .75em;
   right: .75em;
   color: #a0b2bd;
 }
-/* line 414, ../../../unisubs-design/sass/v1.scss */
+/* line 405, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a {
   background-color: #edf1f2;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #e2e8e9), color-stop(5%, #edf1f2), color-stop(100%, #edf1f2));
@@ -491,7 +482,7 @@
   background-image: linear-gradient(left, #e2e8e9, #edf1f2 5%, #edf1f2);
   color: #486f87;
 }
-/* line 423, ../../../unisubs-design/sass/v1.scss */
+/* line 414, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a:hover {
   background-color: #e8ecee;
   background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #dce3e5), color-stop(5%, #e8ecee), color-stop(100%, #e8ecee));
@@ -501,42 +492,42 @@
   background-image: -ms-linear-gradient(left, #dce3e5, #e8ecee 5%, #e8ecee);
   background-image: linear-gradient(left, #dce3e5, #e8ecee 5%, #e8ecee);
 }
-/* line 432, ../../../unisubs-design/sass/v1.scss */
+/* line 423, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls ul li.current a span {
   color: #7692a3;
 }
 
 /*************** @Forms ***************/
-/* line 446, ../../../unisubs-design/sass/v1.scss */
+/* line 437, ../../../unisubs-design/sass/v1.scss */
 .v1 form {
   padding: 1em 0;
 }
-/* line 449, ../../../unisubs-design/sass/v1.scss */
+/* line 440, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset {
   padding-bottom: 3em;
 }
-/* line 452, ../../../unisubs-design/sass/v1.scss */
+/* line 443, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset legend {
   font-weight: bold;
   padding-bottom: .5em;
 }
-/* line 457, ../../../unisubs-design/sass/v1.scss */
+/* line 448, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input, .v1 form fieldset textarea {
   margin-bottom: 1em;
   padding: 4px;
 }
-/* line 462, ../../../unisubs-design/sass/v1.scss */
+/* line 453, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset label {
   display: block;
   width: 100%;
   padding: 1em 0 .25em;
 }
-/* line 466, ../../../unisubs-design/sass/v1.scss */
+/* line 457, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset label .notation {
   float: right;
   margin-right: -8px;
 }
-/* line 472, ../../../unisubs-design/sass/v1.scss */
+/* line 463, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type="text"], .v1 form fieldset textarea {
   display: block;
   width: 100%;
@@ -548,39 +539,39 @@
   -khtml-border-radius: 2px;
   border-radius: 2px;
 }
-/* line 478, ../../../unisubs-design/sass/v1.scss */
+/* line 469, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='checkbox'] {
   margin: 0 4px 0 0;
 }
-/* line 482, ../../../unisubs-design/sass/v1.scss */
+/* line 473, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset input[type='file'] {
   display: block;
   width: 100%;
   padding: 0;
 }
-/* line 487, ../../../unisubs-design/sass/v1.scss */
+/* line 478, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset select {
   margin-bottom: 1em;
   padding: 4px;
   width: 100%;
 }
-/* line 493, ../../../unisubs-design/sass/v1.scss */
+/* line 484, ../../../unisubs-design/sass/v1.scss */
 .v1 form fieldset textarea {
   height: 5em;
 }
 
-/* line 500, ../../../unisubs-design/sass/v1.scss */
+/* line 491, ../../../unisubs-design/sass/v1.scss */
 .v1 .panel-holder form {
   float: left;
   width: 100%;
   clear: both;
 }
 
-/* line 506, ../../../unisubs-design/sass/v1.scss */
+/* line 497, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow {
   margin-top: -3em;
 }
-/* line 509, ../../../unisubs-design/sass/v1.scss */
+/* line 500, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow fieldset {
   padding: 0 1em;
   background: #dce2e5;
@@ -591,12 +582,12 @@
   -khtml-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 514, ../../../unisubs-design/sass/v1.scss */
+/* line 505, ../../../unisubs-design/sass/v1.scss */
 .v1 form.workflow fieldset .button {
   margin-top: 2em;
 }
 
-/* line 520, ../../../unisubs-design/sass/v1.scss */
+/* line 511, ../../../unisubs-design/sass/v1.scss */
 .v1 .permissions .workflow {
   margin-top: 1em;
   padding: 0 1em;
@@ -609,51 +600,51 @@
   border-radius: 4px;
 }
 
-/* line 527, ../../../unisubs-design/sass/v1.scss */
+/* line 518, ../../../unisubs-design/sass/v1.scss */
 .v1 .alpha .omega {
   margin-left: 60px;
 }
 
-/* line 531, ../../../unisubs-design/sass/v1.scss */
+/* line 522, ../../../unisubs-design/sass/v1.scss */
 .v1 div.submit {
   margin-top: 2em;
   padding-top: 1em;
   border-top: 1px solid #dce2e5;
   text-align: right;
 }
-/* line 537, ../../../unisubs-design/sass/v1.scss */
+/* line 528, ../../../unisubs-design/sass/v1.scss */
 .v1 div.submit input {
   padding: 4px;
 }
 
-/* line 542, ../../../unisubs-design/sass/v1.scss */
+/* line 533, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form {
   margin-left: -10px;
 }
-/* line 545, ../../../unisubs-design/sass/v1.scss */
+/* line 536, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset {
   padding: 0;
 }
-/* line 548, ../../../unisubs-design/sass/v1.scss */
+/* line 539, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset input {
   width: 190px;
   padding: .5em;
   color: #a0b2bd;
   border-color: #dce2e5;
 }
-/* line 554, ../../../unisubs-design/sass/v1.scss */
+/* line 545, ../../../unisubs-design/sass/v1.scss */
 .v1 .controls form fieldset input:focus {
   border-color: #678ca3;
 }
 
 /*************** @Dashboard ***************/
-/* line 563, ../../../unisubs-design/sass/v1.scss */
+/* line 554, ../../../unisubs-design/sass/v1.scss */
 .v1.dashboard h2 {
   margin: 0;
   padding-bottom: .5em;
 }
 
-/* line 568, ../../../unisubs-design/sass/v1.scss */
+/* line 559, ../../../unisubs-design/sass/v1.scss */
 .v1.dashboard .row {
   clear: both;
   margin: 2em 0 0;

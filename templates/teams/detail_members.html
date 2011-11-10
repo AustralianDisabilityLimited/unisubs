@@ -20,8 +20,7 @@
         {% include_bundle "js-teams-settings-panel" %}
     {% endif %}
     {% include_bundle "unisubs-onsite-compiled" %}
-    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>     
-    
+    <script src="{% url teams:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}
 
 {% block main_content %}
@@ -107,7 +106,7 @@
     </div>
 
     <div class="controls grid_3 omega">
-        <form><fieldset><input type="text" value="Search..."/></fieldset></form>
+        <form class="search"><fieldset><input type="text" value="Search..."/></fieldset></form>
         {% include "teams/_filters_members.html" %}
         {% include "teams/_actions.html" %}
     </div>

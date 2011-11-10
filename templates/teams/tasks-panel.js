@@ -228,7 +228,7 @@ var TasksPanel = AsyncPanel.$extend({
     },
 
     renderTasksList: function() {
-        var tasksListing = $('.tasks.listing', this.el);
+        var tasksListing = $('.tasks.listing');
 
         $('li', tasksListing).remove();
 

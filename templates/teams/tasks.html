@@ -32,7 +32,7 @@
 
     <div class="controls grid_3 omega">
         <form class="search"><fieldset><input type="text" value="Search..."/></fieldset></form>
-        
+
         <form id="tasks_type_filter"></form>
 
         {% include "teams/_actions.html" %}
@@ -156,8 +156,9 @@ $(window).load(function() {
                     {% csrf_token %}
                 {% verbatim %}
                 <input type="hidden" name="task_id" value="{{ pk }}" />
+
                 {{ #performAllowed }}
-                    <a class="perform" href="#">Perform Task</a>
+                    <a class="perform" href="{{ performUrl }}">Perform Task</a>
                 {{ /performAllowed }}
             </form>
         </li>

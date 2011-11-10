@@ -1339,6 +1339,16 @@ class Task(models.Model):
         pass
 
 
+    def get_perform_url(self):
+        '''Return the URL that will open whichever dialog necessary to perform this task.'''
+        mode = Task.TYPE_NAMES[self.type].lower()
+        if mode in ['approve', 'review']:
+            return self.subtitle_language.get_widget_url(mode=mode, task_id=self.pk)
+        else:
+            # TODO
+            return None
+
+
 class SettingManager(models.Manager):
     use_for_related_fields = True
 
@@ -1387,6 +1397,7 @@ class Setting(models.Model):
     @property
     def key_name(self):
         return Setting.KEY_NAMES[self.key]
+
 
 class TeamLanguagePreferenceManager(models.Manager):
 

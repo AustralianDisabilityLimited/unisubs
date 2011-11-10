@@ -16,7 +16,7 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.reviewsubtitles.ReviewSubtitlesPanel');
+goog.provide('unisubs.approvesubtitles.ApproveSubtitlesPanel');
 
 /**
  * @constructor
@@ -26,7 +26,7 @@ goog.provide('unisubs.reviewsubtitles.ReviewSubtitlesPanel');
  * @param {unisubs.CaptionManager} Caption manager, already containing subtitles
  *     with start_time set.
  */
-unisubs.reviewsubtitles.ReviewSubtitlesPanel = function(subtitles, videoPlayer, serverModel, captionManager) {
+unisubs.approvesubtitles.ApproveSubtitlesPanel = function(subtitles, videoPlayer, serverModel, captionManager) {
     goog.ui.Component.call(this);
     /**
      * @type {unisubs.subtitle.EditableCaptionSet}
@@ -43,15 +43,15 @@ unisubs.reviewsubtitles.ReviewSubtitlesPanel = function(subtitles, videoPlayer, 
     this.downSub_ = null;
     this.downPlayheadTime_ = -1;
 };
-goog.inherits(unisubs.reviewsubtitles.ReviewSubtitlesPanel, goog.ui.Component);
+goog.inherits(unisubs.approvesubtitles.ApproveSubtitlesPanel, goog.ui.Component);
 
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.enterDocument = function() {
-    unisubs.reviewsubtitles.ReviewSubtitlesPanel.superClass_.enterDocument.call(this);
+unisubs.approvesubtitles.ApproveSubtitlesPanel.prototype.enterDocument = function() {
+    unisubs.approvesubtitles.ApproveSubtitlesPanel.superClass_.enterDocument.call(this);
     var handler = this.getHandler();
     handler.listen(this.captionManager_, unisubs.CaptionManager.CAPTION, this.captionReached_);
 };
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.createDom = function() {
-    unisubs.reviewsubtitles.ReviewSubtitlesPanel.superClass_.createDom.call(this);
+unisubs.approvesubtitles.ApproveSubtitlesPanel.prototype.createDom = function() {
+    unisubs.approvesubtitles.ApproveSubtitlesPanel.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
 
     this.getElement().appendChild(this.contentElem_ = $d('div'));
@@ -60,15 +60,15 @@ unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.createDom = function() {
         this.videoPlayer_, this.subtitles_, true, false, true);
     this.addChild(this.subtitleList_, true);
 };
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.captionReached_ = function(event) {
+unisubs.approvesubtitles.ApproveSubtitlesPanel.prototype.captionReached_ = function(event) {
     var editableCaption = event.caption;
     this.subtitleList_.clearActiveWidget();
     if (editableCaption !== null) {
         this.subtitleList_.setActiveWidget(editableCaption.getCaptionID());
     }
 };
-unisubs.reviewsubtitles.ReviewSubtitlesPanel.prototype.disposeInternal = function() {
-    unisubs.reviewsubtitles.ReviewSubtitlesPanel.superClass_.disposeInternal.call(this);
+unisubs.approvesubtitles.ApproveSubtitlesPanel.prototype.disposeInternal = function() {
+    unisubs.approvesubtitles.ApproveSubtitlesPanel.superClass_.disposeInternal.call(this);
     if (this.rightPanel_) {
         this.rightPanel_.dispose();
     }

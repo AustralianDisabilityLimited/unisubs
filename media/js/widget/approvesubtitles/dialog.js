@@ -16,12 +16,12 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.reviewsubtitles.Dialog');
+goog.provide('unisubs.approvesubtitles.Dialog');
 
 /**
  * @constructor
  */
-unisubs.reviewsubtitles.Dialog = function(videoSource, serverModel, subtitleState) {
+unisubs.approvesubtitles.Dialog = function(videoSource, serverModel, subtitleState) {
     unisubs.Dialog.call(this, videoSource);
     unisubs.SubTracker.getInstance().start(true);
 
@@ -32,14 +32,14 @@ unisubs.reviewsubtitles.Dialog = function(videoSource, serverModel, subtitleStat
     this.captionManager_ = new unisubs.CaptionManager(this.getVideoPlayerInternal(), this.captionSet_);
     this.saved_ = false;
 };
-goog.inherits(unisubs.reviewsubtitles.Dialog, unisubs.Dialog);
+goog.inherits(unisubs.approvesubtitles.Dialog, unisubs.Dialog);
 
-unisubs.reviewsubtitles.Dialog.prototype.createDom = function() {
-    unisubs.reviewsubtitles.Dialog.superClass_.createDom.call(this);
-    this.reviewPanel_ = new unisubs.reviewsubtitles.ReviewSubtitlesPanel(
+unisubs.approvesubtitles.Dialog.prototype.createDom = function() {
+    unisubs.approvesubtitles.Dialog.superClass_.createDom.call(this);
+    this.approvePanel_ = new unisubs.approvesubtitles.ApproveSubtitlesPanel(
         this.serverModel_.getCaptionSet(), this.getVideoPlayerInternal(),
         this.serverModel_, this.captionManager_);
-    this.getCaptioningAreaInternal().addChild(this.reviewPanel_, true);
+    this.getCaptioningAreaInternal().addChild(this.approvePanel_, true);
 
     var rightPanel = this.createRightPanel_();
 
@@ -60,12 +60,12 @@ unisubs.reviewsubtitles.Dialog.prototype.createDom = function() {
                                       this.getVideoPlayerInternal(), true), true);
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.showGuidelines_ = function() {
-    if (!unisubs.guidelines['review']) {
+unisubs.approvesubtitles.Dialog.prototype.showGuidelines_ = function() {
+    if (!unisubs.guidelines['approve']) {
         return;
     }
 
-    var guidelinesPanel = new unisubs.GuidelinesPanel(unisubs.guidelines['review']);
+    var guidelinesPanel = new unisubs.GuidelinesPanel(unisubs.guidelines['approve']);
     this.showTemporaryPanel(guidelinesPanel);
     this.displayingGuidelines_ = true;
 
@@ -78,20 +78,20 @@ unisubs.reviewsubtitles.Dialog.prototype.showGuidelines_ = function() {
     });
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.createRightPanel_ = function() {
-    var title = "Review Subtitles";
+unisubs.approvesubtitles.Dialog.prototype.createRightPanel_ = function() {
+    var title = "Approve Subtitles";
     var helpContents = new unisubs.RightPanel.HelpContents(title, ["Help goes here"]);
-    return new unisubs.reviewsubtitles.ReviewSubtitlesRightPanel(
-        this, this.serverModel_, helpContents, [], false, "Done?", "Submit final Review");
+    return new unisubs.approvesubtitles.ApproveSubtitlesRightPanel(
+        this, this.serverModel_, helpContents, [], false, "Done?", "Submit final Approval");
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.captionReached_ = function(event) {
+unisubs.approvesubtitles.Dialog.prototype.captionReached_ = function(event) {
     var c = event.caption;
     this.getVideoPlayerInternal().showCaptionText(c ? c.getText() : '');
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.enterDocument = function() {
-    unisubs.reviewsubtitles.Dialog.superClass_.enterDocument.call(this);
+unisubs.approvesubtitles.Dialog.prototype.enterDocument = function() {
+    unisubs.approvesubtitles.Dialog.superClass_.enterDocument.call(this);
     unisubs.Dialog.translationDialogOpen = false;
     var doc = this.getDomHelper().getDocument();
     this.getHandler().listen(
@@ -100,32 +100,32 @@ unisubs.reviewsubtitles.Dialog.prototype.enterDocument = function() {
             this.captionReached_);
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.disposeInternal = function() {
-    unisubs.reviewsubtitles.Dialog.superClass_.disposeInternal.call(this);
+unisubs.approvesubtitles.Dialog.prototype.disposeInternal = function() {
+    unisubs.approvesubtitles.Dialog.superClass_.disposeInternal.call(this);
     this.serverModel_.dispose();
     this.timelineSubtitleSet_.dispose();
     this.timelineSubtitleSet_ = null;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.getSubtitleLanguage = function() {
+unisubs.approvesubtitles.Dialog.prototype.getSubtitleLanguage = function() {
     return this.subtitleState_.LANGUAGE;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.getServerModel = function() {
+unisubs.approvesubtitles.Dialog.prototype.getServerModel = function() {
     return this.serverModel_;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.isWorkSaved = function() {
+unisubs.approvesubtitles.Dialog.prototype.isWorkSaved = function() {
     return this.saved_ || false;
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
+unisubs.approvesubtitles.Dialog.prototype.saveWorkInternal = function(closeAfterSave) {
     var that = this;
     this.getRightPanelInternal().showLoading(true);
     this.getRightPanelInternal().finish('In Progress');
 };
 
-unisubs.reviewsubtitles.Dialog.prototype.onWorkSaved = function(closeAfterSave){
+unisubs.approvesubtitles.Dialog.prototype.onWorkSaved = function(closeAfterSave){
     this.saved_ = true;
     unisubs.widget.ResumeEditingRecord.clear();
     if (this.finishFailDialog_) {

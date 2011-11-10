@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load i18n teams_tags widget media_compressor %}
+
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
+
+{% block title %}
+    {% trans 'Team video' %} | Universal Subtitles
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+     {% include_bundle "widget-css"%}
+{% endblock %}
+
+{% block main_content %}
+    
+    {% if team.logo %}
+        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% with "members" as current %}
+        {% include "teams/_tabs.html" %}
+    {% endwith %}
+
+    <div class="view grid_9 alpha">
+        <form method='post' action="." enctype="multipart/form-data" class="invite-members">
+            <div class="grid_4 alpha">
+                <fieldset>
+                    <legend>Invite Existing Users</legend>
+                    <label>Names or Usernames <span class="notation">type for suggestions</span></label>
+                    <input type="text" />
+                </fieldset>
+                <fieldset>
+                    <legend>Invite via Email</legend>
+
+                    <label>Email Adresses</label>
+                    <input type="text" />
+                </fieldset>
+            </div>
+
+            <div class="grid_4 omega">
+                <fieldset>
+                    <legend>Invite Details</legend>
+
+                    <label>Message</label>
+                    <textarea></textarea>
+
+                    <label>Role</label>
+                    <select>
+                        <option value="">Contributor</option>
+                        <option value="">Manager</option>
+                        <option value="">Admin</option>
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="grid_9 submit">
+                <button>{% trans 'Send Invites' %}</button>
+            </div>
+            {% comment %}
+                TODO: Re-add when we've got a form object...
+                {% csrf_token %}
+            {% endcomment %}
+        </form>
+    </div>
+    <div class="controls grid_3 omega">
+        <ul>
+            <li class="current">
+                <a href="{% url teams:invite_members slug=team.slug %}">{% trans "Invite New Members" %}</a>
+            </li>
+            <li>
+                <a href="{% url teams:detail_members team.slug %}">← {% trans "Back to Members" %}</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

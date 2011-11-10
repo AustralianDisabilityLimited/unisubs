@@ -16,14 +16,14 @@
 // along with this program.  If not, see
 // http://www.gnu.org/licenses/agpl-3.0.html.
 
-goog.provide('unisubs.reviewsubtitles.ReviewSubtitlesRightPanel');
+goog.provide('unisubs.approvesubtitles.ApproveSubtitlesRightPanel');
 
 
 /**
  * @constructor
  * @extends unisubs.RightPanel
  */
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel = function(
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel = function(
     dialog, serverModel, helpContents, legendKeySpecs, showRestart, doneStrongText, doneText) {
     unisubs.RightPanel.call(this, serverModel, helpContents, null,
                             legendKeySpecs, showRestart, doneStrongText, doneText);
@@ -34,7 +34,7 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel = function(
     // TODO: See if there's a way to avoid the circular reference here.
     this.dialog_ = dialog;
 };
-goog.inherits(unisubs.reviewsubtitles.ReviewSubtitlesRightPanel, unisubs.RightPanel);
+goog.inherits(unisubs.approvesubtitles.ApproveSubtitlesRightPanel, unisubs.RightPanel);
 
 /**
  * Values for approval stages.
@@ -42,20 +42,20 @@ goog.inherits(unisubs.reviewsubtitles.ReviewSubtitlesRightPanel, unisubs.RightPa
  * @type {object}
  * @private
  */
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_ = {
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.APPROVAL_STAGES_ = {
     'In Progress': 10,
     'Approved': 20,
     'Rejected': 30
 };
 
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
-    el.appendChild($d('label', {'class': 'unisubs-review-notes-label', 'for': 'unisubs-review-notes'}, 'Notes'));
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.appendMiddleContentsInternal = function($d, el) {
+    el.appendChild($d('label', {'class': 'unisubs-approve-notes-label', 'for': 'unisubs-approve-notes'}, 'Notes'));
 
-    this.bodyInput_ = $d('textarea', {'class': 'unisubs-review-notes', 'id': 'unisubs-review-notes', 'name': 'notes'});
+    this.bodyInput_ = $d('textarea', {'class': 'unisubs-approve-notes', 'id': 'unisubs-approve-notes', 'name': 'notes'});
     el.appendChild(this.bodyInput_);
 
     var that = this;
-    this.serverModel_.fetchReviewData(unisubs.task_id, function(body) {
+    this.serverModel_.fetchApproveData(unisubs.task_id, function(body) {
         goog.dom.forms.setValue(that.bodyInput_, body);
     });
 
@@ -70,14 +70,14 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendMiddleContents
                       ' to someone else, or ',
                       this.editedVersionLink_,
                       ' yourself.',
-                      ' If you submit a new version it will also be subject to review.'
+                      ' If you submit a new version it will also be subject to approval.'
                   ));
 
     var handler = this.getHandler();
     handler.listen(this.reassignLink_, 'click', this.reassignLinkClicked_);
     handler.listen(this.editedVersionLink_, 'click', this.editedVersionLinkClicked_);
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendCustomButtonsInternal = function($d, el) {
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.appendCustomButtonsInternal = function($d, el) {
     this.sendBackButton_ = $d('a', {'class': 'unisubs-done'}, 'Send Back');
     this.saveForLaterButton_ = $d('a', {'class': 'unisubs-done'}, 'Save for Later');
     this.approveButton_ = $d('a', {'class': 'unisubs-done'}, 'Approve');
@@ -92,14 +92,14 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.appendCustomButtonsI
     handler.listen(this.approveButton_, 'click', this.approveButtonClicked_);
 };
 
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.finish = function(approved) {
-    var approval_code = unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.APPROVAL_STAGES_[approved];
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.finish = function(approved) {
+    var approval_code = unisubs.approvesubtitles.ApproveSubtitlesRightPanel.APPROVAL_STAGES_[approved];
     var dialog = this.dialog_;
 
     var successCallback = function(serverMsg) {
         unisubs.subtitle.OnSavedDialog.show(serverMsg, function() {
             dialog.onWorkSaved(true);
-        }, 'review');
+        }, 'approve');
     };
 
     var failureCallback = function(opt_status) {
@@ -112,28 +112,28 @@ unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.finish = function(ap
         }
     };
 
-    this.serverModel_.finishReview({
+    this.serverModel_.finishApprove({
         'task_id': unisubs.task_id,
         'body': goog.dom.forms.getValue(this.bodyInput_),
         'approved': approval_code
     }, successCallback, failureCallback);
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.approveButtonClicked_ = function(e){
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.approveButtonClicked_ = function(e){
     e.preventDefault();
     this.finish('Approved');
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.saveForLaterButtonClicked_ = function(e){
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.saveForLaterButtonClicked_ = function(e){
     e.preventDefault();
     this.finish('In Progress');
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.sendBackButtonClicked_ = function(e){
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.sendBackButtonClicked_ = function(e){
     e.preventDefault();
     this.finish('Rejected');
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.reassignLinkClicked_ = function(e){
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.reassignLinkClicked_ = function(e){
     // TODO
 };
-unisubs.reviewsubtitles.ReviewSubtitlesRightPanel.prototype.editedVersionLinkClicked_ = function(e){
+unisubs.approvesubtitles.ApproveSubtitlesRightPanel.prototype.editedVersionLinkClicked_ = function(e){
     e.preventDefault();
     // TODO
 };

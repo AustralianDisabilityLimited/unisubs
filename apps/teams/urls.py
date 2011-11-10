@@ -55,9 +55,11 @@ urlpatterns = patterns('teams.views',
     url('^remove/members/(?P<slug>[-\w]+)/(?P<user_pk>\d+)/$', 'remove_member', name='remove_member'),
     url('^(?P<slug>[-\w]+)/(?P<is_debugging>debug/)?$', 'detail', name='detail'),
     url('^(?P<slug>[-\w]+)/members/$', 'detail_members', name='detail_members'),
+    url('^(?P<slug>[-\w]+)/members/invite/$', 'invite_members', name='invite_members'),
     url('^(?P<slug>[-\w]+)/members/(?P<role>[-\w]+)/$', 'detail_members', name='detail_members_role'),
     url('^(?P<slug>[-\w]+)/activity/$', 'videos_actions', name='videos_actions'),
     url('^(?P<slug>[-\w]+)/projects/$', 'project_list', name='project_list'),
+    url('^(?P<slug>[-\w]+)/tasks/$', 'team_tasks', name='team_tasks'),
     # just /p/ will bring all videos on any projects                   
     url('^(?P<slug>[-\w]+)/p/(?P<project_slug>[-\w]+)?/?$', 'detail', name='project_video_list'),
 

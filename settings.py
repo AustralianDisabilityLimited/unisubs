@@ -265,6 +265,9 @@ JS_DIALOG = \
      'js/widget/reviewsubtitles/dialog.js',
      'js/widget/reviewsubtitles/reviewsubtitlespanel.js',
      'js/widget/reviewsubtitles/reviewsubtitlesrightpanel.js',
+     'js/widget/approvesubtitles/dialog.js',
+     'js/widget/approvesubtitles/approvesubtitlespanel.js',
+     'js/widget/approvesubtitles/approvesubtitlesrightpanel.js',
      'js/widget/subtitle/dialog.js',
      'js/widget/subtitle/msservermodel.js',
      'js/widget/subtitle/subtitlewidget.js',
@@ -820,6 +823,18 @@ MEDIA_BUNDLES = {
             "js/libs/classy.js",
             "js/libs/underscore.js",
             "js/libs/chosen.js",
+            "js/libs/chosen.jquery.min.js",
+            "js/jquery.mod.js",
+         )
+    },
+    "js-teams-tasks-panel":{
+        "type":"js",
+        "optimizations": "WHITESPACE_ONLY",
+        "closure_deps": "",
+        "files": (
+            "js/libs/ICanHaz.js",
+            "js/libs/classy.js",
+            "js/libs/underscore.js",
             "js/libs/chosen.jquery.min.js",
             "js/jquery.mod.js",
          )

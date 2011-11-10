@@ -22,13 +22,13 @@ goog.provide('unisubs.subtitle.OnSavedDialog');
  * @constructor
  * @private
  */
-unisubs.subtitle.OnSavedDialog = function( msg, callback) {
+unisubs.subtitle.OnSavedDialog = function(msg, callback, mode) {
     goog.ui.Dialog.call(this, 'unisubs-modal-completed', true);
     this.setButtonSet(null);
     this.setDisposeOnHide(true);
     this.callback_ = callback;
     this.msg_ = msg;
-
+    this.mode_ = mode;
 };
 goog.inherits(unisubs.subtitle.OnSavedDialog, goog.ui.Dialog);
 
@@ -36,7 +36,18 @@ goog.inherits(unisubs.subtitle.OnSavedDialog, goog.ui.Dialog);
 unisubs.subtitle.OnSavedDialog.prototype.createDom = function() {
     unisubs.subtitle.OnSavedDialog.superClass_.createDom.call(this);
     var $d = goog.bind(this.getDomHelper().createDom, this.getDomHelper());
-    this.getElement().appendChild($d('h3', null, "Subtitles saved"));
+
+    var title;
+    if (this.mode_ === 'review') {
+        title = "Review saved";
+    } else if (this.mode_ === 'approve') {
+        title = "Approval saved";
+    } else {
+        title = "Subtitles saved";
+    }
+
+    this.getElement().appendChild($d('h3', null, title));
+
     this.getElement().appendChild(
         $d('div', null,
            $d('p', null, 
@@ -71,8 +82,8 @@ unisubs.subtitle.OnSavedDialog.prototype.okClicked_ = function(e) {
  * @param {string} The msg to display to the end user
  * @param {function(boolean)} callback
  */
-unisubs.subtitle.OnSavedDialog.show = function(msg, callback) {
+unisubs.subtitle.OnSavedDialog.show = function(msg, callback, mode) {
     var dialog = new unisubs.subtitle.OnSavedDialog(
-        msg, callback);
+        msg, callback, mode);
     dialog.setVisible(true);
 };

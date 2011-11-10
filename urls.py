@@ -24,7 +24,12 @@ from sitemaps import sitemaps, sitemap_view, sitemap_index
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
+# these really should be unregistred but while in development the dev server
+# might have not registred yet, so we silence this exception
+try:
+    admin.site.unregister([AuthMeta, OpenidProfile, TwitterUserProfile, FacebookUserProfile])
+except admin.sites.NotRegistered:
+    pass
 
 # Monkeypatch the Celery admin to show a column for task run time in the list view.
 from djcelery.admin import TaskMonitor

@@ -182,20 +182,20 @@ var TasksTypesList = Class.$extend({
     },
 
     getValue: function() {
-        return $('.selected input', this.el).val();
+        return $('.current input', this.el).val();
     },
 
     onTypeClick: function(e) {
         e.preventDefault();
 
-        if ($(e.target).hasClass('selected')) {
+        if ($(e.target).hasClass('current')) {
             return;
         }
 
-        // Clear language dropdown and mark the target as selected.
+        // Clear language dropdown and mark the target as current.
         $('select#id_task_language').val('');
-        $('.type', this.el).removeClass('selected');
-        $(e.target).addClass('selected');
+        $('.type', this.el).removeClass('current');
+        $(e.target).parent().addClass('current');
 
         this.parent.reloadTasks();
     }
@@ -214,7 +214,7 @@ var TasksPanel = AsyncPanel.$extend({
         this.el = ich.tasksPanel();
 
         this.typesList = new TasksTypesList(this);
-        $('#tasks_type_filter', this.el).append(this.typesList.el);
+        $('#tasks_type_filter').append(this.typesList.el);
 
         // Initialize data
         this.tasks = [];

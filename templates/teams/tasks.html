@@ -30,9 +30,12 @@
     <div class="panel-holder view grid_9 alpha">
     </div>
 
-    <div class="controls grid_3 omega ">
-        <ul class="sub-settings-panel">
-        </ul>
+    <div class="controls grid_3 omega">
+        <form><fieldset><input type="text" value="Search..."/></fieldset></form>
+        
+        <form id="tasks_type_filter"></form>
+
+        {% include "teams/_actions.html" %}
     </div>
 
 <script type="text/javascript">
@@ -47,12 +50,6 @@ $(window).load(function() {
   <img class="placeholder" width="256" height1="30" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
 </script>
 
-{% comment %}
-    Whatever is inside the verbatim tag does not run through django's var
-    subtitution, so the final template is render as it's written bellow.  This
-    is needed, since it's for the js templating.
-{% endcomment %}
-
 {% verbatim %}
 
 <script id="subMenuItem" type="text/html">
@@ -64,29 +61,31 @@ $(window).load(function() {
         <option value="">All Languages</option>
     </select>
 </script>
+
 <script id="tasksLanguagesListOption" type="text/html">
     <option value="{{ language }}">{{ language_display }}</option>
 </script>
+
 <script id="tasksTypesList" type="text/html">
     <ul class="types">
-        <li class="type selected">
-            All Pending
+        <li class="type current">
+            <a href="#">All Pending</a>
             <input type="hidden" name="type" value="" />
         </li>
         <li class="type">
-            Review
+            <a href="#">Review</a>
             <input type="hidden" name="type" value="Review" />
         </li>
         <li class="type">
-            Approve
+            <a href="#">Approve</a>
             <input type="hidden" name="type" value="Approve" />
         </li>
         <li class="type">
-            Translate
+            <a href="#">Translate</a>
             <input type="hidden" name="type" value="Translate" />
         </li>
         <li class="type">
-            Subtitle
+            <a href="#">Subtitle</a>
             <input type="hidden" name="type" value="Subtitle" />
         </li>
     </ul>
@@ -164,13 +163,14 @@ $(window).load(function() {
         </li>
     </ul>
 </script>
+
 <script id="tasksPanel" type="text/html">
     <div class="tools panel-tasks">
-        <form id="tasks_type_filter"></form>
-
         <form id="tasks_language_filter">
             <label for="id_task_language">Language needed:</label>
         </form>
+        <br/>
+        <br/>
 
         <ul class="tasks listing"></ul>
     </div>

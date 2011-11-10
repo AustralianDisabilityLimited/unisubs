@@ -31,7 +31,7 @@ from apps.teams.permissions import remove_role, add_role, \
      can_edit_subs_for, can_peer_review, can_manager_review, \
      can_accept_assignments, can_message_all_members,  \
      can_change_team_settings, can_change_video_settings, can_add_video, \
-     can_assign_taks, can_assign_roles, can_change_video_settings, _perms_for, \
+     can_assign_tasks, can_assign_roles, can_change_video_settings, _perms_for, \
      roles_assignable_to
 from django.core.exceptions import SuspiciousOperation
 from apps.teams.forms import CreateTeamForm

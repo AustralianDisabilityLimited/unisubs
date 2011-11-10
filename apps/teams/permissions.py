@@ -77,7 +77,7 @@ def _owner(team, user):
 
 @_check_perms(EDIT_TEAM_SETTINGS_PERM)
 def can_change_team_settings(team, user, project=None, lang=None, role=None) :
-    return False
+    return False    
 
 def _perms_equal_or_lower(role):
     return ROLES_ORDER[ROLES_ORDER.index(role):]
@@ -108,7 +108,7 @@ def can_assign_roles(team, user, project=None, lang=None,  role=None):
 
 
 @_check_perms(ASSIGN_TASKS_PERM)
-def can_assign_taks(team, user, project=None, lang=None):
+def can_assign_tasks(team, user, project=None, lang=None):
     pass
     
 def can_add_video(team, user, project=None, lang=None):

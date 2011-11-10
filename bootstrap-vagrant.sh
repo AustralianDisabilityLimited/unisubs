@@ -27,8 +27,17 @@ sudo ./deploy/update_solr_schema_vagrant.sh
 # Adjust sys.path -------------------------------------------------------------
 cat >venv/lib/python2.6/sitecustomize.py <<EOF
 import sys
-sys.path.remove('/opt/extras/venv/lib/python2.6/site-packages')
-sys.path.remove('/usr/lib/python2.6')
+
+try:
+    sys.path.remove('/opt/extras/venv/lib/python2.6/site-packages')
+except ValueError:
+    pass
+
+try:
+    sys.path.remove('/usr/lib/python2.6')
+except ValueError:
+    pass
+
 sys.path = ['/opt/extras/venv/lib/python2.6/site-packages', '/usr/lib/python2.6'] + sys.path
 EOF
 

@@ -634,7 +634,8 @@ MEDIA_BUNDLES = {
             "css/html.css", 
             "css/about_faq.css", 
             "css/breadcrumb.css", 
-            "css/buttons.css", 
+            "css/buttons.css",
+            "css/chosen.css",
             "css/classes.css", 
             "css/comments.css", 
             "css/forms.css",
@@ -778,7 +779,7 @@ MEDIA_BUNDLES = {
               "js/jquery.rpc.js",
               "js/jquery.input_replacement.min.js",
               "js/messages.js",
-
+              "js/libs/chosen.jquery.min.js",
             ],
         "closure_deps": "",
         "include_flash_deps": False,
@@ -823,7 +824,6 @@ MEDIA_BUNDLES = {
             "js/libs/ICanHaz.js",
             "js/libs/classy.js",
             "js/libs/underscore.js",
-            "js/libs/chosen.js",
             "js/libs/chosen.jquery.min.js",
             "js/jquery.mod.js",
          )

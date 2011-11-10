@@ -1,8 +1,6 @@
-{% extends "base.html" %}
+{% extends "teams/base.html" %}
 
 {% load i18n teams_tags widget media_compressor %}
-
-{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block title %}
     {% trans 'Edit team video' %} | Universal Subtitles
@@ -16,7 +14,7 @@
     {{ block.super }}
 {% endblock %}
 
-{% block main_content %}
+{% block view_content %}
     
     {% with "videos" as active %}
         {% include 'teams/_tabs.html' %}

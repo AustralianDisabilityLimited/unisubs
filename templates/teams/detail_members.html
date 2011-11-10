@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "teams/base.html" %}
 
 {% load i18n teams_tags paginator widget media_compressor verbatim_templatetag %}
 
@@ -23,13 +23,7 @@
     <script src="{% url teams:rpc_api %}" type="text/javascript"></script>  
 {% endblock %}
 
-{% block main_content %}
-
-    {% if team.logo %}
-        <img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/>
-    {% else %}
-        <h2 id="team_title">{{ team }}</h2>
-    {% endif %}
+{% block view_content %}
 
     {% with "members" as current %}
         {% include "teams/_tabs.html" %}

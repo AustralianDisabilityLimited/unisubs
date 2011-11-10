@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load i18n teams_tags %}
+
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
+
+{% block main_content %}
+	{% if team.logo %}
+        <a href="{{ team.get_absolute_url }}"><img class="logo" alt="{{ team }} logo" src="{{ MEDIA_URL }}{{ team.logo }}"/></a>
+    {% else %}
+        <h2 id="team_title">{{ team }}</h2>
+    {% endif %}
+
+    {% block view_content %}{% endblock %}
+{% endblock %}

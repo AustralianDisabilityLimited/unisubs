@@ -337,41 +337,16 @@ var BasicPanel  = AsyncPanel.$extend({
         this.onImageUploadClick = _.bind(this.onImageUploadClick, this);
         this.onImageUploaded = _.bind(this.onImageUploaded, this);
 
-        this.onWorkflowStatusChange = _.bind(this.onWorkflowStatusChange, this);
-        this.onWorkflowLoaded = _.bind(this.onWorkflowLoaded, this);
-        this.showWorkflow = _.bind(this.showWorkflow, this);
-        this.hideWorkflow = _.bind(this.hideWorkflow, this);
-
         // Render template
         this.el = ich.basicPanel();
 
         // Bind events
         $('form.team-settings', this.el).submit(this.onSubmit);
         $('button', this.el).click(this.onImageUploadClick);
-        $('#basic_workflows_enabled', this.el).change(this.onWorkflowStatusChange);
 
         // Load initial data
         this.team = null;
-        this.workflow = null;
         TeamsApiV2.team_get(TEAM_SLUG, this.onLoaded);
-    },
-
-    onWorkflowStatusChange: function(e) {
-        if ($('#basic_workflows_enabled', this.el).attr('checked')) {
-            this.showWorkflow();
-        } else {
-            this.hideWorkflow();
-        }
-    },
-    onWorkflowLoaded: function(data) {
-        this.workflow = new WorkflowItem(new WorkflowModel(data));
-        $('.workflow', this.el).html(this.workflow.el);
-    },
-    showWorkflow: function(e) {
-        TeamsApiV2.workflow_get(TEAM_SLUG, null, null, this.onWorkflowLoaded);
-    },
-    hideWorkflow: function(e) {
-        $('.workflow', this.el).html('');
     },
 
     onImageUploadClick: function(e) {
@@ -419,13 +394,6 @@ var BasicPanel  = AsyncPanel.$extend({
             $('#current_logo', this.el).attr('src', 'some/placeholder.jpg');
         }
 
-        if (this.team.workflowEnabled) {
-            $('#basic_workflows_enabled', this.el).attr('checked', 'checked');
-        } else {
-            $('#basic_workflows_enabled', this.el).attr('checked', '');
-        }
-        this.onWorkflowStatusChange();
-
         // We edit the page-level title here too.  It's not part of the
         // template, but in this one case we should update it.
         $('.hd h2').text(this.team.name);
@@ -472,10 +440,60 @@ var GuidelinesPanel  = AsyncPanel.$extend({
     }
 });
 
+// Permissions ----------------------------------------------------
 var PermissionsPanel = AsyncPanel.$extend({
     __init__: function() {
+        this.onWorkflowStatusChange = _.bind(this.onWorkflowStatusChange, this);
+        this.onWorkflowLoaded = _.bind(this.onWorkflowLoaded, this);
+        this.showWorkflow = _.bind(this.showWorkflow, this);
+        this.hideWorkflow = _.bind(this.hideWorkflow, this);
+
         // Render template
         this.el = ich.permissionsPanel();
+
+        // Bind events
+        $('#basic_workflows_enabled', this.el).change(this.onWorkflowStatusChange);
+
+        // Load initial data
+        this.workflow = null;
+        this.team = null;
+        TeamsApiV2.team_get(TEAM_SLUG, this.onLoaded);
+    },
+    onWorkflowStatusChange: function(e) {
+        if ($('#basic_workflows_enabled', this.el).attr('checked')) {
+            this.showWorkflow();
+        } else {
+            this.hideWorkflow();
+        }
+    },
+    onWorkflowLoaded: function(data) {
+        this.workflow = new WorkflowItem(new WorkflowModel(data));
+        $('.workflow', this.el).html(this.workflow.el);
+    },
+    showWorkflow: function(e) {
+        TeamsApiV2.workflow_get(TEAM_SLUG, null, null, this.onWorkflowLoaded);
+    },
+    hideWorkflow: function(e) {
+        $('.workflow', this.el).html('');
+    },
+    onSubmit: function(e) {
+        e.preventDefault();
+
+        var data = {
+            // TODO Fill in...
+
+            workflow_enabled: $('#basic_workflows_enabled', this.el).attr('checked')
+        };
+
+        this.workflow && this.workflow.onSubmit();
+    },
+    fillFromModel: function() {
+        if (this.team.workflowEnabled) {
+            $('#basic_workflows_enabled', this.el).attr('checked', 'checked');
+        } else {
+            $('#basic_workflows_enabled', this.el).attr('checked', '');
+        }
+        this.onWorkflowStatusChange();
     }
 });
 

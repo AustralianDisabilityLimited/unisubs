@@ -248,7 +248,7 @@ This is needed, since it's for the js templating
         <form class="permissions">
             <div class="grid_4 alpha messages">
                 <fieldset>
-                    <legend>Basic Permissions</legend>
+                    <legend>Team Management</legend>
 
                     <label for="id_membership_policy">How can users join your team?</label>
                     {% endverbatim %}{{ settings_form.membership_policy }}{% verbatim %}
@@ -256,12 +256,20 @@ This is needed, since it's for the js templating
                     <label for="id_video_policy">Who can add/remove videos?</label>
                     {% endverbatim %}{{ settings_form.video_policy }}{% verbatim %}
 
+                    <label>Who can assign tasks?</label>
+                    <select>
+                        <option>Any team member</option>
+                        <option>Managers and admins</option>
+                        <option>Admins only</option>
+                    </select>
+
                 </fieldset>
                 <fieldset>
 
-                    <legend>Subtitling Permissions</legend>
+                    <legend>Subtitling</legend>
 
-                    <label for="id_subtitle_policy">Transcribe original language</label>
+                    <label for="id_subtitle_policy">Who can create subtitles?</label>
+                    <p class="notation">i.e. transcribe from video and perform time-alignment</p>
                     <select>
                         <option>Anyone</option>
                         <option>Any team member</option>
@@ -269,15 +277,8 @@ This is needed, since it's for the js templating
                         <option>Only admins</option>
                     </select>
 
-                    <label for="id_translate_policy">Translate subtitles</label>
-                    <select>
-                        <option>Anyone</option>
-                        <option>Any team member</option>
-                        <option>Only managers and admins</option>
-                        <option>Only admins</option>
-                    </select>
-
-                    <label for="id_translate_policy">Edit completed subtitles</label>
+                    <label for="id_translate_policy">Who can translate subtitles?</label>
+                    <p class="notation">i.e. translate text from an original subtitle into a new language</p>
                     <select>
                         <option>Anyone</option>
                         <option>Any team member</option>
@@ -289,47 +290,12 @@ This is needed, since it's for the js templating
             </div>
             <div class="grid_4 omega guidelines">
                 <fieldset>
-                    <legend>Workflow</legend>
-                    <p class="notation">Moderate subtitles and automate tasks</p>
-                    <label for="basic_workflows_enabled"><input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled" checked="checked"/> Enable workflows</label>
-
-                        <div class="workflow">
-                            <label>When a video is added...</label>
-                            <select>
-                                <option>Do nothing</option>
-                                <option>Request transcription</option>
-                            </select>
-
-                            <label>When a transcription is finished...</label>
-                            <select>
-                                <option>Do nothing</option>
-                                <option>Request translations</option>
-                            </select>
-
-                            <label>Subtitle review</label>
-                            <select>
-                                <option>Don't require review</option>
-                                <option>Request peer review</option>
-                                <option>Manager or admin must review</option>
-                                <option>Admin must review</option>
-                            </select>
-
-                            <label>Subtitle approval</label>
-                            <select>
-                                <option>Don't require approval</option>
-                                <option>Request peer approval</option>
-                                <option>Manager or admin must approve</option>
-                                <option>Admin must approve</option>
-                            </select>
-
-                            <label>Who can assign tasks?</label>
-                            <select>
-                                <option>Any team member</option>
-                                <option>Managers and admins</option>
-                                <option>Admins only</option>
-                            </select>
-                        </div>
+                    <legend>Workflows</legend>
+                    <p class="notation">Add moderation steps and automate tasks</p>
+                    <label for="basic_workflows_enabled"><input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/> Enable workflows</label>
                 </fieldset>
+
+                <form action="" class="workflow" method="post"></form>
             </div>
 
             <div class="grid_9 submit">
@@ -400,6 +366,9 @@ This is needed, since it's for the js templating
                             <textarea id="basic_description" name="name"></textarea>
                         </fieldset>
                 </form>
+            </div>
+
+            <div class="grid_4 omega">
 
                 <form class="logo" action="{% endverbatim %}{% url teams:upload_logo team.slug %}{% verbatim %}" method="POST">
                     <fieldset>
@@ -415,20 +384,7 @@ This is needed, since it's for the js templating
                         <p class="notation">Max size 000x000</p>
                     </fieldset>
                 </form>
-            </div>
 
-            <div class="grid_4 omega">
-
-                <form class="team-settings">
-                    <fieldset>
-                        <legend>Workflows</legend>
-                        <p class="notation">Moderate subtitles on your videos</p>
-
-                        <label for="basic_workflows_enabled"><input type="checkbox" name="workflows_enabled" id="basic_workflows_enabled"/> Enable workflows</label>
-                    </fieldset>
-                </form>
-
-                <form action="" class="workflow" method="post"></form>
             </div>
             
             <div class="grid_9 submit">
@@ -440,37 +396,31 @@ This is needed, since it's for the js templating
 
 <script id="workflow" type="text/html">
     <fieldset>
-        <label>Subtitle</label>
+        <label>Subtitle creation</label>
         <select name="perm_subtitle">
-            <option value="20">Open to public</option>
-            <option value="30">Open to team</option>
-            <option value="40">Managers and admins</option>
-            <option value="50">Admins only</option>
+            <option>Don't request</option>
+            <option>Request transcription</option>
         </select>
 
-        <label>Translate</label>
+        <label>Translation</label>
         <select name="perm_translate">
-            <option value="20">Open to public</option>
-            <option value="30">Open to team</option>
-            <option value="40">Managers and admins</option>
-            <option value="50">Admins only</option>
+            <option>Don't request</option>
+            <option>Request translation</option>
         </select>
 
         <label>Review</label>
         <select name="perm_review">
-            <option value="10">None</option>
-            <option value="30">Open to team</option>
-            <option value="40">Managers and admins</option>
-            <option value="50">Admins only</option>
-            <option value="60">Owner only</option>
+            <option>Don't require review</option>
+            <option>Request peer review</option>
+            <option>Manager must review</option>
+            <option>Admin must review</option>
         </select>
 
-        <label>Approve</label>
+        <label>Approval</label>
         <select name="perm_approve">
-            <option value="10">None</option>
-            <option value="40">Managers and admins</option>
-            <option value="50">Admins only</option>
-            <option value="60">Owner only</option>
+            <option>Don't require approval</option>
+            <option>Manager must approve</option>
+            <option>Admin must approve</option>
         </select>
 
         <input type="submit" class="button submit" value="Save Workflow Changes" name="save" />

@@ -53,3 +53,4 @@ unisubs-integration
 /.ponyrc
 user-data/video
 media/static-cache
+.ropeproject

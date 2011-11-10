@@ -89,7 +89,7 @@ import codecs
 class BaseSubtitles(object):
     file_type = ''
     
-    def __init__(self, subtitles, video, line_delimiter=u'\n', sl=None):
+    def __init__(self, subtitles, video=None, line_delimiter=u'\n', sl=None):
         """
         Use video for extra data in subtitles like Title
         Subtitles is list of {'text': 'text', 'start': 'seconds', 'end': 'seconds', 'id': id}
@@ -98,7 +98,10 @@ class BaseSubtitles(object):
         self.video = video
         self.line_delimiter = line_delimiter
         self.sl = sl
-        self.title = sl and sl.get_title_display() or video.title
+        if video:
+            self.title = sl and sl.get_title_display() or video.title
+        else:
+            self.title = u""
         
     def __unicode__(self):
         raise Exception('Should return subtitles')

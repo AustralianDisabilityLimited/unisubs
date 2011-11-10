@@ -137,6 +137,12 @@
                   {{ form.biography.label_tag }}
                   {{ form.biography }}
               </p>                          
+              <p>
+                <b>Your api key</b>: 
+                <span class="api-key-holder">{{form.instance.api_key.key}}</span><br/>
+                <span class="api-key-status"></span><br/>
+                <a href="{% url profiles:generate-api-key %}" class="blue_button small get-new-api-bt button"> Generate new api</a>
+                </p>
           </div>
 
           <div class="grid_3 omega">
@@ -249,5 +255,20 @@
     $('.upload-picture').click(function(){
         return false;
     });
+</script>
+<script type="text/javascript">
+  $(".get-new-api-bt").click(function(e){
+     e.preventDefault();
+     $.ajax({
+       url: $(this).attr("href"),
+       dataType: "json",
+       type: "POST",
+       success: function(res){
+           $(".api-key-holder").text(res.key);
+           $(".api-key-status").text("Key generated, enjoy!");
+         }
+      }) ;
+     return false;
+  })
 </script>
 {% endblock %}

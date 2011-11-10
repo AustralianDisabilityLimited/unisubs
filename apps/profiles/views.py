@@ -25,6 +25,7 @@ from django.contrib import messages
 from django.utils import simplejson as json
 from django.utils.translation import ugettext_lazy as _, ugettext
 from utils.amazon import S3StorageError
+from tastypie.models import ApiKey
 from django.views.generic.simple import direct_to_template
 from django.views.generic.list_detail import object_list
 from videos.models import Video, Action, SubtitleLanguage
@@ -34,7 +35,6 @@ from profiles.rpc import ProfileApiClass
 from utils.rpc import RpcRouter
 from utils.orm import LoadRelatedQuerySet
 from django.shortcuts import get_object_or_404
-
 rpc_router = RpcRouter('profiles:rpc_router', {
     'ProfileApi': ProfileApiClass()
 })
@@ -171,4 +171,14 @@ def actions_list(request, user_id):
                        paginate_by=settings.ACTIVITIES_ONPAGE,
                        template_name='profiles/actions_list.html',
                        template_object_name='action',
-                       extra_context=extra_context)       
+                       extra_context=extra_context)
+
+@login_required
+def generate_api_key(request):
+    key, created = ApiKey.objects.get_or_create(user=request.user)
+    if not created:
+        key.key = key.generate_key()
+        key.key = key.generate_key()
+        key.save()
+    return HttpResponse(json.dumps({"key":key.key}))
+    

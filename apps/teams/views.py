@@ -21,7 +21,7 @@ from teams.forms import CreateTeamForm, EditTeamForm, EditTeamFormAdmin, AddTeam
 from teams.models import Team, TeamMember, Invite, Application, TeamVideo, Task, Project
 from django.shortcuts import get_object_or_404, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -731,17 +731,15 @@ def leave_team(request, slug):
 @login_required
 def perform_task(request):
     task = Task.objects.get(pk=request.POST.get('task_id'))
-    member = task.team.members.get(user=request.user)
 
-    if not task.perform_allowed(member):
+    if not task.perform_allowed(request.user):
         return HttpResponseForbidden(_(u'You are not allowed to perform this task.'))
 
     task.assignee = request.user
     task.save()
 
     # ... perform task ...
-
-    return {}
+    return HttpResponseRedirect(task.get_perform_url())
 
 def project_list(request, slug):
     team = get_object_or_404(Team, slug=slug)

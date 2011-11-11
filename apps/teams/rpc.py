@@ -300,7 +300,7 @@ class TeamsApiV2Class(object):
         if filters.get('type'):
             real_tasks = [t for t in real_tasks if t.type == Task.TYPE_IDS[filters['type']]]
 
-        real_tasks = [t.to_dict(member) for t in real_tasks]
+        real_tasks = [t.to_dict(user) for t in real_tasks]
         ghost_tasks = _ghost_tasks(team, tasks, filters, member)
 
         return real_tasks + ghost_tasks

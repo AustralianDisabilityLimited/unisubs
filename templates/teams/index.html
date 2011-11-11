@@ -2,11 +2,11 @@
 
 {% load paginator i18n teams_tags %}
 
-{% block body_attrs %}id="teams"{% endblock %}
-
 {% block title %}
     {% if my_teams %}{% trans 'My Teams' %}{% else %}{% trans 'Teams' %}{% endif %}| Universal Subtitles
 {% endblock %}
+
+{% block body_attrs %}id="teams" class="v1"{% endblock %}
 
 {% block scripts %}
     {{ block.super }}
@@ -15,11 +15,25 @@
 
 {% block main_content %}
 
-<h2>{% trans 'Team Directory' %}</h2>
+    <h2>{% trans 'Team Directory' %}</h2>
 
-<div class="grid_8 alpha">
-    <div class="pod">
-        <div class="padding_small clearfix">
+    <ul class="tabs">
+        <li{% if not my_teams %} class="current"{% endif %}>
+            <a href="{% url teams:index %}">
+                {% trans "All Teams" %}
+            </a>
+        </li>
+        {% if user.teams.exists %}
+            <li{% if my_teams %} class="current"{% endif %}>
+                <a href="{% url teams:user_teams %}">
+                    {% trans "My Teams" %}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <div class="view grid_9 alpha">
+        <div class="tools">
             <div class="sort_button">
                 <div class="arrow">
                 </div>
@@ -41,128 +55,99 @@
                     {% endif %}
                 </ul>
             </div>
-            <div class="inline_search">
-                <form action=".">
-                    <input type="text" name="q" value="{{ query|default:'' }}"/>
-                    <button class="green_button big" style="margin:0;">
-                        <span>{% trans 'Search' %}</span>
-                    </button>
-                </form>
-            </div>
         </div>
-    </div>
-    <div class="grid_8 clearfix">
-        <br/>
-        <br/>
-    </div>
-    {% if is_paginated %}{% paginator %}{% endif %}
-    <ul class="big_list">
-        {% for team in teams_list %}
-        <li>
-            <a href="{{ team.get_absolute_url }}" class="thumbnail_medium">
-                {% if team.logo %}<img src="{{ team.logo_thumbnail }}" width="100" height="100"/>{% endif %}
-            </a>
-            <div class="info">
-                <h4>
-                    <a href="{{ team.get_absolute_url }}">
-                        {{ team }}
-                        {% if team|is_team_member:user %} 
-                            <span class="your-team">({% trans 'your team' %})</span>
+
+        {% if is_paginated %}{% paginator %}{% endif %}
+            <ul class="listing teams">
+                {% for team in teams_list %}
+                <li>
+                    <h3>
+                        <a href="{{ team.get_absolute_url }}">{{ team }}</a>
+                        {% if team|is_team_member:user and not my_teams %} 
+                            <span class="descriptor">{% trans 'My team' %}</span>
                         {% endif %}
                         {% if not team.is_visible %}
-                            <span class="your-team">({% trans 'private' %})</span>
+                            <span class="descriptor">{% trans 'Private' %}</span>
                         {% endif %}
-                    </a>
-                </h4>
-                <span class="count">
-                    {% blocktrans count count=team.member_count %}
-                        {{ count }} member
-                    {% plural %}
-                        {{ count }} members
-                    {% endblocktrans %}
-                </span>
-                {% if team.description %}
-                <p style="float: none;">
-                    {{ team.description|urlize }}
-                </p>
-                {% endif %}
-                <div class="buttons-container">
-                    {% if user.is_staff and perms.teams.change_team %}
-                        {% if team.highlight %}
-                            <a href="{% url teams:unhighlight team.slug %}" class="blue_button small">{% trans 'Un-highlight this team' %}</a>
-                        {% else %}
-                            <a href="{% url teams:highlight team.slug %}" class="blue_button small">{% trans 'Highlight this team' %}</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if team|is_team_member:user and team|is_team_manager:user%}
-                        <a href="{% url teams:settings slug=team.slug %}" class="blue_button small">{% trans 'Edit' %}</a>
-                    {% endif %}
-                    {% if team|is_team_member:user %}
-                        {% render_team_leave team %}
-                    {% else %}
-                        {% if team.is_open %}
-                            {% render_team_join team "small" %}
-                        {% endif %}
-                    {% endif %}  
-                </div>
-            </div>         
-        </li>
-        {% endfor %}
-    </ul>
-    {% if is_paginated %}{% paginator %}{% endif %}
-</div>
-<div class="grid_4 omega">
-    <h3>{% trans 'About Teams' %}</h3>
-    <p class="notice">
-        {% blocktrans %}
-        Teams are a great way to work together on subtitling videos. 
-        Membership and participation policies vary from team to team.
-        {% endblocktrans %}
-    </p>
-    <p class="notice">Want to create your own captioning and translation team? Contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>
-    <br />
-    {% if highlighted_qs %}
-        <h3>{% trans 'Highlighted Teams' %}</h3>
-        <ul class="small_list">
-            {% for team in highlighted_qs %}
-            <li>
-                <a href="{{ team.get_absolute_url }}" class="thumbnail_small">
-                    {% if team.logo %}<img src="{{ team.logo_thumbnail }}"/>{% endif %}
-                </a>
-                <div class="info">
-                    <h4><a href="{{ team.get_absolute_url }}">{{ team }}</a></h4>
-                    <span>
-                        {% blocktrans count count=team.member_count %}
-                            Team with {{ count }} member
-                        {% plural %}
-                            Team with {{ count }} members
-                        {% endblocktrans %}
-                    </span>
-                    
-                    {% if team.description %}
+                    </h3>
                     <p>
-                        {{ team.description }}
-                    </p>              
-                    {% endif %}
-                    
-                    {% if user.is_staff and perms.teams.change_team %}
-                        <div>
-                        {% if team.highlight %}
-                            <a href="{% url teams:unhighlight team.slug %}">{% trans 'Un-highlight this team' %}</a>
+                        {% if team.description %}
+                            {{ team.description|truncatewords:20|urlize }}
                         {% else %}
-                            <a href="{% url teams:highlight team.slug %}">{% trans 'Highlight this team' %}</a>
+                            {{ team.videos_count }} videos
                         {% endif %}
-                        </div>
-                    {% endif %}                
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% if user.is_superuser and user.is_active %}
-    <a href="{% url teams:create %}" class="green_button big start_team">
-        <span>{% trans 'Start a Team' %}</span>
-    </a>
-{% endif %}
-</div>
+                    </p>
+                    {% if team.logo %}
+                        <a href="{{ team.get_absolute_url }}" class="thumb">
+                            <img src="{{ team.logo_thumbnail }}" alt="{{ team }} logo"/>
+                        </a>
+                    {% endif %}
+                    <ul class="actions">
+                        <li>
+                            <h4>
+                            {% blocktrans count count=team.member_count %}
+                                {{ count }} member
+                            {% plural %}
+                                {{ count }} members
+                            {% endblocktrans %}
+                            </h4>
+                        </li>
+                        <li>
+                            {% if team|is_team_member:user %}
+                                <a href="">Leave team</a>
+                            {% else %}
+                                {% if user.is_authenticated %}
+                                    {% if team.is_open %}
+                                        <a href="">Join team</a>
+                                    {% endif %}
+                                    {% if team.is_by_application %}
+                                        {% if not team|has_applicant:user %}
+                                            <a href="">Apply to join</a>
+                                        {% else %}
+                                            Your application is pending
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %} 
+                        </li>
+                    </ul>
+
+                {% comment %}
+                        <div class="buttons-container">
+                            {% if user.is_staff and perms.teams.change_team %}
+                                {% if team.highlight %}
+                                    <a href="{% url teams:unhighlight team.slug %}" class="blue_button small">{% trans 'Un-highlight this team' %}</a>
+                                {% else %}
+                                    <a href="{% url teams:highlight team.slug %}" class="blue_button small">{% trans 'Highlight this team' %}</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if team|is_team_member:user and team|is_team_manager:user%}
+                                <a href="{% url teams:settings slug=team.slug %}" class="blue_button small">{% trans 'Edit' %}</a>
+                            {% endif %}
+                            {% if team|is_team_member:user %}
+                                {% render_team_leave team %}
+                            {% else %}
+                                {% if team.is_open %}
+                                    {% render_team_join team "small" %}
+                                {% endif %}
+                            {% endif %}  
+                        </div>{% endcomment %}       
+                </li>
+                {% endfor %}
+            </ul>
+        {% if is_paginated %}{% paginator %}{% endif %}
+    </div>
+    <div class="controls grid_3 omega">
+        <form action="." class="search">
+            <fieldset>
+                <input type="text" name="q" value="{{ query|default:'Search...' }}"/>
+            </fieldset>
+        </form>
+        
+        {% if user.is_superuser and user.is_active %}
+            <a href="{% url teams:create %}" class="button primary start_team">{% trans 'Start a Team' %}</a>
+        {% endif %}
+        
+        <p class="notation">Want to create your own captioning and translation team? Contact Dean Jansen, <a href="mailto:dean@pculture.org">dean@pculture.org</a></p>
+    </div>
 {% endblock %}

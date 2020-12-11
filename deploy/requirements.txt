@@ -20,7 +20,7 @@ vendor/celery-2.2.7.zip
 vendor/django-celery-2.2.4.tar.gz
 oauth==1.0.1
 oauth2==1.2.0
-pyOpenSSL==0.9
+pyOpenSSL==17.5.0
 pycrypto==2.1.0
 vendor/redis-2.4.5.tar.gz
 simplejson==2.1.1
